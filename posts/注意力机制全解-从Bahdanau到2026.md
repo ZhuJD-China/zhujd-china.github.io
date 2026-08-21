@@ -2,6 +2,8 @@
 title: 注意力机制全解：从 Bahdanau Attention 到 2026 年的稀疏与线性注意力
 date: 2026-08-21
 tags: [深度学习, 注意力机制, 大模型]
+album: 深度学习专栏
+order: 1
 excerpt: 一份面向初学者的详细教程：从 Bahdanau/Luong 到 Transformer，再到 2026 年主流大模型中的 MLA、DSA、Gated DeltaNet 与线性注意力混合架构。
 ---
 

@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Norris Zhu · 观澜阁</title>
-  <meta name="description" content="Norris Zhu（祝）的个人博客 —— 数据科学与人工智能学者，记录技术、思考与生活">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80' fill='%23c9a96a'>祝</text></svg>">
+  <meta name="description" content="Norris Zhu 的个人博客 —— 数据科学与人工智能学者，记录技术、思考与生活">
+  <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,11 +22,12 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">
-        <span class="nav-logo-mark">祝</span>
+        <span class="nav-logo-mark"><img src="logo.png" alt="Norris Zhu"></span>
         <span class="nav-logo-text">Norris<i> Zhu</i></span>
       </a>
       <div class="nav-links">
         <a href="#articles" class="nav-link">文章</a>
+        <a href="#albums" class="nav-link">专辑</a>
         <a href="agent.html" class="nav-link">智能体</a>
         <a href="#about" class="nav-link">关于</a>
         <a href="https://github.com/ZhuJD-China" target="_blank" class="nav-link nav-link-github" rel="noopener">
@@ -38,13 +39,20 @@
 
   <!-- 首屏 -->
   <header class="hero">
+    <div class="hero-side hero-side-left" aria-hidden="true"><span>观水有术</span></div>
+    <div class="hero-side hero-side-right" aria-hidden="true"><span>必观其澜</span></div>
     <div class="hero-inner">
       <p class="hero-eyebrow reveal">DATA SCIENCE · ARTIFICIAL INTELLIGENCE</p>
       <h1 class="hero-title">
         <span class="reveal">观澜阁</span>
       </h1>
       <p class="hero-sub reveal">静观 <em>·</em> 深思 <em>·</em> 笃行</p>
-      <p class="hero-desc reveal">Norris Zhu（祝）· 数据科学与人工智能学者<br>记录数据、模型与智能的探索，以及代码之外的思考。</p>
+      <p class="hero-desc reveal">Norris Zhu · 数据科学与人工智能学者<br>记录数据、模型与智能的探索，以及代码之外的思考。</p>
+      <div class="hero-stats reveal" id="heroStats">
+        <div class="hero-stat"><b id="statPosts">–</b><span>文章</span></div>
+        <div class="hero-stat"><b id="statAlbums">–</b><span>专辑</span></div>
+        <div class="hero-stat"><b id="statWords">–</b><span>累计字数</span></div>
+      </div>
       <div class="hero-actions reveal">
         <a href="#articles" class="btn btn-primary">开始阅读</a>
         <a href="#about" class="btn btn-ghost">关于我</a>
@@ -55,12 +63,15 @@
     </div>
   </header>
 
-  <!-- 文章列表 -->
   <main>
+    <!-- 文章列表 -->
     <section class="section" id="articles">
       <div class="section-inner">
         <div class="section-head reveal">
-          <h2 class="section-title">文章</h2>
+          <div>
+            <p class="section-eyebrow">WRITING</p>
+            <h2 class="section-title">文章</h2>
+          </div>
           <div class="section-tools">
             <div class="search-box">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -69,12 +80,37 @@
           </div>
         </div>
         <div class="tag-filter reveal" id="tagFilter"></div>
+
+        <!-- 最新精选（无筛选时展示） -->
+        <div class="featured-wrap reveal" id="featuredWrap" hidden>
+          <!-- JS 渲染 -->
+        </div>
+
         <div class="article-grid" id="articleGrid">
           <!-- JS 渲染 -->
         </div>
         <div class="empty-state" id="emptyState" hidden>
-          <div class="empty-glyph">空</div>
+          <div class="empty-glyph"><img src="logo.png" alt="logo"></div>
           <p>没有找到相关文章</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 专辑 -->
+    <section class="section section-albums" id="albums">
+      <div class="section-inner">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-eyebrow">COLLECTIONS</p>
+            <h2 class="section-title">专辑</h2>
+          </div>
+          <p class="section-note">系列连载 · 装订成册</p>
+        </div>
+        <div class="album-grid" id="albumGrid">
+          <!-- JS 渲染 -->
+        </div>
+        <div class="empty-state" id="albumEmpty" hidden>
+          <p>暂无专辑 · 在文章头部信息中填写 album 字段即可创建</p>
         </div>
       </div>
     </section>
@@ -83,10 +119,11 @@
     <section class="section section-about" id="about">
       <div class="section-inner">
         <div class="about-card reveal">
-          <div class="about-seal">祝</div>
+          <div class="about-seal"><img src="logo.png" alt="Norris Zhu"></div>
           <div class="about-body">
+            <p class="section-eyebrow">ABOUT</p>
             <h2 class="section-title">关于我</h2>
-            <p>我是 <strong>Norris Zhu（祝）</strong>，一名数据科学与人工智能学者。着迷于从数据中发现规律、用模型理解世界，相信写作与代码同样是思考的方式。</p>
+            <p>我是 <strong>Norris Zhu</strong>，一名数据科学与人工智能学者。着迷于从数据中发现规律、用模型理解世界，相信写作与代码同样是思考的方式。</p>
             <p>这个博客由纯静态页面搭建，所有文章以 Markdown 书写 —— 简单、纯粹、专注内容本身。</p>
             <div class="about-links">
               <a href="https://github.com/ZhuJD-China" target="_blank" rel="noopener">GitHub</a>
@@ -101,8 +138,26 @@
   <!-- 页脚 -->
   <footer class="footer">
     <div class="footer-inner">
-      <p class="footer-line">观澜阁 · Norris Zhu's Blog</p>
-      <p class="footer-meta">© 2026 Norris Zhu · Powered by GitHub Pages & Markdown</p>
+      <div class="footer-brand">
+        <p class="footer-line">观澜阁 · Norris Zhu's Blog</p>
+        <p class="footer-slogan">静观 · 深思 · 笃行</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <p class="footer-head">导航</p>
+          <a href="#articles">文章</a>
+          <a href="#albums">专辑</a>
+          <a href="agent.html">智能体</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-head">链接</p>
+          <a href="https://github.com/ZhuJD-China" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/ZhuJD-China/zhujd-china.github.io" target="_blank" rel="noopener">本站仓库</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p>© 2026 Norris Zhu · Powered by GitHub Pages & Markdown</p>
     </div>
   </footer>
 
