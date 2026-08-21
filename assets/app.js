@@ -416,6 +416,7 @@
         "<span>最近更新 " + escapeHTML(formatDate(album.latest.date)) + "</span>" +
         "</div></header>" +
         '<div class="album-list">' + listHTML + "</div>";
+      revealObserve();
     }).catch(function () {
       renderAlbumError(shell, "专辑加载失败，请稍后重试");
     });
@@ -487,6 +488,7 @@
             ? '<a class="album-nav-link album-nav-next" href="post.html?file=' + encodeURIComponent(next.file) + '">' +
               "<span>下一篇</span><b>" + escapeHTML(next.title) + "</b></a>"
             : "");
+        revealObserve();
       }
     }).catch(function () {});
   }
