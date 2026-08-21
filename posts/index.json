@@ -1,8 +1,13 @@
 {
-  "_comment": "兜底文章清单：仅在 GitHub API 不可用时（本地预览/限流）使用。线上以 API 自动发现为准，新增文章无需更新本文件。",
   "posts": [
-    { "file": "hello-world.md" },
-    { "file": "how-to-write.md" },
-    { "file": "architecture.md" }
+    {
+      "file": "how-to-write.md"
+    },
+    {
+      "file": "hello-world.md"
+    },
+    {
+      "file": "architecture.md"
+    }
   ]
 }
