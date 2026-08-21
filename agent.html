@@ -3,22 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>文章 · Norris Zhu</title>
+  <title>智能体 · Norris Zhu</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80' fill='%23c9a96a'>祝</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <!-- Markdown 渲染 & 代码高亮 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
   <link rel="stylesheet" href="assets/style.css">
 </head>
-<body class="post-page">
+<body class="agent-page">
 
   <div class="bg-noise"></div>
   <div class="bg-glow bg-glow-1"></div>
-
-  <!-- 阅读进度条 -->
-  <div class="reading-progress" id="readingProgress"></div>
+  <div class="bg-glow bg-glow-2"></div>
 
   <nav class="nav nav-solid" id="nav">
     <div class="nav-inner">
@@ -27,8 +23,9 @@
         <span class="nav-logo-text">Norris<i> Zhu</i></span>
       </a>
       <div class="nav-links">
-        <a href="index.html#articles" class="nav-link">所有文章</a>
-        <a href="agent.html" class="nav-link">智能体</a>
+        <a href="index.html#articles" class="nav-link">文章</a>
+        <a href="agent.html" class="nav-link nav-link-active">智能体</a>
+        <a href="index.html#about" class="nav-link">关于</a>
         <a href="https://github.com/ZhuJD-China" target="_blank" class="nav-link nav-link-github" rel="noopener">
           <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
         </a>
@@ -36,29 +33,29 @@
     </div>
   </nav>
 
-  <main class="post-main">
-    <article class="post-shell" id="postShell">
-      <!-- JS 渲染 -->
-      <div class="post-loading">
-        <div class="loading-mark">祝</div>
-        <p>正在加载文章…</p>
+  <main class="agent-launch-main">
+    <div class="agent-launch">
+      <div class="about-seal agent-seal reveal">智</div>
+      <h1 class="agent-launch-title reveal">BubbleAgent</h1>
+      <p class="agent-launch-sub reveal">LLM · RAG · AGENT</p>
+      <p class="agent-launch-desc reveal">
+        自研大模型智能体应用，集成多轮对话、检索增强与工具调用。<br>
+        服务部署于云端，全天候在线。
+      </p>
+      <div class="agent-launch-actions reveal">
+        <a class="btn btn-primary btn-lg" href="http://47.106.82.34:8080/" target="_blank" rel="noopener">
+          启动智能体
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="index.html#articles">返回文章</a>
       </div>
-    </article>
-
-    <div class="post-end">
-      <a href="index.html#articles" class="btn btn-ghost">← 返回文章列表</a>
+      <p class="agent-launch-note reveal">
+        点击后将在新窗口打开，登录与使用体验最佳<br>
+        后续服务升级 HTTPS 后将实现站内无缝内嵌
+      </p>
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="footer-inner">
-      <p class="footer-line">观澜阁 · Norris Zhu's Blog</p>
-      <p class="footer-meta">© 2026 Norris Zhu · Powered by GitHub Pages & Markdown</p>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>

@@ -434,6 +434,66 @@ body {
 .article-card { opacity: 0; transform: translateY(26px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease), background 0.5s, border-color 0.5s, box-shadow 0.5s; }
 .article-card.visible { opacity: 1; transform: translateY(0); }
 
+/* ============================================================
+   智能体启动页（BubbleAgent · 新窗口打开）
+   ============================================================ */
+.nav-link-active { color: var(--gold-bright); }
+.nav-link-active::after { width: 100%; }
+
+.agent-launch-main {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 130px 24px 90px;
+}
+.agent-launch { text-align: center; max-width: 640px; }
+
+.agent-seal {
+  margin: 0 auto 36px;
+  animation: sealPulse 5s ease-in-out infinite;
+}
+@keyframes sealPulse {
+  0%, 100% { box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px var(--line), 0 0 0 0 rgba(201, 169, 106, 0); }
+  50% { box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px var(--line), 0 0 46px 4px rgba(201, 169, 106, 0.16); }
+}
+
+.agent-launch-title {
+  font-family: var(--serif); font-weight: 900;
+  font-size: clamp(44px, 8vw, 72px);
+  line-height: 1.15; letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #f4ead6 10%, var(--gold) 45%, var(--gold-deep) 70%, #f4ead6 95%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 8s ease-in-out infinite;
+  margin-bottom: 14px;
+}
+.agent-launch-sub {
+  color: var(--ink-dim); font-size: 13px;
+  letter-spacing: 0.5em; padding-left: 0.5em;
+  margin-bottom: 28px;
+}
+.agent-launch-desc {
+  color: var(--ink-faint); font-size: 15px; line-height: 2;
+  margin-bottom: 46px;
+}
+.agent-launch-actions {
+  display: flex; gap: 18px; justify-content: center; flex-wrap: wrap;
+}
+.btn-lg {
+  padding: 16px 46px; font-size: 14px;
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.agent-launch-note {
+  margin-top: 44px; font-size: 12px; line-height: 2.1;
+  color: var(--ink-faint); letter-spacing: 0.05em;
+  padding-top: 24px; border-top: 1px solid var(--line-soft);
+}
+
+@media (max-width: 720px) {
+  .agent-launch-actions { flex-direction: column; align-items: center; }
+}
+
 /* ---------- 响应式 ---------- */
 @media (max-width: 1024px) {
   .article-grid { grid-template-columns: repeat(2, 1fr); }
