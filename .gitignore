@@ -1,0 +1,8 @@
+# IDE 内部目录
+.snapshots/
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
+Thumbs.db
