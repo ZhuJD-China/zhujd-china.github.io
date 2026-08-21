@@ -1,8 +1,8 @@
-# zhujd.github.io · 观澜阁
+# zhujd-china.github.io · 观澜阁
 
 Norris Zhu（祝）的个人博客 —— 数据科学与人工智能学者，基于 GitHub Pages 纯静态搭建。
 
-**线上地址**：<https://zhujd.github.io>
+**线上地址**：<https://zhujd-china.github.io>
 
 ## 写新文章（只需两步）
 
@@ -19,15 +19,16 @@ excerpt: 一句话摘要
 正文（Markdown）……
 ```
 
-2. 提交并推送：
+2. 提交并推送（推送前先 `git pull` 同步自动生成的清单更新）：
 
 ```bash
+git pull
 git add posts/你的文章.md
 git commit -m "发布新文章"
 git push
 ```
 
-推送后约 1 分钟，文章自动出现在首页。**无需修改任何其他文件。**
+推送后约 1~2 分钟，文章自动出现在首页。**无需修改任何其他文件。**
 
 ## 目录结构
 
@@ -44,7 +45,8 @@ git push
 
 - 首页通过 GitHub Contents API 自动发现 `posts/` 下所有 `.md` 文章
 - 文章在浏览器端用 marked.js 实时渲染，代码高亮由 highlight.js 提供
-- `posts/index.json` 仅为本地预览兜底，线上可忽略
+- `posts/index.json` 由 GitHub Action 自动维护：当 GitHub API 限流时作为兜底，保证文章列表永不丢失
+- `.nojekyll` 用于禁用 GitHub Pages 默认的 Jekyll 构建（否则带 frontmatter 的 .md 会被转换而无法直接访问）
 
 ## 本地预览
 

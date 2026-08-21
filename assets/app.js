@@ -10,13 +10,14 @@
   /* ---------- 配置 ---------- */
   var CONFIG = {
     owner: "ZhuJD-China",
-    repo: "zhujd.github.io",
+    repo: "zhujd-china.github.io",
     branch: "master",
     postsDir: "posts",
     // API 失败时（本地预览 / 限流）使用的兜底清单
+    // 该清单由 .github/workflows/update-manifest.yml 在推送时自动更新
     fallbackManifest: "posts/index.json",
-    cacheKey: "guanlan_posts_cache_v1",
-    cacheTTL: 10 * 60 * 1000, // 10 分钟
+    cacheKey: "guanlan_posts_cache_v2",
+    cacheTTL: 3 * 60 * 1000, // 3 分钟
   };
 
   /* ---------- 工具 ---------- */
@@ -111,7 +112,7 @@
       })
       .catch(function () {
         // 兜底：本地预览或 API 限流
-        return fetch(CONFIG.fallbackManifest)
+        return fetch(CONFIG.fallbackManifest + "?t=" + Date.now())
           .then(function (r) { return r.ok ? r.json() : []; })
           .then(function (list) { return (list.posts || []).map(function (p) { return p.file; }); })
           .catch(function () { return []; });

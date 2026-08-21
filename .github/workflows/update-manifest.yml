@@ -1,0 +1,45 @@
+# 自动维护文章清单：posts/ 有变动时重新生成 posts/index.json
+# 作用：GitHub API 限流(403)时，博客仍能通过本地清单正常发现文章
+name: Update posts manifest
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "posts/**"
+      - ".github/workflows/update-manifest.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate posts/index.json
+        run: |
+          python3 - <<'EOF'
+          import json, os
+          posts = sorted(
+              [f for f in os.listdir("posts") if f.endswith(".md")],
+              reverse=True
+          )
+          manifest = {"posts": [{"file": p} for p in posts]}
+          with open("posts/index.json", "w", encoding="utf-8") as fh:
+              json.dump(manifest, fh, ensure_ascii=False, indent=2)
+              fh.write("\n")
+          EOF
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add posts/index.json
+          if git diff --cached --quiet; then
+            echo "manifest unchanged"
+          else
+            git commit -m "chore: auto-update posts manifest [skip ci]"
+            git push
+          fi
