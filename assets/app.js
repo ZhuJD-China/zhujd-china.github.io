@@ -551,11 +551,37 @@
   /* ---------- 通用：导航滚动态 & 入场动画 ---------- */
   function initCommon() {
     var nav = $("#nav");
+    var backTop = $("#backTop");
+
     var onScroll = function () {
       if (nav) nav.classList.toggle("scrolled", window.scrollY > 40);
+      if (backTop) backTop.classList.toggle("show", window.scrollY > 480);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+
+    // 返回顶部
+    if (backTop) {
+      backTop.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    // 导航滚动高亮（scrollspy）
+    var sections = $all("main section[id]");
+    var spyLinks = $all('.nav-link[href^="#"]');
+    if (sections.length && spyLinks.length && "IntersectionObserver" in window) {
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          var id = "#" + en.target.id;
+          spyLinks.forEach(function (l) {
+            l.classList.toggle("nav-link-active", l.getAttribute("href") === id);
+          });
+        });
+      }, { rootMargin: "-38% 0px -55% 0px" });
+      sections.forEach(function (s) { spy.observe(s); });
+    }
 
     revealObserve();
   }
