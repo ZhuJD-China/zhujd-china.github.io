@@ -1,524 +1,106 @@
 ---
-title: 分词与词嵌入全解：从 BPE 到 2026 年的 Tokenizer-Free 时代
+title: 分词与词嵌入：从 BPE 的胜利到"取消 Tokenizer"的浪潮
 date: 2026-08-25
 tags: [深度学习, 分词, 词嵌入, 大模型]
 album: 深度学习专栏
 order: 2
-excerpt: 一份系统梳理 Tokenization 与 Embedding 演进史的深度长文：从 word-level 到 BPE/SentencePiece，再到 2026 年的 Dynamic Tokenization、FLEXITOKENS 与 ByteFlow 所代表的 Tokenizer-Free 路线。
+excerpt: Tokenization 曾被视为流水线里"最好的必要之恶"。本文梳理 subword 分词如何成为默认范式、它积累了哪些债，以及 ByT5、BLT、FLEXITOKENS、ByteFlow 这条"取消 Tokenizer"的路线如何一步步把边界决策收回模型内部。
 ---
 
-> 本文是《深度学习专栏》系列第 2 篇。第 1 篇我们梳理了注意力机制从 Bahdanau 到 2026 年稀疏/线性注意力的演进；这一篇我们沿同一个时间轴往前看——在文本进入 Transformer 之前，它到底经历了什么。
+这是《深度学习专栏》的第二篇。第一篇讲注意力机制从 Bahdanau 走到稀疏与线性注意力的十年；这一篇讲的是流水线上更靠前、也更少被严肃对待的一段——文本在进入 Transformer 之前发生了什么。
 
----
+我之所以想写这个题目，是因为 2026 年的情况有点反直觉：分词这个看起来早已定型、教科书里一页带过的东西，重新变成了活跃的研究方向。而且这轮研究的主流不是"BPE 再改一点"，而是一个更根本的追问：**LLM 到底还需不需要一个独立的 Tokenizer？**
 
-## 目录
+## 一、先说清楚三个东西的分工
 
-1. 引子：2026 年，分词为什么重新变热
-2. 先把三个东西分清楚：Tokenizer、Token ID、Embedding
-3. 前史：从 word-level 到 BPE / WordPiece / SentencePiece（2016-2020）
-4. 2026 年的"反 Tokenizer"路线：ByteFlow 与 tokenizer-free 语言建模
-5. 为什么大家突然重新研究 Tokenization：BPE 的三宗罪
-6. 中文：Tokenization 问题的放大器
-7. Dynamic Tokenization：让边界随上下文变化
-8. Learnable Tokenizer：FLEXITOKENS
-9. 更根本的问题：Token 到底应该是什么
-10. Embedding 研究还在继续吗
-11. 现实工程问题 I：Cross-Tokenizer 蒸馏
-12. 现实工程问题 II：Tokenizer 成为推理瓶颈——GPUTOK
-13. 2026 年研究地图：五条路线一张图
-14. 与注意力机制演进的统一视角
-15. 学习建议：2026 年该怎么学 Tokenization
-16. 参考资料
+讨论这个问题的人经常把几个概念混在一起，先剥开。
 
----
+Tokenizer 决定"文本怎么切"。它把 `我喜欢人工智能` 切成若干片段，每个片段映射到词表里的一个整数编号。Embedding 决定"切出来的单元用什么向量表示"。编号 `1532` 去查一张 V×D 的大表，得到一个 4096 维的向量，交给 Transformer。
 
-## 1. 引子：2026 年，分词为什么重新变热
+这张表有多大？一个 15 万词表、4096 维隐层的模型，光 embedding 就有约 6.1 亿参数——和一个小模型整个的体量相当。所以"词表多大"从来不是随手定的工程参数，它直接决定了模型的参数分布。
 
-**2026 年，"分词（Tokenization）"反而是一个重新变热的研究方向。**
+真正值得琢磨的是这套流水线隐含的一个假设：**切分在训练之前完成、由一个独立于模型的算法决定、且一经训练永不改变。**2026 年这波研究，攻击的正是这个假设。
 
-但有一个非常重要的变化：
+## 二、Subword 是怎么赢的
 
-> **研究重点已经不是"BPE 怎么再改一点"这么简单，而是在重新追问：LLM 到底还需不需要传统 Tokenizer？**
+按词切分是最直觉的方案，但词表会爆炸，而且永远有没见过的词，只能全部塌缩成 `<UNK>`，信息直接丢失。按字符切分则走向另一个极端：序列长度暴涨，而注意力是 O(N²) 的；单个字符承载的语义又太稀薄，模型要花很多层才能把字符重新组合成语义单元。
 
-ICLR 2026 已经出现了直接**取消 Tokenizer**、让模型自己学习字节如何组合的工作（ByteFlow）；ACL 2026 也有专门研究可动态变化 Tokenizer 的论文（MUTANT、FLEXITOKENS）。这不是零星尝试，而是一条清晰的新路线。
+Subword 是两者的折中，逻辑相当优雅：高频词保持完整，低频词拆成可复用的子词片段。`doghouse` 即使没见过，也能拆成 `dog` + `house`，OOV 问题被消解掉了。
 
-一句话总结本文的核心观察：
+这一代算法有三个代表。BPE 原本是 1994 年的数据压缩算法，Sennrich 等人 2016 年把它引入神经机器翻译：从字符序列出发，反复合并语料中共现频率最高的相邻对，直到词表达到目标大小。WordPiece 走的是另一条准则——它选择让语言模型似然提升最大的合并，而不是最频繁的合并，这是 Google 在 GNMT/BERT 一系里的选择。SentencePiece 则是工程化集大成者：直接在原始文本上工作、语言无关、把空格编码进符号本身，成为 T5、LLaMA 这些多语言模型的标配。
 
-> **2020 年：研究"怎么把词切成 Token"。**
-> **2024 年：研究"怎么把 Token 切得更好"。**
-> **2026 年：开始认真研究"为什么一定要有 Token"。**
+公平地说，subword 分词是深度学习时代最成功的"基础设施级"设计之一——简单、稳定、可复用。它的问题不在当下，而在于它把一组基于训练语料统计的贪心决策**冻结**进了模型，然后让所有下游为此买单。
 
----
+## 三、这笔债积累在哪
 
-## 2. 先把三个东西分清楚：Tokenizer、Token ID、Embedding
+Karpathy 有个流传很广的说法：tokenization 充其量是"必要之恶"（at best a necessary evil），与真正的语言建模关系不大。SpaceByte 那篇论文的动机部分专门引了他的推文和演讲。这句话在 2020 年前后是共识，但最近两年，"恶"的部分越来越难忽视了。
 
-很多人说的"分词和词嵌入"，其实是流水线上三个不同的层次：
+**第一笔债是多语言不公平。**分词器的合并规则由语料频率决定，而语料天然偏向英文。Ahia 等人在 EMNLP 2023 那篇《Do All Languages Cost the Same?》里给过一组很有冲击力的数字：同一句话，GPT-4o 的 tokenizer 切英文是 29 个 token，切日文是 53 个，切旁遮普文是 254 个。接近九倍的差距，直接换算成 API 账单、上下文窗口占用和推理延迟——而对非拉丁文字，同样的信息量往往需要最多四倍的 UTF-8 字节来表示，处境是双重的。MAGNET（NeurIPS 2024）整篇论文处理的正是这种"过度切分"（over-segmentation）。
 
-```text
-原始文本
-   ↓
-Tokenizer
-   ↓
-Token ID
-   ↓
-Embedding
-   ↓
-向量
-   ↓
-Transformer
-```
+**第二笔债是脆弱性。**一个拼写变体、一个大小写变化、一个生僻字符，就可能让整段文本的 token 序列面目全非。ByT5 的实验早就表明字节级模型对噪声鲁棒得多，在拼写和发音敏感的任务上优势明显。另一个常被引用的例子是数字：tokenizer 对数字的切法（逐位切还是成块切）会显著影响算术能力——这是字面意义上的"表示方式决定能力上限"。
 
-以一句中文为例：
+**第三笔债我原以为是小事，直到看到系统测量的数据。**大家总觉得 tokenizer 不就是 CPU 上切个字符串么。TokTier（2026 年 7 月）对两个 agent 生态里 15 万余次调用做了统计：编码 agent 的会话模式是"长历史 + 小增量"，中位每次追加约 1.4K 字符；当 prompt 缓存命中率逼近 0.99 时，**tokenization 占首 token 延迟（TTFT）的比例从 10% 涨到了 64%**。GPU 全速运转，CPU 在切词——这在长上下文时代成了真实的系统瓶颈。
 
-> 我喜欢人工智能
+## 四、字节级的反攻
 
-可能被 tokenizer 切成：
+要取消 tokenizer，最彻底的做法是直接对 UTF-8 字节建模：词表缩到 256，OOV 的概念从此不存在。ByT5（2021）证明了这条路可行，也暴露了代价——字节序列大约是 token 序列的四倍长，朴素的字节级 Transformer 要多付出一个量级左右的训练 FLOPs 才能追平 subword 模型。SpaceByte 后来把这笔账算得更清楚，并给出了一个朴素但有效的架构改进：在字节流里，只在空格这类天然边界之后插入更大的 Transformer 块，让计算分配跟着边界走，性能就能大致追平 tokenized 模型。
 
-```text
-我 / 喜欢 / 人工 / 智能
-```
+真正的转折点是 Meta FAIR 2024 年 12 月的 Byte Latent Transformer（BLT）。我认为这是这条线上最重要的一篇工作，值得讲细一点。
 
-然后每个片段映射到词表中的编号：
+BLT 的核心观察是：tokenized 模型对每个 token 花等量的计算，但预测难度并不均匀——一个常见词的后缀几乎是白送的，而新句子的第一个词才值得动用大模型。既然如此，边界不应该由统计频率决定，而应该由**信息量**决定。BLT 先单独训一个约一亿参数的小字节模型，用它的下一字节预测熵来划边界：熵超阈值就开一个新 patch。熵模型是个 14 层、滑窗 512 字节的小 Transformer，阈值取 1.09 时平均 patch 约 4.4 字节。可预测的长尾被合并成长 patch 轻量处理，不可预测的位置切成细 patch 交给大模型——计算跟着不确定性走。
 
-```text
-我     → ID 1532
-喜欢   → ID 9281
-人工   → ID 17421
-智能   → ID 3298
-```
+架构上它是三段式：轻量局部编码器把字节聚合成 patch 表示，一个深且宽的全局 latent Transformer 承担几乎所有 FLOPs，再由轻量局部解码器还原回字节。编码器里还加了 hash n-gram embedding 来增强对噪声的鲁棒性。BLT 做了字节级模型第一个 FLOP 受控的扩展性研究，规模到 80 亿参数、4 万亿训练字节，结论是在固定推理开销下，字节级的 scaling 曲线比 tokenization 模型更好看——匹配 Llama 3 性能的同时推理 FLOPs 最多省一半。顺带一提，2026 年的后续工作（Fast BLT）用块式离散扩散替换逐字节自回归解码，把推理显存带宽又降了 87%–92%。这条路还在继续变便宜。
 
-再通过 Embedding 表查到向量：
+BLT 之后，动态边界成了字节级架构的标配，但边界怎么学，各家给出了不同的答案。ByteFlow（2026 年 3 月，Rice 与 Amazon Science）的切入点我认为最见功力：它用潜在表示的**编码率**（coding rate）驱动切分——把分割问题转化成一个有损压缩决策，信息密度高的位置获得更高的编码率、被送入全局计算。工程上尤其聪明的一点是它用 Top-K 选择保持了静态计算图：边界是自适应的，但图的形状是固定的，这对 GPU 映射和内核优化是决定性的友好。
 
-```text
-1532  → [0.12, -0.43, 0.87, ...]
-9281  → [0.51,  0.21, 0.03, ...]
-...
-```
+## 五、不推翻重来，让旧模型学会动态切分
 
-所以两者的分工是：
+上面这条线要求从零预训练，门槛太高，所以还有一条更务实路线：保留 subword tokenizer 和已训练的模型，把切分决策改成动态的。
 
-- **Tokenization** 解决：*"文本应该怎么切？"*
-- **Embedding** 解决：*"这个 Token 应该用什么向量表示？"*
+Cambridge 的 Feher、Vulić 和 Minixhofer 做的 retrofitting（ACL 2025）很有代表性。他们的做法是在 batch 级别跑一个受 BPE 启发的合并算法——在同一批输入里统计子词序列的频率，合并频繁片段，然后用一个预训练的超网络（hypernetwork）**现算**合并后新 token 的 embedding。这个设计一石二鸟：encoder 模型（XLM-R）在 14 种语言上平均缩短 token 序列 20% 以上而性能损失不到 2%；应用到 Mistral-7B 的 prefill 时序列最多缩短 40%。更妙的是，超网络意味着模型不再依赖固定词表查表——词表事实上变成无界的，这悄悄改写了"embedding 必须是一张静态表"的默认设定。
 
-而 2026 年真正有意思的问题是：
+往预训练里做的人则要处理另一个问题：怎么让边界预测器可微且可控。MAGNET 用 Gumbel 技巧把离散边界松弛成可训练的，再用一个二项先验把压缩率锚在目标附近——每个文字系统配一个专属的边界预测器。FLEXITOKENS（俄亥俄州立与华盛顿大学）指出了这里的新的僵化：锚定固定压缩率，等于把"BPE 的刚性"换成了"压缩率的刚性"——医学文本和土耳其语这种形态丰富的语言需要更细的切分，代码和中文反而适合更粗的合并，一个全局定死的压缩率两头不讨好。他们的修法很简洁：把固定压缩率放松成一个区间，损失函数只在越界时惩罚（hinge 形式）。就这么一个改动，过度切分显著减少，多个基准上相对 BPE 和其他梯度化分词器拿到最多 10 个百分点的提升。
 
-> **为什么一定要先固定切好，再查一个固定 Embedding Table？**
+## 六、Tokenizer 不统一造成的系统性摩擦
 
-这正是当前大量研究在挑战的东西。
+还有一个不那么显眼但影响深远的问题：**世界上没有两个模型的 tokenizer 是一样的。**
 
----
+标准知识蒸馏假设师生共享 tokenizer，因为 logit 级蒸馏需要两个输出空间逐维对齐。词表一变，teacher 的 5 万维分布对上 student 的 3 万维分布，直接失效。这在实践中捆住了很多手脚——想把一个通用大模型的知识蒸给一个领域专用 tokenizer 的小模型，理论上顺理成章，工程上无从下手。
 
-## 3. 前史：从 word-level 到 BPE / WordPiece / SentencePiece（2016-2020）
+解法正在收敛到"字节层做公共接口"。MediaTek Research 的 BLD（2026 年 4 月）思路干净：把 teacher 的输出分布转换成字节级概率，给 student 外挂一个轻量字节解码头，蒸馏在这个共享接口上进行，1B 到 8B 的任务上都打得过复杂得多的启发式方法。更早的 ALM（Cambridge）则把"tokenizer 迁移"本身看作自蒸馏问题，能做到把 subword 模型快速迁到字节层。2026 年 2 月还有一篇工作反着走：把 Llama、Qwen、OLMo 这些 token-trained 模型蒸成字节级模型，两阶段课程（先做表示对齐和联合蒸馏，再做字节级 SFT），只花约 1250 亿字节就保留了 teacher 九成以上的能力。这些工作共同说明：字节层正在成为跨 tokenizer 世界的"通用语"。
 
-要看懂 2026 年的"反叛"，得先知道它反叛的是什么。
+## 七、系统侧的觉醒
 
-### word-level 的困境
+最后说回工程。GPUTOK（2026 年 3 月）把 byte-level BPE 搬上 GPU：合并表放进 `cuCollections static_map`，合并循环写成 CUDA kernel，pair 打包成 64 位键做 GPU 侧查表。在 WikiText103 的 131k token 长序列上，比 tiktoken 快 1.7 倍，比 HuggingFace 的 GPT-2 tokenizer 快 7.6 倍。这篇论文有个很诚实的 profiling 细节：CUDA API 时间的 70%–80% 花在内存分配上——瓶颈不在算法在访存，这种结论只有真做过系统的人才会写出来。
 
-最朴素的做法是把"词"当 token。但词表会爆炸：英文几十万词，中文组合无穷，而且总有没见过的词（OOV，Out-of-Vocabulary）。训练时没见过的词只能全部映射成 `<UNK>`，信息直接丢失。
+TokTier 走得更远，做成了有状态的分词服务：保存会话的历史 token 序列，增量重切追加部分附近的一个窗口，只有通过精确性校验（保证与全量重切结果逐 ID 一致）才拼接。为"切词"这个操作单独设计一套带契约的服务，放在五年前很难想象。
 
-### character-level 的另一极
+## 八、回到那个大问题
 
-把每个字符当 token，OOV 问题消失了，但序列变得极长——同样一句话，字符数远多于词数，注意力是 O(N²) 的，序列变长意味着计算成本平方级上升；且单个字符承载的语义太稀薄，模型要花很多层才能把字符组合成有意义的单元。
+把这篇和上一篇放在一起看，会发现一个共同的模式。注意力那边的问题是"为什么每个 token 对所有 token 都算 O(N²) 的注意力"，答案是稀疏化、线性化、层次化；分词这边的问题是"为什么边界是预先固定的、计算是均匀分配的"，答案是熵驱动 patch、编码率驱动压缩、区间化的 hinge 损失。**两条线其实在回答同一个问题：一个 Transformer 应该用什么粒度表示信息，又该在什么粒度上分配计算。**
 
-### Subword：两条路线的折中
+它们还互相成就。BLT 能成立，部分前提是滑动窗口注意力和高效 token mixing 让长字节序列可负担；反过来，字节级模型又把"表示粒度"从超参数变成了可学习量。注意力变便宜了，细粒度才用得起；细粒度学出来了，计算的分配才有了依据。
 
-现代分词算法都落在"子词"（subword）这个中间粒度上：
+我个人的判断是，"tokenizer 是否应该作为独立组件存在"这个问题，答案的天平正在向"否"倾斜，但速度会慢于 enthusiasts 的预期——subword 分词是如此成熟、如此嵌入现有基础设施，BLT 这类架构要真正进入主流生产栈，还需要解决推理生态（KV cache 的 patch 化、serving 框架的适配）等一大堆脏活。短期内更可能的现实是分层共存：存量模型靠 retrofitting 和字节级接口续命，新架构从字节层重新出发。
 
-- **BPE（Byte Pair Encoding，2016 被引入 NLP）**：从字符开始，迭代地合并语料中最频繁共现的相邻对，直到词表达到目标大小。高频词保持完整，低频词被拆成子词。GPT 系列的 tokenizer 以它为基础。
-- **WordPiece（2012/2016）**：Google 用于 BERT，思路与 BPE 相近，但合并准则不是"最频繁"，而是"能让语言模型似然提升最大"的组合。
-- **Unigram Language Model（2018）**：反过来，先假设一个大词表，用 EM 算法估计每个子词的概率，再逐步裁掉对似然伤害最小的子词。
-- **SentencePiece（2018）**：把上述算法工程化，直接在原始文本上工作（含空格特殊编码），语言无关，成为多语言模型（T5、LLaMA 等）的标配。
+如果读者想顺着这条线读文献，我的建议是这个顺序：ByT5 看动机，SpaceByte 看账怎么算，BLT 看架构思想的完整形态，MAGNET 和 FLEXITOKENS 看边界学习的技术演进，Retrofitting 看务实路线，ByteFlow 看最新的信息论视角。读完之后再回头看 BPE 的原始论文，会有一种"原来起点是这么朴素的一个贪心算法"的恍然。
 
-这一代方案共同确立了今天 LLM 的默认范式：**先离线训练一个固定 tokenizer，再训练模型，之后永不改变**。
+**Token 从来不是语言建模的第一性单位——它只是我们暂时买得起的一个近似。**这句话，大概就是 2026 年这个方向所有论文共同的注脚。
 
-2026 年的新研究，攻击的正是这个"固定"。
+## 参考文献
 
----
-
-## 4. 2026 年的"反 Tokenizer"路线：ByteFlow 与 tokenizer-free 语言建模
-
-这是目前最值得关注的路线。
-
-传统 LLM：
-
-```text
-文本
- ↓
-BPE / SentencePiece（固定、离线训练）
- ↓
-Token
- ↓
-Embedding
- ↓
-Transformer
-```
-
-新的路线开始尝试：
-
-```text
-UTF-8 bytes
- ↓
-模型自己学习如何组合
- ↓
-动态 representation
- ↓
-Transformer
-```
-
-甚至：
-
-```text
-文本 → Byte → Transformer
-```
-
-**完全没有传统 tokenizer。**
-
-ICLR 2026 的 **ByteFlow** 就是典型代表。它提出 ByteFlow Net，让模型直接从原始 byte stream 中学习 segmentation，而不是提前由固定 tokenizer 决定 token 边界。论文明确把目标定义为 **tokenizer-free language modeling**。
-
-对 byte-level 路线，OOV 概念彻底消失（任何文本都是字节），代价是序列更长——这就与第 1 篇讲的注意力效率研究（线性注意力、稀疏注意力）形成了直接呼应：**注意力变便宜了，细粒度表示才变得可负担**。两条研究线在这里汇合。
-
----
-
-## 5. 为什么大家突然重新研究 Tokenization：BPE 的三宗罪
-
-### 罪一：Token 是人为固定的
-
-假设 vocabulary 是 50,000 tokens，训练完 tokenizer 后：
-
-```text
-"internationalization"
-→ international / ization
-```
-
-但另一种语言可能被切成：
-
-```text
-in / ter / na / tion / al / ization
-```
-
-这意味着：
-
-> **同样的信息量，不同语言可能需要完全不同数量的 token。**
-
-这直接影响：
-
-- context length（同样窗口装的内容更少）
-- 推理成本（token 多，计算多）
-- KV Cache 占用
-- attention 计算量
-- 多语言能力与长文本能力
-
-ACL 2026 的 **MUTANT** 专门研究多语言 tokenizer 设计，指出 tokenizer 的设计会直接影响 LLM 的性能、训练效率和 inference cost。
-
-### 罪二：切分依赖统计，而非语义/结构
-
-BPE 的合并顺序由语料频率决定。它不知道"中华人民共和国"是一个政治实体，也不知道"光伏电池片"在光伏行业是一个整体概念。它只是在数共现频率。
-
-### 罪三：一次训练，终身使用
-
-Tokenizer 在模型训练前就冻结了。领域迁移（医疗、法律、代码）、语言演化（新词）、词表更新（vocabulary expansion）都变成麻烦的后续工程问题。
-
----
-
-## 6. 中文：Tokenization 问题的放大器
-
-中文天然把这些问题放大。例如：
-
-```text
-中华人民共和国
-```
-
-到底应该切成：
-
-```text
-中 / 华 / 人 / 民 / 共 / 和 / 国
-```
-
-还是：
-
-```text
-中华 / 人民 / 共和国
-```
-
-还是：
-
-```text
-中华人民共和国（一个 token）
-```
-
-？
-
-传统 tokenizer 只能根据统计做决定。但统计上最优的切法，并不一定是最适合 Transformer 的 segmentation。这正是研究者开始思考的：
-
-> **Token boundary 是否应该由模型根据上下文动态决定？**
-
-顺带一提，中文的 token efficiency 问题（同样内容比英文消耗更多 token）也直接源于此——这也是国内模型厂商（DeepSeek、GLM、Qwen 等）近年持续优化中文词表压缩率的现实动机。
-
----
-
-## 7. Dynamic Tokenization：让边界随上下文变化
-
-这是 2026 年的一个重要方向。
-
-传统：
-
-```text
-Tokenizer → 固定 → 永远这样切
-```
-
-新方法：
-
-```text
-Input
- ↓
-模型观察上下文
- ↓
-动态决定 token boundary
- ↓
-生成当前输入最合适的切分
-```
-
-例如通用语境下：
-
-```text
-今天 / 天气 / 很 / 好
-```
-
-但在某个专业领域：
-
-```text
-光伏电池片
-```
-
-可能动态变成：
-
-```text
-光伏 / 电池片
-```
-
-甚至整体作为一个 token。
-
-2025 年 ACL 已有工作（Retrofitting LLMs with Dynamic Tokenization）尝试给已有 LLM 加上 dynamic tokenization，在多语言场景下平均减少超过 20% 的 token sequence length，同时性能下降很小。**省 20% 的 token，就是省 20% 的推理成本和 20% 的有效上下文。**
-
----
-
-## 8. Learnable Tokenizer：FLEXITOKENS
-
-ACL 2026 的 **FLEXITOKENS**（Flexible Tokenization for Evolving Language Models）代表了"Tokenizer 自己学习"的方向。
-
-它不是人工设计 tokenizer，而是：
-
-```text
-Byte
- ↓
-Learnable Tokenizer
- ↓
-模型学习 token boundary
- ↓
-Variable-length segments
-```
-
-也就是说：
-
-> **Token 不再是固定词表里的东西，而可以成为模型学习出来的东西。**
-
-论文在多语言、形态复杂语言和不同领域上做了实验，报告了相对 BPE 等 baseline 的明显提升。它同时回应了第 5 节的"三宗罪"：边界可学习、可适应演化中的语言、天然适配多语言。
-
----
-
-## 9. 更根本的问题：Token 到底应该是什么
-
-2026 年 8 月的论文 *What Tokens are Learned when Tokenization is Optimized Jointly with Language Modeling?* 直接研究：
-
-> 如果 Tokenization 和 Language Modeling 一起联合优化，模型最终会自己学出什么样的 token？
-
-他们在 18 种语言上比较了不同的 tokenizer-free / jointly optimized 方法，发现模型学出来的 token 与传统 BPE vocabulary 可以非常不同。
-
-这暗示了一个更深的结论：
-
-> **我们现在使用的"token"，很可能只是历史工程选择，并不是语言建模最优的基本单位。**
-
----
-
-## 10. Embedding 研究还在继续吗
-
-当然在继续，而且要稍微区分一下。
-
-传统路径：
-
-```text
-Token ID → Embedding Lookup → Vector
-```
-
-本质上就是：
-
-```python
-embedding = Embedding[token_id]
-```
-
-这是一个巨大矩阵：V × D。例如 V = 150,000、D = 4096 时参数量约 6.14 亿。**vocabulary 越大，embedding 参数量越大**——这也解释了为什么词表大小是个需要精打细算的工程决策。
-
-当前 embedding 方向的研究关键词包括：
-
-- byte-level / character embedding
-- dynamic embedding
-- contextual embedding
-- compositional embedding（向量组合表示新词）
-- factorized embedding（矩阵分解降参数）
-- vocabulary expansion / replacement（词表更新）
-- multilingual embedding
-- cross-tokenizer embedding
-- embedding transfer
-
-值得注意的是：如果 tokenizer-free 路线胜出，"Embedding Table 查表"这个操作本身也会被改写——字节序列的表示将来自模型内部的动态计算，而非静态查表。
-
----
-
-## 11. 现实工程问题 I：Cross-Tokenizer 蒸馏
-
-一个非常现实的问题：不同模型的 Tokenizer 不一样。
-
-```text
-Model A：Tokenizer A / Vocabulary A / Embedding A
-Model B：Tokenizer B / Vocabulary B / Embedding B
-```
-
-如果想把 A 模型的知识蒸馏给 B，就会遇到麻烦：
-
-```text
-A: "人工智能" → [1234, 5678]
-B: "人工智能" → [8932, 112, 745]
-```
-
-Token 序列完全对不上，logit-level 蒸馏直接失效。
-
-ACL 2026 出现了 **Cross-Tokenizer LLM Distillation through a Byte-Level Interface**，尝试用 byte-level 作为两个模型之间的共同接口，解决不同 tokenizer 间的知识蒸馏。论文也明确指出 cross-tokenizer distillation 仍是开放问题——这正是"各家 tokenizer 不统一"这一历史遗产造成的系统性摩擦。
-
----
-
-## 12. 现实工程问题 II：Tokenizer 成为推理瓶颈——GPUTOK
-
-你可能会觉得：tokenizer 不就是 CPU 上切字符串吗？以前确实影响不大。
-
-但现在 1M、2M 甚至 10M context 越来越常见，GPU 全速运转的同时，CPU tokenizer 可能成为 pipeline 的短板：
-
-```text
-GPU：    ████████████████████████  很快
-CPU tokenizer： ████                    拖后腿
-```
-
-2026 年的 **GPUTOK** 研究直接把 BPE tokenizer GPU 化，在超长输入上相比部分 CPU tokenizer 实现获得明显加速。这提示我们：tokenization 不只是"建模前的预处理"，它本身就是推理基础设施的一部分。
-
----
-
-## 13. 2026 年研究地图：五条路线一张图
-
-把 2026 年的 Tokenization 研究记成这张图：
-
-```text
-                         Tokenization
-                              │
-          ┌───────────────────┼───────────────────┐
-          │                   │                   │
-       改进 BPE            Dynamic Token       Tokenizer-Free
-          │                   │                   │
-   更好的词表             动态切分             Byte-level
-   多语言 tokenizer        动态长度             Learned boundary
-   Domain tokenizer        Context-aware        ByteFlow
-          │                   │                   │
-          └───────────────────┼───────────────────┘
-                              │
-                    Cross-Tokenizer
-                              │
-                    Byte-level interface
-                              │
-                         Embedding
-                              │
-              ┌───────────────┼───────────────┐
-              │               │               │
-        Byte Embedding   Dynamic Embedding   Compositional
-```
-
-五条主路线：**改进 BPE / Dynamic Tokenization / Tokenizer-Free / Cross-Tokenizer 接口 / 新一代 Embedding**。
-
----
-
-## 14. 与注意力机制演进的统一视角
-
-本专栏第 1 篇讲 Attention 的演进，这一篇讲 Tokenization。它们不是孤立的话题，而是同一个问题的两面：
-
-```text
-输入表示 → Tokenization → Embedding
-                      ↓
-          ┌─────────────────┐
-          │ Transformer     │
-          │  Attention/FFN/ │
-          │  MoE ...        │
-          └─────────────────┘
-                      ↓
-                  Output
-```
-
-2026 年的研究实际上在同时攻击这条 pipeline 的不同位置：
-
-```text
-Tokenizer
-   为什么固定？        → Dynamic / Token-free
-
-Attention
-   为什么 O(N²)？      → Sparse / Linear / Hybrid
-
-FFN
-   为什么每个 token 都算？ → MoE / Conditional Compute
-
-Embedding
-   为什么必须固定查表？  → Compositional / Contextual
-
-Inference
-   为什么每步重算？      → KV Cache / Speculative Decoding
-```
-
-所以如果现在系统学 2026 年的大模型底层原理，不要把 **Tokenizer → Embedding → Attention** 当成三个孤立知识点，而应理解成一个更大的问题：
-
-> **"一个 Transformer 到底应该用什么粒度来表示信息，以及应该在什么粒度上进行计算？"**
-
-注意力效率的进步（第 1 篇）使得更细的表示粒度（本篇）变得可负担；表示粒度的研究又反过来改变注意力的输入分布。两者互相成就。
-
-而且从 2026 年的论文趋势看，**"tokenization 是不是 LLM 必须存在的一层"这个问题，目前远没有定论**。
-
----
-
-## 15. 学习建议：2026 年该怎么学 Tokenization
-
-**必须学，但学习重点已经变了。**
-
-不要把时间花在"BPE 算法背下来就完事"。应该建立完整的表示链路直觉：
-
-```text
-文本 → Unicode/UTF-8 → Byte → 字符 → 词 → Subword → Token
-    → Embedding → Contextual Representation → Attention
-```
-
-然后真正理解这些问题：
-
-- 为什么我们需要 Token？
-- 为什么 Token 粒度会影响模型？
-- 为什么 token 数量会影响计算成本？
-- 为什么中文、英文、代码会出现不同的 token efficiency？
-- 为什么 tokenizer 会影响模型能力？
-- 如果取消 tokenizer，Transformer 会发生什么？
-
-这些才是 2026 年更有价值的问题。
-
----
-
-## 16. 参考资料
-
-1. [ByteFlow: Language Modeling through Adaptive Byte Compression without a Tokenizer — ICLR 2026](https://proceedings.iclr.cc/paper_files/paper/2026/hash/eaf5d2cdb582c058a078d4fdf52a20f9-Abstract-Conference.html)
-2. [MUTANT: A Recipe for Multilingual Tokenizer Design — ACL 2026](https://aclanthology.org/2026.acl-long.2146/)
-3. [Retrofitting Large Language Models with Dynamic Tokenization — ACL 2025](https://aclanthology.org/2025.acl-long.1444/)
-4. [FLEXITOKENS: Flexible Tokenization for Evolving Language Models — Findings of ACL 2026](https://aclanthology.org/2026.findings-acl.848/)
-5. [What Tokens are Learned when Tokenization is Optimized Jointly with Language Modeling? — arXiv 2608.17325](https://arxiv.org/abs/2608.17325)
-6. [Cross-Tokenizer LLM Distillation through a Byte-Level Interface — ACL 2026 Workshop](https://aclanthology.org/2026.customnlp4u-1.9/)
-7. [GPUTOK: GPU Accelerated Byte Level BPE Tokenization — arXiv 2603.02597](https://arxiv.org/abs/2603.02597)
-8. 本专栏第 1 篇：《注意力机制全解：从 Bahdanau Attention 到 2026 年的稀疏与线性注意力》
+1. Sennrich et al. *Neural Machine Translation of Rare Words with Subword Units*. ACL 2016.
+2. Kudo & Richardson. *SentencePiece: A Simple and Language Independent Subword Tokenizer and Detokenizer for Neural Text Processing*. EMNLP 2018.
+3. Xue et al. *ByT5: Towards a Token-Free Future with Pre-trained Byte-to-Byte Models*. TACL 2021.
+4. Ahia et al. *Do All Languages Cost the Same? Tokenization in the Era of Commercial Language Models*. EMNLP 2023.
+5. Slagle. *SpaceByte: Towards Deleting Tokenization from Large Language Modeling*. arXiv:2404.14408.
+6. Pagnoni et al. *Byte Latent Transformer: Patches Scale Better Than Tokens*. arXiv:2412.09871, ACL 2025.
+7. Ahia et al. *MAGNET: Improving the Multilingual Fairness of Language Models with Adaptive Gradient-Based Tokenization*. NeurIPS 2024.
+8. Feher, Vulić & Minixhofer. *Retrofitting Large Language Models with Dynamic Tokenization*. ACL 2025, arXiv:2411.18553.
+9. Owodunni, Ahia & Kumar. *FLEXITOKENS: Flexible Tokenization for Evolving Language Models*. arXiv:2507.12720.
+10. Deng et al. *ByteFlow: Language Modeling through Adaptive Byte Compression without a Tokenizer*. arXiv:2603.03583.
+11. Kadamba & Jaisankar. *GPUTOK: GPU Accelerated Byte Level BPE Tokenization*. arXiv:2603.02597.
+12. Zhang & Cao. *TokTier: Exact Stateful Tokenization for Agentic LLM Serving*. arXiv:2607.29678.
+13. Singh et al. *Cross-Tokenizer LLM Distillation through a Byte-Level Interface*. arXiv:2604.07466.
+14. Minixhofer, Vulić & Ponti. *Universal Cross-Tokenizer Distillation via Approximate Likelihood Matching*. arXiv:2503.20083.
+15. Bao et al. *Distilling Token-Trained Models into Byte-Level Models*. arXiv:2602.01007.
