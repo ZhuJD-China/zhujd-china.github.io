@@ -41,15 +41,13 @@ excerpt: 一份面向初学者的详细教程：从 Bahdanau/Luong 到 Transform
 
 ### 2.1 Bahdanau Attention（加性注意力）
 
-2014 年，Bahdanau、Cho 和 Bengio 提出：解码器在生成第 `t` 个输出词时，不再只依赖编码器最后一个隐状态，而是对编码器**每一个位置**的隐状态 `h_1, h_2, ..., h_n` 计算一个"相关性得分"，再加权求和得到一个"上下文向量" `c_t`。
+2014 年，Bahdanau、Cho 和 Bengio 提出：解码器在生成第 $t$ 个输出词时，不再只依赖编码器最后一个隐状态，而是对编码器**每一个位置**的隐状态 $h_1, h_2, \dots, h_n$ 计算一个"相关性得分"，再加权求和得到一个"上下文向量" $c_t$。
 
-计算过程可以这样理解：
+计算过程分三步——打分、归一化、加权求和：
 
-```
-score(s_{t-1}, h_i) = v^T · tanh(W_s · s_{t-1} + W_h · h_i)   # 一个小型前馈网络打分
-α_{t,i} = softmax_i(score(s_{t-1}, h_i))                       # 归一化成权重
-c_t = Σ_i α_{t,i} · h_i                                         # 加权求和
-```
+$$\mathrm{score}(s_{t-1}, h_i) = v^\top \tanh\!\left(W_s s_{t-1} + W_h h_i\right)$$
+
+$$\alpha_{t,i} = \frac{\exp\left(\mathrm{score}(s_{t-1}, h_i)\right)}{\sum_{j=1}^{n} \exp\left(\mathrm{score}(s_{t-1}, h_j)\right)}, \qquad c_t = \sum_{i=1}^{n} \alpha_{t,i}\, h_i$$
 
 因为打分函数是一个可学习的小神经网络（加法+tanh），所以叫"加性注意力"（Additive Attention）。
 
@@ -57,9 +55,7 @@ c_t = Σ_i α_{t,i} · h_i                                         # 加权求�
 
 2015 年 Luong 等人提出了更简单、计算更快的版本，直接用点积衡量相关性：
 
-```
-score(s_t, h_i) = s_t · h_i        # 或者加一个可学习矩阵：s_t^T · W · h_i
-```
+$$\mathrm{score}(s_t, h_i) = s_t^\top h_i \qquad \text{（通用形式：} s_t^\top W h_i\text{）}$$
 
 这个"用点积算相似度"的思路，两年后被 Transformer 直接继承并发扬光大——这就是后来"Scaled Dot-Product Attention"里"Dot-Product"的来源。
 
@@ -81,35 +77,32 @@ score(s_t, h_i) = s_t · h_i        # 或者加一个可学习矩阵：s_t^T · 
 
 你拿着 Query 去和每一个 Key 比对相似度（点积），相似度高的书就多参考一点，相似度低的书就少参考一点，最后把所有书的内容（Value）按相似度加权，就是你最终得到的答案。
 
-在 Transformer 里，Q、K、V 都是同一个输入向量 `x` 经过三个不同的线性变换得到的：
+在 Transformer 里，Q、K、V 都是同一个输入向量 $x$ 经过三个不同的线性变换得到的：
 
-```
-Q = x · W_Q
-K = x · W_K
-V = x · W_V
-```
+$$Q = x W_Q, \qquad K = x W_K, \qquad V = x W_V$$
 
 ### 3.2 缩放点积注意力公式
 
-```
-Attention(Q, K, V) = softmax( Q · K^T / √d_k ) · V
-```
+$$\mathrm{Attention}(Q, K, V) = \mathrm{softmax}\!\left(\frac{Q K^\top}{\sqrt{d_k}}\right) V$$
 
 逐步拆解：
 
-1. `Q · K^T`：每个 query 和每个 key 做点积，得到一个 `[序列长度, 序列长度]` 的相关性矩阵（也叫注意力分数矩阵）。
-2. `/ √d_k`：**为什么要除以 √d_k？** 当 key 的维度 `d_k` 较大时，点积的方差会随维度线性增长，数值会变得很大，导致 softmax 后梯度趋近于 0（饱和）。除以 `√d_k` 是为了把方差重新拉回到 1 附近，让 softmax 的梯度保持健康。这是一个很小但很关键的工程细节。
-3. `softmax(...)`：把每一行归一化成"和为 1 的权重分布"。
-4. `· V`：用这些权重对 Value 做加权求和，得到输出。
+1. $Q K^\top$：每个 query 和每个 key 做点积，得到一个 `[序列长度, 序列长度]` 的相关性矩阵（也叫注意力分数矩阵）。
+2. $\div \sqrt{d_k}$：**为什么要除以 $\sqrt{d_k}$？** 当 key 的维度 $d_k$ 较大时，点积的方差会随维度线性增长（若 $q, k$ 各分量独立同分布、方差为 1，则 $q^\top k$ 的方差为 $d_k$），数值会变得很大，导致 softmax 后梯度趋近于 0（饱和）。除以 $\sqrt{d_k}$ 是为了把方差重新拉回到 1 附近：
+
+$$\mathrm{Var}\!\left(\frac{q^\top k}{\sqrt{d_k}}\right) = \frac{d_k}{d_k} = 1$$
+
+让 softmax 的梯度保持健康。这是一个很小但很关键的工程细节。
+3. $\mathrm{softmax}(\cdot)$：把每一行归一化成"和为 1 的权重分布"。
+4. $\cdot V$：用这些权重对 Value 做加权求和，得到输出。
 
 ### 3.3 多头注意力（Multi-Head Attention）
 
-只用一组 Q/K/V 做一次注意力，模型只能学到"一种"相关性模式。多头注意力把 `d_model` 维的向量切成 `h` 份（比如 8 头、32 头、128 头），每一份独立做一次缩放点积注意力，再把结果拼接起来：
+只用一组 Q/K/V 做一次注意力，模型只能学到"一种"相关性模式。多头注意力把 $d_{\mathrm{model}}$ 维的向量切成 $h$ 份（比如 8 头、32 头、128 头），每一份独立做一次缩放点积注意力，再把结果拼接起来：
 
-```
-head_i = Attention(Q·W_Q^i, K·W_K^i, V·W_V^i)
-MultiHead(Q,K,V) = Concat(head_1, ..., head_h) · W_O
-```
+$$\mathrm{head}_i = \mathrm{Attention}\!\left(Q W_Q^{(i)},\; K W_K^{(i)},\; V W_V^{(i)}\right)$$
+
+$$\mathrm{MultiHead}(Q, K, V) = \mathrm{Concat}\!\left(\mathrm{head}_1, \dots, \mathrm{head}_h\right) W_O$$
 
 直觉上，不同的头可以专注于不同类型的关系——有的头关注语法结构（比如主谓一致），有的头关注语义相关的实体，有的头关注紧邻的局部依赖。
 
@@ -117,7 +110,7 @@ MultiHead(Q,K,V) = Concat(head_1, ..., head_h) · W_O
 
 - **自注意力（Self-Attention）**：Q、K、V 都来自同一个序列，用来建模一句话内部词与词的关系。
 - **交叉注意力（Cross-Attention）**：Q 来自解码器，K/V 来自编码器（或者来自 KV Cache），用于生成任务里"参考已有信息"。
-- **因果掩码（Causal Mask）**：像 GPT 这样的自回归模型，生成第 `t` 个词时不能看到第 `t+1` 个及以后的词，所以要在 `Q·K^T` 矩阵的上三角部分填上 `-∞`，softmax 之后这些位置的权重自然变成 0。
+- **因果掩码（Causal Mask）**：像 GPT 这样的自回归模型，生成第 $t$ 个词时不能看到第 $t+1$ 个及以后的词，所以要在 $Q K^\top$ 矩阵的上三角部分填上 $-\infty$，softmax 之后这些位置的权重自然变成 0。
 
 ### 3.5 位置编码：模型如何知道"顺序"
 
@@ -145,9 +138,7 @@ MultiHead(Q,K,V) = Concat(head_1, ..., head_h) · W_O
 
 KV Cache 虽然省了计算，但极其吃显存。每一层、每一个注意力头都要为每一个 token 存一份 K 向量和一份 V 向量。粗略估算：
 
-```
-KV Cache 大小 ≈ 2（K和V） × 层数 × 头数 × 每头维度 × 序列长度 × batch size × 每个数字占用的字节数
-```
+$$\underbrace{2}_{\text{K 和 V}} \times \underbrace{L_{\mathrm{layers}}}_{\text{层数}} \times \underbrace{h}_{\text{头数}} \times \underbrace{d_{\mathrm{head}}}_{\text{每头维度}} \times \underbrace{N_{\mathrm{seq}}}_{\text{序列长度}} \times \underbrace{B}_{\text{batch}} \times \underbrace{\mathrm{bytes}}_{\text{精度字节}}$$
 
 对于一个几十层、上百个头的大模型，几万 token 的上下文，KV Cache 很容易超过参数本身占用的显存。这直接限制了能同时服务多少并发用户、能支持多长的上下文——这也是为什么"降低 KV Cache"成了过去几年注意力机制演进最重要的一条主线，本文后面讲的 MQA、GQA、MLA、DSA 本质上都是在打这一场"KV Cache 攻防战"。
 
@@ -155,22 +146,17 @@ KV Cache 大小 ≈ 2（K和V） × 层数 × 头数 × 每头维度 × 序列�
 
 最直接的思路：**多个 Query 头共享同一组 Key/Value 头**。也就是说，不管你有多少个 Query 头，Key 和 Value 都只算一份、存一份。
 
-```
-标准 MHA 的 KV Cache ∝ 头数（比如 32 头）
-MQA 的 KV Cache      ∝ 1（只有一组 K/V）
-```
+$$\text{MHA 的 KV Cache} \propto h \;(\text{如 32 头}), \qquad \text{MQA 的 KV Cache} \propto 1$$
 
 好处是显存直接降低几十倍；代价是所有 Query 头被迫"共用同一套参考资料"，模型表达能力会打折扣，实践中会带来一定的精度损失。
 
 ### 4.4 Grouped-Query Attention（GQA，Ainslie 等，2023）
 
-GQA 是 MHA 和 MQA 的折中：把 Query 头分成若干组，**同一组内的 Query 头共享一组 K/V**，组数是一个可调超参数（比如 32 个 Query 头分成 8 组，每组 4 个 Query 头共享 1 组 K/V）。
+GQA 是 MHA 和 MQA 的折中：把 Query 头分成若干组，**同一组内的 Query 头共享一组 K/V**，组数 $g$ 是一个可调超参数（比如 32 个 Query 头分成 8 组，每组 4 个 Query 头共享 1 组 K/V）：
 
-```
-组数 = 1        → 退化成 MQA
-组数 = 头数      → 退化成标准 MHA
-组数介于两者之间   → GQA，效果接近 MHA，显存接近 MQA
-```
+$$g = 1 \Rightarrow \text{MQA（最省显存）}, \qquad g = h \Rightarrow \text{MHA（最完整）}, \qquad 1 < g < h \Rightarrow \text{GQA}$$
+
+效果接近 MHA，显存接近 MQA。
 
 GQA 在效果和效率之间取得了很好的平衡，从 LLaMA 2/3 开始被绝大多数主流大模型采用，直到今天依然是"最经典、最保守"的高效注意力方案（2026 年仍有像 MiniMax M2.5 这样的模型坚持只用朴素 GQA，不叠加其他花活）。
 
@@ -233,7 +219,7 @@ DSA 是 NSA 思路的延续和"精细化"版本，2025 年底随 DeepSeek-V3.2 �
 1. **Lightning Indexer（轻量索引器）**：用一个非常轻量的打分函数，快速估算当前 query 和历史每一个 token 的相关性得分。
 2. **Top-k 选择器**：只保留得分最高的 `k` 个（默认 k=2048）历史 token，真正的注意力计算只在这被选中的 `k` 个 token 上进行。
 
-复杂度从标准注意力的 `O(L²)`（L 是序列长度）降到 `O(L·k)`，当 `L` 远大于 `k` 时，这个降幅非常可观。DeepSeek 官方报告显示长文本场景下推理速度提升 2-3 倍，API 定价直接下调超过 50%，同时基准测试成绩和上一代稠密版本基本持平——说明"变稀疏"这件事本身并没有明显牺牲模型质量，前提是从头训练时就让模型适应这种稀疏模式（而不是拿一个稠密模型硬套稀疏推理）。
+复杂度从标准注意力的 $O(L^2)$（$L$ 是序列长度）降到 $O(L \cdot k)$，当 $L$ 远大于 $k$ 时，这个降幅非常可观。DeepSeek 官方报告显示长文本场景下推理速度提升 2-3 倍，API 定价直接下调超过 50%，同时基准测试成绩和上一代稠密版本基本持平——说明"变稀疏"这件事本身并没有明显牺牲模型质量，前提是从头训练时就让模型适应这种稀疏模式（而不是拿一个稠密模型硬套稀疏推理）。
 
 值得一提的是 DSA 和 NSA 的区别：NSA 是**块级（block-wise）**稀疏，DSA 是更细粒度的**逐 token 级**稀疏，工程实现上也和 DeepSeek 自家的 MLA（下一节详解）深度耦合在一起。到 2026 年年中，DeepSeek 在研究预览的 V4 架构中进一步提出了 **CSA（压缩+DSA 组合）和 HCA（更极端的压缩）交替混合**的方案，目标是支撑百万级 token 上下文。
 
@@ -247,12 +233,11 @@ DSA 是 NSA 思路的延续和"精细化"版本，2025 年底随 DeepSeek-V3.2 �
 
 标准做法是给每个注意力头都存一份完整维度的 K、V。MLA 的想法是：与其存 N 份完整的 K/V，不如先把输入压缩成一个**共享的、维度小得多**的"潜在向量"（latent vector），所有头都从这同一个潜在向量里，通过一个轻量的上投影矩阵反推出各自需要的 K/V。
 
-```
-c_t^KV = h_t · W^DKV                          # 下投影：压缩成低维潜在向量（这是真正被缓存的东西）
-K^h = c_t^KV · W^UK_h,   V^h = c_t^KV · W^UV_h # 上投影：需要时再还原出每个头的 K/V
-```
+$$c_t^{KV} = h_t W^{DKV} \quad \text{（下投影：压缩成低维潜在向量——这才是真正被缓存的东西）}$$
 
-用 DeepSeek-V3 的实际数字直观感受一下压缩幅度：标准 MHA 每个 token 需要缓存 128 个头 × 128 维 = 16384 个浮点数；MLA 每个 token 只需要缓存大约 576 个数（512 维压缩 KV + 64 维解耦 RoPE），差不多是 **28 倍**的压缩率。
+$$K^{(i)} = c_t^{KV} W^{UK}_{(i)}, \qquad V^{(i)} = c_t^{KV} W^{UV}_{(i)} \quad \text{（上投影：需要时再还原出各头的 K/V）}$$
+
+用 DeepSeek-V3 的实际数字直观感受一下压缩幅度：标准 MHA 每个 token 需要缓存 $128 \times 128 = 16384$ 个浮点数；MLA 每个 token 只需要缓存大约 576 个数（512 维压缩 KV + 64 维解耦 RoPE），差不多是 **28 倍**的压缩率。
 
 ### 7.2 Decoupled RoPE（解耦旋转位置编码）
 
@@ -276,7 +261,7 @@ DeepSeek-V2 论文里一个有意思的消融实验结论是：**GQA 在同等 K
 
 ### 8.1 早期线性注意力为什么没有大规模成功
 
-2020 年前后的 Performer、Linear Transformer、Linformer 等工作，本质上是用核函数近似或者低秩近似替代 softmax，把 `O(n²)` 的注意力算成 `O(n)`。但这些早期方案有个共同短板：**"记忆"能力弱**，尤其在需要精确检索久远上下文中某个具体细节的任务（比如"文档第 3 页提到的那个数字是多少"）上，表现明显不如标准注意力——因为它们把所有历史信息都压进了一个大小固定的状态里，天然存在信息瓶颈，这也是它们当年没能取代 Transformer 主流地位的核心原因。
+2020 年前后的 Performer、Linear Transformer、Linformer 等工作，本质上是用核函数近似或者低秩近似替代 softmax，把 $O(n^2)$ 的注意力算成 $O(n)$。但这些早期方案有个共同短板：**"记忆"能力弱**，尤其在需要精确检索久远上下文中某个具体细节的任务（比如"文档第 3 页提到的那个数字是多少"）上，表现明显不如标准注意力——因为它们把所有历史信息都压进了一个大小固定的状态里，天然存在信息瓶颈，这也是它们当年没能取代 Transformer 主流地位的核心原因。
 
 ### 8.2 状态空间模型与 Gated DeltaNet
 
