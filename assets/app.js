@@ -493,6 +493,33 @@
     }).catch(function () {});
   }
 
+  /* ---------- 数学公式：在 marked 解析前提取 $$/$$ 与 $/$，防止 Markdown 吞转义 ---------- */
+  function extractMath(src) {
+    var store = [];
+    // 块级 $$...$$（可跨行）
+    src = src.replace(/\$\$([\s\S]+?)\$\$/g, function (m, tex) {
+      store.push({ display: true, tex: tex });
+      return "ZmathPH" + (store.length - 1) + "Z";
+    });
+    // 行内 $...$（不跨行；首尾非空白，避免误伤价格等普通 $）
+    src = src.replace(/(^|[^\$\\])\$(?!\s)([^\n$]*?[^\s$])\$/g, function (m, pre, tex) {
+      store.push({ display: false, tex: tex });
+      return pre + "ZmathPH" + (store.length - 1) + "Z";
+    });
+    return { src: src, store: store };
+  }
+
+  function restoreMath(html, store) {
+    return html.replace(/ZmathPH(\d+)Z/g, function (m, i) {
+      var e = store[+i];
+      if (!e) return m;
+      var tex = escapeHTML(e.tex);
+      return e.display
+        ? '<div class="math-block">$$' + tex + "$$</div>"
+        : '<span class="math-inline">$' + tex + "$</span>";
+    });
+  }
+
   function renderPost(shell, post) {
     if (window.marked) {
       marked.setOptions({
@@ -505,7 +532,9 @@
         },
       });
     }
-    var bodyHTML = window.marked ? marked.parse(post.body) : "<pre>" + escapeHTML(post.body) + "</pre>";
+    var math = extractMath(post.body);
+    var bodyHTML = window.marked ? marked.parse(math.src) : "<pre>" + escapeHTML(math.src) + "</pre>";
+    bodyHTML = restoreMath(bodyHTML, math.store);
 
     var tagsHTML = post.tags.map(function (t) {
       return '<span class="card-tag">' + escapeHTML(t) + "</span>";
@@ -527,6 +556,19 @@
       '<div class="post-tags">' + tagsHTML + "</div>" +
       "</header>" +
       '<div class="post-body">' + bodyHTML + "</div>";
+
+    // KaTeX 渲染
+    if (window.renderMathInElement) {
+      try {
+        renderMathInElement(shell, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ],
+          throwOnError: false
+        });
+      } catch (e) {}
+    }
   }
 
   function renderError(shell, msg) {

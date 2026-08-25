@@ -744,6 +744,12 @@ body {
 .post-body th, .post-body td { padding: 12px 16px; border: 1px solid var(--line-soft); text-align: left; }
 .post-body th { background: rgba(201, 169, 106, 0.07); color: var(--gold-bright); font-weight: 500; }
 
+/* ---------- 数学公式 ---------- */
+.math-block { overflow-x: auto; overflow-y: hidden; }
+.math-block .katex-display { margin: 1.6em 0; }
+.post-body .katex { font-size: 1.05em; color: var(--ink); }
+.math-inline .katex { font-size: 1em; }
+
 .post-end { text-align: center; margin-top: 70px; }
 
 /* ---------- 入场动画 ---------- */
