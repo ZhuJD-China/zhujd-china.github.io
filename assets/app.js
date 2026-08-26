@@ -462,7 +462,7 @@
   var GISCUS = {
     repo: "ZhuJD-China/zhujd-china.github.io",
     repoId: "R_kgDOT_X5Vw",
-    categoryId: "", // TODO: 待配置 Discussions 分类 ID
+    categoryId: "DIC_kwDOT_X5V84DENud",
     category: "Announcements"
   };
 
