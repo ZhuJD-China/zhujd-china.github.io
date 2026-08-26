@@ -448,9 +448,46 @@
       renderPost(shell, post);
       observeProgress();
       if (post.album) initAlbumNav(post);
+      initComments(file);
     }).catch(function () {
       renderError(shell, "文章加载失败，请稍后重试");
     });
+  }
+
+  /* ---------- giscus 评论区 ----------
+   * 评论数据存储在本仓库 GitHub Discussions 的 Announcements 分类。
+   * categoryId 在仓库开启 Discussions 后可从 https://giscus.app 获取（或由脚本解析），
+   * 未配置时评论区整体隐藏，不影响其他功能。
+   */
+  var GISCUS = {
+    repo: "ZhuJD-China/zhujd-china.github.io",
+    repoId: "R_kgDOT_X5Vw",
+    categoryId: "", // TODO: 待配置 Discussions 分类 ID
+    category: "Announcements"
+  };
+
+  function initComments(term) {
+    var sec = $("#commentsSection");
+    if (!sec || !GISCUS.categoryId || !term) return;
+
+    sec.hidden = false;
+
+    var s = document.createElement("script");
+    s.src = "https://giscus.app/client.js";
+    s.async = true;
+    s.crossOrigin = "anonymous";
+    s.setAttribute("data-repo", GISCUS.repo);
+    s.setAttribute("data-repo-id", GISCUS.repoId);
+    s.setAttribute("data-category", GISCUS.category);
+    s.setAttribute("data-category-id", GISCUS.categoryId);
+    s.setAttribute("data-mapping", "specific");
+    s.setAttribute("data-term", term); // 以文章文件名作为稳定标识，避免 URL 参数干扰
+    s.setAttribute("data-reactions-enabled", "1");
+    s.setAttribute("data-emit-metadata", "0");
+    s.setAttribute("data-input-position", "top");
+    s.setAttribute("data-theme", "transparent_dark");
+    s.setAttribute("data-lang", "zh-CN");
+    $("#giscusWrap").appendChild(s);
   }
 
   // 专辑面包屑 + 上一篇 / 下一篇

@@ -752,6 +752,29 @@ body {
 
 .post-end { text-align: center; margin-top: 70px; }
 
+/* ---------- 评论区（giscus） ---------- */
+.comments-section {
+  margin-top: 78px; padding-top: 46px; position: relative;
+  border-top: 1px solid var(--line-soft);
+}
+.comments-section::before {
+  content: "❖"; position: absolute; top: -10px; left: 50%;
+  transform: translateX(-50%);
+  color: var(--gold); font-size: 15px;
+  background: var(--bg); padding: 0 16px;
+}
+.comments-head { margin-bottom: 30px; }
+.comments-title {
+  font-family: var(--serif); font-size: 26px; font-weight: 700;
+  letter-spacing: 0.18em; display: flex; align-items: baseline; gap: 14px;
+}
+.comments-title::after {
+  content: ""; width: 56px; height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.giscus-wrap { min-height: 120px; }
+.giscus-wrap iframe { width: 100%; }
+
 /* ---------- 入场动画 ---------- */
 .reveal {
   opacity: 0; transform: translateY(30px);
