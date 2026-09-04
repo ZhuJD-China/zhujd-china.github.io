@@ -63,7 +63,7 @@ GPT-3 之后，benchmark 世界进入了"三大件"时代：**MMLU 测知识、G
 
 2022 年的 BIG-bench 是一次雄心勃勃的尝试：444 位作者、132 个机构、204 个任务，想一劳永逸地覆盖"所有能力"。结果它贡献的最重要的东西反而是方法论上的：BIG-Bench Hard（BBH）挑出其中 23 个模型做不好的任务，发现 chain-of-thought 提示能解锁大幅提升——**benchmark 从"计分板"变成了"诊断工具"**，这可能是它比榜单本身更值钱的用法。
 
-把这个时代的规律总结一下，就是**跑步机效应**：从发布到饱和的时间在系统性缩短——MNIST 用了约 14 年，ImageNet 约 3 年，SQuAD 约 2 年，GLUE 1.2 年，GPQA 约 1 年。每个新 benchmark 买到的"区分度时间"越来越短，而制作成本（要找专家出难题）越来越高。
+把这个时代的规律总结一下，就是**跑步机效应**：从发布到饱和的时间在系统性缩短——MNIST 用了约 14 年，ImageNet 约 3 年，SQuAD 约 2 年，GLUE 1.2 年，GPQA 约 1 年。每个新 benchmark 买到的"区分度时间"越来越短，而制作成本（要找专家出难题）越来越高。最新的一个数据点：ARC-AGI-2 于 2025 年 4 月发布时，最强模型只能拿百分之十几，被视为"未来五年的天花板"——到 2026 年 9 月，GPT-5.6 Sol 92.5%、Claude Opus 5 90.4%、Claude Fable 5.1 90%，前三名挤在 2.5 个点里。**16 个月，又一个"不可能被解决"的 benchmark 进入了噪声区间**——跑步机还在加速。
 
 ## 4. 危机（2023）：污染、天花板与噪声天花板
 
@@ -152,6 +152,8 @@ MT-Bench 本身也有硬伤：80 道题太少，按 95% 置信区间算，它的
 
 第三件事我称之为**脚手架冲击（scaffolding shock）**：同一个模型换个 agent 框架，分数能差 30 个点（普林斯顿的 HAL 脚手架在 GAIA 上给裸模型加了约 30 分）。这意味着 agent benchmark 测的从来不是模型，是"模型 + 脚手架"的组合体。BenchJack 项目的审计更狠：在主流 agent benchmark 里找到了 **219 个可利用的缺陷**（分八类），用自动生成的作弊 agent 在不少基准上刷到接近满分——**什么任务都没解决**。
 
+而这个论断在 2026 年 9 月拿到了一个近乎漫画级的数据：ARC Prize 官方发布了 **ARC-AGI-3**（交互式 agentic 推理，模型在 25 个游戏化环境里实时行动），OpenAI 的 GPT-6 Astra 同日参评。结果按 harness 分两栏：用**标准脚手架**（模型自己带笔记、环境间迁移）最高 62.7%；用**Provider Adapter 脚手架**（保留不透明的推理状态、跨请求续接思考、长对话压缩）——99.9%。同一个模型、同一批题目，脚手架不同，分数差出 37 个点，从"及格边缘"直接到"满分"。ARC Prize 把两种 harness 的成绩并列公示而非只报高分的做法值得尊敬，但它也把一个残酷的事实钉在了公告栏上：**在 agentic 评测里，harness 已经不是实验误差，它是成绩的主要决定项**。
+
 这三件事合起来把 2026 年的 agent 评测推到了一个尴尬的境地：分数最高的榜单，恰恰是最不值得信的榜单。
 
 ## 10. 评测工具链：harness 的战国时代
@@ -223,6 +225,7 @@ Chollet 在 2019 年那篇论文的结尾写的大意是：基准衡量的是昨
 - *Are We Done with MMLU?*, 2024（MMLU 标签质量审计）
 - Pimentel et al., *Beyond Metrics: Variability in LLM Evaluation Frameworks*, 2024
 - OpenAI, *Why We No Longer Evaluate SWE-bench Verified*, 2026-02
+- Chollet et al., *ARC-AGI-2: A New Challenge for Frontier AI Reasoning Systems*, 2025；ARC Prize 官方榜（2026-09：ARC-AGI-2 前三 GPT-5.6 Sol 92.5% / Claude Opus 5 90.4% / Claude Fable 5.1 90%）；ARC Prize, *OpenAI's GPT-6 Astra on ARC-AGI-3*, 2026-09
 - METR, *Reward Hacking in Language Models (o3 案例分析)*, 2025-2026
 - Ni et al., *A Survey on Large Language Model Benchmarks*, 2025（283 个 benchmark 的系统综述）
 - lm-evaluation-harness / HELM / OpenCompass / VLMEvalKit 官方文档

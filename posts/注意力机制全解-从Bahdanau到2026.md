@@ -228,6 +228,8 @@ DSA 是 NSA 思路的延续和"精细化"版本，2025 年底随 DeepSeek-V3.2 �
 
 值得一提的是 DSA 和 NSA 的区别：NSA 是**块级（block-wise）**稀疏，DSA 是更细粒度的**逐 token 级**稀疏，工程实现上也和 DeepSeek 自家的 MLA（下一节详解）深度耦合在一起。到 2026 年年中，DeepSeek 在研究预览的 V4 架构中进一步提出了 **CSA（压缩+DSA 组合）和 HCA（更极端的压缩）交替混合**的方案，目标是支撑百万级 token 上下文。
 
+DSA 发布后，围绕它的"生态位补强"很快形成了一条小研究脉络，这本身就说明逐 token 稀疏已经成了长上下文的主航道：2026 年 1 月的 **GSA（Gated Sparse Attention）** 把稀疏选择和门控注意力结合，声称把 attention sink（模型对第一个 token 的病态关注）从 46.7% 压到 4.8%、训练 loss 尖峰减少 98%；2026 年 5 月北大的 **MISA** 则把 DSA 索引器的多个头当成一个 MoE 池来按需激活，用 8 分之一的索引头数保持 LongBench 成绩不掉，索引 kernel 提速约 3.8 倍—— indexer 这个原本"顺手一写"的组件，自己长成了一个新的优化维度。
+
 ---
 
 ## 7. 另一条路：Multi-Head Latent Attention（MLA，2024）
@@ -283,7 +285,7 @@ DeepSeek-V2 论文里一个有意思的消融实验结论是：**GQA 在同等 K
 
 单纯用线性注意力替换全部层，长程精确检索能力还是会打折扣。2025-2026 年的实践共识变成了**"混合"**：绝大多数层用便宜的线性注意力处理局部/摘要式信息，每隔几层保留一层标准（或压缩过的）softmax 注意力，专门负责需要精确检索的场景。典型代表：
 
-- **Qwen3-Next / Qwen3.5**：以 3:1 的比例交替堆叠"Gated DeltaNet 块"和"Gated Attention 块"（每 3 层线性注意力后接 1 层标准注意力），原生支持 262k、可扩展到约 1M 的上下文。
+- **Qwen3-Next / Qwen3.5 / Qwen3.8-Flash-Next**：以 3:1 的比例交替堆叠"Gated DeltaNet 块"和"Gated Attention 块"（每 3 层线性注意力后接 1 层标准注意力），原生支持 262k、可扩展到约 1M 的上下文。2026 年 8 月底的 Qwen3.8-Flash-Next（Qwen4 架构的预览版，176B 总参/6B 激活）延续了这个配方，并给那 1/4 的全局注意力层引入了 **Qwen Sparse Attention**——连"负责精确检索的那几层"也开始稀疏化了。
 - **Kimi Linear / Kimi K3**：用 **Kimi Delta Attention（KDA）**——Gated DeltaNet 的进一步精细化版本，把 Qwen3-Next 里"每个头一个标量遗忘门"升级成"每个特征通道单独一个遗忘门"，记忆控制更精细；配合门控 MLA 层，同样是接近 3:1 的比例。到 2026 年年中的 Kimi K3（总参数约 2.8T，激活约 104B，支持 1M 上下文）里，93 层中有 69 层是 KDA、24 层是门控 MLA，官方声称在 1M 长上下文下 KV Cache 可减少约 75%、解码速度提升数倍。
 - **Jamba / Nemotron 系列**：更早期的代表，把 Mamba 模块和标准自注意力模块直接交替堆叠。
 
@@ -295,14 +297,15 @@ DeepSeek-V2 论文里一个有意思的消融实验结论是：**GQA 在同等 K
 
 ## 9. 2026 年年中全景图：主流模型都在用什么
 
-截至 2026 年 8 月，可以看到几条清晰但并未收敛成"单一答案"的技术路线，下表汇总了几个代表性模型的选择：
+截至 2026 年 9 月，可以看到几条清晰但并未收敛成"单一答案"的技术路线，下表汇总了几个代表性模型的选择：
 
 | 模型 | 核心注意力方案 | 主要特点 |
 |---|---|---|
 | DeepSeek V3.2 / V3.2-Speciale | MLA + DSA | Lightning indexer 打分 + top-k（默认2048）选择，复杂度 O(L·k) |
-| DeepSeek V4（研究预览） | CSA（压缩+DSA）与 HCA 交替混合 | 面向百万级 token 上下文的更激进压缩 |
+| DeepSeek V4 / V4-Pro（2026.8 开源） | CSA（压缩+DSA）与 HCA 交替混合 | 面向百万级 token 上下文，V4-Pro 已开放权重 |
 | GLM-5 / GLM-5.2 | MLA + DSA（5.2 新增 IndexShare） | 相邻层之间复用已选中的稀疏位置，进一步降低索引开销 |
-| Qwen3-Next / Qwen3.5 | Gated DeltaNet : Gated Attention ≈ 3 : 1 | 原生 262k，可扩展至约 1M 上下文 |
+| GLM-5.3-Flash（2026.8） | MLA + DSA + KDA 三合一 | 45 层文本混合三种方案，原生多模态，1M 上下文 |
+| Qwen3-Next / Qwen3.5 / 3.8-Flash-Next | Gated DeltaNet : Gated Attention ≈ 3 : 1 | 原生 262k，可扩展至约 1M；3.8-Flash-Next 的全局层引入 Qwen Sparse Attention |
 | Kimi Linear / Kimi K3 | Kimi Delta Attention : 门控 MLA ≈ 3 : 1 | 逐通道门控，1M 上下文下 KV Cache 降幅显著 |
 | MiniMax M2 / M2.5 | 纯 Grouped-Query Attention | 主动放弃线性注意力，换取推理密集/智能体任务的精度稳定性 |
 | Ling 2.5 | MLA + 线性注意力混合 | 与 Kimi/Qwen 路线并行的另一种混合配方 |
@@ -310,6 +313,7 @@ DeepSeek-V2 论文里一个有意思的消融实验结论是：**GQA 在同等 K
 几个值得记住的观察：
 
 - **没有"终局答案"**：2026 年年中同时并存至少三条主流路线——「MLA+DSA稀疏」「线性/softmax混合」「保守GQA」——不同团队根据自己最看重的场景（超长上下文成本、agentic 任务稳定性、工程实现复杂度）做出了不同取舍。
+- **"三合一"开始出现**：GLM-5.3-Flash 把 MLA（压缩 KV）、DSA（稀疏选择）、KDA（线性循环）三种方案叠进同一个模型，说明这些技术不再是非此即彼的路线之争，而是可以按层自由组合的"零件库"。
 - **"省 KV Cache"和"省计算量"是两个可以叠加的正交问题**：MQA/GQA/MLA 解决前者，DSA/NSA/线性注意力解决后者（严格说线性注意力两者都省），FlashAttention 系列解决"同样的计算怎么让硬件跑得更快"，三条线互不冲突，实践中经常同时出现在同一个模型里（比如 DSA 就是构建在 MLA 之上的）。
 - **推理框架是新瓶颈**：像 vLLM、SGLang 这样的开源推理引擎需要为每一种新注意力变体（MLA 的权重吸收、DSA 的稀疏索引 kernel、Gated DeltaNet 的循环状态管理）单独适配高性能算子，一个新架构从论文发布到能在生产环境里跑满硬件算力，中间往往有几个月的工程滞后——这也是为什么"算法论文"和"能用的产品"之间总会有时间差。
 
@@ -355,5 +359,7 @@ DeepSeek-V2 论文里一个有意思的消融实验结论是：**GQA 在同等 K
 - Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention (arXiv:2502.11089)
 - FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling (arXiv:2603.05451)
 - Kimi Linear: An Expressive, Efficient Attention Architecture (arXiv:2510.26692)
+- Gated Sparse Attention (arXiv:2601.15305)；MISA: Mixture of Indexer Sparse Attention (arXiv:2605.07363)
+- SGLang 官方 Cookbook：Qwen3.8-Flash-Next（2026-08）/ GLM-5.3-Flash / Kimi-K3 部署文档
 - Sebastian Raschka, "The Big LLM Architecture Comparison" 系列文章（LLM Architecture Gallery）
 - Qwen3 / Qwen3-Next / Qwen3.5 技术报告

@@ -202,8 +202,9 @@ $$y = x W = x (R R^\top) W = (x R)\,(R^\top W)$$
 
 - **QuaRot**（NeurIPS 2024）用随机 Hadamard 变换完成了端到端 4bit：权重、激活、KV Cache 全部 4bit，Llama-2-70B 困惑度损失不超过 0.47。
 - **SpinQuant**（ICLR 2025，Meta）更进一 步：他们发现随机旋转之间的差距可以大到下游任务 13 个点——那干脆**让旋转矩阵本身可学习**，用优化找最好的 $R$。在难量化的 Llama-3 上，把与全精度的差距又缩小了 45%。
+- **WUSH**（ICML 2026，ISTA / Red Hat AI / ETH，Hoefler 和 Alistarh 组）是这条线的最新一步：它推导出了闭式解的**近优自适应变换**——Hadamard 骨架 + 一个依赖数据二阶矩的分量，组成的甚至不是正交矩阵，但在标准 RTN/AbsMax 块量化器下被证明接近理论最优。在 Llama-3.1-8B 的 MXFP4 W4A4 上，比最强的 Hadamard 基线平均高 2.8 个点（RTN 场景），FP4 矩阵乘让单层吞吐最高到 BF16 的 5.8 倍。从"随机转一个角度"到"闭式解找最优角度"，这条路的数学已经卷到了头。
 
-我对这波工作的评价是：**这是 PTQ 的收官之战**。它之后，W4A4 从研究级问题变成了工程级问题，纯算法层面的花样基本出尽了。ICLR 2026 的量化论文里，旋转路线已经是最成熟、最饱和的方向之一。
+我对这波工作的评价是：**这是 PTQ 的收官之战**。它之后，W4A4 从研究级问题变成了工程级问题，纯算法层面的花样基本出尽了——WUSH 这种"闭式解 + 最优性证明"的工作形态，本身就是一条研究线走向成熟的标志。
 
 ## 8. 被忽视的另一半：KV Cache 量化
 
@@ -249,6 +250,8 @@ MXFP4（OCP 微缩放格式）和 NVIDIA 的 NVFP4（Blackwell 原生）是 2025
 
 "4bit"这个词从此需要翻译：INT4（GPTQ/AWQ 那一代）、MXFP4、NVFP4 是**三套不同的算法-硬件协同体系**，不能直接比大小。
 
+而 2026 年这条线发生了一件此前没人敢想的事：**FP4 从推理格式变成了预训练格式**。NVIDIA 用 NVFP4 从头训练了一个 12B 模型，跑了整整 **10 万亿 token**——公开记录里最长的 4bit 精度训练——最终 MMLU-Pro 62.58%，和 FP8 基线的 62.62% 几乎无法区分。配方颇有第 7 节既视感：随机 Hadamard 变换压制 outlier、前后向用二维 scale 保持表示一致、随机舍入让梯度估计无偏、少数敏感层保留高精度——旋转量化的思想从推理侧反哺回了训练侧。此后一个月内接连出现了两篇跟进：**Quartet**（基于 Llama 型模型的低精度 scaling law，设计出"精度-算力最优"的全 FP4 训练方案，Blackwell 上跑通）和 9 月初的 **UE5M3**（把 block scale 从 E4M3 换成无符号 E5M3 拿到更宽的量程，从而省掉 Hadamard 变换，8B 模型训练终末 loss 反而低于 NVFP4 官方配方）。原生 4bit 训练的"配方之争"开打了——这通常意味着一项技术正从"能不能"转向"怎么最好"。
+
 ## 10. 2026 年的三个未解难题
 
 写这篇文章时我翻了 ICLR 2026 的接收列表——91 篇量化论文，这个领域并没有"做完"。至少有三件事还没收敛：
@@ -285,5 +288,8 @@ MXFP4（OCP 微缩放格式）和 NVIDIA 的 NVFP4（Blackwell 原生）是 2025
 - Ma et al., *BitNet b1.58 2B4T Technical Report*, 2025
 - Kumar et al., *Scaling Laws for Precision*, ICLR 2025
 - NVIDIA, *Introducing NVFP4 for Efficient and Accurate Low-Precision Inference*, 2025
+- NVIDIA, *Pretraining Large Language Models with NVFP4*（arXiv:2509.25149，12B / 10T token 的 4bit 预训练）
+- *Quartet: Native FP4 Training Can Be Optimal for Large Language Models*；*UE5M3 FP4 Block Scaling for Stable Language Model Pretraining*（arXiv:2609.02846）
+- Chen et al., *WUSH: Near-Optimal Adaptive Transforms for LLM Quantization*, ICML 2026（arXiv:2512.00956）
 - llama.cpp 仓库的 K-quants 与 IQ 系列文档：github.com/ggml-org/llama.cpp
 - ICLR 2026 量化论文全景观察：kai-liu.cn/Awesome-Model-Quantization

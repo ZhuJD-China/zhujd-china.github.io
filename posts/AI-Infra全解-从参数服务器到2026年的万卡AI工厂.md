@@ -142,12 +142,17 @@ $$\text{算术强度} = \frac{\text{FLOPs}}{\text{读写字节数}}, \qquad \tex
 | NVLink 3（2020） | A100 | 600 GB/s |
 | NVLink 4（2022） | H100 | 900 GB/s |
 | NVLink 5（2024） | B200 | 1.8 TB/s |
+| NVLink 6（2026） | Rubin（VR200 NVL72） | 机架级总带宽约 250 TB/s |
 
 2018 年 DGX-2 引入 **NVSwitch**（NVLink 的交叉开关），让 16 卡全互联成为可能；到 Blackwell 代的 **GB200 NVL72**，一个机架 72 张 GPU 通过机架级 NVSwitch 连成一个统一的 NVLink 域，总带宽 130 TB/s——NVIDIA 官方的说法是"整个机架就是一台 GPU"。这不是修辞：NVL72 上跑 TP，延迟和机内跑几乎没差别。
+
+2026 年 8 月，**Vera Rubin 平台正式量产**，把这条曲线又推了一格：VR200 NVL72 用 72 张 Rubin GPU + 36 颗 Vera CPU（88 个自研 Olympus 核、1.2 TB/s 内存带宽），配 HBM4 和 NVLink 6，官方口径是单机架 token 吞吐达到 GB200 架构的 10 倍，FP4 稀疏算力每节点 50 PFLOPS。供应链也随之换血：HBM4 三家原厂（SK 海力士/三星/美光）在 2026 年三季度全面量产，台积电 CoWoS 先进封装月产能年底突破 13 万片——**AI 算力的瓶颈正在从 GPU 本体转向先进封装和 HBM 产能**，这是 Infra 叙事里新的一层。价格也在重构：一台 VR200 NVL72 机架约 780 万美元（Bernstein 的落地成本调研口径接近 910 万），几乎是 GB300 的一倍——算力增长的同时，"单位算力的资本开支"并没有下降。
 
 **scale-out 这边**是 InfiniBand 和以太网（RoCE）的长期对峙。IB 延迟亚微秒、自带 SHARP（在交换机里直接做归约，all-reduce 带宽翻倍），是超算和头部 AI 工厂的黄金标准；RoCE 用通用以太网硬件承载 RDMA，便宜、生态开放，NVIDIA 用 Spectrum-X（针对 AI 调优的以太网）在这个市场追赶。到 2025-2026 年，两边的带宽都到了 800 Gbps（XDR），拓扑上统一收敛到 **rail-optimized fat-tree**：每台机器的 8 张网卡各接一台 leaf 交换机（同号 GPU 接同一台 leaf），上层 spine 无阻塞全互联——这样跨机 TP/EP 的同号 GPU 通信永远只穿两跳，物理拓扑和通信模式对齐。
 
 最后是能耗这堵新墙：一个万卡集群功率几十 MW（NVL72 单机架 120 kW 起），数据中心选址从"哪里地价便宜"变成"哪里有电"。AI Infra 的最新一层（液冷、直流母线、CPO 光电共封装）已经完全是电力工程了。**"数据中心即计算机"这句话，2026 年是字面成立的。**
+
+而且这个"计算机"的规模单位已经从兆瓦（MW）换成了吉瓦（GW）。2026 年下半年两件事给这个时代盖了章：其一，NVIDIA 与 OpenAI 签下至少 **10 GW** 的系统部署意向、分期投入至多 1000 亿美元，首批设施 2026 年内上线——一家模型公司锁定十座核电站级别的算力；其二，SpaceX 和 NVIDIA 把 Vera Rubin NVL72 做成了**抗辐照的卫星版本（Starmind）**，计划 2027 年四季度发射首批"轨道数据中心"，理由是轨道上太阳能无限、不用买地、不用过环评——尽管 Wood Mackenzie 估算 1 GW 轨道数据中心的建造成本约 1700 亿美元（同等地面设施的三倍多）。当 Infra 的战场从机房延伸到近地轨道，你很难说这是泡沫还是未来——大概率两者都是。
 
 ## 7. 推理革命（2022-2024）：操作系统思想占领 LLM
 
@@ -281,5 +286,7 @@ Meta 训练 Llama 3 405B 的报告（16384 张 H100，54 天预训练）披露�
 - Sheng et al., *HybridFlow: A Flexible and Efficient RLHF Framework (veRL)*, EuroSys 2025
 - RollArt: *Scaling Agentic RL Training via Disaggregated Infrastructure*, 2025
 - NVIDIA DGX SuperPOD / NVL72 参考架构文档；NVIDIA《迎接十亿瓦数据中心时代》博客（2025）
+- 中证鹏元《Vera Rubin 开启量产周期》专题报告（2026-08）；Vera Rubin NVL72 / Vera CPU / Starmind 相关官方与媒体报道（2026-08）
+- NVIDIA × OpenAI 10 GW 合作公告相关报道（2026-09）；SpaceX × NVIDIA Starmind 轨道数据中心报道（2026-08）
 - Meta Llama 3 集群运维数据的相关报道（TweakTown / shiftdelete 等对技术报告的转述，2024-07）
 - vLLM 与 SGLang 官方文档及 2026 年生态报告

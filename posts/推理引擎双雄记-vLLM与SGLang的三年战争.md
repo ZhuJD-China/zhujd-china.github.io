@@ -104,7 +104,8 @@ SGLang 2025 年的另一条主线是把引擎变成生态，四个作品都值�
 - **slime**：自研 RL 框架（Megatron 训练 + SGLang rollout），给 GLM-4.5/4.6 做了大规模训练——推理引擎公司反过来定义 RL 训练栈，这个信号在上一篇第 11 节提过；
 - **HiCache**：分层 KV cache（GPU → CPU → 存储，可插拔 Mooncake/3FS 后端），长上下文场景吞吐最高 6 倍、TTFT 降 84%；
 - **SpecForge**：投机解码草稿模型（EAGLE-3）的训练流水线——"投机解码"从推理技巧变成了完整的训练生态；
-- **SGLang-Jax**（2025-10）：纯 Jax/XLA 的 TPU 原生后端，为 Google 的 TPU 开放做卡位。
+- **SGLang-Jax**（2025-10）：纯 Jax/XLA 的 TPU 原生后端，为 Google 的 TPU 开放做卡位；
+- **SGLang Diffusion**（2026）：引擎边界的又一次扩张——直接 serving 视频扩散模型（MiniMax-H3 一次请求返回带同步音轨的 MP4），Ulysses × Ring 序列并行跑 24 fps 视频生成，从 B200 到双卡 5090 都有配方。一个"LLM 推理引擎"的名字已经装不下它的业务范围了。
 
 ### 4.4 商业化（2026）
 
@@ -175,6 +176,10 @@ SGLang 2025 年的另一条主线是把引擎变成生态，四个作品都值�
 
 **SGLang 的 2026 关键词是"往深长"**。v0.5.17/v0.5.18（一个版本 582-710 个 PR、200 左右贡献者，节奏是 vLLM 的两倍）在干几件很"底层"的事：session-aware cache 让 agent 会话能影响缓存驱逐决策（缓存认识到了"应用还关不关心这段状态"）；weight daemon 让模型权重活得比引擎进程久（崩溃恢复从分钟级到亚秒级）；checkpoint 分阶段加载和 CUDA graph 捕获重叠（启动快 2.4 倍）；Rust 前端逐步替换 Python 的 HTTP/分词路径。它 2026 Q1 的 roadmap 写得非常工程化：overlap scheduler 默认开、prefill CUDA graph 默认开、Mem Cache V2 重构、PP/EP/CP 全部重构、RL 集成的训练-推理一致性……
 
+到了 7-8 月，这场竞争出现了一个漂亮的插曲：**7 月 25 日两家同一天发版**（vLLM 0.26 和 SGLang 0.5.16），而且连续第二个周期把最大的工作量砸在同一个问题上——**KV cache 放不进显存之后怎么办**。但答案完全相反：vLLM 选择**往下压**，把冷 KV 块溢写到对象存储二级层（DP 副本感知的分层放置），用"比 HBM 大得多的并发上下文"换性能；SGLang 选择**往小压**，UnifiedRadixTree 成为 SWA/Mamba/DSA 全路径的默认缓存结构，GLM-5.2 的 cache 分层切分把每卡 KV 内存再砍 74%（0.77 → 0.20 GB/rank）。一个月后 vLLM 0.28（584 个 commit、270 位贡献者）继续这条线并叠了新料：Kimi-K3 全栈性能冲刺（Decode Context Parallel、fused FlashKDA kernel、自适应投机 token 预算让 TTFT 再快约 60%）、DeepSeek V4 稀疏 MLA 端到端跑通、KV cache 磁盘分级 offload、Rust gRPC 前端支持多模态与 RL 生命周期控制；SGLang 0.5.18（710 个 PR）则把原生支持铺到了 Muse Glimmer、Spark3、LLaDA2.2 这批最新架构上。"两家在同一天、对同一个瓶颈、给出相反的解法"——这个画面本身比任何 benchmark 都更能说明这场竞争的质量。
+
+还有一个 2026 年年中才看清的暗线值得记一笔：**模型支持军备竞赛的另一面是正确性债务**。跟踪两个项目 issue 列表你会发现，新架构模型（Kimi K3、DSV4、GLM-5.2）的 day-0 支持和它的高性能 kernel 稳定性经常是两拨 PR——CUDA graph 在特定 batch 下的输出损坏、投机解码的显存越界、ROCm 路径的 KV 状态串扰，这些 bug 的修复往往比功能本身晚几个版本。"先跑通、再跑对"是这场竞赛心照不宣的节奏，选型时对新架构的 day-0 支持要多一分敬畏。
+
 两家 roadmap 放一起看还有个彩蛋：**对方最擅长的东西都在自己的计划里**。vLLM 在补 cache-aware 能力和 agent 支持，SGLang 在补通用性和硬件广度。竞争没有让它们分道扬镳，反而像两块相向生长的大陆。
 
 ## 8. 未来展望：趋同、分叉与商业化
@@ -229,3 +234,5 @@ SGLang 2025 年的另一条主线是把引擎变成生态，四个作品都值�
 - Benchmark 三方对照：PremAI/DeployBase 与 Morph LLM 的 H100 对比（2026）；vLLM issue #37730（Radix vs PagedAttention Scaling，2026-03）；srawlin/vllm-vs-sglang-performance-benchmark BENCHMARK_REPORT（2×H100，2025-12）
 - Inferact 成立报道：TechCrunch（2026-01-22）；RadixArk 公开信息（2026-05）
 - ChatForest 2026 年度评测：vLLM（2026-05-07）与 SGLang（2026-05-07）两篇 Review
+- vLLM v0.26.0 / v0.28.0 Release Notes（2026-07-25 / 2026-08-26）；SGLang v0.5.16 / v0.5.18 Release Notes（2026-07-25 / 2026-08-22）
+- dreaming.press《vLLM 0.26 and SGLang 0.5.16 Shipped the Same Day》（2026-08-01）；AI Infrastructure Digest 2026-08-19/08-23（agents-radar）

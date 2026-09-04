@@ -118,9 +118,11 @@ patch:    [─── 长 patch: 可预测后缀 ───][短 patch: 信息密�
            + hash n-gram        动态边界                                       逐字节还原
 ```
 
-编码器里还加了 hash n-gram embedding 来增强对噪声的鲁棒性。BLT 做了字节级模型第一个 FLOP 受控的扩展性研究，规模到 80 亿参数、4 万亿训练字节，结论是在固定推理开销下，字节级的 scaling 曲线比 tokenization 模型更好看——匹配 Llama 3 性能的同时推理 FLOPs 最多省一半。顺带一提，2026 年的后续工作（Fast BLT）用块式离散扩散替换逐字节自回归解码，把推理显存带宽又降了 87%–92%。这条路还在继续变便宜。
+编码器里还加了 hash n-gram embedding 来增强对噪声的鲁棒性。BLT 做了字节级模型第一个 FLOP 受控的扩展性研究，规模到 80 亿参数、4 万亿训练字节，结论是在固定推理开销下，字节级的 scaling 曲线比 tokenization 模型更好看——匹配 Llama 3 性能的同时推理 FLOPs 最多省一半。顺带一提，2026 年 8 月的后续工作 **Fast BLT** 用三招继续压成本：BLT-D 给训练目标加一个块式扩散损失，让模型一次解码步并行吐出多个字节；BLT-S 借鉴投机解码的思路，让轻量局部解码器越过 patch 边界多写几个"草稿字节"、再用一次全局前向验证。三管齐下，生成时的内存带宽成本估计再降 50% 以上——其中扩散变体降幅 87%–92%。这条路还在继续变便宜。
 
 BLT 之后，动态边界成了字节级架构的标配，但边界怎么学，各家给出了不同的答案。ByteFlow（2026 年 3 月，Rice 与 Amazon Science）的切入点我认为最见功力：它用潜在表示的**编码率**（coding rate）驱动切分——把分割问题转化成一个有损压缩决策，信息密度高的位置获得更高的编码率、被送入全局计算。工程上尤其聪明的一点是它用 Top-K 选择保持了静态计算图：边界是自适应的，但图的形状是固定的，这对 GPU 映射和内核优化是决定性的友好。
+
+这条线在 2026 年还有两个值得一提的进展。一个是 **H-Net**（Cartesia，Albert Gu 团队）：BLT 的熵模型是外挂的、独立训练的，H-Net 把"在哪里切块"也做成了端到端可学习的（byte→chunk→superchunk 的多级层次，切块器和主模型一起训），在中文、代码、DNA 这类"BPE 词表天然吃亏"的模态上优势尤其明显——DNA 序列没有空格，BPE 在它上面近乎瞎切，H-Net 报告了数倍的数据效率差距。另一个是 8 月的 **EntropyMoE**：BLT 算 patch 熵本来只是为了定边界，这篇工作顺手把这个熵当成 MoE 路由器的输入——熵值本身就是"这个 patch 有多难"的信号，用它来决定激活哪些专家，一鱼两吃。这个细节说明熵驱动的表示已经积累了足够的系统性，开始反哺其他组件的设计。
 
 ## 五、不推翻重来，让旧模型学会动态切分
 
@@ -180,10 +182,13 @@ TokTier 走得更远，做成了有状态的分词服务：保存会话的历史
 | ByT5 | 2021 | 无边界，逐字节 | 256 | OOV 消失；序列 ×4，FLOPs ×10 |
 | SpaceByte | 2024 | 空格等天然边界 | 无 | 计算跟着边界走，追平 tokenized |
 | BLT | 2024 | 下一字节预测熵（动态 patch） | 无 | 同 FLOPs 下优于 Llama 3，推理省一半 |
+| Fast BLT（BLT-D/S/DV） | 2026.8 | 沿用 BLT 熵边界 | 无 | 扩散并行解码 + 自投机验证，带宽成本再降 50%+ |
+| H-Net | 2025 | 端到端可学习的多级切块 | 无 | 切块器与主模型联合训练，中文/代码/DNA 优势显著 |
 | MAGNET | 2024 | 梯度 + 按文字系统的二项先验 | 学习 | 可微训练，多语言公平性提升 |
 | Retrofitting | 2025 | batch 级 BPE 合并 + 超网络算 embedding | 无界 | 旧模型可改造，序列 -20%~-40% |
 | FLEXITOKENS | 2025 | 梯度 + 区间化 hinge 损失 | 学习 | 抗过切分，最高 +10pp |
 | ByteFlow | 2026 | 潜在表示的编码率（Top-K） | 无 | 自适应边界 + 静态计算图 |
+| EntropyMoE | 2026.7 | 熵边界 + 熵路由 | 无 | patch 熵兼任 MoE 路由信号，稀疏计算跟进信息量 |
 
 ```text
 表示粒度                                计算粒度
@@ -220,8 +225,11 @@ Tokenizer-Free 路线                      注意力效率路线
 8. Feher, Vulić & Minixhofer. *Retrofitting Large Language Models with Dynamic Tokenization*. ACL 2025, arXiv:2411.18553.
 9. Owodunni, Ahia & Kumar. *FLEXITOKENS: Flexible Tokenization for Evolving Language Models*. arXiv:2507.12720.
 10. Deng et al. *ByteFlow: Language Modeling through Adaptive Byte Compression without a Tokenizer*. arXiv:2603.03583.
-11. Kadamba & Jaisankar. *GPUTOK: GPU Accelerated Byte Level BPE Tokenization*. arXiv:2603.02597.
-12. Zhang & Cao. *TokTier: Exact Stateful Tokenization for Agentic LLM Serving*. arXiv:2607.29678.
-13. Singh et al. *Cross-Tokenizer LLM Distillation through a Byte-Level Interface*. arXiv:2604.07466.
-14. Minixhofer, Vulić & Ponti. *Universal Cross-Tokenizer Distillation via Approximate Likelihood Matching*. arXiv:2503.20083.
-15. Bao et al. *Distilling Token-Trained Models into Byte-Level Models*. arXiv:2602.01007.
+11. Kallini et al. *Fast Byte Latent Transformer*. arXiv:2605.08044 (BLT-D/BLT-S/BLT-DV).
+12. Gu & Wang et al. *H-Net: Dynamic Chunking for End-to-End Hierarchical Sequence Modeling*. arXiv:2411.12578（Cartesia）.
+13. Liu et al. *EntropyMoE: Entropy-Aware Sparse Expert Routing for Tokenizer-Free LLMs*. arXiv:2608.06398.
+14. Kadamba & Jaisankar. *GPUTOK: GPU Accelerated Byte Level BPE Tokenization*. arXiv:2603.02597.
+15. Zhang & Cao. *TokTier: Exact Stateful Tokenization for Agentic LLM Serving*. arXiv:2607.29678.
+16. Singh et al. *Cross-Tokenizer LLM Distillation through a Byte-Level Interface*. arXiv:2604.07466.
+17. Minixhofer, Vulić & Ponti. *Universal Cross-Tokenizer Distillation via Approximate Likelihood Matching*. arXiv:2503.20083.
+18. Bao et al. *Distilling Token-Trained Models into Byte-Level Models*. arXiv:2602.01007.
