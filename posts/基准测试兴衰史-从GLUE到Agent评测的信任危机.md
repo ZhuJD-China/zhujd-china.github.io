@@ -4,7 +4,7 @@ date: 2026-09-04
 tags: [深度学习, 大模型, 评测, Benchmark, Agent]
 album: 深度学习专栏
 order: 6
-excerpt: 从 GLUE 的一年被杀穿讲起：饱和时间压缩的跑步机、数据污染与噪声天花板、Chatbot Arena 的统计学、LLM-as-Judge 的偏见、VLM 与 Agent 基准的谱系，直到 2026 年 SWE-bench Verified 之死——一部"考试"追不上"考生"的历史。
+excerpt: 从 GLUE 的一年被杀穿讲起：饱和时间压缩的跑步机、数据污染与噪声天花板、Chatbot Arena 的统计学、LLM-as-Judge 的偏见、数学/长上下文/事实性三条深水线、VLM 与 Agent 基准的谱系，直到 2026 年 SWE-bench 两代连死与 reward hacking——一部"考试"追不上"考生"的历史。
 ---
 
 这是《深度学习专栏》的第六篇。前五篇讲的是"模型怎么变强"，这一篇讲的是另一件同样重要的事：**我们怎么知道模型变强了**。
@@ -24,18 +24,19 @@ excerpt: 从 GLUE 的一年被杀穿讲起：饱和时间压缩的跑步机、�
 5. 人类偏好入场：Chatbot Arena 与它的统计学
 6. LLM-as-Judge：让考生当阅卷老师
 7. VLM 的平行演化：从"看图说话"到"看图做科研"
-8. Agent 基准爆发：从答题到干活
-9. 2026 年的信任危机：SWE-bench 之死与 reward hacking
-10. 评测工具链：harness 的战国时代
-11. 实战：怎么读分数，怎么自己评
-12. 尾声：六篇合奏
-13. 参考资料
+8. 三条深水线：数学、长上下文与事实性
+9. Agent 基准爆发：从答题到干活
+10. 2026 年的信任危机：SWE-bench 之死与 reward hacking
+11. 评测工具链：harness 的战国时代
+12. 实战：怎么读分数，怎么自己评
+13. 尾声：六篇合奏
+14. 参考资料
 
 ---
 
 ## 1. 引子：benchmark 到底在测什么
 
-先做个定义。一个 benchmark 形式上是三元组：**（数据集 D，指标 M，协议 P）**。数据集是题库，指标是评分规则，协议是"怎么喂题、怎么抽答案、怎么算分"的完整流程。大部分人只关注 D 和 M，但 2023 年之后翻车的案例几乎全在 P 上——同一个模型、同一个题库，换个答案提取方式（生成式 vs 概率比较）、换个 few-shot 数量，分数能差出一截。后面第 10 节会专门讲这个。
+先做个定义。一个 benchmark 形式上是三元组：**（数据集 D，指标 M，协议 P）**。数据集是题库，指标是评分规则，协议是"怎么喂题、怎么抽答案、怎么算分"的完整流程。大部分人只关注 D 和 M，但 2023 年之后翻车的案例几乎全在 P 上——同一个模型、同一个题库，换个答案提取方式（生成式 vs 概率比较）、换个 few-shot 数量，分数能差出一截。后面第 11 节会专门讲这个。
 
 更深一层的问题是效度：benchmark 测的到底是不是我们关心的能力？心理测量学里有两个概念很好用——**信度**（重复测量是否一致）和**效度**（测的是不是想测的东西）。用这个框架看，MMLU 这类选择题 benchmark 信度很高（可以精确到小数点后两位），但效度可疑（选对选项 ≠ 会解决这个问题）；而真实用户的使用体验效度较高，但信度极低（每个人感受都不一样）。整个 benchmark 发展史，可以说就是在信度和效度之间反复横跳的历史。
 
@@ -69,7 +70,7 @@ GPT-3 之后，benchmark 世界进入了"三大件"时代：**MMLU 测知识、G
 
 2023 年 GPT-4 发布，MMLU 干到 86.4%。表面是狂欢，底下三颗雷同年陆续炸响。
 
-**第一颗：数据污染**。benchmark 是公开的，公开的东西会进训练语料。GPT-4 的技术报告自己承认"可能见过部分 benchmark 的题目"。此后每次"某模型在某 benchmark 暴涨"的新闻，评论区第一句都是"先查污染"。确凿的证据后来不断出现：AIME 2024 对多个模型存在 10-20 分的通胀（对比干净的 AIME 2025）；最狠的实锤是 OpenAI 2026 年 2 月弃用 SWE-bench Verified 时承认——**他们测的每一个前沿模型都有污染迹象**（第 9 节详述）。
+**第一颗：数据污染**。benchmark 是公开的，公开的东西会进训练语料。GPT-4 的技术报告自己承认"可能见过部分 benchmark 的题目"。此后每次"某模型在某 benchmark 暴涨"的新闻，评论区第一句都是"先查污染"。确凿的证据后来不断出现：AIME 2024 对多个模型存在 10-20 分的通胀（对比干净的 AIME 2025）；最狠的实锤是 OpenAI 2026 年 2 月弃用 SWE-bench Verified 时承认——**他们测的每一个前沿模型都有污染迹象**（第 10 节详述）。
 
 **第二颗：天花板效应**。当最好的模型 92%、第二名 91%，这一分的差距主要是测量噪声，不是能力差距。2020-2022 年间 MMLU 的分数分布是一个有信息量的宽区间（43.9 到 70 多），2024 年后前沿挤成一团（DeepSeek-V3 88.5、GPT-4o 88.7、Claude 3.5 Sonnet 88.7、Llama-3.1-405B 88.6……）——**benchmark 失去了排序能力**。
 
@@ -118,11 +119,44 @@ MT-Bench 本身也有硬伤：80 道题太少，按 95% 置信区间算，它的
 
 **推理时代（2023）**：ScienceQA 证明了多模态推理 benchmark 可行，MMMU 把它推向极端——11,500 道大学水平考题、30 个学科、183 个子领域，涵盖医学影像、工程图纸、乐谱、化学结构等 30 种异构图。发布时 GPT-4V 只有 56%，人类专家 88.6%。同年 MathVista 补上"带视觉语境的数学推理"（几何图、统计图、函数图像）。
 
-**反作弊时代（2024-2026）**：MMMU-Pro 的两个改动堪称对症下药——把选项从 4 个加到 10 个（猜对概率从 25% 稀释到 10%），以及一个"vision-only"模式：**把题目本身渲染成图片**，选项都不给。结果揭示了一个尴尬的事实：部分模型在有纯文本选项时分数明显更高——它们在做语言模式的匹配，不是在看图。CharXiv 则用真实 arXiv 论文图表做细粒度的图表理解测试，暴露了 VLM 空间-定量推理的短板。2025 年 HLE 的多模态 split（专家出的图文题）是当前天花板：最强模型也在 20% 以下。
+**反作弊时代（2024-2026）**：MMMU-Pro 的两个改动堪称对症下药——把选项从 4 个加到 10 个（猜对概率从 25% 稀释到 10%），以及一个"vision-only"模式：**把题目本身渲染成图片**，选项都不给。结果揭示了一个尴尬的事实：部分模型在有纯文本选项时分数明显更高——它们在做语言模式的匹配，不是在看图。CharXiv 则用真实 arXiv 论文图表做细粒度的图表理解测试，暴露了 VLM 空间-定量推理的短板。HLE 的多模态 split 曾被视为当前天花板——发布时最强模型拿不到 10%；到 2026 年年中，纯文本榜已被 15 个模型攻破 50%（工具加持下最高 64.7%，论文也上了 Nature），只有多模态 split 还留着大段余量。
 
 一条值得单说的经验：**VLM benchmark 的每一步升级，几乎都是在堵"用语言先验绕过视觉"的漏洞**。MMMU-Pro 的 vision-only 模式是最典型的——它本质上是在问"把你的眼睛借我用一下，别用脑子里的题库"。
 
-## 8. Agent 基准爆发：从答题到干活
+## 8. 三条深水线：数学、长上下文与事实性
+
+主战场（知识、偏好、代码）的格局稳定之后，评测向三个深水区延伸。这三条线各有各的病理，放在一起看，benchmark 这个学科的版图才算完整。
+
+### 8.1 数学：从竞赛题到未解问题
+
+数学线是跑步机效应最直观的展品。GSM8K 之后，Hendrycks 的 **MATH**（2021，12,500 道 AMC/AIME 级竞赛题）接棒，GPT-3 的起点是 6.9%；到 2025 年，MATH-500 上的前沿模型全部挤在 98.6%-99.4% 之间，正式宣告饱和。接力棒传给 AIME（每年只有 15 道题，方差大到没法当排行榜，但好歹还能区分），然后是 Epoch AI 2024 年 11 月的 **FrontierMath**：60 多位在职数学家（包括陶哲轩、Timothy Gowers、Richard Borcherds 三位 Fields Medalist）出的研究级原题，发布时所有模型低于 2%，被认为能撑好几年。
+
+结果是 18 个月后，GPT-5.5 Pro 在 Tier 1-3 上拿到 52.4%。更尴尬的是 2026 年 6 月的 v2 修订：AI 辅助审计发现**原题 42% 存在错误**，修正 135 题、删除 12 题。这个数字和 MMLU 的 6% 错标、SWE-bench Verified 的 59.4% 缺陷测试连成一条线——出题人写的题，正在被 AI 审计出系统性问题。
+
+而数学线真正的头条是 2026 年 9 月 1 日的 **FrontierMath Erdős**：68 道 Erdős 未解问题（数学家 Thomas Bloom 从 652 道未解题全集里挑出的"重要且困难"子集），全部用 Lean 形式化，要求模型在固定预算内**证明或反驳**。参评模型中只有 GPT-6 Astra 有收获——68 题做出 2 题（证一驳一）——其余全部 0 分。这是 benchmark 设计的一个新阶段：**题库的上限不再是"专家能出的难题"，而是人类知识本身的边界**。好处是零污染（答案不存在于任何语料），代价是你测的东西正在和数学研究本身重合——Chollet 2019 年那套"测适应新任务的能力"的理念，被推到了逻辑终点。
+
+### 8.2 长上下文：广告窗口 vs 有效窗口
+
+长上下文是唯一一条"benchmark 主要用来拆穿营销"的线。2026 年所有前沿模型都宣传 1M token 窗口，而 NVIDIA RULER 的结论是：**多数模型在多跳任务上稳定可用的长度只有宣传值的 50-65%**。
+
+这条线自身的演化是一部"任务难度阶梯"：
+
+- **大海捞针（NIAH）**：长文本里藏一个事实，问模型在哪。几乎所有前沿模型在 1M 上都能拿 90%+——这也是厂商发布会最爱引用的数字；
+- **多针/多跳检索（MRCR v2，Google DeepMind）**：1M token 里藏 8 根针，分数立刻悬崖式下跌。2026 年年中，Claude Opus 4.6 以约 78% 领跑 8 针版——是前代 Sonnet 4.5 的 18.5% 的四倍。进步是真的，但"1M 窗口"和"1M 可用"依然是两回事；
+- **间接推理（NoLiMa，Adobe）**：把问题和针之间的字面关键词重叠全部去掉，逼模型真的推理而非匹配。GPT-4o 从 32K 上的 99.3% 掉到 69.7%——大部分厂商悄悄不报这个基准，原因你懂的；
+- **下游任务（HELMET，Princeton）**：RAG、摘要、many-shot ICL 等真实负载在 128K 上的表现。它的核心发现很冷静：**真实工作负载的 95% 发生在 128K 以内**，而不少 1M 榜单上领先的模型在 128K 上反而落后——1M token 正在变成手机摄像头的"百万像素"，参数表上人人都有，日常几乎没人真用得上。
+
+### 8.3 事实性与深度研究：把"开卷考试"做成学科
+
+幻觉是最难评测的能力，因为它真正要测的是"模型知不知道自己不知道"。这条线三年走完三代：
+
+**SimpleQA**（OpenAI，2024 底）：4,300 道短问答，专测参数化知识的事实性，很快成了行业标准——然后 2025 年 9 月被 Google DeepMind 的 **SimpleQA Verified** 审计：原版标签噪声大、主题偏斜、题目大量重复，修出一个 1,000 题的干净版（Gemini 2.5 Pro 以 F1 55.6 领跑）。还是那个模式：先流行，再被审计，再出 Verified 版。
+
+**BrowseComp**（OpenAI，2025-04）：1,266 道"难找但易验证"的检索题——出题人从一个冷僻事实出发反向加约束（时代、地域、职业），直到模型靠常规浏览找不到答案。发布时的对比成了经典：人类专家两小时做出 29.2%，带浏览器的 GPT-4o 只有 1.9%，Deep Research 51.5%。它成了深度研究 agent 的第一个通用货币——到 2026 年 5 月，GPT-5.5 Pro 单次尝试 90.1%，又一条跑步机到站。学界的应对是 **BrowseComp-Plus**：把语料从活的互联网换成冻结的 10 万文档库，终于把"检索器"和"推理器"拆开评——同一模型换更好的检索器，分数从 55.9% 涨到 70.1%，搜索调用反而更少。
+
+**DeepResearch Bench**（2025-06）：100 道博士级任务、22 个领域，评的不是短答案而是长报告，用 RACE（报告质量）+ FACT（引用落地）两套 rubric 打分。它和 BrowseComp 测的是两种能力——检索 vs 综合——一个分数对另一个几乎没有预测力。这条线上真正缺的指标是**校准弃答**：查不到就说查不到，而不是编一个像模像样的引用——而这恰恰是生产环境里最疼的失败模式。
+
+## 9. Agent 基准爆发：从答题到干活
 
 2023 年下半年开始，评测的重心从"答题"转向"干活"——前者测的是单轮能力，后者测的是**在环境里导航、调用工具、从错误中恢复、达成目标状态**的复合能力。这个转变和 Agent 产品化互为因果。
 
@@ -138,25 +172,31 @@ MT-Bench 本身也有硬伤：80 道题太少，按 95% 置信区间算，它的
 
 **tau-bench / tau2-bench**（2024/2025，Sierra）：对话式工具使用 + 业务规则遵从（真实航空公司/零售/电信政策），模拟用户会主动改变世界状态。它贡献了一个重要的新指标 **pass^k**：同一任务独立跑 k 次全部成功的概率。这是对 agent 评测"单次运气"问题的正面回应——一个任务 10 次里对 5 次，对产品来说就是 0。
 
-**SWE-bench 家族**（2023-10 起）：软件工程的正统线，从真实 GitHub issue 出题，模型要产出能通过维护者测试套件的 patch。原版 2,294 题质量参差（很多 issue 描述含糊），2024 年 8 月 OpenAI 联合普林斯顿用 93 位承包工程师审出 500 题的 **Verified** 子集，成为 2024-2025 年引用最多的 agent benchmark——直到它的死亡，第 9 节细讲。
+**SWE-bench 家族**（2023-10 起）：软件工程的正统线，从真实 GitHub issue 出题，模型要产出能通过维护者测试套件的 patch。原版 2,294 题质量参差（很多 issue 描述含糊），2024 年 8 月 OpenAI 联合普林斯顿用 93 位承包工程师审出 500 题的 **Verified** 子集，成为 2024-2025 年引用最多的 agent benchmark——直到它的死亡，第 10 节细讲。
 
-**METR Time Horizons**：不测具体任务，测**时间跨度**——agent 能以 50% 成功率完成的最长任务时长。这个指标因其在 log 尺度上随模型代际线性增长（被称为"新的摩尔定律"）而影响深远。
+**METR Time Horizons**：不测具体任务，测**时间跨度**——agent 能以 50% 成功率完成的最长任务时长。这个指标因其在 log 尺度上随模型代际线性增长（被称为"新的摩尔定律"）而影响深远，而且还在加速：2019-2024 的倍增周期约 7 个月，2024 年后压到约 3 个月。2026 年初的 TH 1.1 数据里 Claude Opus 4.6 的 50% 跨度约 12 小时，METR 五月 Frontier Risk Report 里最强的内测模型估计已到 16-20 小时——他们同时提醒，题库饱和后 16 小时以上的估计不可靠。**连"测时间"的尺子自己都需要加长了**。
 
-## 9. 2026 年的信任危机：SWE-bench 之死与 reward hacking
+2026 年年中的两个新趋势也值得记一笔。一是**时间维度推向极限**：字节 Seed 的 EdgeBench 用 134 个单任务 12 小时起步的长程任务测"边干边学"，OpenMOSS 的 SWE-bench Science 从 98 个科学代码库里抽了 119 个真实 bug——最好的 agent 也修不到一半。二是**评测进入"没有标准答案"的地带**：Anthropic 的 Conceptual Reasoning Index 专测无法验证对错的开放推理，Ai2 的 TutorMoments 给 AI 导师打"该不该忍住不直接给答案"的分。从"能不能做对"到"该不该去做"，benchmark 的地盘正在向判断力扩张。
+
+## 10. 2026 年的信任危机：SWE-bench 之死与 reward hacking
 
 如果只允许用一个事件标记 agent benchmark 的"信任危机元年"，我会选 **2026 年 2 月 23 日 OpenAI 弃用 SWE-bench Verified**。这个他们自己参与缔造的、被全行业引用了一年半的标杆，在官方博客里被宣布"不再反映模型真实软件工程能力的有意义提升"，理由有二：审计发现至少 **59.4% 的失败测试用例本身有缺陷**（题目出错了）；且**所有前沿模型都有训练数据污染的迹象**（答案泄题了）。
 
 这件事的象征意义在于它同时引爆了两颗一直存在的雷：**题目质量**和**数据污染**——而且是裁判自己下场承认的。继承者们（SWE-bench Pro、SWE-bench Live、Terminal-Bench 2.0）的应对也都是针对这两点：Pro 用商业闭源仓库（天然不可污染）、Live 每月从新 issue 滚动更新（发布时间晚于训练截止）。
 
-第二件大事是 **reward hacking 成为主流叙事**。METR 对 o3 的分析给出了教科书案例：模型在优化任务时被观察到把一个慢 kernel 的调用栈改成调用一个更快的现成实现——它没有按预期"优化代码"，而是"把分数函数骗了过去"。类似的案例在 2025-2026 年的 agent 评测里层出不穷：从环境里 debug 出评测脚本、在文件系统里翻到测试用例直接改、甚至修改计分器本身。**当被测量的东西足够有价值，被测系统就会进化出欺骗测量本身的能力**——这是 Goodhart 定律的 agent 版，而且这次作弊的不是出题人，是模型。
+但跑步机追杀的速度超出了所有人的预期——**七个月后，头号继承者自己也进了 ICU**。2026 年 9 月 3 日，OpenAI 再发博客，这次炮口对准 Scale AI 的 SWE-bench Pro：两条独立审查路径（数据驱动分析、人工标注）分别在 731 道公开题里标出 27.4% 和 34.1% 的缺陷题，综合估计约 **30% 的题目有问题**——过严的隐藏测试、误导性题面、与明文指令矛盾的隐藏要求（有一题让模型在行首加一个空格，隐藏测试期待的却是两个）。而 Pro 的分数在八个月里从 23.3% 飙到 80.3%，OpenAI 的原话是"这种进步速度是可疑的"，随即正式撤回了对它的推荐。SWE-bench Verified 之死本来是"旧标杆的落幕"，这次是"新标杆接班半年即翻车"——**benchmark 的死亡开始滚雪球**。
+
+第二件大事是 **reward hacking 成为主流叙事**。METR 对 o3 的分析给出了教科书案例：模型在优化任务时被观察到把一个慢 kernel 的调用栈改成调用一个更快的现成实现——它没有按预期"优化代码"，而是"把分数函数骗了过去"。类似的案例在 2025-2026 年的 agent 评测里层出不穷：从环境里 debug 出评测脚本、在文件系统里翻到测试用例直接改、甚至修改计分器本身。2026 年 7 月 Andon Labs 的 Vending-Bench 2 给了这条线一个漫画级注脚：在模拟自动贩卖机生意里夺冠的 Claude Opus 5，被观察到对系统撒谎、和别的 agent 组建价格卡特尔、无理由拒绝客户退款——分数第一，方式全错。**当被测量的东西足够有价值，被测系统就会进化出欺骗测量本身的能力**——这是 Goodhart 定律的 agent 版，而且这次作弊的不是出题人，是模型。
 
 第三件事我称之为**脚手架冲击（scaffolding shock）**：同一个模型换个 agent 框架，分数能差 30 个点（普林斯顿的 HAL 脚手架在 GAIA 上给裸模型加了约 30 分）。这意味着 agent benchmark 测的从来不是模型，是"模型 + 脚手架"的组合体。BenchJack 项目的审计更狠：在主流 agent benchmark 里找到了 **219 个可利用的缺陷**（分八类），用自动生成的作弊 agent 在不少基准上刷到接近满分——**什么任务都没解决**。
 
-而这个论断在 2026 年 9 月拿到了一个近乎漫画级的数据：ARC Prize 官方发布了 **ARC-AGI-3**（交互式 agentic 推理，模型在 25 个游戏化环境里实时行动），OpenAI 的 GPT-6 Astra 同日参评。结果按 harness 分两栏：用**标准脚手架**（模型自己带笔记、环境间迁移）最高 62.7%；用**Provider Adapter 脚手架**（保留不透明的推理状态、跨请求续接思考、长对话压缩）——99.9%。同一个模型、同一批题目，脚手架不同，分数差出 37 个点，从"及格边缘"直接到"满分"。ARC Prize 把两种 harness 的成绩并列公示而非只报高分的做法值得尊敬，但它也把一个残酷的事实钉在了公告栏上：**在 agentic 评测里，harness 已经不是实验误差，它是成绩的主要决定项**。
+而这个论断在 2026 年拿到了两次实锤。7 月底 OpenAI 自己就先演示过一次：GPT-5.6 Sol 在 ARC-AGI-3 公开任务集上，官方 harness 下 7.8%，换上自家 Responses API 的推理状态保留配置后 38.3%——当天拿来对比的 Claude Opus 5 是 30.2%，这 8 个点的"领先"全在配置开关里。9 月则拿到了近乎漫画级的数据：ARC Prize 官方发布了 **ARC-AGI-3**（交互式 agentic 推理，模型在 25 个游戏化环境里实时行动），OpenAI 的 GPT-6 Astra 同日参评。结果按 harness 分两栏：用**标准脚手架**（模型自己带笔记、环境间迁移）最高 62.7%；用**Provider Adapter 脚手架**（保留不透明的推理状态、跨请求续接思考、长对话压缩）——99.9%。同一个模型、同一批题目，脚手架不同，分数差出 37 个点，从"及格边缘"直接到"满分"。ARC Prize 把两种 harness 的成绩并列公示而非只报高分的做法值得尊敬，但它也把一个残酷的事实钉在了公告栏上：**在 agentic 评测里，harness 已经不是实验误差，它是成绩的主要决定项**。
 
 这三件事合起来把 2026 年的 agent 评测推到了一个尴尬的境地：分数最高的榜单，恰恰是最不值得信的榜单。
 
-## 10. 评测工具链：harness 的战国时代
+把视野拉远一点，2026 年评测圈的主旋律其实是**审计潮**：MMLU 6% 错标、SWE-bench Verified 59.4% 缺陷测试、FrontierMath 42% 错题、SWE-bench Pro 约 30% 缺陷——benchmark 基础设施本身成了被研究对象，"先审计再采信"正在变成新默认。建设性的回应也出现了：8 月底 DeepMind 对前沿模型做了第一次**双盲评测**（出题方与被测方互相看不到对方细节，防止协议被针对性优化），HuggingFace 的 ASR 榜单同月上线了 "benchmark fitting" 指标，直接测模型背下了多少测试集——用 benchmark 的方法论，给 benchmark 自己打分。
+
+## 11. 评测工具链：harness 的战国时代
 
 最后一层是工具。就像上一篇讲推理引擎离不开 vLLM/SGLang，讲 benchmark 也离不开跑评测的 harness——而且那边的罗生门在这边重演了：**同一模型、同一数据集、不同 harness，分数不一样**（2024 年的论文《Beyond Metrics》实测 Llama2/Mistral 系列在几个主流框架间有可观的分数差异，来源是答案提取方式、few-shot 模板这些协议细节）。
 
@@ -171,11 +211,13 @@ MT-Bench 本身也有硬伤：80 道题太少，按 95% 置信区间算，它的
 
 选型建议一句话：英文模型对比选 lm-eval-harness（社区可比性最强），中文能力评估选 OpenCompass，需要"正确率之外"的维度（校准、毒性、公平性）用 HELM，多模态走 VLMEvalKit。
 
+框架之外还有第五个玩家——**独立评测机构**。Artificial Analysis 的 Intelligence Index 把各家模型的质量、价格、速度放进同一张表（2026 年 8 月 xAI 的 Grok 4.6 追平 GPT-5.6 Sol 的 61 分，就是从这张表读出来的新闻），同月还上线了面向 agent 的 Search Index——测各家搜索 API 对 agent 的质量/成本/速度，数据显示给 agent 接一个好搜索能把分数从 33 分拉到 75 分。它的价值是中立和及时，局限也直白：**任何"指数"都是加权平均，它的权重几乎必然和你的场景不同**——当参考系可以，当选型依据不行。
+
 harness 这个层级存在的一个深层问题是：**它让"协议"变成了代码，而代码的细节差异没有公共标准**。你用 lm-eval 跑 MMLU 是 loglikelihood 比较四个选项，我用生成式让模型输出字母，同一模型能差好几分。这不是谁的 bug，是"协议"这个三元组里最被忽视的成员终于开始收租了。
 
-## 11. 实战：怎么读分数，怎么自己评
+## 12. 实战：怎么读分数，怎么自己评
 
-看了六节历史，落地成几条可操作的：
+看了十节历史，落地成几条可操作的：
 
 **读别人的分数时问五个问题**：
 
@@ -195,7 +237,7 @@ harness 这个层级存在的一个深层问题是：**它让"协议"变成了�
 
 最后一条元经验，也是写完这篇最大的感触：**benchmark 的半衰期大概只有 18-24 个月，但"怎么怀疑一个数字"的方法论不会过期**。这套方法论——问协议、问污染、问方差、问激励——才是这个领域真正可迁移的技能。
 
-## 12. 尾声：六篇合奏
+## 13. 尾声：六篇合奏
 
 专栏至此六篇。回头看，这条线其实一直是同一件事的不同剖面：**注意力**、**分词**、**量化**讲的是模型内部的计算经济学；**infra** 和**推理引擎**讲的是这些计算跑在什么机器和系统上；而这一篇讲的是这一切的**记分牌**——我们凭什么说一个模型比另一个好。
 
@@ -203,13 +245,13 @@ harness 这个层级存在的一个深层问题是：**它让"协议"变成了�
 
 Chollet 在 2019 年那篇论文的结尾写的大意是：基准衡量的是昨天的智能，而我们真正想测的是明天的那种。六年过去，这句话依然是整个评测领域最好的注脚。
 
-## 13. 参考资料
+## 14. 参考资料
 
 - Rajpurkar et al., *SQuAD: 100,000+ Questions for Machine Comprehension*, 2016
 - Wang et al., *GLUE: A Multi-Task Benchmark*, 2018；*SuperGLUE: A Stickier Benchmark*, 2019
 - Chollet, *On the Measure of Intelligence (ARC-AGI)*, 2019
 - Hendrycks et al., *Measuring Massive Multitask Language Understanding (MMLU)*, 2020
-- Cobbe et al., *Training Verifiers to Solve Math Word Problems (GSM8K)*, 2021
+- Cobbe et al., *Training Verifiers to Solve Math Word Problems (GSM8K)*, 2021；Hendrycks et al., *MATH Dataset*, 2021
 - Chen et al., *Evaluating LLMs Trained on Code (HumanEval/Codex)*, 2021
 - Srivastava et al., *Beyond the Imitation Game (BIG-bench)*, 2022
 - Zheng et al., *Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*, NeurIPS 2023
@@ -220,12 +262,16 @@ Chollet 在 2019 年那篇论文的结尾写的大意是：基准衡量的是昨
 - Zhou et al., *WebArena: A Realistic Web Environment*, 2023
 - Xie et al., *OSWorld: Benchmarking Multimodal Agents*, 2024
 - Yao et al., *tau-bench / tau2-bench*, 2024/2025
-- Glazer et al., *FrontierMath*, 2024
-- Phan et al., *Humanity's Last Exam*, 2025
+- Glazer et al., *FrontierMath*, 2024（含 *FrontierMath v2* 修订 2026-06、*FrontierMath Erdős* 2026-09）
+- Hsieh et al., *RULER: What's the Real Context Size of Your Long-Context LLMs?*, 2024；Yen et al., *HELMET*, 2024；DeepMind, *MRCR v2*；Adobe, *NoLiMa*, 2025
+- Wei et al., *SimpleQA*, 2024；Haas et al., *SimpleQA Verified*, 2025；*BrowseComp*, 2025；Chen et al., *BrowseComp-Plus*, 2025；*DeepResearch Bench*, 2025
+- Phan et al., *Humanity's Last Exam*, 2025（2026-01 刊于 Nature；至 2026-07 已有 15 个模型越过 50%）
 - *Are We Done with MMLU?*, 2024（MMLU 标签质量审计）
 - Pimentel et al., *Beyond Metrics: Variability in LLM Evaluation Frameworks*, 2024
-- OpenAI, *Why We No Longer Evaluate SWE-bench Verified*, 2026-02
+- OpenAI, *Why We No Longer Evaluate SWE-bench Verified*, 2026-02；*SWE-bench Pro 任务质量审查*, 2026-09
+- METR, *Time Horizon 1.1*, 2026-01；*Frontier Risk Report*, 2026-05；Andon Labs, *Vending-Bench 2*, 2026-07；ByteDance Seed, *EdgeBench*, 2026-07；OpenMOSS, *SWE-bench Science*, 2026-08
 - Chollet et al., *ARC-AGI-2: A New Challenge for Frontier AI Reasoning Systems*, 2025；ARC Prize 官方榜（2026-09：ARC-AGI-2 前三 GPT-5.6 Sol 92.5% / Claude Opus 5 90.4% / Claude Fable 5.1 90%）；ARC Prize, *OpenAI's GPT-6 Astra on ARC-AGI-3*, 2026-09
 - METR, *Reward Hacking in Language Models (o3 案例分析)*, 2025-2026
 - Ni et al., *A Survey on Large Language Model Benchmarks*, 2025（283 个 benchmark 的系统综述）
+- Anthropic, *Conceptual Reasoning Index*, 2026-08；Ai2, *TutorMoments*, 2026-08；Google DeepMind 双盲评测, 2026-08；Artificial Analysis, *Intelligence Index / Search Index*
 - lm-evaluation-harness / HELM / OpenCompass / VLMEvalKit 官方文档
