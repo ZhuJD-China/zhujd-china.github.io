@@ -1424,7 +1424,8 @@ html[data-theme="us"] .about-card {
 }
 html[data-theme="us"] .about-seal {
   width: 104px; height: 104px; margin: 0 auto 22px;
-  border: 1px solid var(--ink); border-radius: 0; background: #fff;
+  border: 1px solid var(--ink); border-radius: 0;
+  background: url("../en_logo.png") center/cover no-repeat;
   box-shadow: var(--shadow);
 }
 html[data-theme="us"] .about-body .section-eyebrow { text-align: center; }
@@ -1575,7 +1576,8 @@ html[data-theme="us"] .agent-launch-main { padding: 90px 24px 80px; }
 html[data-theme="us"] .agent-launch { max-width: 720px; }
 html[data-theme="us"] .agent-seal {
   width: 104px; height: 104px; border-radius: 0; border: 1px solid var(--ink);
-  background: #fff; box-shadow: var(--shadow); animation: none;
+  background: url("../en_logo.png") center/cover no-repeat;
+  box-shadow: var(--shadow); animation: none;
 }
 html[data-theme="us"] .agent-launch-title {
   font-family: var(--serif); font-weight: 900; font-size: clamp(52px, 9vw, 88px);
