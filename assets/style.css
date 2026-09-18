@@ -1098,11 +1098,6 @@ html:not([data-theme="us"]) .loading-mark img {
   margin: 0 auto;
 }
 
-html[data-theme="us"] .about-seal {
-  background: url("../en_logo.png") center/cover no-repeat;
-}
-html[data-theme="us"] .about-seal img { display: none !important; }
-
 /* CN theme (default): ensure logo.png shows in about seal */
 html:not([data-theme="us"]) .about-seal {
   background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.06), rgba(255, 255, 255, 0.015));
@@ -1111,11 +1106,7 @@ html:not([data-theme="us"]) .about-seal img {
   display: block !important; width: 100%; height: 100%; object-fit: cover;
 }
 
-/* agent page seal */
-html[data-theme="us"] .agent-seal {
-  background: url("../en_logo.png") center/cover no-repeat;
-}
-html[data-theme="us"] .agent-seal img { display: none !important; }
+/* agent page seal - main rule at line ~1572 */
 
 html:not([data-theme="us"]) .agent-seal {
   background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.06), rgba(255, 255, 255, 0.015));
