@@ -8,8 +8,9 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css?v=4">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css?v=6">
+  <script>(function(){try{if(localStorage.getItem("guanlan_theme")!=="cn")document.documentElement.setAttribute("data-theme","us");}catch(e){}})();</script>
 </head>
 <body>
 
@@ -21,15 +22,24 @@
   <!-- 导航 -->
   <nav class="nav" id="nav">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        <span class="nav-logo-mark"><img src="logo.png" alt="Norris Zhu"></span>
-        <span class="nav-logo-text">Norris<i> Zhu</i></span>
-      </a>
+      <div class="nav-left">
+        <button class="theme-switch" id="themeSwitch" type="button" aria-label="切换风格" title="切换风格 · Switch theme">
+          <span class="theme-switch-track">
+            <span class="theme-switch-icon theme-switch-icon-cn">观</span>
+            <span class="theme-switch-icon theme-switch-icon-us">US</span>
+            <span class="theme-switch-thumb"></span>
+          </span>
+        </button>
+        <a href="index.html" class="nav-logo">
+          <span class="nav-logo-mark"><img src="logo.png" alt="Norris Zhu"></span>
+          <span class="nav-logo-text"><span class="i18n-cn">Norris<i> Zhu</i></span><span class="i18n-en">The Zhu Journal<i>EDITION</i></span></span>
+        </a>
+      </div>
       <div class="nav-links">
-        <a href="#articles" class="nav-link">文章</a>
-        <a href="#albums" class="nav-link">专辑</a>
-        <a href="agent.html" class="nav-link">智能体</a>
-        <a href="#about" class="nav-link">关于</a>
+        <a href="#articles" class="nav-link"><span class="i18n-cn">文章</span><span class="i18n-en">Writing</span></a>
+        <a href="#albums" class="nav-link"><span class="i18n-cn">专辑</span><span class="i18n-en">Collections</span></a>
+        <a href="agent.html" class="nav-link"><span class="i18n-cn">智能体</span><span class="i18n-en">Agent</span></a>
+        <a href="#about" class="nav-link"><span class="i18n-cn">关于</span><span class="i18n-en">About</span></a>
         <a href="https://github.com/ZhuJD-China" target="_blank" class="nav-link nav-link-github" rel="noopener" title="GitHub · Norris Zhu">
           <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
         </a>
@@ -44,19 +54,19 @@
     <div class="hero-inner">
       <p class="hero-eyebrow reveal">DATA SCIENCE · ARTIFICIAL INTELLIGENCE</p>
       <h1 class="hero-title">
-        <span class="reveal">观澜阁</span>
+        <span class="reveal"><span class="i18n-cn">观澜阁</span><span class="i18n-en">The Zhu Journal</span></span>
       </h1>
-      <p class="hero-sub reveal">静观 <em>·</em> 深思 <em>·</em> 笃行</p>
+      <p class="hero-sub reveal"><span class="i18n-cn">静观 <em>·</em> 深思 <em>·</em> 笃行</span><span class="i18n-en">Notes on Intelligence <em>&amp;</em> Computation</span></p>
       <div class="hero-seal" aria-hidden="true">观澜</div>
-      <p class="hero-desc reveal">Norris Zhu · 数据科学与人工智能学者<br>记录数据、模型与智能的探索，以及代码之外的世界。</p>
+      <p class="hero-desc reveal"><span class="i18n-cn">Norris Zhu · 数据科学与人工智能学者<br>记录数据、模型与智能的探索，以及代码之外的世界。</span><span class="i18n-en">Data science &amp; artificial intelligence.<br>Dispatches on models, machines, and the world beyond the code.</span></p>
       <div class="hero-stats reveal" id="heroStats">
-        <div class="hero-stat"><b id="statPosts">–</b><span>文章</span></div>
-        <div class="hero-stat"><b id="statAlbums">–</b><span>专辑</span></div>
-        <div class="hero-stat"><b id="statWords">–</b><span>累计字数</span></div>
+        <div class="hero-stat"><b id="statPosts">–</b><span><span class="i18n-cn">文章</span><span class="i18n-en">Stories</span></span></div>
+        <div class="hero-stat"><b id="statAlbums">–</b><span><span class="i18n-cn">专辑</span><span class="i18n-en">Series</span></span></div>
+        <div class="hero-stat"><b id="statWords">–</b><span><span class="i18n-cn">累计字数</span><span class="i18n-en">Words</span></span></div>
       </div>
       <div class="hero-actions reveal">
-        <a href="#articles" class="btn btn-primary">开始阅读</a>
-        <a href="#about" class="btn btn-ghost">关于我</a>
+        <a href="#articles" class="btn btn-primary"><span class="i18n-cn">开始阅读</span><span class="i18n-en">Start Reading</span></a>
+        <a href="#about" class="btn btn-ghost"><span class="i18n-cn">关于我</span><span class="i18n-en">About</span></a>
       </div>
     </div>
     <div class="hero-scroll" id="heroScroll">
@@ -70,13 +80,13 @@
       <div class="section-inner">
         <div class="section-head reveal">
           <div>
-            <p class="section-eyebrow">WRITING</p>
-            <h2 class="section-title">文章</h2>
+            <p class="section-eyebrow"><span class="i18n-cn">WRITING</span><span class="i18n-en">The Latest</span></p>
+            <h2 class="section-title"><span class="i18n-cn">文章</span><span class="i18n-en">Writing</span></h2>
           </div>
           <div class="section-tools">
             <div class="search-box">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-              <input type="text" id="searchInput" placeholder="搜索文章…">
+              <input type="text" id="searchInput" placeholder="搜索文章…" data-ph-cn="搜索文章…" data-ph-en="Search stories…">
             </div>
           </div>
         </div>
@@ -92,7 +102,7 @@
         </div>
         <div class="empty-state" id="emptyState" hidden>
           <div class="empty-glyph"><img src="logo.png" alt="logo"></div>
-          <p>没有找到相关文章</p>
+          <p><span class="i18n-cn">没有找到相关文章</span><span class="i18n-en">No stories found</span></p>
         </div>
       </div>
     </section>
@@ -104,16 +114,16 @@
       <div class="section-inner">
         <div class="section-head reveal">
           <div>
-            <p class="section-eyebrow">COLLECTIONS</p>
-            <h2 class="section-title">专辑</h2>
+            <p class="section-eyebrow"><span class="i18n-cn">COLLECTIONS</span><span class="i18n-en">The Series</span></p>
+            <h2 class="section-title"><span class="i18n-cn">专辑</span><span class="i18n-en">Collections</span></h2>
           </div>
-          <p class="section-note">系列连载 · 装订成册</p>
+          <p class="section-note"><span class="i18n-cn">系列连载 · 装订成册</span><span class="i18n-en">Long-form, bound in order</span></p>
         </div>
         <div class="album-grid" id="albumGrid">
           <!-- JS 渲染 -->
         </div>
         <div class="empty-state" id="albumEmpty" hidden>
-          <p>暂无专辑 · 在文章头部信息中填写 album 字段即可创建</p>
+          <p><span class="i18n-cn">暂无专辑 · 在文章头部信息中填写 album 字段即可创建</span><span class="i18n-en">No collections yet · add an <b>album</b> field to a story's front matter</span></p>
         </div>
       </div>
     </section>
@@ -126,15 +136,19 @@
         <div class="about-card reveal">
           <div class="about-seal"><img src="logo.png" alt="Norris Zhu"></div>
           <div class="about-body">
-            <p class="section-eyebrow">ABOUT</p>
-            <h2 class="section-title">关于我</h2>
-            <p>我是 <strong>Norris Zhu</strong>，做数据科学和人工智能，平时也爱写点代码、记录想法。</p>
-            <p>生活里离不开<b>抹茶</b>，奶茶只点抹茶，咖啡也要换燕麦奶；闲下来就去打<b>篮球</b>，水平一般，但上场就图个痛快。</p>
-            <p>最近对 <b>AI Agent</b> 和<b>自动驾驶</b>很上头，觉得这两块是接下来最有意思的方向。</p>
-            <p>做这行说到底是对"智能"本身好奇，也想借着技术去<b>看看世界</b>，找到一些真正能打动自己的东西。</p>
+            <p class="section-eyebrow"><span class="i18n-cn">ABOUT</span><span class="i18n-en">The Author</span></p>
+            <h2 class="section-title"><span class="i18n-cn">关于我</span><span class="i18n-en">About</span></h2>
+            <p class="i18n-cn">我是 <strong>Norris Zhu</strong>，做数据科学和人工智能，平时也爱写点代码、记录想法。</p>
+            <p class="i18n-cn">生活里离不开<b>抹茶</b>，奶茶只点抹茶，咖啡也要换燕麦奶；闲下来就去打<b>篮球</b>，水平一般，但上场就图个痛快。</p>
+            <p class="i18n-cn">最近对 <b>AI Agent</b> 和<b>自动驾驶</b>很上头，觉得这两块是接下来最有意思的方向。</p>
+            <p class="i18n-cn">做这行说到底是对"智能"本身好奇，也想借着技术去<b>看看世界</b>，找到一些真正能打动自己的东西。</p>
+            <p class="i18n-en">I'm <strong>Norris Zhu</strong>. I work in data science and artificial intelligence, and I write to think.</p>
+            <p class="i18n-en">Off the clock it's <b>matcha</b> — matcha milk tea, oat-milk lattes — and pickup <b>basketball</b> where I'm average at best but play for the fun of it.</p>
+            <p class="i18n-en">Right now I'm hooked on <b>AI agents</b> and <b>autonomous driving</b>, the two directions I find most interesting.</p>
+            <p class="i18n-en">At bottom it's curiosity about intelligence itself — and a hope that the work takes me out to <b>see the world</b>.</p>
             <div class="about-links">
               <a href="https://github.com/ZhuJD-China" target="_blank" rel="noopener">GitHub</a>
-              <a href="https://github.com/ZhuJD-China/zhujd-china.github.io" target="_blank" rel="noopener">本站仓库</a>
+              <a href="https://github.com/ZhuJD-China/zhujd-china.github.io" target="_blank" rel="noopener"><span class="i18n-cn">本站仓库</span><span class="i18n-en">Source</span></a>
             </div>
           </div>
         </div>
@@ -146,25 +160,25 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <p class="footer-line">观澜阁 · Norris Zhu's Blog</p>
-        <p class="footer-slogan">静观 · 深思 · 笃行</p>
+        <p class="footer-line"><span class="i18n-cn">观澜阁 · Norris Zhu's Blog</span><span class="i18n-en">The Zhu Journal</span></p>
+        <p class="footer-slogan"><span class="i18n-cn">静观 · 深思 · 笃行</span><span class="i18n-en">Notes on intelligence &amp; computation</span></p>
       </div>
       <div class="footer-cols">
         <div class="footer-col">
-          <p class="footer-head">导航</p>
-          <a href="#articles">文章</a>
-          <a href="#albums">专辑</a>
-          <a href="agent.html">智能体</a>
+          <p class="footer-head"><span class="i18n-cn">导航</span><span class="i18n-en">Sections</span></p>
+          <a href="#articles"><span class="i18n-cn">文章</span><span class="i18n-en">Writing</span></a>
+          <a href="#albums"><span class="i18n-cn">专辑</span><span class="i18n-en">Collections</span></a>
+          <a href="agent.html"><span class="i18n-cn">智能体</span><span class="i18n-en">Agent</span></a>
         </div>
         <div class="footer-col">
-          <p class="footer-head">链接</p>
+          <p class="footer-head"><span class="i18n-cn">链接</span><span class="i18n-en">Elsewhere</span></p>
           <a href="https://github.com/ZhuJD-China" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://github.com/ZhuJD-China/zhujd-china.github.io" target="_blank" rel="noopener">本站仓库</a>
+          <a href="https://github.com/ZhuJD-China/zhujd-china.github.io" target="_blank" rel="noopener"><span class="i18n-cn">本站仓库</span><span class="i18n-en">Source</span></a>
         </div>
       </div>
     </div>
     <div class="footer-base">
-      <p>© 2026 Norris Zhu · Powered by GitHub Pages & Markdown</p>
+      <p>© 2026 Norris Zhu · Powered by GitHub Pages &amp; Markdown</p>
     </div>
   </footer>
 
@@ -173,6 +187,6 @@
     <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"/></svg>
   </button>
 
-  <script src="assets/app.js?v=4"></script>
+  <script src="assets/app.js?v=7"></script>
 </body>
 </html>

@@ -21,6 +21,55 @@
     cacheTTL: 3 * 60 * 1000, // 3 分钟
   };
 
+  /* ---------- 风格切换（观澜阁 / US Edition） ---------- */
+  var THEME_KEY = "guanlan_theme";
+
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-theme") === "us" ? "us" : "cn";
+  }
+
+  function applyTheme(theme, persist) {
+    if (theme === "us") {
+      document.documentElement.setAttribute("data-theme", "us");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+    }
+    var sw = $("#themeSwitch");
+    if (sw) sw.setAttribute("aria-pressed", theme === "us" ? "true" : "false");
+    // 搜索框占位文案
+    var input = $("#searchInput");
+    if (input) {
+      var ph = input.getAttribute(theme === "us" ? "data-ph-en" : "data-ph-cn");
+      if (ph) input.setAttribute("placeholder", ph);
+    }
+    if (persist) {
+      try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+    }
+    // 同步 giscus 评论区主题（若已加载）
+    var frame = document.querySelector(".giscus-frame");
+    if (frame && frame.contentWindow) {
+      frame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme() } } }, "https://giscus.app");
+    }
+  }
+
+  function giscusTheme() {
+    return currentTheme() === "us" ? "light" : "transparent_dark";
+  }
+
+  function initThemeSwitch() {
+    // 默认 US；只有显式存了 "cn" 才回退到中文
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+    var initial = saved === "cn" ? "cn" : "us";
+    applyTheme(initial, false);
+    var sw = $("#themeSwitch");
+    if (!sw) return;
+    sw.addEventListener("click", function () {
+      var next = currentTheme() === "us" ? "cn" : "us";
+      applyTheme(next, true);
+    });
+  }
+
   /* ---------- 工具 ---------- */
   function $(sel) { return document.querySelector(sel); }
   function $all(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
@@ -29,6 +78,11 @@
     return String(s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
+  }
+
+  // 双语输出：随风格自动切换（无需重渲染）
+  function bi(cn, en) {
+    return '<span class="i18n-cn">' + cn + '</span><span class="i18n-en">' + en + "</span>";
   }
 
   /* ---------- Frontmatter 解析 ----------
@@ -233,7 +287,11 @@
       if ((el = $("#statPosts"))) el.textContent = allPosts.length;
       if ((el = $("#statAlbums"))) el.textContent = albums.length;
       if ((el = $("#statWords"))) {
-        el.textContent = words >= 10000 ? (words / 10000).toFixed(1) + " 万" : String(words);
+        if (words >= 10000) {
+          el.innerHTML = bi((words / 10000).toFixed(1) + " 万", (words / 1000).toFixed(1) + "k");
+        } else {
+          el.textContent = String(words);
+        }
       }
     }
 
@@ -253,8 +311,9 @@
       allPosts.forEach(function (p) { p.tags.forEach(function (t) { tags[t] = true; }); });
       var list = ["全部"].concat(Object.keys(tags));
       box.innerHTML = list.map(function (t) {
+        var label = t === "全部" ? bi("全部", "All") : escapeHTML(t);
         return '<button class="tag-pill' + (t === activeTag ? " active" : "") + '" data-tag="' +
-          escapeHTML(t) + '">' + escapeHTML(t) + "</button>";
+          escapeHTML(t) + '">' + label + "</button>";
       }).join("");
       box.addEventListener("click", function (e) {
         var btn = e.target.closest(".tag-pill");
@@ -299,7 +358,10 @@
       var empty = $("#emptyState");
       if (empty) {
         empty.hidden = false;
-        empty.querySelector("p").textContent = "暂无文章 · 请将 Markdown 文件放入 posts/ 目录";
+        empty.querySelector("p").innerHTML = bi(
+          "暂无文章 · 请将 Markdown 文件放入 posts/ 目录",
+          "No stories yet · drop Markdown files into the posts/ folder"
+        );
       }
     }
   }
@@ -316,12 +378,12 @@
     return (
       '<a class="featured-card" href="post.html?file=' + encodeURIComponent(p.file) + '">' +
       '<div class="featured-main">' +
-      '<p class="featured-eyebrow">最新发表 · LATEST</p>' +
+      '<p class="featured-eyebrow">' + bi("最新发表 · LATEST", "Featured Story") + "</p>" +
       '<h3 class="featured-title">' + escapeHTML(p.title) + "</h3>" +
       '<p class="featured-excerpt">' + escapeHTML(p.excerpt) + "</p>" +
       '<div class="card-tags">' + albumBadgeHTML(p) + tagsHTML + "</div>" +
       '<div class="card-read"><span>' + escapeHTML(formatDate(p.date)) +
-      " · " + p.readTime + " 分钟读完 · 阅读全文</span>" +
+      " · " + bi(p.readTime + " 分钟读完", p.readTime + " min read") + "</span>" +
       '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>' +
       "</div></div>" +
       '<div class="featured-mark" aria-hidden="true">澜</div>' +
@@ -333,17 +395,17 @@
     var preview = a.posts.slice(0, 3).map(function (p, i) {
       return '<li><i>' + (i + 1) + "</i>" + escapeHTML(p.title) + "</li>";
     }).join("");
-    var more = a.count > 3 ? '<li class="album-more">… 共 ' + a.count + " 篇</li>" : "";
+    var more = a.count > 3 ? '<li class="album-more">' + bi("… 共 " + a.count + " 篇", "… " + a.count + " total") + "</li>" : "";
     return (
       '<a class="album-card" href="' + albumURL(a.name) + '">' +
       '<div class="album-card-head">' +
       '<h3 class="album-name">' + escapeHTML(a.name) + "</h3>" +
-      '<span class="album-count">' + a.count + " 篇</span>" +
+      '<span class="album-count">' + bi(a.count + " 篇", a.count + " pieces") + "</span>" +
       "</div>" +
       '<ul class="album-preview">' + preview + more + "</ul>" +
       '<div class="album-card-foot">' +
-      "<span>最近更新 " + escapeHTML(formatDate(a.latest.date)) + "</span>" +
-      '<span class="album-enter">进入专辑' +
+      "<span>" + bi("最近更新 ", "Updated ") + escapeHTML(formatDate(a.latest.date)) + "</span>" +
+      '<span class="album-enter">' + bi("进入专辑", "Open series") +
       '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>' +
       "</span></div></a>"
     );
@@ -356,11 +418,11 @@
     return (
       '<a class="article-card" href="post.html?file=' + encodeURIComponent(p.file) + '">' +
       '<div class="card-meta"><span class="card-date">' + escapeHTML(formatDate(p.date)) +
-      '</span><span>' + p.readTime + " 分钟读完</span></div>" +
+      '</span><span>' + bi(p.readTime + " 分钟读完", p.readTime + " min read") + "</span></div>" +
       '<h3 class="card-title">' + escapeHTML(p.title) + "</h3>" +
       '<p class="card-excerpt">' + escapeHTML(p.excerpt) + "</p>" +
       '<div class="card-tags">' + albumBadgeHTML(p) + tagsHTML + "</div>" +
-      '<div class="card-read"><span>阅读全文</span>' +
+      '<div class="card-read"><span>' + bi("阅读全文", "Read story") + "</span>" +
       '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>' +
       "</div></a>"
     );
@@ -375,14 +437,14 @@
 
     var name = new URLSearchParams(location.search).get("album") || "";
     if (!name) {
-      renderAlbumError(shell, "专辑不存在");
+      renderAlbumError(shell, bi("专辑不存在", "Series not found"));
       return;
     }
 
     loadAllPosts().then(function (posts) {
       var album = groupAlbums(posts).filter(function (a) { return a.name === name; })[0];
       if (!album) {
-        renderAlbumError(shell, "专辑不存在或暂无文章");
+        renderAlbumError(shell, bi("专辑不存在或暂无文章", "Series not found or still empty"));
         return;
       }
       document.title = album.name + " · 专辑 · Norris Zhu";
@@ -401,31 +463,31 @@
           "</div>" +
           '<div class="album-item-meta">' +
           "<span>" + escapeHTML(formatDate(p.date)) + "</span>" +
-          "<span>" + p.readTime + " 分钟</span>" +
+          "<span>" + bi(p.readTime + " 分钟", p.readTime + " min") + "</span>" +
           "</div></a>"
         );
       }).join("");
 
       shell.innerHTML =
         '<header class="album-header">' +
-        '<p class="section-eyebrow">ALBUM</p>' +
+        '<p class="section-eyebrow">' + bi("ALBUM", "SERIES") + "</p>" +
         '<h1 class="album-title">' + escapeHTML(album.name) + "</h1>" +
         '<div class="post-meta">' +
-        "<span>" + album.count + " 篇文章</span>" +
+        "<span>" + bi(album.count + " 篇文章", album.count + " stories") + "</span>" +
         '<span class="dot">·</span>' +
-        "<span>最近更新 " + escapeHTML(formatDate(album.latest.date)) + "</span>" +
+        "<span>" + bi("最近更新 ", "Updated ") + escapeHTML(formatDate(album.latest.date)) + "</span>" +
         "</div></header>" +
         '<div class="album-list">' + listHTML + "</div>";
       revealObserve();
     }).catch(function () {
-      renderAlbumError(shell, "专辑加载失败，请稍后重试");
+      renderAlbumError(shell, bi("专辑加载失败，请稍后重试", "Couldn't load this series. Please try again."));
     });
   }
 
   function renderAlbumError(shell, msg) {
     shell.innerHTML =
       '<div class="post-loading"><div class="empty-glyph"><img src="logo.png" alt="logo"></div><p>' +
-      escapeHTML(msg) + '</p></div>';
+      msg + '</p></div>';
   }
 
   /* ============================================================
@@ -438,7 +500,7 @@
     var file = new URLSearchParams(location.search).get("file") || "";
     // 安全校验：仅允许 posts/ 下的 .md 文件
     if (!/^[\w\u4e00-\u9fa5.-]+\.md$/i.test(file)) {
-      renderError(shell, "文章不存在");
+      renderError(shell, bi("文章不存在", "Story not found"));
       return;
     }
 
@@ -450,7 +512,7 @@
       if (post.album) initAlbumNav(post);
       initComments(file);
     }).catch(function () {
-      renderError(shell, "文章加载失败，请稍后重试");
+      renderError(shell, bi("文章加载失败，请稍后重试", "Couldn't load this story. Please try again."));
     });
   }
 
@@ -485,8 +547,8 @@
     s.setAttribute("data-reactions-enabled", "1");
     s.setAttribute("data-emit-metadata", "0");
     s.setAttribute("data-input-position", "top");
-    s.setAttribute("data-theme", "transparent_dark");
-    s.setAttribute("data-lang", "zh-CN");
+    s.setAttribute("data-theme", giscusTheme());
+    s.setAttribute("data-lang", currentTheme() === "us" ? "en" : "zh-CN");
     $("#giscusWrap").appendChild(s);
   }
 
@@ -506,9 +568,9 @@
       if (crumb) {
         crumb.hidden = false;
         crumb.innerHTML =
-          '<a href="index.html#albums">专辑</a><i>/</i>' +
+          '<a href="index.html#albums">' + bi("专辑", "Collections") + "</a><i>/</i>" +
           '<a href="' + albumURL(album.name) + '">' + escapeHTML(album.name) + "</a>" +
-          "<i>/</i><span>第 " + (idx + 1) + " 篇 · 共 " + album.count + " 篇</span>";
+          "<i>/</i><span>" + bi("第 " + (idx + 1) + " 篇 · 共 " + album.count + " 篇", "No. " + (idx + 1) + " of " + album.count) + "</span>";
       }
 
       if (nav) {
@@ -519,11 +581,11 @@
         nav.innerHTML =
           (prev
             ? '<a class="album-nav-link album-nav-prev" href="post.html?file=' + encodeURIComponent(prev.file) + '">' +
-              "<span>上一篇</span><b>" + escapeHTML(prev.title) + "</b></a>"
+              "<span>" + bi("上一篇", "Previous") + "</span><b>" + escapeHTML(prev.title) + "</b></a>"
             : '<span class="album-nav-link album-nav-dummy"></span>') +
           (next
             ? '<a class="album-nav-link album-nav-next" href="post.html?file=' + encodeURIComponent(next.file) + '">' +
-              "<span>下一篇</span><b>" + escapeHTML(next.title) + "</b></a>"
+              "<span>" + bi("下一篇", "Next") + "</span><b>" + escapeHTML(next.title) + "</b></a>"
             : "");
         revealObserve();
       }
@@ -580,15 +642,15 @@
     shell.innerHTML =
       '<header class="post-header">' +
       (post.album
-        ? '<p class="post-album-line"><a href="' + albumURL(post.album) + '">『 ' + escapeHTML(post.album) + " 』</a></p>"
+        ? '<p class="post-album-line"><a href="' + albumURL(post.album) + '">' + bi("『 " + escapeHTML(post.album) + " 』", escapeHTML(post.album)) + "</a></p>"
         : "") +
       '<h1 class="post-title">' + escapeHTML(post.title) + "</h1>" +
       '<div class="post-meta">' +
       '<span>' + escapeHTML(formatDate(post.date)) + "</span>" +
       '<span class="dot">·</span>' +
-      "<span>" + post.readTime + " 分钟读完</span>" +
+      "<span>" + bi(post.readTime + " 分钟读完", post.readTime + " min read") + "</span>" +
       '<span class="dot">·</span>' +
-      "<span>约 " + post.words + " 字</span>" +
+      "<span>" + bi("约 " + post.words + " 字", post.words + " words") + "</span>" +
       "</div>" +
       '<div class="post-tags">' + tagsHTML + "</div>" +
       "</header>" +
@@ -690,6 +752,7 @@
 
   /* ---------- 启动 ---------- */
   document.addEventListener("DOMContentLoaded", function () {
+    initThemeSwitch();
     initCommon();
     initHome();
     initAlbum();

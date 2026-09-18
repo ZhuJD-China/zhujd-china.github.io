@@ -7,11 +7,12 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Markdown 渲染 & 代码高亮 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-  <link rel="stylesheet" href="assets/style.css?v=5">
+  <link rel="stylesheet" href="assets/style.css?v=6">
+  <script>(function(){try{if(localStorage.getItem("guanlan_theme")!=="cn")document.documentElement.setAttribute("data-theme","us");}catch(e){}})();</script>
 </head>
 <body class="post-page">
 
@@ -23,14 +24,23 @@
 
   <nav class="nav nav-solid" id="nav">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        <span class="nav-logo-mark"><img src="logo.png" alt="Norris Zhu"></span>
-        <span class="nav-logo-text">Norris<i> Zhu</i></span>
-      </a>
+      <div class="nav-left">
+        <button class="theme-switch" id="themeSwitch" type="button" aria-label="切换风格" title="切换风格 · Switch theme">
+          <span class="theme-switch-track">
+            <span class="theme-switch-icon theme-switch-icon-cn">观</span>
+            <span class="theme-switch-icon theme-switch-icon-us">US</span>
+            <span class="theme-switch-thumb"></span>
+          </span>
+        </button>
+        <a href="index.html" class="nav-logo">
+          <span class="nav-logo-mark"><img src="logo.png" alt="Norris Zhu"></span>
+          <span class="nav-logo-text"><span class="i18n-cn">Norris<i> Zhu</i></span><span class="i18n-en">The Zhu Journal<i>EDITION</i></span></span>
+        </a>
+      </div>
       <div class="nav-links">
-        <a href="index.html#articles" class="nav-link">所有文章</a>
-        <a href="index.html#albums" class="nav-link">专辑</a>
-        <a href="agent.html" class="nav-link">智能体</a>
+        <a href="index.html#articles" class="nav-link"><span class="i18n-cn">所有文章</span><span class="i18n-en">All Stories</span></a>
+        <a href="index.html#albums" class="nav-link"><span class="i18n-cn">专辑</span><span class="i18n-en">Collections</span></a>
+        <a href="agent.html" class="nav-link"><span class="i18n-cn">智能体</span><span class="i18n-en">Agent</span></a>
         <a href="https://github.com/ZhuJD-China" target="_blank" class="nav-link nav-link-github" rel="noopener" title="GitHub · Norris Zhu">
           <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
         </a>
@@ -57,20 +67,20 @@
     <section class="comments-section" id="commentsSection" hidden>
       <div class="comments-head">
         <p class="section-eyebrow">Comments</p>
-        <h2 class="comments-title">留言</h2>
+        <h2 class="comments-title"><span class="i18n-cn">留言</span><span class="i18n-en">Discussion</span></h2>
       </div>
       <div class="giscus-wrap" id="giscusWrap"></div>
     </section>
 
     <div class="post-end">
-      <a href="index.html#articles" class="btn btn-ghost">← 返回文章列表</a>
+      <a href="index.html#articles" class="btn btn-ghost">← <span class="i18n-cn">返回文章列表</span><span class="i18n-en">Back to all stories</span></a>
     </div>
   </main>
 
   <footer class="footer">
     <div class="footer-inner">
-      <p class="footer-line">观澜阁 · Norris Zhu's Blog</p>
-      <p class="footer-meta">© 2026 Norris Zhu · Powered by GitHub Pages & Markdown</p>
+      <p class="footer-line"><span class="i18n-cn">观澜阁 · Norris Zhu's Blog</span><span class="i18n-en">The Zhu Journal</span></p>
+      <p class="footer-meta">© 2026 Norris Zhu · Powered by GitHub Pages &amp; Markdown</p>
     </div>
   </footer>
 
@@ -83,6 +93,6 @@
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-  <script src="assets/app.js?v=6"></script>
+  <script src="assets/app.js?v=7"></script>
 </body>
 </html>

@@ -7,8 +7,9 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css?v=4">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css?v=6">
+  <script>(function(){try{if(localStorage.getItem("guanlan_theme")!=="cn")document.documentElement.setAttribute("data-theme","us");}catch(e){}})();</script>
 </head>
 <body class="agent-page">
 
@@ -18,14 +19,23 @@
 
   <nav class="nav nav-solid" id="nav">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        <span class="nav-logo-mark"><img src="logo.png" alt="Norris Zhu"></span>
-        <span class="nav-logo-text">Norris<i> Zhu</i></span>
-      </a>
+      <div class="nav-left">
+        <button class="theme-switch" id="themeSwitch" type="button" aria-label="切换风格" title="切换风格 · Switch theme">
+          <span class="theme-switch-track">
+            <span class="theme-switch-icon theme-switch-icon-cn">观</span>
+            <span class="theme-switch-icon theme-switch-icon-us">US</span>
+            <span class="theme-switch-thumb"></span>
+          </span>
+        </button>
+        <a href="index.html" class="nav-logo">
+          <span class="nav-logo-mark"><img src="logo.png" alt="Norris Zhu"></span>
+          <span class="nav-logo-text"><span class="i18n-cn">Norris<i> Zhu</i></span><span class="i18n-en">The Zhu Journal<i>EDITION</i></span></span>
+        </a>
+      </div>
       <div class="nav-links">
-        <a href="index.html#articles" class="nav-link">文章</a>
-        <a href="agent.html" class="nav-link nav-link-active">智能体</a>
-        <a href="index.html#about" class="nav-link">关于</a>
+        <a href="index.html#articles" class="nav-link"><span class="i18n-cn">文章</span><span class="i18n-en">Writing</span></a>
+        <a href="agent.html" class="nav-link nav-link-active"><span class="i18n-cn">智能体</span><span class="i18n-en">Agent</span></a>
+        <a href="index.html#about" class="nav-link"><span class="i18n-cn">关于</span><span class="i18n-en">About</span></a>
         <a href="https://github.com/ZhuJD-China" target="_blank" class="nav-link nav-link-github" rel="noopener" title="GitHub · Norris Zhu">
           <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
         </a>
@@ -39,19 +49,19 @@
       <h1 class="agent-launch-title reveal">BubbleAgent</h1>
       <p class="agent-launch-sub reveal">LLM · RAG · AGENT</p>
       <p class="agent-launch-desc reveal">
-        自研大模型智能体应用，集成多轮对话、检索增强与工具调用。<br>
-        服务部署于云端，全天候在线。
+        <span class="i18n-cn">自研大模型智能体应用，集成多轮对话、检索增强与工具调用。<br>服务部署于云端，全天候在线。</span>
+        <span class="i18n-en">An in-house LLM agent with multi-turn dialogue, retrieval augmentation, and tool use.<br>Deployed in the cloud, online around the clock.</span>
       </p>
       <div class="agent-launch-actions reveal">
         <a class="btn btn-primary btn-lg" href="http://47.106.82.34:8080/" target="_blank" rel="noopener">
-          启动智能体
+          <span class="i18n-cn">启动智能体</span><span class="i18n-en">Launch the Agent</span>
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
-        <a class="btn btn-ghost" href="index.html#articles">返回文章</a>
+        <a class="btn btn-ghost" href="index.html#articles"><span class="i18n-cn">返回文章</span><span class="i18n-en">Back to Writing</span></a>
       </div>
       <p class="agent-launch-note reveal">
-        点击后将在新窗口打开，登录与使用体验最佳<br>
-        后续服务升级 HTTPS 后将实现站内无缝内嵌
+        <span class="i18n-cn">点击后将在新窗口打开，登录与使用体验最佳<br>后续服务升级 HTTPS 后将实现站内无缝内嵌</span>
+        <span class="i18n-en">Opens in a new window for the best sign-in experience.<br>In-page embedding is planned once the service moves to HTTPS.</span>
       </p>
     </div>
   </main>
@@ -61,6 +71,6 @@
     <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"/></svg>
   </button>
 
-  <script src="assets/app.js?v=4"></script>
+  <script src="assets/app.js?v=7"></script>
 </body>
 </html>
