@@ -1074,23 +1074,56 @@ html[data-theme="us"] .empty-glyph {
 }
 html[data-theme="us"] .empty-glyph img { display: none; }
 
+html:not([data-theme="us"]) .empty-glyph {
+  font-family: var(--serif); font-size: 72px; font-weight: 300;
+  color: var(--line); margin-bottom: 18px;
+}
+html:not([data-theme="us"]) .empty-glyph img {
+  display: block; width: 72px; height: 72px; object-fit: contain;
+  opacity: 0.85; margin: 0 auto;
+}
+
 html[data-theme="us"] .loading-mark {
   width: 56px; height: 56px; margin: 0 auto 20px;
   background: url("../en_logo.png") center/cover no-repeat;
-  font-size: 0; /* hide fallback text */
+  font-size: 0;
 }
 html[data-theme="us"] .loading-mark img { display: none; }
+
+html:not([data-theme="us"]) .loading-mark {
+  font-size: 52px; line-height: 1;
+  animation: pulse 1.6s ease-in-out infinite; margin-bottom: 20px;
+}
+html:not([data-theme="us"]) .loading-mark img {
+  display: block; width: 56px; height: 56px; object-fit: contain;
+  margin: 0 auto;
+}
 
 html[data-theme="us"] .about-seal {
   background: url("../en_logo.png") center/cover no-repeat;
 }
 html[data-theme="us"] .about-seal img { display: none; }
 
+/* CN theme (default): ensure logo.png shows in about seal */
+html:not([data-theme="us"]) .about-seal {
+  background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.06), rgba(255, 255, 255, 0.015));
+}
+html:not([data-theme="us"]) .about-seal img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+
 /* agent page seal */
 html[data-theme="us"] .agent-seal {
   background: url("../en_logo.png") center/cover no-repeat;
 }
 html[data-theme="us"] .agent-seal img { display: none; }
+
+html:not([data-theme="us"]) .agent-seal {
+  background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.06), rgba(255, 255, 255, 0.015));
+}
+html:not([data-theme="us"]) .agent-seal img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
 
 /* favicon: not swappable via CSS; keep logo.png for favicon */
   font-family: var(--serif); font-weight: 900; font-size: 27px;
