@@ -1065,8 +1065,13 @@ html[data-theme="us"] .nav-logo::before {
   margin-right: 12px;
 }
 html[data-theme="us"] .nav-logo-text {
+  font-family: var(--serif); font-weight: 900; font-size: 27px;
+  letter-spacing: -0.02em; color: var(--ink);
+  display: inline-flex; align-items: baseline; gap: 8px;
+  white-space: nowrap;
+}
 
-/* ---------- US theme: swap ALL logo.png → en_logo.png ---------- */
+/* ---------- US theme: swap ALL logo.png -> en_logo.png ---------- */
 html[data-theme="us"] .empty-glyph {
   width: 72px; height: 72px; margin: 0 auto 18px;
   background: url("../en_logo.png") center/cover no-repeat;
@@ -1098,15 +1103,16 @@ html:not([data-theme="us"]) .loading-mark img {
   margin: 0 auto;
 }
 
-/* CN theme (default): ensure logo.png shows in about seal */
+html[data-theme="us"] .about-seal img,
+html[data-theme="us"] .agent-seal img { display: none !important; }
+
+/* CN theme (default): ensure logo.png shows in about / agent seal */
 html:not([data-theme="us"]) .about-seal {
   background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.06), rgba(255, 255, 255, 0.015));
 }
 html:not([data-theme="us"]) .about-seal img {
   display: block !important; width: 100%; height: 100%; object-fit: cover;
 }
-
-/* agent page seal - main rule at line ~1572 */
 
 html:not([data-theme="us"]) .agent-seal {
   background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.06), rgba(255, 255, 255, 0.015));
@@ -1115,12 +1121,7 @@ html:not([data-theme="us"]) .agent-seal img {
   display: block !important; width: 100%; height: 100%; object-fit: cover;
 }
 
-/* favicon: not swappable via CSS; keep logo.png for favicon */
-  font-family: var(--serif); font-weight: 900; font-size: 27px;
-  letter-spacing: -0.02em; color: var(--ink);
-  display: inline-flex; align-items: baseline; gap: 8px;
-  white-space: nowrap;
-}
+/* favicon is swapped in JS, see applyTheme() in assets/app.js */
 html[data-theme="us"] .nav-logo-text i {
   display: inline-block; font-size: 10px; font-weight: 700;
   font-family: var(--sans); letter-spacing: 0.24em; text-transform: uppercase;

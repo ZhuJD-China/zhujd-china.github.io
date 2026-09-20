@@ -28,20 +28,25 @@
     return document.documentElement.getAttribute("data-theme") === "us" ? "us" : "cn";
   }
 
+  // 标签页图标：按当前风格切换 logo / en_logo
+  function setFavicon(file) {
+    var links = $all('link[rel="icon"]');
+    if (!links.length) {
+      var link = document.createElement("link");
+      link.rel = "icon"; link.type = "image/png";
+      document.head.appendChild(link);
+      links = [link];
+    }
+    links.forEach(function (l) { l.href = file + "?v=7"; });
+  }
+
   function applyTheme(theme, persist) {
     if (theme === "us") {
       document.documentElement.setAttribute("data-theme", "us");
-      // swap favicon
-      var favicon = document.querySelector('link[rel="icon"]');
-      if (favicon && !favicon.href.includes("en_logo.png")) {
-        favicon.href = "en_logo.png";
-      }
+      setFavicon("en_logo.png");
     } else {
       document.documentElement.removeAttribute("data-theme");
-      var favicon = document.querySelector('link[rel="icon"]');
-      if (favicon && !favicon.href.includes("logo.png")) {
-        favicon.href = "logo.png";
-      }
+      setFavicon("logo.png");
     }
     var sw = $("#themeSwitch");
     if (sw) sw.setAttribute("aria-pressed", theme === "us" ? "true" : "false");
