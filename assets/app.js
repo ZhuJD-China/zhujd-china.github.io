@@ -633,17 +633,167 @@
     });
   }
 
+  /* ---------- 语法高亮 ----------
+     marked v12 不再回调 options.highlight，因此渲染完成后手动调 hljs。
+     本站代码块语言分布：asm / text / il / c / python —— 其中 asm、il 不在
+     highlight.js common构建的语言包里，这里按需补注册；text 保持纯文本，
+     未知语言走自动探测（相关性阈值不过就保持原样，避免乱上色）。 */
+  var langsRegistered = false;
+
+  function registerCustomLanguages() {
+    if (langsRegistered || !window.hljs) return;
+    langsRegistered = true;
+
+    // x86 汇编（反汇编输出：助记符 + 寄存器 + 立即数 + `;` 注释）
+    if (!hljs.getLanguage("asm")) {
+      hljs.registerLanguage("asm", function () {
+        var MNEMONICS = ("mov movzx movsx movsxd lea push pop add sub adc sbb imul mul idiv div inc dec neg not and or xor test cmp xchg " +
+          "movdqa movdqu movaps movups movsd movss movq movd xorps xorpd andps orps addps subps mulps " +
+          "cvtsi2sd cvtss2sd cvtsd2ss cvttsd2si cvttss2si " +
+          "sete setne setz setnz setg setge setl setle seta setb setae setbe sets setns setp setnp " +
+          "cmovz cmovnz cmovg cmovl cmova cmovb cmovae cmovbe " +
+          "jmp je jnz jz jne jg jge jl jle ja jb jae jbe js jns jo jnp call ret retn leave enter " +
+          "shl shr sal sar rol ror rcl rcr bt bts btr btc bsf bsr popcnt lzcnt tzcnt pause ud2 cpuid nop cdq cqo cbw cwd int syscall").split(" ");
+        var REGISTERS = ("rax eax ax al ah rbx ebx bx bl bh rcx ecx cx cl ch rdx edx dx dl dh rsi esi si rdi edi di rbp ebp bp rsp esp sp " +
+          "r8 r8d r8w r8b r9 r9d r9w r9b r10 r10d r10w r10b r11 r11d r11w r11b r12 r12d r12w r12b r13 r13d r13w r13b " +
+          "r14 r14d r14w r14b r15 r15d r15w r15b rip eflags rflags " +
+          "xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7 xmm8 xmm9 xmm10 xmm11 xmm12 xmm13 xmm14 xmm15 " +
+          "ymm0 ymm1 ymm2 ymm3 ymm4 ymm5 ymm6 ymm7 mm0 mm1 mm2 mm3 mm4 mm5 mm6 mm7 fs gs cs ds ss es " +
+          "byte word dword qword xmmword tbyte ptr").split(" ");
+        return {
+          name: "x86 Assembly",
+          keywords: { keyword: MNEMONICS.join(" "), built_in: REGISTERS.join(" ") },
+          contains: [
+            { className: "comment", begin: ";", end: "\n", relevance: 0 },
+            { className: "string", begin: "\"", end: "\"", illegal: "\n", relevance: 0 },
+            { className: "number", begin: "\\b0x[0-9a-fA-F]+\\b", relevance: 0 },
+            { className: "number", begin: "\\b\\d+[hHdDbB]\\b", relevance: 0 },
+            { className: "number", begin: "\\b\\d+(\\.\\d+)?\\b", relevance: 0 },
+            { className: "title", begin: "\\b[a-zA-Z_.$][a-zA-Z0-9_.$]*:", relevance: 0 }
+          ]
+        };
+      });
+    }
+
+    // CIL（.NET IL 反汇编：.method/.field 指令、IL 操作码、类型名）
+    if (!hljs.getLanguage("il")) {
+      hljs.registerLanguage("il", function (hljs) {
+        var OPS = ("ldarg ldarga ldloc ldloca ldloca stloc ldc br brtrue brfalse beq bne bge bgt ble blt " +
+          "leave endfinally endfilter box unbox castclass isinst call callvirt ret dup pop newarr ldlen " +
+          "ldelem stelem conv conv conv throw rethrow initobj cpobj ldstr ldtoken ldftn ldvirtftn " +
+          "ldfld ldflda stfld ldsfld ldsflda stsfld ldnull add sub mul div rem and or xor shl shr neg not " +
+          "clt cgt ceq localloc sizeof arglist mkrefany refanyval refanytype break nop " +
+          "public private family famorassem assembly hidebysig static virtual newslot abstract specialname " +
+          "rtspecialname final initname cil managed preserve sig class valuetype").split(" ");
+        var TYPES = ("void int8 int16 int32 int64 uint8 uint16 uint32 uint64 float32 float64 bool char string object native").split(" ");
+        return {
+          name: "CIL",
+          keywords: { keyword: OPS.join(" "), built_in: TYPES.join(" "), literal: "true false null" },
+          contains: [
+            { className: "comment", begin: "//", end: "\n", relevance: 0 },
+            hljs.COMMENT("/\\*", "\\*/"),
+            { className: "string", begin: "\"", end: "\"", illegal: "\n", relevance: 0 },
+            { className: "meta", begin: "\\.[a-zA-Z_][a-zA-Z0-9_]*", relevance: 0 },
+            { className: "number", begin: "\\b0x[0-9a-fA-F]+\\b", relevance: 0 },
+            { className: "number", begin: "\\b\\d+(\\.\\d+)?\\b", relevance: 0 }
+          ]
+        };
+      });
+    }
+  }
+
+  function highlightCode(root) {
+    if (!window.hljs) return;
+    registerCustomLanguages();
+
+    var blocks = root.querySelectorAll("pre code");
+    Array.prototype.forEach.call(blocks, function (block) {
+      var lang = null;
+      var m = (block.className || "").match(/language-([\w+#-]+)/);
+      if (m) lang = m[1].toLowerCase();
+      var label = lang || "";
+      try {
+        // text / 未标注（本站未标注的全是输出转储）→ 纯文本，不猜测
+        if (!lang || lang === "text" || lang === "txt" || lang === "plaintext") {
+          label = lang || "text";
+        } else if (hljs.getLanguage(lang)) {
+          block.innerHTML = hljs.highlight(block.textContent, { language: lang, ignoreIllegals: true }).value;
+        } else {
+          // 标注了但 common 语言包没有的语言 → 自动探测兜底（阈值挡住乱上色）
+          var auto = hljs.highlightAuto(block.textContent);
+          if (auto.relevance >= 4) {
+            block.innerHTML = auto.value;
+            label = label || auto.language || "";
+          }
+        }
+      } catch (e) { /* 高亮失败保持纯文本（marked 已转义，安全） */ }
+      block.classList.add("hljs");
+      decorateCode(block, label || "text");
+    });
+  }
+
+  /* ---------- 代码条：语言标签 + 复制按钮 ---------- */
+  function decorateCode(block, label) {
+    var pre = block.parentNode;
+    if (!pre || pre.tagName !== "PRE") return;
+    var parent = pre.parentNode;
+    if (!parent || parent.classList.contains("codebox")) return;
+
+    var box = document.createElement("div");
+    box.className = "codebox";
+    var bar = document.createElement("div");
+    bar.className = "codebox-bar";
+    var tag = document.createElement("span");
+    tag.className = "codebox-lang";
+    tag.textContent = String(label).toUpperCase();
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "codebox-copy";
+    btn.innerHTML = bi("复制", "Copy");
+    btn.addEventListener("click", function () { copyCode(block, btn); });
+    bar.appendChild(tag);
+    bar.appendChild(btn);
+    parent.insertBefore(box, pre);
+    box.appendChild(bar);
+    box.appendChild(pre);
+  }
+
+  function copyCode(block, btn) {
+    var text = block.textContent;
+    var flash = function () {
+      var old = btn.innerHTML;
+      btn.innerHTML = bi("已复制", "Copied");
+      btn.classList.add("copied");
+      setTimeout(function () {
+        btn.innerHTML = old;
+        btn.classList.remove("copied");
+      }, 1600);
+    };
+    var legacy = function () {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;";
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return ok;
+      } catch (e) { return false; }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(flash, function () { if (legacy()) flash(); });
+    } else if (legacy()) {
+      flash();
+    }
+  }
+
   function renderPost(shell, post) {
     if (window.marked) {
-      marked.setOptions({
-        breaks: true,
-        highlight: function (code, lang) {
-          if (window.hljs && lang && hljs.getLanguage(lang)) {
-            return hljs.highlight(code, { language: lang }).value;
-          }
-          return window.hljs ? hljs.highlightAuto(code).value : code;
-        },
-      });
+      // 注意：marked v12 已移除 options.highlight（v5 起废弃、不再回调），
+      // 语法高亮必须在渲染完成后手动执行，见下方 highlightCode()。
+      marked.setOptions({ breaks: true });
     }
     var math = extractMath(post.body);
     var bodyHTML = window.marked ? marked.parse(math.src) : "<pre>" + escapeHTML(math.src) + "</pre>";
@@ -669,6 +819,9 @@
       '<div class="post-tags">' + tagsHTML + "</div>" +
       "</header>" +
       '<div class="post-body">' + bodyHTML + "</div>";
+
+    // 语法高亮 + 代码条（语言标签 / 复制按钮）
+    highlightCode(shell);
 
     // KaTeX 渲染
     if (window.renderMathInElement) {
@@ -719,6 +872,29 @@
     if (backTop) {
       backTop.addEventListener("click", function () {
         window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    // 移动端导航：汉堡按钮开合下拉面板
+    var toggle = $("#navToggle");
+    if (toggle && nav) {
+      var closeMenu = function () {
+        nav.classList.remove("nav-open");
+        toggle.setAttribute("aria-expanded", "false");
+      };
+      toggle.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var open = nav.classList.toggle("nav-open");
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      $all(".nav-links a").forEach(function (a) {
+        a.addEventListener("click", closeMenu);
+      });
+      document.addEventListener("click", function (e) {
+        if (nav.classList.contains("nav-open") && !nav.contains(e.target)) closeMenu();
+      });
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 720) closeMenu();
       });
     }
 
