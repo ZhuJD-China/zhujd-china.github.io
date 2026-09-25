@@ -702,6 +702,8 @@
     }
   }
 
+  /* ---------- 语法高亮（只上色，不加任何附加 UI，
+     代码块保持"黑底 + 高亮代码"两层） ---------- */
   function highlightCode(root) {
     if (!window.hljs) return;
     registerCustomLanguages();
@@ -711,82 +713,25 @@
       var lang = null;
       var m = (block.className || "").match(/language-([\w+#-]+)/);
       if (m) lang = m[1].toLowerCase();
-      var label = lang || "";
+      var done = false;
       try {
         // text / 未标注（本站未标注的全是输出转储）→ 纯文本，不猜测
         if (!lang || lang === "text" || lang === "txt" || lang === "plaintext") {
-          label = lang || "text";
+          done = false;
         } else if (hljs.getLanguage(lang)) {
           block.innerHTML = hljs.highlight(block.textContent, { language: lang, ignoreIllegals: true }).value;
+          done = true;
         } else {
           // 标注了但 common 语言包没有的语言 → 自动探测兜底（阈值挡住乱上色）
           var auto = hljs.highlightAuto(block.textContent);
           if (auto.relevance >= 4) {
             block.innerHTML = auto.value;
-            label = label || auto.language || "";
+            done = true;
           }
         }
       } catch (e) { /* 高亮失败保持纯文本（marked 已转义，安全） */ }
-      block.classList.add("hljs");
-      decorateCode(block, label || "text");
+      if (done) block.classList.add("hljs");
     });
-  }
-
-  /* ---------- 代码条：语言标签 + 复制按钮 ---------- */
-  function decorateCode(block, label) {
-    var pre = block.parentNode;
-    if (!pre || pre.tagName !== "PRE") return;
-    var parent = pre.parentNode;
-    if (!parent || parent.classList.contains("codebox")) return;
-
-    var box = document.createElement("div");
-    box.className = "codebox";
-    var bar = document.createElement("div");
-    bar.className = "codebox-bar";
-    var tag = document.createElement("span");
-    tag.className = "codebox-lang";
-    tag.textContent = String(label).toUpperCase();
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "codebox-copy";
-    btn.innerHTML = bi("复制", "Copy");
-    btn.addEventListener("click", function () { copyCode(block, btn); });
-    bar.appendChild(tag);
-    bar.appendChild(btn);
-    parent.insertBefore(box, pre);
-    box.appendChild(bar);
-    box.appendChild(pre);
-  }
-
-  function copyCode(block, btn) {
-    var text = block.textContent;
-    var flash = function () {
-      var old = btn.innerHTML;
-      btn.innerHTML = bi("已复制", "Copied");
-      btn.classList.add("copied");
-      setTimeout(function () {
-        btn.innerHTML = old;
-        btn.classList.remove("copied");
-      }, 1600);
-    };
-    var legacy = function () {
-      try {
-        var ta = document.createElement("textarea");
-        ta.value = text;
-        ta.setAttribute("readonly", "");
-        ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;";
-        document.body.appendChild(ta);
-        ta.select();
-        var ok = document.execCommand("copy");
-        document.body.removeChild(ta);
-        return ok;
-      } catch (e) { return false; }
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(flash, function () { if (legacy()) flash(); });
-    } else if (legacy()) {
-      flash();
-    }
   }
 
   function renderPost(shell, post) {
@@ -820,7 +765,7 @@
       "</header>" +
       '<div class="post-body">' + bodyHTML + "</div>";
 
-    // 语法高亮 + 代码条（语言标签 / 复制按钮）
+    // 语法高亮（无附加 UI：代码块 = 黑底 + 高亮代码）
     highlightCode(shell);
 
     // KaTeX 渲染
