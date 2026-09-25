@@ -633,11 +633,17 @@
     });
   }
 
-  /* ---------- 语法高亮 ----------
-     marked v12 不再回调 options.highlight，因此渲染完成后手动调 hljs。
-     本站代码块语言分布：asm / text / il / c / python —— 其中 asm、il 不在
-     highlight.js common构建的语言包里，这里按需补注册；text 保持纯文本，
-     未知语言走自动探测（相关性阈值不过就保持原样，避免乱上色）。 */
+  /* ---------- 语法高亮：GitHub 风格流程 ----------
+     marked v12 已移除 options.highlight → 渲染完成后手动调 hljs，等价
+     GitHub（Linguist）"显式语言优先、缺失时探测" 的策略：
+       1) 语言取 ``` 围栏的 language-xxx 标注，别名走 hljs 注册表归一
+          （x86/nasm → asm、cil → il 等，对齐 Linguist 的 alias 习惯）；
+       2) hljs 有该语言 → 精确着色；没有 → highlightAuto 探测兑底，
+          相关性 < 4 不上色（防误染输出转储）；
+       3) text / 未标注 → 纯文本（本站未标注的全是输出转储，无文件名可推断）；
+       4) asm、il 不在 hljs common 构建里，按需补注册自定义语法。
+     配色不在此处：style.css 内联 GitHub Dark / GitHub Light 两套官方调色板，
+     随站点主题切换，不依赖外链主题 CSS。 */
   var langsRegistered = false;
 
   function registerCustomLanguages() {
@@ -662,6 +668,7 @@
           "byte word dword qword xmmword tbyte ptr").split(" ");
         return {
           name: "x86 Assembly",
+          aliases: ["x86", "x86asm", "nasm", "disasm"],
           keywords: { keyword: MNEMONICS.join(" "), built_in: REGISTERS.join(" ") },
           contains: [
             { className: "comment", begin: ";", end: "\n", relevance: 0 },
@@ -688,6 +695,7 @@
         var TYPES = ("void int8 int16 int32 int64 uint8 uint16 uint32 uint64 float32 float64 bool char string object native").split(" ");
         return {
           name: "CIL",
+          aliases: ["cil", "msil"],
           keywords: { keyword: OPS.join(" "), built_in: TYPES.join(" "), literal: "true false null" },
           contains: [
             { className: "comment", begin: "//", end: "\n", relevance: 0 },
@@ -702,36 +710,35 @@
     }
   }
 
-  /* ---------- 语法高亮（只上色，不加任何附加 UI，
-     代码块保持"黑底 + 高亮代码"两层） ---------- */
+  /* 取围栏语言标注（language-xxx），别名已在 hljs 注册表里归一 */
+  function blockLanguage(block) {
+    var m = (block.className || "").match(/language-([\w+#-]+)/);
+    return m ? m[1].toLowerCase() : null;
+  }
+
+  /* 单块着色：返回是否上了色（false = 保持 marked 转义后的纯文本） */
+  function highlightBlock(block) {
+    var lang = blockLanguage(block);
+    if (!lang || lang === "text" || lang === "txt" || lang === "plaintext") return false;
+    var html = null;
+    try {
+      if (hljs.getLanguage(lang)) {
+        html = hljs.highlight(block.textContent, { language: lang, ignoreIllegals: true }).value;
+      } else {
+        var auto = hljs.highlightAuto(block.textContent);  // 探测兜底
+        if (auto.relevance >= 4) html = auto.value;        // 阈值挡住乱上色
+      }
+    } catch (e) { /* 着色失败保持纯文本（marked 已转义，安全） */ }
+    if (html === null) return false;
+    block.innerHTML = html;
+    block.classList.add("hljs");
+    return true;
+  }
+
   function highlightCode(root) {
     if (!window.hljs) return;
     registerCustomLanguages();
-
-    var blocks = root.querySelectorAll("pre code");
-    Array.prototype.forEach.call(blocks, function (block) {
-      var lang = null;
-      var m = (block.className || "").match(/language-([\w+#-]+)/);
-      if (m) lang = m[1].toLowerCase();
-      var done = false;
-      try {
-        // text / 未标注（本站未标注的全是输出转储）→ 纯文本，不猜测
-        if (!lang || lang === "text" || lang === "txt" || lang === "plaintext") {
-          done = false;
-        } else if (hljs.getLanguage(lang)) {
-          block.innerHTML = hljs.highlight(block.textContent, { language: lang, ignoreIllegals: true }).value;
-          done = true;
-        } else {
-          // 标注了但 common 语言包没有的语言 → 自动探测兜底（阈值挡住乱上色）
-          var auto = hljs.highlightAuto(block.textContent);
-          if (auto.relevance >= 4) {
-            block.innerHTML = auto.value;
-            done = true;
-          }
-        }
-      } catch (e) { /* 高亮失败保持纯文本（marked 已转义，安全） */ }
-      if (done) block.classList.add("hljs");
-    });
+    Array.prototype.forEach.call(root.querySelectorAll("pre code"), highlightBlock);
   }
 
   function renderPost(shell, post) {
