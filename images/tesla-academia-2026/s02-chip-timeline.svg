@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" width="100%" role="img" aria-label="车端硬件演进与算力口径">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hw{fill:#e8e4dc;font:500 17px 'Noto Sans SC','PingFang SC',sans-serif}
+    .box1{fill:#0b0b10;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .box2{fill:#0b0b10;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .d{fill:#a09b8d;font:400 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .off{fill:#c9a96a}
+    .rep{fill:#8a7f6a}
+    .line{stroke:#c9a96a;stroke-opacity:.45;stroke-width:1.4;fill:none}
+    .dline{stroke:#e8e4dc;stroke-opacity:.12;stroke-width:1.4;fill:none;stroke-dasharray:5 4}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="430" rx="14"/>
+  <text class="ttl" x="44" y="56">车端硬件演进：算力口径与发布状态</text>
+  <text class="sub" x="44" y="86">金色为官方口径，灰色为公开报道或高管访谈口径；TOPS 均为标称峰值，非有效算力</text>
+
+  <line class="line" x1="110" y1="300" x2="110" y2="180"/>
+  <line class="line" x1="110" y1="300" x2="380" y2="300"/>
+  <line class="line" x1="380" y1="300" x2="380" y2="180"/>
+  <line class="dline" x1="380" y1="300" x2="700" y2="300"/>
+  <line class="line" x1="700" y1="300" x2="700" y2="180"/>
+  <line class="dline" x1="700" y1="300" x2="1010" y2="300"/>
+  <line class="dline" x1="1010" y1="300" x2="1010" y2="180"/>
+
+  <!-- HW3 -->
+  <rect class="off" x="140" y="150" width="200" height="40" rx="8"/>
+  <text class="box1" x="156" y="175">HW3（FSD 芯片）</text>
+  <text class="d" x="110" y="326">2019 量产</text>
+  <text class="d" x="110" y="348">14nm，双 NPU 合计约 144 TOPS</text>
+
+  <!-- HW4 -->
+  <rect class="off" x="410" y="150" width="220" height="40" rx="8"/>
+  <text class="box1" x="426" y="175">HW4 / AI4</text>
+  <text class="d" x="380" y="326">2023 起</text>
+  <text class="d" x="380" y="348">约 3 至 5 倍于 HW3，16GB 内存，256GB 存储</text>
+
+  <!-- AI4+ -->
+  <rect class="rep" x="730" y="150" width="220" height="40" rx="8"/>
+  <text class="box1" x="746" y="175">AI4+ 过渡款</text>
+  <text class="d" x="700" y="326">规划中</text>
+  <text class="d" x="700" y="348">内存翻倍至每 SoC 32GB，介于 HW4 与 AI5 之间</text>
+
+  <!-- AI5 -->
+  <rect class="rep" x="1040" y="150" width="120" height="40" rx="8"/>
+  <text class="box1" x="1056" y="175">AI5</text>
+  <text class="d" x="1160" y="326" text-anchor="end">2026，官方规划</text>
+  <text class="d" x="1160" y="348" text-anchor="end">报道称 2000+ TOPS，约 AI4 的 8 倍</text>
+  <text class="d" x="1160" y="370" text-anchor="end">官方称对标 H100 级别模型推理</text>
+
+  <line class="grid" x1="44" y1="392" x2="1156" y2="392"/>
+  <text class="foot" x="44" y="416">虚线段表示尚未量产或时间点未确证。全部 TOPS 与时间点来自公开报道与高管访谈，非官方规格书；官方未公布过完整的硬件规格表。</text>
+</svg>

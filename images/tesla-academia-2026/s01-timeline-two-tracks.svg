@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="100%" role="img" aria-label="特斯拉与学术界五年时间线">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lane{fill:#e8e4dc;font:500 17px 'Noto Sans SC','PingFang SC',sans-serif}
+    .item1{fill:#0b0b10;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .item2{fill:#e8e4dc;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .yr{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .t1{fill:#c9a96a}
+    .t2{fill:#7aa2c8}
+    .lane1{stroke:#c9a96a;stroke-opacity:.35;stroke-width:1.2;fill:none}
+    .lane2{stroke:#7aa2c8;stroke-opacity:.35;stroke-width:1.2;fill:none}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="700" rx="14"/>
+  <text class="ttl" x="44" y="56">五年时间线：一条闭源、一条开源</text>
+  <text class="sub" x="44" y="86">上泳道为特斯拉公开发布物，下泳道为学术界论文与仓库；横轴为首次公开时间，2021 至 2026</text>
+
+  <!-- year grid: 2021=170, 2022=350, 2023=530, 2024=710, 2025=890, 2026=1070 -->
+  <line class="grid" x1="170" y1="112" x2="170" y2="560"/>
+  <line class="grid" x1="350" y1="112" x2="350" y2="560"/>
+  <line class="grid" x1="530" y1="112" x2="530" y2="560"/>
+  <line class="grid" x1="710" y1="112" x2="710" y2="560"/>
+  <line class="grid" x1="890" y1="112" x2="890" y2="560"/>
+  <line class="grid" x1="1070" y1="112" x2="1070" y2="560"/>
+  <text class="yr" x="170" y="132" text-anchor="middle">2021</text>
+  <text class="yr" x="350" y="132" text-anchor="middle">2022</text>
+  <text class="yr" x="530" y="132" text-anchor="middle">2023</text>
+  <text class="yr" x="710" y="132" text-anchor="middle">2024</text>
+  <text class="yr" x="890" y="132" text-anchor="middle">2025</text>
+  <text class="yr" x="1070" y="132" text-anchor="middle">2026</text>
+
+  <!-- lane 1 -->
+  <text class="lane" x="44" y="176">特斯拉</text>
+  <rect class="t1" x="180" y="160" width="150" height="26" rx="5"/><text class="item1" x="190" y="177">AI Day：HydraNet 加 MCTS</text>
+  <rect class="t1" x="360" y="160" width="150" height="26" rx="5"/><text class="item1" x="370" y="177">Occupancy Network</text>
+  <rect class="t1" x="520" y="160" width="150" height="26" rx="5"/><text class="item1" x="530" y="177">FSD v12 端到端</text>
+  <rect class="t1" x="700" y="160" width="110" height="26" rx="5"/><text class="item1" x="710" y="177">v12 推送</text>
+  <rect class="t1" x="850" y="160" width="90" height="26" rx="5"/><text class="item1" x="860" y="177">v13</text>
+  <rect class="t1" x="950" y="160" width="110" height="26" rx="5"/><text class="item1" x="960" y="177">v14 与 RL</text>
+  <path class="lane1" d="M186 196 L1058 196"/>
+
+  <!-- lane 2 row A -->
+  <text class="lane" x="44" y="270">学术界</text>
+  <rect class="t2" x="180" y="222" width="140" height="24" rx="5"/><text class="item2" x="190" y="238">DETR3D</text>
+  <rect class="t2" x="320" y="222" width="120" height="24" rx="5"/><text class="item2" x="330" y="238">BEVDet</text>
+  <rect class="t2" x="430" y="222" width="150" height="24" rx="5"/><text class="item2" x="440" y="238">BEVFormer ECCV</text>
+  <rect class="t2" x="500" y="256" width="150" height="24" rx="5"/><text class="item2" x="510" y="272">OpenOccupancy</text>
+  <rect class="t2" x="580" y="256" width="140" height="24" rx="5"/><text class="item2" x="590" y="272">TPVFormer</text>
+  <rect class="t2" x="660" y="256" width="130" height="24" rx="5"/><text class="item2" x="670" y="272">SurroundOcc</text>
+  <rect class="t2" x="440" y="290" width="120" height="24" rx="5"/><text class="item2" x="450" y="306">StreamPETR</text>
+  <rect class="t2" x="580" y="290" width="100" height="24" rx="5"/><text class="item2" x="590" y="306">UniAD</text>
+  <rect class="t2" x="700" y="290" width="110" height="24" rx="5"/><text class="item2" x="710" y="306">VAD</text>
+  <rect class="t2" x="830" y="290" width="120" height="24" rx="5"/><text class="item2" x="840" y="306">SparseBEV</text>
+  <rect class="t2" x="960" y="290" width="110" height="24" rx="5"/><text class="item2" x="970" y="306">DiffusionDrive</text>
+  <path class="lane2" d="M186 322 L1058 322"/>
+
+  <!-- lane 3: 占据与稀疏两簇的对应 -->
+  <text class="lane" x="44" y="404">同向并行</text>
+  <rect class="t1" x="360" y="356" width="140" height="24" rx="5"/><text class="item1" x="370" y="372">占据表征</text>
+  <rect class="t2" x="520" y="356" width="200" height="24" rx="5"/><text class="item2" x="530" y="372">Occ3D 与 FB-OCC 复现</text>
+  <rect class="t1" x="440" y="396" width="140" height="24" rx="5"/><text class="item1" x="450" y="412">放弃稠密 BEV</text>
+  <rect class="t2" x="600" y="396" width="200" height="24" rx="5"/><text class="item2" x="610" y="412">StreamPETR、SparseBEV</text>
+  <rect class="t1" x="520" y="436" width="140" height="24" rx="5"/><text class="item1" x="530" y="452">端到端</text>
+  <rect class="t2" x="680" y="436" width="200" height="24" rx="5"/><text class="item2" x="690" y="452">UniAD、VAD、DiffusionDrive</text>
+  <path class="lane1" d="M186 468 L700 468"/>
+  <path class="lane2" d="M720 468 L1058 468"/>
+
+  <line class="grid" x1="44" y1="500" x2="1156" y2="500"/>
+  <text class="ax" x="44" y="524">图示按各工作的首次公开时间排列，不代表性能顺序；特斯拉一侧仅有公开发布物，无论文与代码。</text>
+  <text class="foot" x="44" y="560">读法一：特斯拉的每一次架构切换，学术界在半年至一年内都出现了公开对应物，DETR3D 早于 v12、UniAD 同样早于 v12 是可核查的两个反例。</text>
+  <text class="foot" x="44" y="584">读法二：差距不在发布速度，而在验证方式。特斯拉只公布接管率与里程，学术界只公布基准分数，两组数字至今无法换算。</text>
+  <text class="foot" x="44" y="608">读法三：同向并行一栏是两篇论文与一组开源仓库之间的对应关系，属问题定义的趋同，不构成代码或数据往来。</text>
+  <text class="foot" x="44" y="632">其余关键节点：Sparse4D 于 2022 年 11 月在 arXiv 首发，后正式发表于 TPAMI 2026；RAD 于 2025 年引入强化学习后训练。</text>
+</svg>

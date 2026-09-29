@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="两条路线的约束差异与最终交集">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#0b0b10;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .row{fill:#e8e4dc;font:400 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .key{fill:#6b675c;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .val{fill:#e8e4dc;font:400 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .boxA{fill:#1a1712;stroke:#c9a96a;stroke-opacity:.55;stroke-width:1.3}
+    .boxB{fill:#14161c;stroke:#7aa2c8;stroke-opacity:.6;stroke-width:1.3}
+    .boxC{fill:#1d1414;stroke:#cf5a50;stroke-opacity:.6;stroke-width:1.3}
+    .ln{stroke:#e8e4dc;stroke-opacity:.22;stroke-width:1.2}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+  <text class="ttl" x="44" y="56">两条路线的约束差异，以及最后的交集</text>
+  <text class="sub" x="44" y="86">同一问题，两种资源禀赋；各自的短板决定了架构分歧，也决定了五 年后在三点上重合</text>
+
+  <!-- column headers -->
+  <rect class="boxA" x="44" y="112" width="330" height="44" rx="8"/>
+  <text class="hd" x="60" y="140">特斯拉：数据充裕，车端受限</text>
+  <rect class="boxB" x="396" y="112" width="330" height="44" rx="8"/>
+  <text class="hd" x="412" y="140">学术界：基准公开，功耗不受限</text>
+  <rect class="boxC" x="748" y="112" width="408" height="44" rx="8"/>
+  <text class="hd" x="764" y="140">结果：稀疏 + 多任务 + 时序</text>
+
+  <!-- rows -->
+  <g>
+    <text class="key" x="44" y="192">数据规模</text>
+    <text class="val" x="150" y="192">数百万 clip，自动标注车队回流</text>
+    <text class="val" x="502" y="192">nuScenes 5.5 小时，人工标注</text>
+    <text class="val" x="854" y="192">双方都需要时序，因为单帧无法估计速度</text>
+
+    <line class="ln" x1="44" y1="208" x2="1156" y2="208"/>
+
+    <text class="key" x="44" y="238">算力与功耗</text>
+    <text class="val" x="150" y="238">几十瓦车规芯片，须实时并留余量</text>
+    <text class="val" x="502" y="238">A100 单卡单 batch，无实时要求</text>
+    <text class="val" x="854" y="238">都走向稀疏化，代价由全局视野换吞吐</text>
+
+    <line class="ln" x1="44" y1="254" x2="1156" y2="254"/>
+
+    <text class="key" x="44" y="284">可验证性</text>
+    <text class="val" x="150" y="284">闭源，只有接管率与里程</text>
+    <text class="val" x="502" y="284">开源，基准分数与消融可复现</text>
+    <text class="val" x="854" y="284">共同短板：缺少统一第三方评测</text>
+
+    <line class="ln" x1="44" y1="300" x2="1156" y2="300"/>
+
+    <text class="key" x="44" y="330">表征选择</text>
+    <text class="val" x="150" y="330">占据体素，规避类别假设</text>
+    <text class="val" x="502" y="330">占据体素、稀疏 query、BEV 各路线并行</text>
+    <text class="val" x="854" y="330">从稠密 BEV 转向物体中心表征</text>
+
+    <line class="ln" x1="44" y1="346" x2="1156" y2="346"/>
+
+    <text class="key" x="44" y="376">训练目标</text>
+    <text class="val" x="150" y="376">人工代价 → 模仿 → 强化学习</text>
+    <text class="val" x="502" y="376">开环模仿为主，闭环评测稀缺</text>
+    <text class="val" x="854" y="376">强化学习后训练在 2025 年后合流</text>
+  </g>
+
+  <!-- convergence band -->
+  <rect class="boxC" x="44" y="410" width="1112" height="86" rx="10"/>
+  <text class="key" x="60" y="436" fill="#cf5a50">三点交集</text>
+  <text class="val" x="150" y="436">稀疏化：只让 query 或体素跟着物体走</text>
+  <text class="val" x="502" y="436">多任务共享：单一 backbone 接多个任务头</text>
+  <text class="val" x="854" y="436">时序融合：按自车运动对齐后融合</text>
+  <text class="row" x="60" y="472">这三点在 2021 年由特斯拉定型，学术界在 2022 至 2023 年给出公开实现；差异此后转移到数据规模与闭环评测，而不是网络结构。</text>
+
+  <text class="foot" x="44" y="528">读法：横向比较每一行而非整体排名。特斯拉在数据与闭环上是短板，在车载部署约束下形成工程积累；学术界相反，在可复现性上占优而受限于数据。</text>
+</svg>

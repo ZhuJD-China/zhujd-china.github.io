@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="nuScenes 同基准成绩与口径差异">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lbl{fill:#e8e4dc;font:400 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .val{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .vin{fill:#0b0b10;font:700 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .test{fill:#c9a96a}
+    .valb{fill:#7aa2c8}
+    .other{fill:#14141c;stroke:#6b675c;stroke-width:1.2;stroke-dasharray:5 4}
+    .none{fill:none;stroke:#cf5a50;stroke-width:1.4;stroke-dasharray:5 4}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="56">nuScenes 同基准成绩：口径不同，不能混列</text>
+  <text class="sub" x="44" y="86">金色为 test 集 NDS，蓝色为 val 集 NDS，虚框为 mAP 等其他指标；横轴 0 至 80 线性</text>
+
+  <line class="grid" x1="360" y1="112" x2="360" y2="470"/>
+  <line class="grid" x1="560" y1="112" x2="560" y2="470"/>
+  <line class="grid" x1="760" y1="112" x2="760" y2="470"/>
+  <line class="grid" x1="960" y1="112" x2="960" y2="470"/>
+  <line class="grid" x1="1160" y1="112" x2="1160" y2="470"/>
+  <text class="ax" x="360" y="490" text-anchor="middle">0</text>
+  <text class="ax" x="560" y="490" text-anchor="middle">20</text>
+  <text class="ax" x="760" y="490" text-anchor="middle">40</text>
+  <text class="ax" x="960" y="490" text-anchor="middle">60</text>
+  <text class="ax" x="1160" y="490" text-anchor="end">80</text>
+  <text class="ax" x="360" y="510" text-anchor="middle">指标值</text>
+
+  <text class="lbl" x="44" y="140">FCOS3D（2021）</text>
+  <rect class="other" x="360" y="124" width="107" height="22" rx="5"/>
+  <text class="ax" x="477" y="140">42.8 test mAP，非 NDS</text>
+
+  <text class="lbl" x="44" y="176">DETR3D（2021）</text>
+  <rect class="test" x="360" y="160" width="120" height="22" rx="5"/>
+  <text class="vin" x="470" y="176" text-anchor="end">47.9</text>
+  <text class="ax" x="492" y="176">test，V2-99</text>
+
+  <text class="lbl" x="44" y="212">BEVFormer-base（2022）</text>
+  <rect class="valb" x="360" y="196" width="129" height="22" rx="5"/>
+  <text class="ax" x="499" y="212">51.7 val，R101-DCN</text>
+  <rect class="test" x="360" y="224" width="142" height="22" rx="5"/>
+  <text class="vin" x="492" y="240" text-anchor="end">56.9</text>
+  <text class="ax" x="514" y="240">test，V2-99</text>
+
+  <text class="lbl" x="44" y="276">BEVDepth（2023）</text>
+  <rect class="test" x="360" y="260" width="150" height="22" rx="5"/>
+  <text class="vin" x="500" y="276" text-anchor="end">60.0</text>
+  <text class="ax" x="522" y="276">test，激光雷达深度监督</text>
+
+  <text class="lbl" x="44" y="312">StreamPETR-Large（2023）</text>
+  <rect class="test" x="360" y="296" width="169" height="22" rx="5"/>
+  <text class="vin" x="519" y="312" text-anchor="end">67.6</text>
+  <text class="ax" x="541" y="312">test，62.0 mAP，65.3 AMOTA</text>
+
+  <text class="lbl" x="44" y="348">SparseBEV EVA02（2023-2026）</text>
+  <rect class="test" x="360" y="332" width="176" height="22" rx="5"/>
+  <text class="vin" x="526" y="348" text-anchor="end">70.2</text>
+  <text class="ax" x="548" y="348">test，稀疏采样加大 backbone</text>
+
+  <text class="lbl" x="44" y="390">特斯拉（2022-2026）</text>
+  <rect class="none" x="360" y="374" width="800" height="22" rx="5"/>
+  <text class="ax" x="780" y="390" fill="#cf5a50">不参赛：无公开基准成绩，以接管率与真实里程为指标</text>
+
+  <line class="grid" x1="44" y1="420" x2="1156" y2="420"/>
+  <text class="foot" x="44" y="450">读法一：横条可比的只有同口径项。FCOS3D 的 42.8 是 mAP，与 NDS 不同量纲，图中以虚框标出；BEVFormer 的 val 与 test 两行不可相加或直接比较。</text>
+  <text class="foot" x="44" y="476">读法二：同一方法换 backbone 与预训练即可跨档（BEVFormer 从 51.7 到 56.9，SparseBEV 从 55.6 到 70.2），因此分数排名反映的是配置与预训练，不是路线优劣。</text>
+  <text class="foot" x="44" y="502">读法三：最后一行始终为空，是本次对照最根本的不对称。学术界以分数为评价体系，特斯拉以接管率为评价体系，两者之间不存在换算关系。</text>
+  <text class="foot" x="44" y="528">数据来源：各方法官方仓库的 Model Zoo 与论文报告，val 与 test 口径已分别标注；论文级最佳成绩通常需要更大的 backbone 与额外预训练。</text>
+</svg>
