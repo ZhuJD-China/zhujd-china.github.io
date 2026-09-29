@@ -43,23 +43,23 @@
   <line class="grid" x1="56" y1="222" x2="1156" y2="222"/>
 
   <text class="nm" x="44" y="256">切分策略与每卡保留量</text>
-  <text class="fm2" x="44" y="282">以卡数 N 为例，下表按参数态 16 字节每参数拆分，说明每卡需要保留多少；激活部分不在此列。</text>
+  <text class="fm2" x="44" y="282">以卡数 N 为例，按参数态 16 字节每参数拆分；激活部分不在此列。ZeRO 论文表 1 的实测口径是 7.5B 模型 64 路数据并行。</text>
 
   <text class="fm" x="44" y="316">不切分（数据并行）</text>
   <text class="fm2" x="300" y="316">每卡 16 字节，全量副本</text>
   <rect class="tot" x="620" y="304" width="536" height="20" rx="4"/>
 
-  <text class="fm" x="44" y="350">切优化器状态</text>
+  <text class="fm" x="44" y="350">切优化器状态（ZeRO-1）</text>
   <text class="fm2" x="300" y="350">每卡 4 + 8/N 字节</text>
   <rect class="tot" x="620" y="338" width="150" height="20" rx="4"/>
   <rect class="s1" x="770" y="338" width="16" height="20" rx="2" fill-opacity=".5"/>
 
-  <text class="fm" x="44" y="384">切优化器状态与梯度</text>
+  <text class="fm" x="44" y="384">切优化器状态与梯度（ZeRO-2）</text>
   <text class="fm2" x="300" y="384">每卡 2 + 6/N 字节</text>
   <rect class="tot" x="620" y="372" width="75" height="20" rx="4"/>
   <rect class="s1" x="695" y="372" width="14" height="20" rx="2" fill-opacity=".5"/>
 
-  <text class="fm" x="44" y="418">全切（含参数）</text>
+  <text class="fm" x="44" y="418">全切，含参数（ZeRO-3）</text>
   <text class="fm2" x="300" y="418">每卡近似 2/N 字节，加一次性参数收集</text>
   <rect class="tot" x="620" y="406" width="25" height="20" rx="4"/>
   <rect class="s1" x="645" y="406" width="12" height="20" rx="2" fill-opacity=".5"/>

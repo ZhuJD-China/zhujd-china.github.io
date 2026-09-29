@@ -85,11 +85,11 @@ Claude Code 发布时朴素得像个学术 demo：装在终端里，能读文件
 
 2026 年是编排之年。4 月：**Routines**（定时任务）、Opus 4.7 成为默认模型、Ultraplan/Ultrareview（云端规划和审查智能体舰队）。5 月：**Dynamic Workflows**（用 JavaScript 脚本编排成百上千个并行子代理）、Opus 4.8 默认。6 月：子代理可以递归再派子代理（五层深度）。8 月：跨会话 agent、自托管 runner。
 
-有组数字能说明这十八个月的烈度：Claude Code 从发布到十亿美元年化收入用了六个月；到 2026 年年中，**它贡献了公开 GitHub 全部 commit 的约 4%**（5 月峰值单日 40 万次）；Anthropic 整体 25 亿美元 ARR（2026 年 2 月）里它是第一驱动力。连微软内部都在用——尽管自家有 Copilot。
+有组数字能说明这十八个月的烈度：Claude Code 从发布到十亿美元年化收入用了六个月；到 2026 年年中，**它贡献了公开 GitHub 全部 commit 的约 4%**（5 月峰值单日 40 万次）。收入类数字需要加一道标注：各家都不在官方渠道披露 ARR，媒体流传的"Claude Code 自身年化 25 亿美元（2026 年 2 月）"与"Anthropic 整体 650 亿美元（2026 年 7 月）"均为**二手估算**（口径多为最近四周乘 13），不能当作官方数字引用。连微软内部都在用 Claude Code——尽管自家有 Copilot。
 
 ### 3.4 一个反直觉的架构事实
 
-2026 年有篇论文分析了 Claude Code v2.1.88 的源码快照（约 1,884 个 TypeScript 文件、51.2 万行），结论被广泛引用：**核心 AI 决策逻辑只占代码量的约 1.6%，剩下 98.4% 是"运营性 harness"**——权限系统、上下文管理、工具路由、错误恢复、会话持久化。核心 agent loop 本身就是一个朴素的 while 循环。
+2026 年有篇论文（arXiv:2604.14228，VILA-Lab）分析了 Claude Code v2.1.88 的源码快照（约 1,884 个 TypeScript 文件、51.2 万行），结论被广泛引用：**核心 AI 决策逻辑只占代码量的约 1.6%，剩下 98.4% 是"运营性 harness"**——权限系统、上下文管理、工具路由、错误恢复、会话持久化。核心 agent loop 本身就是一个朴素的 while 循环。
 
 这个数字值得所有做 agent 的人记一下。它印证了 Anthropic 的设计哲学：**不要试图把聪明写进流程图，让模型自由判断，但把它放进一个确定性、可审计、安全的运行环境里**——所谓"最小脚手架、最大运营 harness"。模型负责"想做什么"，harness 掌握"能不能做"。第五篇讲 vLLM V1 重构时说过推理引擎的竞争力在调度不在 kernel，这里是同一个道理的 agent 版：**agent 产品的竞争力在 harness，不在 loop**。
 
@@ -190,7 +190,7 @@ Codex 的生态思路更"紧"：custom_tools 的 JSON schema 扩展、config.tom
 
 **速度与成本**。Codex 标准档 65-70 token/秒（Spark 变体在 Cerebras 硬件上宣称 1000+），配合 2-4 倍的 token 效率，**同样的活 Codex 经常又快又便宜**。Claude Code 快感上吃亏，但换来的是少返工——一次做对的"慢"比三次返工的"快"便宜。
 
-按任务计价这一维度上，2026 年 9 月的一份第三方横评给出了可比的数字：在 Terminal-Bench 4.0 上取同一分数（约 58%），Codex 约合每任务 7.12 美元，Claude Code 约合 14.76 美元，同榜其余档位落在 7.70 至 18.92 美元之间。这组数字来自第三方榜单而非厂商自报，方向可信但绝对值依赖具体配置，**结论是"差价接近一倍"而非某个固定倍数**。与之互补的是 SWE-bench 官方榜上按每任务美元计的横向对比：同一代模型在 0.07 到 0.75 美元之间浮动近十倍，说明**同价位内部的效率差距远大于价位之间的差距**——选型时先看每任务成本，再看分数。
+按任务计价这一维度上，2026 年 9 月的一份第三方横评给出了可比的数字：在 Terminal-Bench 4.0 上取同一分数（约 58%），Codex 约合每任务 7.12 美元，Claude Code 约合 14.76 美元，同榜其余档位落在 7.70 至 18.92 美元之间。需要说明的是，这组数字来自第三方动态榜单，**官方并未公布每任务成本**，因此只能当作一个量级参考，结论是"差价接近一倍"而非某个固定倍数。
 
 **并行形态**。Claude Code 的并行是"舰队"式的：Agent Teams、Dynamic Workflows、五层子代理递归，适合"一个复杂任务拆给一个团队"；Codex 的并行是"车间"式的：最多 8 个子代理、云端多任务并行、Goal mode 单任务长跑，适合"一批独立任务分给八个工位"。前者像项目组，后者像流水线。
 
@@ -257,7 +257,7 @@ Codex 的生态思路更"紧"：custom_tools 的 JSON schema 扩展、config.tom
 | 需要"扔下就走"的委派式工作流 | Codex（沙箱内自主 + Goal mode，云端版更省心） |
 | 想要开源可改造、多模型后端自由 | Codex（Apache 2.0） |
 | 长会话长任务 | 各有千秋：Claude 靠大窗口，Codex 靠压缩管理 |
-| 大多数活跃开发者 | **两个都开**（月成本 $40，认知成本约等于学会两个编辑器快捷键） |
+| 大多数活跃开发者 | **两个都开**（月成本约 $40 起，认知成本约等于学会两个编辑器快捷键） |
 
 以及几条超出二选一的实话：其一，**混合流正在成为高手标配**——Claude Code 做规划和复杂实施、Codex 做审查和批量杂活，社区里甚至有专门让 Codex 审查 Claude Code 产出的 hook 配置。其二，别忘了这个市场还有 Cursor（IDE 派，增长最快）和 Gemini CLI（免费额度最大方）——**"终端双雄"是本文的叙事框架，不是市场的全部**。其三，选型的影响比看起来大：选哪个工具就是选哪家的模型路线图，这个决定会随着你写进 AGENTS.md/CLAUDE.md 的每一行团队知识复利加深。
 
@@ -269,11 +269,12 @@ Codex 的生态思路更"紧"：custom_tools 的 JSON schema 扩展、config.tom
 
 ## 11. 参考资料
 
-- Anthropic, *Introducing Claude 3.7 Sonnet / Claude Code research preview*, 2025-02；*Introducing Claude 4 / Claude Code GA*, 2025-05；*Claude Sonnet 4.5 与 Claude Code 平台化发布*, 2025-09；*Claude Code on the web*, 2025-10
-- OpenAI, *Codex CLI 开源发布*, 2025-04；*Codex 云端版与 codex-1*, 2025-05；*GPT-5-Codex 发布*, 2025-09；*Codex 更新日志（Goal mode/Appshots/Hooks 等）*, 2025-2026
-- *Dive into Claude Code: The Design Space of Today's and Future AI Agent Systems*（arXiv:2604.14228，v2.1.88 源码分析）
+- Anthropic, *Introducing Claude 3.7 Sonnet / Claude Code research preview*, 2025-02-24；*Introducing Claude 4 / Claude Code GA*, 2025-05-22；*Claude Sonnet 4.5 与 Claude Code 平台化发布*, 2025-09-29；*Claude Code on the web*, 2025-10
+- OpenAI, *Codex CLI 开源发布*, 2025-04-13（GitHub 仓库创建日）；*Codex 云端版与 codex-1*, 2025-05-16；*GPT-5-Codex 系统卡*, 2025-09-15；*Codex 更新日志（Goal mode/Appshots/Hooks 等）*, 2025-2026
+- *Dive into Claude Code: The Design Space of Today's and Future AI Agent Systems*（arXiv:2604.14228，VILA-Lab，v1 2026-04-14，基于 v2.1.88 源码分析）
+- 收入类数字（年化 run-rate）均为媒体报道的二手估算，官方未披露
 - Chen et al., *Evaluating Large Language Models Trained on Code（原版 Codex 论文与 HumanEval）*, 2021
-- Terminal-Bench 2.0/2.1 leaderboard；SWE-bench Verified/Pro 各方公布成绩（含第六篇所述审查争议）
+- Terminal-Bench 2.0/2.1 leaderboard；Terminal-Bench 4.0 发布于 2026-08-28（tbench.ai 官方）；SWE-bench Verified/Pro 各方公布成绩（含第六篇所述审查争议）
 - Stack Overflow 2026 开发者调查；JetBrains 2026 Q1 生态调查；Zylos *Agentic Coding Tools: Q2 2026 Landscape*
 - Anthropic *Claude Code Advanced Patterns*（CLAUDE.md/Hooks/Subagents/MCP 官方最佳实践）；OpenAI Codex 官方文档（AGENTS.md、沙箱、config 参考）
 - 社区实践汇编：termdock / teamvoy / codesota 2026 对比报告；Codex 与 Claude Code 用户社区技巧帖

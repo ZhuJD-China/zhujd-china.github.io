@@ -80,7 +80,7 @@ NVIDIA 的 Megatron-LM 给出了教科书级的做法：把每一层的权重矩
 
 代价很清楚：**每一层的前后都要通信**，所以 TP 只适合放在 NVLink 域内（单机 8 卡），跨机做 TP 会被网络延迟杀死。这条经验法则（TP ≤ 单机卡数）直到今天依然成立。
 
-### 4.2 流水线并行（GPipe 2018 / PipeDream 2019）
+### 4.2 流水线并行（GPipe 2019 / PipeDream 2019）
 
 另一条路：把模型**按层切开**，第 1-10 层放机器 A，第 11-20 层放机器 B。这就是流水线并行。问题是流水线有**气泡**（bubble）——第一台机器算第一批数据时，后面的机器都在等。GPipe 用 micro-batch 缓解，PipeDream 贡献了 1F1B 调度。经典气泡公式：
 
@@ -101,15 +101,17 @@ $$\text{Bubble fraction} = \frac{p-1}{m+p-1}$$
 | FP32 variance（Adam） | 4 |
 | **合计** | **16** |
 
-一个 7B 模型，光训练状态就是 112 GB——这就是为什么"7B 模型 fp16 只要 14 GB 但根本训不动"是每个初学者的第一课。ZeRO 的观察是：数据并行下每张卡都**冗余**地保存了全部这些状态，那就切开放：
+按上表推算，7B 模型的光训练状态就是 112 GB 左右——这就是为什么"7B 模型 fp16 只要 14 GB 但根本训不动"是每个初学者的第一课。ZeRO 的观察是：数据并行下每张卡都**冗余**地保存了全部这些状态，那就切开放。论文自身的实验口径是 **7.5B 模型、64 路数据并行**，表 1 给出的逐步切分结果是：
 
-- **ZeRO-1**：切优化器状态（7B 模型单卡显存从 112 GB → 31.4 GB）
-- **ZeRO-2**：再切梯度（→ 18.8 GB）
-- **ZeRO-3**：再切参数（→ 2 GB 级别，代价是前向/反向要临时 all-gather 参数）
+- **ZeRO-1**：切优化器状态（每卡从 120 GB → 31.4 GB）
+- **ZeRO-2**：再切梯度（→ 16.6 GB）
+- **ZeRO-3**：再切参数（→ 1.88 GB，代价是前向/反向要临时 all-gather 参数）
+
+（这几个数字来自论文表 1，是 7.5B 在 64 卡下的实测；网上常见的 112 GB 与 18.8 GB 是按不同模型规模或不同阶段算出来的，引用时应注明口径。）
 
 ### 4.4 合流：3D 并行
 
-2021 年，Megatron + DeepSpeed 联手训练 Megatron-Turing NLG 530B，把 TP（机内）+ PP（机间）+ DP（跨副本）组合成完整的"3D 并行"，成了此后所有大模型训练的模板。今天 Megatron 的文档里你能看到更夸张的组合：**TP × PP × CP × EP × DP 五维并行**（CP 切序列长度、EP 切 MoE 专家），总卡数 = 各维乘积——DeepSeek-V3 就是 16-way PP × 64-way EP × ZeRO-1 DP 的组合。
+2022 年初，Megatron + DeepSpeed 联手训练 Megatron-Turing NLG 530B，把 TP（机内）+ PP（机间）+ DP（跨副本）组合成完整的"3D 并行"，成了此后所有大模型训练的模板。今天 Megatron 的文档里你能看到更夸张的组合：**TP × PP × CP × EP × DP 五维并行**（CP 切序列长度、EP 切 MoE 专家），总卡数 = 各维乘积——DeepSeek-V3 就是 2048 张 H800 上的 16 路 PP + 64 路 EP + ZeRO-1，且明确不用 TP 的组合。
 
 这五种切分维度可以并排对照，它们切的对象不同，通信原语也因此不同。
 
@@ -235,7 +237,7 @@ Meta 训练 Llama 3 405B 的报告（16384 张 H100，54 天预训练）披露�
 
 1. **KV Cache 成为架构的一等公民**。用集群里闲置的 CPU DRAM + SSD + RDMA 网卡，组一个分布式的 KV cache 池（"以空间换计算"）；
 2. **全局调度器 Conductor**：每个调度决策都围绕"哪台机器上已经有这个请求可复用的 KV cache"来算——调度问题变成了缓存放置问题；
-3. **实测**：长上下文场景下有效请求容量提升 59%~498%，生产集群数千节点、日处理 token 过千亿。
+3. **实测**：论文摘要给出的口径是模拟场景下吞吐最高提升 **525%**、真实负载下 Kimi 多处理 **75%** 的请求；生产集群数千节点、日处理 token 过千亿。
 
 为什么这事重要？因为** agent 时代的负载就是极端化的长上下文 + 高前缀复用**——一个 agent 会话几十轮，每轮都带着完整历史，而历史的前缀几乎不变。KV cache 外置 + 前缀复用，把这种负载的成本压了一个数量级。2026 年这个方向的生态已经成型：Mooncake 作为独立的 KV cache 存储引擎被 vLLM/SGLang 集成，K8s 侧出现了专门编排"推理角色 + 缓存角色"的 API（阿里和 SGLang 团队的 RBG）。
 
@@ -249,7 +251,7 @@ Meta 训练 Llama 3 405B 的报告（16384 张 H100，54 天预训练）披露�
 - **rollout 成为瓶颈**：每个训练 step 都要让当前策略生成大量轨迹（采样几万条长思维链、或跑几千个环境回合），rollout 集群的规模常常是训练集群的几倍；
 - **三种负载异质共存**：训练（compute-heavy）、生成（prefill + decode 混合）、环境/奖励（常常是 CPU 密集的沙盒或另一个模型）——单一并行策略没法同时喂饱它们。
 
-这个领域的代表作是字节跳动的 **veRL**（HybridFlow）：用"混合控制器"架构——上层单控制器编排 RL 数据流（哪些轨迹进 buffer、何时触发训练、参数何时同步给 rollout 集群），内部各引擎（Megatron/FSDP 训练、vLLM/SGLang rollout）保持 SPMD 集合通信的效率。5D 并行被封装在 Model Engine 里，算法工程师写 RL 逻辑时完全不用感知。2026 年这条线的新进展是"全异步"：veRL 官方文档给出的口径是 128 张 GPU 上 2.35 至 2.67 倍加速（流式约 1.6 倍，加上允许陈旧策略与部分轨迹后达到 2.35 倍），其机制正是允许 rollout 相对训练进度滞后若干步。另一条更省带宽的做法是**增量权重同步**：实测两次同步之间只有约 1% 到 3% 的参数字节发生变化，据此只传变化量，在 7B、32B、72B 三个规模上分别报告 2.4、1.9、3.1 倍加速（同上为项目方口径，需注意测试条件）。vLLM 生态的 vime、更激进的 AgentJet、阿里的 RollArt（3000+ GPU 训练百亿级 MoE，端到端时间比同步基线快 1.35 至 2.05 倍）都在同一个方向上卷：**把 RL 训练从"同步大锁"拆成异步流水线，消灭 GPU 空转的"依赖气泡"**。
+这个领域的代表作是字节跳动的 **veRL**（HybridFlow，EuroSys 2025）：用"混合控制器"架构——上层单控制器编排 RL 数据流（哪些轨迹进 buffer、何时触发训练、参数何时同步给 rollout 集群），内部各引擎（Megatron/FSDP 训练、vLLM/SGLang rollout）保持 SPMD 集合通信的效率。5D 并行被封装在 Model Engine 里，算法工程师写 RL 逻辑时完全不用感知。论文给出的口径是：相对当时的主流 RLHF 框架吞吐提升 **1.53 至 20.57 倍**，且 actor 训练加生成占单次 RLHF 总时间的 **58.9%**（论文另引 DeepSpeed-Chat 的 70B 权重重分片占单次迭代 36.4%）——**这组比例本身就说明了为什么"把 rollout 从训练里解耦出去"是 RL 基建的主要矛盾**。vLLM 生态的 vime、更激进的 AgentJet、阿里的 RollArt（3000+ GPU 训练百亿级 MoE，端到端时间比同步基线快 1.35 至 2.05 倍）都在同一个方向上卷：**把 RL 训练从"同步大锁"拆成异步流水线，消灭 GPU 空转的"依赖气泡"**。
 
 同步 vs 异步的取舍是这里的永恒主题：同步训练（等最新权重）正确性干净但气泡大；异步训练吞吐高但存在 staleness（旧策略生成的样本喂给新策略）。轨迹级异步（以单条轨迹为调度粒度）是 2026 年的主流答案。
 
@@ -289,10 +291,11 @@ Meta 训练 Llama 3 405B 的报告（16384 张 H100，54 天预训练）披露�
 
 - Dean et al., *Large Scale Distributed Deep Networks (DistBelief)*, NeurIPS 2012
 - Li et al., *Scaling Distributed Machine Learning with the Parameter Server*, OSDI 2014
-- Shoeybi et al., *Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism*, 2019
+- Shoeybi et al., *Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism*, arXiv:1909.08053, 2019（预印本，未正式发表于会议）
+- Narayanan et al., *PipeDream: Generalized Pipeline Parallelism for DNN Training*, SOSP 2019
 - Huang et al., *GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism*, NeurIPS 2019
 - Rajbhandari et al., *ZeRO: Memory Optimizations Toward Training Trillion Parameter Models*, SC 2020
-- Smith et al., *Using DeepSpeed and Megatron to Train Megatron-Turing NLG 530B*, 2021
+- Smith et al., *Using DeepSpeed and Megatron to Train Megatron-Turing NLG 530B*, arXiv:2201.11990, 2022
 - Dao et al., *FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness*, NeurIPS 2022
 - Yu et al., *Orca: A Distributed Serving System for Transformer-Based Generative Models*, OSDI 2022
 - Kwon et al., *Efficient Memory Management for Large Language Model Serving with PagedAttention (vLLM)*, SOSP 2023

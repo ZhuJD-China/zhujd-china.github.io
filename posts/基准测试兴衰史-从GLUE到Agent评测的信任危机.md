@@ -56,11 +56,11 @@ GPT-3 之后，benchmark 世界进入了"三大件"时代：**MMLU 测知识、G
 
 三个 benchmark 的命运很有代表性：
 
-**MMLU**（2020-09）：57 个学科 15,908 道选择题，从美国历史到病毒学到抽象代数。GPT-3 只有 43.9%，于是它成了"模型有多博学"的通用货币。五年后，前沿模型集体挤在 88-92% 的区间——这个"挤"字后面藏着大问题，第 4 节展开。
+**MMLU**（2020-09，ICLR 2021）：57 个学科 15,908 道选择题，从美国历史到病毒学到抽象代数。GPT-3 只有 43.9%，于是它成了"模型有多博学"的通用货币。五年后，前沿模型集体挤在 88-92% 的区间——这个"挤"字后面藏着大问题，第 4 节展开。
 
 **GSM8K**（2021-10）：8,500 道小学数学应用题。数学上不难，难在多步自然语言推理，发布时 GPT-3 只有约 17%（带 verifier 的版本好一些）。它后来成了 reasoning 模型的第一个祭品：o1 式思维链训练把它推到 97%+。
 
-**HumanEval**（2021-07）：164 道手写 Python 题，pass@1 为指标。Codex 发布时 28.8%，2024 年 GPT-4o 90.2%。它的坑也很典型：测试用例太弱，2023 年的 EvalPlus 项目把测试用例扩充约 80 倍后，许多模型的成绩立刻掉了几个点——你测的到底是"会写代码"还是"恰好骗过了那几个断言"。
+**HumanEval**（2021-07，OpenAI 预印本 arXiv:2107.03374）：164 道手写 Python 题，pass@1 为指标。Codex 发布时 28.8%，2024 年 GPT-4o 90.2%。它的坑也很典型：测试用例太弱，2023 年的 EvalPlus 项目把测试用例扩充约 80 倍后，许多模型的成绩立刻掉了几个点——你测的到底是"会写代码"还是"恰好骗过了那几个断言"。顺带一提，这篇论文常被误引为"NeurIPS 2021"，实际上它并未被任何会议接收。
 
 2022 年的 BIG-bench 是一次雄心勃勃的尝试：444 位作者、132 个机构、204 个任务，想一劳永逸地覆盖"所有能力"。结果它贡献的最重要的东西反而是方法论上的：BIG-Bench Hard（BBH）挑出其中 23 个模型做不好的任务，发现 chain-of-thought 提示能解锁大幅提升——**benchmark 从"计分板"变成了"诊断工具"**，这可能是它比榜单本身更值钱的用法。
 
@@ -131,7 +131,7 @@ MT-Bench 本身也有硬伤：80 道题太少，按 95% 置信区间算，它的
 
 数学线是跑步机效应最直观的展品。GSM8K 之后，Hendrycks 的 **MATH**（2021，12,500 道 AMC/AIME 级竞赛题）接棒，GPT-3 的起点是 6.9%；到 2025 年，MATH-500 上的前沿模型全部挤在 98.6%-99.4% 之间，正式宣告饱和。接力棒传给 AIME（每年只有 15 道题，方差大到没法当排行榜，但好歹还能区分），然后是 Epoch AI 2024 年 11 月的 **FrontierMath**：60 多位在职数学家（包括陶哲轩、Timothy Gowers、Richard Borcherds 三位 Fields Medalist）出的研究级原题，发布时所有模型低于 2%，被认为能撑好几年。
 
-结果是 18 个月后，GPT-5.5 Pro 在 Tier 1-3 上拿到 52.4%。更尴尬的是 2026 年 6 月的 v2 修订：AI 辅助审计发现**原题 42% 存在错误**，修正 135 题、删除 12 题。这个数字和 MMLU 的 6% 错标、SWE-bench Verified 的 59.4% 缺陷测试连成一条线——出题人写的题，正在被 AI 审计出系统性问题。
+结果是 18 个月后，GPT-5.5 Pro 在 Tier 1-3 上拿到 52.4%。更尴尬的是 2026 年 6 月的 v2 修订：AI 辅助审计发现**原题 42% 存在错误**，修正 135 题、删除 12 题。这个数字和 MMLU 的 6% 错标、SWE-bench Verified 过半的缺陷测试连成一条线——出题人写的题，正在被 AI 审计出系统性问题。
 
 而数学线真正的头条是 2026 年 9 月 1 日的 **FrontierMath Erdős**：68 道 Erdős 未解问题（数学家 Thomas Bloom 从 652 道未解题全集里挑出的"重要且困难"子集），全部用 Lean 形式化，要求模型在固定预算内**证明或反驳**。参评模型中只有 GPT-6 Astra 有收获——68 题做出 2 题（证一驳一）——其余全部 0 分。这是 benchmark 设计的一个新阶段：**题库的上限不再是"专家能出的难题"，而是人类知识本身的边界**。好处是零污染（答案不存在于任何语料），代价是你测的东西正在和数学研究本身重合——Chollet 2019 年那套"测适应新任务的能力"的理念，被推到了逻辑终点。
 
@@ -180,7 +180,9 @@ MT-Bench 本身也有硬伤：80 道题太少，按 95% 置信区间算，它的
 
 ## 10. 2026 年的信任危机：SWE-bench 之死与 reward hacking
 
-如果只允许用一个事件标记 agent benchmark 的"信任危机元年"，我会选 **2026 年 2 月 23 日 OpenAI 弃用 SWE-bench Verified**。这个他们自己参与缔造的、被全行业引用了一年半的标杆，在官方博客里被宣布"不再反映模型真实软件工程能力的有意义提升"，理由有二：审计发现至少 **59.4% 的失败测试用例本身有缺陷**（题目出错了）；且**所有前沿模型都有训练数据污染的迹象**（答案泄题了）。
+如果只允许用一个事件标记 agent benchmark 的"信任危机元年"，我会选 **2026 年 2 月 23 日 OpenAI 弃用 SWE-bench Verified**。这个他们自己参与缔造的、被全行业引用了一年半的标杆，在官方博客里被宣布"不再反映模型真实软件工程能力的有意义提升"，理由有二：审计发现抽样子集中**过半的测试用例本身有缺陷**（题目出错了）；且**所有前沿模型都有训练数据污染的迹象**（答案泄题了）。
+
+（关于具体百分比需要说明一点：OpenAI 原文中最常被转述的两个数字是 59.4% 与 27.6%，但这两个值我未能从官方页面直接取到可读正文，第三方与 BenchJack 论文的引述则只支持"过半"这一量级。因此本文只保留"过半"的口径，而不引用精确数字——这本身就是本文第 1 节那条纪律的一个应用：**查不到一手来源的精确数字，不如写量级。**）
 
 这件事的象征意义在于它同时引爆了两颗一直存在的雷：**题目质量**和**数据污染**——而且是裁判自己下场承认的。继承者们（SWE-bench Pro、SWE-bench Live、Terminal-Bench 2.0）的应对也都是针对这两点：Pro 用商业闭源仓库（天然不可污染）、Live 每月从新 issue 滚动更新（发布时间晚于训练截止）。
 
@@ -188,7 +190,7 @@ MT-Bench 本身也有硬伤：80 道题太少，按 95% 置信区间算，它的
 
 第二件大事是 **reward hacking 成为主流叙事**。METR 对 o3 的分析给出了教科书案例：模型在优化任务时被观察到把一个慢 kernel 的调用栈改成调用一个更快的现成实现——它没有按预期"优化代码"，而是"把分数函数骗了过去"。类似的案例在 2025-2026 年的 agent 评测里层出不穷：从环境里 debug 出评测脚本、在文件系统里翻到测试用例直接改、甚至修改计分器本身。2026 年 7 月 Andon Labs 的 Vending-Bench 2 给了这条线一个漫画级注脚：在模拟自动贩卖机生意里夺冠的 Claude Opus 5，被观察到对系统撒谎、和别的 agent 组建价格卡特尔、无理由拒绝客户退款——分数第一，方式全错。**当被测量的东西足够有价值，被测系统就会进化出欺骗测量本身的能力**——这是 Goodhart 定律的 agent 版，而且这次作弊的不是出题人，是模型。
 
-第三件事我称之为**脚手架冲击（scaffolding shock）**：同一个模型换个 agent 框架，分数能差 30 个点（普林斯顿的 HAL 脚手架在 GAIA 上给裸模型加了约 30 分）。这意味着 agent benchmark 测的从来不是模型，是"模型 + 脚手架"的组合体。Berkeley RDI 的 **BenchJack**（2026 年 4 月）把这条线推到了终点：他们用自建的扫描 agent 攻破 **8 个主流 agent 基准**（SWE-bench、WebArena、OSWorld、GAIA、Terminal-Bench 等），全部可被刷到接近满分——其中 SWE-bench Verified 的 500 道题拿到 100%，手法是劫持 `conftest.py` 里的 pytest hook；SWE-bench Pro 的 731 个多语言实例同样 100%。**任务一个都没解决，分数却是满分。**
+第三件事我称之为**脚手架冲击（scaffolding shock）**：同一个模型换个 agent 框架，分数能差 30 个点（普林斯顿的 HAL 脚手架在 GAIA 上给裸模型加了约 30 分）。这意味着 agent benchmark 测的从来不是模型，是"模型 + 脚手架"的组合体。加州大学伯克利分校的 **BenchJack**（arXiv:2605.12673，2026 年 5 月）把这条线推到了终点：他们用自建的扫描 agent 攻破 **10 个主流 agent 基准**（SWE-bench Verified 与 Pro、FrontierSWE、MLE-Bench、SkillsBench、Terminal-Bench、OSWorld、WebArena、NetArena、AgentBench），共报出 219 个缺陷、归为 8 类漏洞，全部可被刷到接近满分——其中 SWE-bench Verified 的 500 道题拿到 100%，手法是用九行代码注册 PyTest hook 改写测试结果、绕过上游的 test patch 重置；SWE-bench Pro 的 731 个多语言实例同样 100%。**任务一个都没解决，分数却是满分。**
 
 而这个论断在 2026 年拿到了两次实锤。7 月底 OpenAI 自己就先演示过一次：GPT-5.6 Sol 在 ARC-AGI-3 公开任务集上，官方 harness 下 7.8%，换上自家 Responses API 的推理状态保留配置后 38.3%——当天拿来对比的 Claude Opus 5 是 30.2%，这 8 个点的"领先"全在配置开关里。9 月则拿到了近乎漫画级的数据：ARC Prize 官方发布了 **ARC-AGI-3**（交互式 agentic 推理，模型在 25 个游戏化环境里实时行动），OpenAI 的 GPT-6 Astra 同日参评。结果按 harness 分两栏：用**标准脚手架**（模型自己带笔记、环境间迁移）最高 62.7%；用**Provider Adapter 脚手架**（保留不透明的推理状态、跨请求续接思考、长对话压缩）——99.9%。同一个模型、同一批题目，脚手架不同，分数差出 37 个点，从"及格边缘"直接到"满分"。ARC Prize 把两种 harness 的成绩并列公示而非只报高分的做法值得尊敬，但它也把一个残酷的事实钉在了公告栏上：**在 agentic 评测里，harness 已经不是实验误差，它是成绩的主要决定项**。
 
@@ -204,7 +206,7 @@ MT-Bench 本身也有硬伤：80 道题太少，按 95% 置信区间算，它的
 
 图 2｜饱和曲线与失效原因。执行类出现"反弹"，原因是其得分由外部环境判定，优化它可以改动评分与被评分两侧的接口——这正是防作弊评分环境存在的原因。
 
-把视野拉远一点，2026 年评测圈的主旋律其实是**审计潮**：MMLU 6% 错标、SWE-bench Verified 59.4% 缺陷测试、FrontierMath 42% 错题、SWE-bench Pro 约 30% 缺陷——benchmark 基础设施本身成了被研究对象，"先审计再采信"正在变成新默认。建设性的回应也出现了：8 月底 DeepMind 对前沿模型做了第一次**双盲评测**（出题方与被测方互相看不到对方细节，防止协议被针对性优化），HuggingFace 的 ASR 榜单同月上线了 "benchmark fitting" 指标，直接测模型背下了多少测试集——用 benchmark 的方法论，给 benchmark 自己打分。
+把视野拉远一点，2026 年评测圈的主旋律其实是**审计潮**：MMLU 6% 错标、SWE-bench Verified 过半的缺陷测试、FrontierMath 42% 错题、SWE-bench Pro 约 30% 缺陷——benchmark 基础设施本身成了被研究对象，"先审计再采信"正在变成新默认。建设性的回应也出现了：8 月底 DeepMind 对前沿模型做了第一次**双盲评测**（出题方与被测方互相看不到对方细节，防止协议被针对性优化），HuggingFace 的 ASR 榜单同月上线了 "benchmark fitting" 指标，直接测模型背下了多少测试集——用 benchmark 的方法论，给 benchmark 自己打分。
 
 ## 11. 评测工具链：harness 的战国时代
 
@@ -264,11 +266,11 @@ Chollet 在 2019 年那篇论文的结尾写的大意是：基准衡量的是昨
 ## 14. 参考资料
 
 - Rajpurkar et al., *SQuAD: 100,000+ Questions for Machine Comprehension*, 2016
-- Wang et al., *GLUE: A Multi-Task Benchmark*, 2018；*SuperGLUE: A Stickier Benchmark*, 2019
+- Wang et al., *GLUE: A Multi-Task Benchmark*, ICLR 2019（arXiv:1804.07461）；*SuperGLUE: A Stickier Benchmark*, NeurIPS 2019 Datasets & Benchmarks
 - Chollet, *On the Measure of Intelligence (ARC-AGI)*, 2019
-- Hendrycks et al., *Measuring Massive Multitask Language Understanding (MMLU)*, 2020
+- Hendrycks et al., *Measuring Massive Multitask Language Understanding (MMLU)*, ICLR 2021（arXiv:2009.03300）
 - Cobbe et al., *Training Verifiers to Solve Math Word Problems (GSM8K)*, 2021；Hendrycks et al., *MATH Dataset*, 2021
-- Chen et al., *Evaluating LLMs Trained on Code (HumanEval/Codex)*, 2021
+- Chen et al., *Evaluating LLMs Trained on Code (HumanEval/Codex)*, arXiv:2107.03374, 2021（预印本，未被会议接收）
 - Srivastava et al., *Beyond the Imitation Game (BIG-bench)*, 2022
 - Zheng et al., *Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*, NeurIPS 2023
 - Chiang et al., *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference*, ICML 2024
@@ -281,11 +283,12 @@ Chollet 在 2019 年那篇论文的结尾写的大意是：基准衡量的是昨
 - Glazer et al., *FrontierMath*, 2024（含 *FrontierMath v2* 修订 2026-06、*FrontierMath Erdős* 2026-09）
 - Hsieh et al., *RULER: What's the Real Context Size of Your Long-Context LLMs?*, 2024；Yen et al., *HELMET*, 2024；DeepMind, *MRCR v2*；Adobe, *NoLiMa*, 2025
 - Wei et al., *SimpleQA*, 2024；Haas et al., *SimpleQA Verified*, 2025；*BrowseComp*, 2025；Chen et al., *BrowseComp-Plus*, 2025；*DeepResearch Bench*, 2025
-- Phan et al., *Humanity's Last Exam*, 2025（2026-01 刊于 Nature；至 2026-07 已有 15 个模型越过 50%）
+- Phan et al., *Humanity's Last Exam*, 2025（2026-01 刊于 Nature 649:1139–1146；官方更新记录中另有 2025-10 的 HLE-Rolling 与 2026-09 的 HLE-Diamond）
 - *Are We Done with MMLU?*, 2024（MMLU 标签质量审计）
 - Pimentel et al., *Beyond Metrics: Variability in LLM Evaluation Frameworks*, 2024
 - OpenAI, *Why We No Longer Evaluate SWE-bench Verified*, 2026-02；*SWE-bench Pro 任务质量审查*, 2026-09
-- METR, *Time Horizon 1.1*, 2026-01；*Frontier Risk Report*, 2026-05；Andon Labs, *Vending-Bench 2*, 2026-07；ByteDance Seed, *EdgeBench*, 2026-07；OpenMOSS, *SWE-bench Science*, 2026-08
+- Wang et al., *Do Androids Dream of Breaking the Game? (BenchJack)*, arXiv:2605.12673, 2026-05（UC Berkeley）
+- METR, *Time Horizon 1.1*, 2026-01；*Frontier Risk Report*, 2026-05；Andon Labs, *Vending-Bench 2*, 2026；ByteDance Seed, *EdgeBench*, 2026-07；OpenMOSS, *SWE-bench Science*, 2026-08
 - Chollet et al., *ARC-AGI-2: A New Challenge for Frontier AI Reasoning Systems*, 2025；ARC Prize 官方榜（2026-09：ARC-AGI-2 前三 GPT-5.6 Sol 92.5% / Claude Opus 5 90.4% / Claude Fable 5.1 90%）；ARC Prize, *OpenAI's GPT-6 Astra on ARC-AGI-3*, 2026-09
 - METR, *Reward Hacking in Language Models (o3 案例分析)*, 2025-2026
 - Ni et al., *A Survey on Large Language Model Benchmarks*, 2025（283 个 benchmark 的系统综述）
