@@ -250,6 +250,8 @@ DSA 是 NSA 思路的延续和"精细化"版本，2025 年底随 DeepSeek-V3.2 �
 
 这里有一处需要澄清的流传说法：**未找到一手来源支持"DSA 把 KV Cache 降低 X%"这类表述**。论文给出的是注意力复杂度（$O(L^2)$ 到 $O(L \cdot k)$）与 token 成本，而不是 KV 降幅；而且索引器本身需要额外保存一份 K Cache（按块存储，块大小固定 64）。也就是说，DSA 省的是注意力计算，KV 侧的净收益要自行核算。
 
+2026 年 8 月的 **LongCat Sparse Attention（LSA，arXiv:2608.01662）**正面处理了这个副作用：它指出 DSA 的索引器打分本身是 $O(L^2)$，且其输出导致不连续访存，于是用三条正交策略消掉这部分开销——流式感知索引把零散的 KV 条目重排为硬件对齐的连续布局以获得合并访存、跨层索引用一层的索引结果摊销到后续若干层（配合跨层蒸馏）、层次化索引用由粗到细逐级缩小候选集。论文在 69B-A3B 到 560B-A27B 规模上验证，支持最长 100 万 token 的原生训练，并支撑了 LongCat-2.0（1.6T-A48B）；配套的 69B-A3B 稀疏版已开源。**这说明 2026 年的竞争点已经从"要不要稀疏"转到"稀疏的索引器本身要付多少"。**
+
 DSA 发布后，围绕它的"生态位补强"很快形成了一条小研究脉络，这本身就说明逐 token 稀疏已经成了长上下文的主航道：2026 年 1 月的 **GSA（Gated Sparse Attention）** 把稀疏选择和门控注意力结合，声称把 attention sink（模型对第一个 token 的病态关注）从 46.7% 压到 4.8%、训练 loss 尖峰减少 98%；2026 年 5 月北大的 **MISA** 则把 DSA 索引器的多个头当成一个 MoE 池来按需激活，用 8 分之一的索引头数保持 LongBench 成绩不掉，索引 kernel 提速约 3.8 倍—— indexer 这个原本"顺手一写"的组件，自己长成了一个新的优化维度。
 
 ---
@@ -267,6 +269,8 @@ $$c_t^{KV} = h_t W^{DKV} \quad \text{（下投影：压缩成低维潜在向量�
 $$K^{(i)} = c_t^{KV} W^{UK}_{(i)}, \qquad V^{(i)} = c_t^{KV} W^{UV}_{(i)} \quad \text{（上投影：需要时再还原出各头的 K/V）}$$
 
 用 DeepSeek-V3 的实际数字直观感受一下压缩幅度：标准 MHA 每个 token 需要缓存 $128 \times 128 = 16384$ 个浮点数；MLA 每个 token 只需要缓存大约 576 个数（512 维压缩 KV + 64 维解耦 RoPE），差不多是 **28 倍**的压缩率。
+
+这条路线到 2026 年 9 月仍在往前推。最新的一版是 **DeepSeek-V4.1-Flash（arXiv:2609.19969，权重已放出）**：552B 骨干、支持 100 万 token，decode 每 token 激活 16B 而 prefill 只要 8B；KV 侧用 CSA2 做跨层复用、再叠加 FP4 KV，把常驻 HBM 的全局 KV 压到 **890 字节每 token**（约为 V4-Flash 的四分之一），常驻 SSD 或主机内存的持久 KV 约为其八分之一。值得注意的是它没有推翻 MLA，而是在其上叠跨层复用与低精度存储——**这是 DeepSeek 一贯的做法。** 同期有一个更"工程"的补丁：**QK-Normed MLA**（arXiv:2606.16310）指出 QK RMSNorm 与 MLA 看似不兼容（归一化似乎需要缓存投影后的完整 key），其实只是实现问题：RMSNorm 可拆成静态仿射权重与动态标量，静态部分吸收进 query 侧投影，动态部分退化为每 token 每组一个标量，从而在保持潜变量解码路径的同时用上 QK 归一化，作者报告 256K 上下文下 H800 解码延迟开销低于 2%。
 
 ### 7.2 Decoupled RoPE（解耦旋转位置编码）
 
@@ -382,6 +386,10 @@ DeepSeek-V2 论文里一个有意思的消融实验结论是：**GQA 在同等 K
 - VideoNSA: Native Sparse Attention Scales Video Understanding (arXiv:2510.02295, ICLR 2026)
 - FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling (arXiv:2603.05451)
 - Kimi Linear: An Expressive, Efficient Attention Architecture (arXiv:2510.26692)
+- DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression (arXiv:2609.19969，2026-09-17)
+- LongCat Sparse Attention: Taming the Lightning via Streaming-aware Hierarchical Cross-Layer Indexing (arXiv:2608.01662，2026-08-03)
+- QK-Normed MLA: QK Normalization without Full Key Caching (arXiv:2606.16310，2026-06-15)
+- Motif 3 Technical Report (arXiv:2608.09119，GDLA：分组微分注意力 + MLA 压缩 KV)
 - Gated Sparse Attention (arXiv:2601.15305)；MISA: Mixture of Indexer Sparse Attention (arXiv:2605.07363)
 - SGLang 官方 Cookbook：Qwen3.8-Flash-Next（2026-08）/ GLM-5.3-Flash / Kimi-K3 部署文档
 - Sebastian Raschka, "The Big LLM Architecture Comparison" 系列文章（LLM Architecture Gallery）

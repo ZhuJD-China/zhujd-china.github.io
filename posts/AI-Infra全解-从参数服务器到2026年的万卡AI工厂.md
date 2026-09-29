@@ -251,7 +251,7 @@ Meta 训练 Llama 3 405B 的报告（16384 张 H100，54 天预训练）披露�
 - **rollout 成为瓶颈**：每个训练 step 都要让当前策略生成大量轨迹（采样几万条长思维链、或跑几千个环境回合），rollout 集群的规模常常是训练集群的几倍；
 - **三种负载异质共存**：训练（compute-heavy）、生成（prefill + decode 混合）、环境/奖励（常常是 CPU 密集的沙盒或另一个模型）——单一并行策略没法同时喂饱它们。
 
-这个领域的代表作是字节跳动的 **veRL**（HybridFlow，EuroSys 2025）：用"混合控制器"架构——上层单控制器编排 RL 数据流（哪些轨迹进 buffer、何时触发训练、参数何时同步给 rollout 集群），内部各引擎（Megatron/FSDP 训练、vLLM/SGLang rollout）保持 SPMD 集合通信的效率。5D 并行被封装在 Model Engine 里，算法工程师写 RL 逻辑时完全不用感知。论文给出的口径是：相对当时的主流 RLHF 框架吞吐提升 **1.53 至 20.57 倍**，且 actor 训练加生成占单次 RLHF 总时间的 **58.9%**（论文另引 DeepSpeed-Chat 的 70B 权重重分片占单次迭代 36.4%）——**这组比例本身就说明了为什么"把 rollout 从训练里解耦出去"是 RL 基建的主要矛盾**。vLLM 生态的 vime、更激进的 AgentJet、阿里的 RollArt（3000+ GPU 训练百亿级 MoE，端到端时间比同步基线快 1.35 至 2.05 倍）都在同一个方向上卷：**把 RL 训练从"同步大锁"拆成异步流水线，消灭 GPU 空转的"依赖气泡"**。
+这个领域的代表作是字节跳动的 **veRL**（HybridFlow，arXiv:2409.19256，项目方口径为 EuroSys 2025）：用"混合控制器"架构——上层单控制器编排 RL 数据流（哪些轨迹进 buffer、何时触发训练、参数何时同步给 rollout 集群），内部各引擎（Megatron/FSDP 训练、vLLM/SGLang rollout）保持 SPMD 集合通信的效率。5D 并行被封装在 Model Engine 里，算法工程师写 RL 逻辑时完全不用感知。论文给出的口径是：相对当时的主流 RLHF 框架吞吐提升 **1.53 至 20.57 倍**，且 actor 训练加生成占单次 RLHF 总时间的 **58.9%**（论文另引 DeepSpeed-Chat 的 70B 权重重分片占单次迭代 36.4%）——**这组比例本身就说明了为什么"把 rollout 从训练里解耦出去"是 RL 基建的主要矛盾**。vLLM 生态的 vime、更激进的 AgentJet、阿里的 **RollArt**（arXiv:2512.22560，v2 收录于 OSDI 2026；3000+ GPU 训练百亿级 MoE，端到端时间比同步基线快 1.31 至 2.05 倍）都在同一个方向上卷：**把 RL 训练从"同步大锁"拆成异步流水线，消灭 GPU 空转的"依赖气泡"**。
 
 同步 vs 异步的取舍是这里的永恒主题：同步训练（等最新权重）正确性干净但气泡大；异步训练吞吐高但存在 staleness（旧策略生成的样本喂给新策略）。轨迹级异步（以单条轨迹为调度粒度）是 2026 年的主流答案。
 
@@ -304,8 +304,8 @@ Meta 训练 Llama 3 405B 的报告（16384 张 H100，54 天预训练）披露�
 - Qin et al., *Mooncake: A KVCache-centric Disaggregated Architecture for LLM Serving*, FAST 2025
 - DeepSeek-AI, *DeepSeek-V3 Technical Report*, 2024（第 3 章 Infrastructures）
 - Dubey et al., *The Llama 3 Herd of Models*, 2024（集群故障数据）
-- Sheng et al., *HybridFlow: A Flexible and Efficient RLHF Framework (veRL)*, EuroSys 2025
-- RollArt: *Scaling Agentic RL Training via Disaggregated Infrastructure*, 2025
+- Sheng et al., *HybridFlow: A Flexible and Efficient RLHF Framework (veRL)*, arXiv:2409.19256, 2024（项目方口径 EuroSys 2025）
+- Gao et al., *RollArt: Disaggregated Multi-Task Agentic RL Training at Scale*, arXiv:2512.22560, OSDI 2026
 - NVIDIA DGX SuperPOD / NVL72 参考架构文档；NVIDIA《迎接十亿瓦数据中心时代》博客（2025）
 - 中证鹏元《Vera Rubin 开启量产周期》专题报告（2026-08）；Vera Rubin NVL72 / Vera CPU / Starmind 相关官方与媒体报道（2026-08）
 - NVIDIA × OpenAI 10 GW 合作公告相关报道（2026-09）；SpaceX × NVIDIA Starmind 轨道数据中心报道（2026-08）

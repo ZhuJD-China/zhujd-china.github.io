@@ -138,9 +138,11 @@ SGLang 2025 年的另一条主线是把引擎变成生态，四个作品都值�
 
 图 2｜两种 KV 复用思路。分页解决"怎么放不浪费"，前缀树解决"怎么知道能复用"；前者适合长度分布杂的负载，后者在共享前缀多时更优。
 
-基数树的实际收益在哪：多轮对话（新请求 = 旧会话 + 增量）、few-shot 批量调用（共享示例前缀）、agent 分叉（self-consistency 采样从同一前缀展开几十条）。SGLang 论文里的实测缓存命中率：Vicuna-33B 74.1%，LLaVA-Next-34B 52.4%。cache-aware 路由器把命中率从 round-robin 的 20% 拉到 75%，吞吐翻倍。而这一切对用户是透明的——SGLang 原文的卖点就是"自动的"。
+基数树的实际收益在哪：多轮对话（新请求 = 旧会话 + 增量）、few-shot 批量调用（共享示例前缀）、agent 分叉（self-consistency 采样从同一前缀展开几十条）。SGLang 论文里的实测缓存命中率：Vicuna-33B 74.1%，LLaVA-Next-34B 52.4%——注意这两个数字是**线上部署一个月后的观测值**，不是基准跑分；论文对可调度性的结论是定性的（提到用了 cache-aware 调度策略提升命中率），量化结果则是 Vicuna-33B 上**首 token 延迟平均降低 1.7 倍**。而这一切对用户是透明的——SGLang 原文的卖点就是"自动的"。
 
-不过这个"天然优势"在第三方实测里并不稳定复现，值得单列。2026 年 RunInfra 的对比（自报、测试脚本未公开）在共享前缀负载下测出 **vLLM 的前缀缓存仍领先 SGLang 6% 到 8%**，未观察到 RadixAttention 的优势；而另一些二手博客（如 Spheron）在 H100 上 70B FP8、80% 共享前缀的场景里给出相反结论，AMD 的官方博客则在三引擎配置基本对齐后报出小于 0.5% 的差距，并明确说明这是指示性结果。
+（这里要澄清一个流传较广的说法："cache-aware 路由把命中率从 20% 拉到 75%、吞吐翻倍"这句话**在论文中查不到**，全文既无该组数字也无"routing"字样。它大概率来自社区解读或二手博客，引用时应删去。）
+
+不过这个"天然优势"在第三方实测里并不稳定复现，值得单列。2026 年 RunInfra 的对比（**自报数据，测试脚本与原始数据未公开**）在"多组不同前缀"的负载下测出 **vLLM 的前缀缓存在各前缀数量下吞吐都领先 SGLang 6% 到 8%、且 TTFT 更低**；而在真正的"单一共享前缀"一节里，两者差距只有百分之几。另一些二手博客（如 Spheron，2026-06-23）在 H100 上 70B FP8、80% 共享前缀、50 并发的场景里给出相反结论（TTFT 中位数 310ms → 195ms，降幅 37%）；AMD 官方博客（2026-09-22）在 8×MI350X 上跑 Kimi-K3 时称 vLLM、SGLang 与 ATOM 三引擎在并发 32 处收敛到 0.5% 以内，但同时自我限定"benchmark 调用未在 ISL/OSL/并发扫描上对齐，跨引擎差距应视为指示性而非实测引擎差异"。
 
 **结论是：不要采信任何单篇横评的胜负，应当按自己的负载实测。** 现有公开对比存在三个共性问题：设置未对齐（缓存开关、采样参数、是否忽略 EOS）、硬件单一、以及吞吐与延迟往往只报其一。
 
@@ -183,6 +185,8 @@ SGLang 2025 年的另一条主线是把引擎变成生态，四个作品都值�
 - 硬件生态（尤其国产/AMD/TPU 兼容）→ vLLM 的插件体系覆盖最广
 
 另外要警惕所有不带完整元数据的基准：模型、量化、上下文长度、并发曲线、SLO 定义、版本号（两个引擎都是两周一个大版本，三个月前的测试基本作废）。我个人的经验法则：**看到"快 30%"的结论，先查它用的是几个月前的版本**。
+
+还有一个常被忽略的参照系：**MLPerf 的第三方审计结果**。MLCommons 于 2026 年 9 月 16 日发布 Inference v6.1，这是唯一一个经过审核、且不允许自报吞吐的口径。本次共 30 家提交方（史上最多），新增端到端 RAG 与边缘 agentic 推理两个场景，GPT-OSS 任务的交互式场景正式支持投机解码。几个可对照的数字：VLM 测试中最佳单加速器服务器结果比半年前的 v6.0 提升 **2.99 倍**，DeepSeek R1 比一年前的 v5.1 提升 **5.7 倍**；首次纳入 NVIDIA Rubin 与 Vera Rubin NVL72（状态为**预览**，非审计终值）；史上最大系统为 **512 个加速器**，另有一个跨太平洋地理分布的异构系统。它给"快多少倍"提供了天花板参照：**当基准本身一年提升 5.7 倍时，两个引擎之间 30% 量级的差距更像实现差异而非代差。**
 
 ## 7. 各自的 2026：忙着不同的事
 
@@ -240,15 +244,14 @@ SGLang 2025 年的另一条主线是把引擎变成生态，四个作品都值�
 
 ## 11. 参考资料
 
-- Kwon et al., *Efficient Memory Management for Large Language Model Serving with PagedAttention (vLLM)*, SOSP 2023
-- Zheng et al., *SGLang: Efficient Execution of Structured Language Model Programs*, arXiv 2312.07104 / NeurIPS 2024
-- vLLM 官方博客：*vLLM V1: A Major Upgrade to vLLM's Core Architecture*（2025-01）；*vLLM 2025 Retrospective & 2026 Roadmap*（Office Hours #38 整理稿）
-- vLLM V1 用户指南与 v0.11.0、v0.20.x Release Notes（GitHub Releases）
-- LMSYS 官方博客：SGLang v0.4（2024-12）、*Large-Scale EP Inference*（2025-05）、slime（2025-07）、SpecForge（2025-07）、HiCache（2025-09）、Deterministic Inference（2025-09）、SGLang-Jax（2025-10）
-- SGLang 官方仓库：*Development Roadmap (2026 Q1)* issue #12780；v0.5.17 / v0.5.18 Release Notes
-- Sheng, *Efficient LLM Inference with SGLang*（LLMSys 2025 春季课程讲义）
-- Benchmark 三方对照：PremAI/DeployBase 与 Morph LLM 的 H100 对比（2026）；vLLM issue #37730（Radix vs PagedAttention Scaling，2026-03）；srawlin/vllm-vs-sglang-performance-benchmark BENCHMARK_REPORT（2×H100，2025-12）
-- Inferact 成立报道：TechCrunch（2026-01-22）；RadixArk 公开信息（2026-05）
-- ChatForest 2026 年度评测：vLLM（2026-05-07）与 SGLang（2026-05-07）两篇 Review
-- vLLM v0.26.0 / v0.28.0 Release Notes（2026-07-25 / 2026-08-26）；SGLang v0.5.16 / v0.5.18 Release Notes（2026-07-25 / 2026-08-22）
-- dreaming.press《vLLM 0.26 and SGLang 0.5.16 Shipped the Same Day》（2026-08-01）；AI Infrastructure Digest 2026-08-19/08-23（agents-radar）
+- Kwon et al., *Efficient Memory Management for Large Language Model Serving with PagedAttention (vLLM)*, arXiv:2309.06180, SOSP 2023
+- Zheng et al., *SGLang: Efficient Execution of Structured Language Model Programs*, arXiv:2312.07104 / NeurIPS 2024（74.1% 与 52.4% 缓存命中率为线上一个月后的观测值；论文对可调度性只给定性描述，量化结论为首 token 延迟平均降 1.7×）
+- Orca（Yu et al.）, OSDI 2022（"36.9× 吞吐提升"为对 FasterTransformer 的对比，GPT-3 175B 同延迟下）
+- MLCommons, *MLPerf Inference v6.1 Results*, 2026-09-16（30 家提交方；VLM 最佳单加速器较 v6.0 提升 2.99×、DeepSeek R1 较 v5.1 提升 5.7×；Rubin 条目为预览状态，史上最大系统 512 加速器）
+- RunInfra, *vLLM vs SGLang vs TensorRT-LLM*, 2026-06-20（更新 2026-09-21；vLLM 0.23.0 / SGLang 0.5.13 / TRT-LLM 1.2.1，1×H100 80GB；**自报数据，测试脚本与原始数据未公开**）
+- Spheron, *vLLM vs SGLang*, 2026-06-23（H100 + 70B FP8、80% 共享前缀、c=50：TTFT p50 310ms → 195ms）
+- AMD ROCm, *Benchmarking Kimi-K3 Across vLLM, SGLang, and ATOM on MI350X*, 2026-09-22（8×MI350X、c=32 三引擎收敛在 0.5% 内；**第三引擎为 ATOM 而非 TensorRT-LLM**，厂商自述为指示性结果）
+- vLLM 官方博客 *vLLM V1*（2025-01-27，"较 V0 最高 1.7× 吞吐"）；v0.8.0（2025-03-18 默认启用 V1）、v0.11.0（2025-10-02 移除 V0）、v0.30.0（2026-09-22）Release Notes
+- SGLang v0.5.15（2026-07-10）、v0.5.16（2026-07-25，含 GLM-5.2 DSA 缓存层分割每 rank KV 降约 74%）、v0.5.17（2026-08-08）、v0.5.18（2026-08-22）Release Notes
+- 融资：Inferact（TechCrunch / Bloomberg，2026-01-22，1.5 亿美元种子、8 亿美元估值，a16z 与 Lightspeed 联合领投）；RadixArk（BusinessWire，2026-05-05，1 亿美元种子、4 亿美元投后，Accel 领投、Spark 联合领投）
+- GitHub API 实时值（2026-09-29 15:30 UTC）：vllm-project/vllm 92,938 stars、sgl-project/sglang 36,580 stars
