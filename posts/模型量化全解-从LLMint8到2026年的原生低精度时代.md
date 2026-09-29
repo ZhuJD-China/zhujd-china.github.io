@@ -307,9 +307,9 @@ ICLR 2026 的接收列表里有 91 篇量化论文——这个领域并没有"�
 - Xiao et al., *SmoothQuant: Accurate and Efficient Post-Training Quantization for Large Language Models*, ICML 2023
 - Lin et al., *AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration*, MLSys 2024 Best Paper
 - Dettmers et al., *QLoRA: Efficient Finetuning of Quantized LLMs*, arXiv:2305.14314（arXiv 仅标注为 NeurIPS 扩展投稿，未见正式收录记录，引用时不建议写 venue）
-- Ashkboos et al., *QuaRot: Outlier-Free 4-Bit Inference in Rotated LLMs*, NeurIPS 2024
-- Liu et al., *SpinQuant: LLM Quantization with Learned Rotations*, ICLR 2025
-- Liu et al., *KIVI: A Tuning-Free Asymmetric 2-bit Quantization for KV Cache*, ICML 2024
+- Ashkboos et al., *QuaRot: Outlier-Free 4-Bit Inference in Rotated LLMs*, arXiv:2404.00456, 2024（arXiv 未标注 venue）
+- Liu et al., *SpinQuant: LLM Quantization with Learned Rotations*, arXiv:2405.16406, ICLR 2025
+- Liu et al., *KIVI: A Tuning-Free Asymmetric 2-bit Quantization for KV Cache*, arXiv:2402.02750, ICML 2024
 - Ma et al., *The Era of 1-bit LLMs: All Large Language Models are in 1.58 Bits*, 2024
 - Ma et al., *BitNet b1.58 2B4T Technical Report*, 2025
 - Kumar et al., *Scaling Laws for Precision*, ICLR 2025

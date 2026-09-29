@@ -97,11 +97,13 @@ Ahia 等人在 EMNLP 2023 那篇《Do All Languages Cost the Same?》里给过�
 
 这个差距在 2025 年的同行评审数据里再次得到确认：《Frontiers in AI》测得乌克兰语的 fertility 在 1.88 到 2.83 之间（对照英文的 1.07 到 1.22），且西里尔文转写为拉丁字母后反而升高——说明问题不在文字系统本身，而在语料与词表的组合。
 
-值得一提的是，**"多语言公平"这条线并没有被放弃，而是被做成了 BPE 自身的改良**：微软研究院的 Parity-aware BPE（ACL 2026）在训练时跨文字系统重平衡合并频率，使多语言基准上的表现与标准 BPE 持平；更激进的 SuperBPE 在 20 万词表下平均比 BPE 少 33% 的 token，30 个下游任务平均提升 4.0 个百分点（MMLU +8.2%），推理算力下降 27%。这两条路线的共同思路是：既然改不掉词表这个抽象，就让词表内部更公平。
+值得一提的是，**"多语言公平"这条线并没有被放弃，而是被做成了 BPE 自身的改良**：Sennrich 等人的 Parity-aware BPE（ACL 2026，arXiv:2508.04796）在每次合并时用 fair-max 规则优先照顾"当前被切得最碎的那种语言"，论文报告以各语言 token 成本的基尼系数衡量，不平等度相对标准 BPE 最多下降 89%，而全局压缩率几乎不受影响；更激进的 SuperBPE（COLM 2025，arXiv:2503.13423）干脆在 BPE 里加了一段"预分词课程"：先学子词，再学跨空格的"超词"，在 20 万词表下平均比 BPE 少 33% 的 token，30 个下游任务平均提升 4.0 个百分点（MMLU +8.2%），推理算力下降 27%。这两条路线的共同思路是：既然改不掉词表这个抽象，就让词表内部更公平——而"超词"这个概念还顺带挑战了一个更根本的前提：**空格真的是语义边界吗**（多词表达、跨语言差异、以及根本不用空格的中文，都是反例）。
 
 **第二笔债是脆弱性。**一个拼写变体、一个大小写变化、一个生僻字符，就可能让整段文本的 token 序列面目全非。ByT5 的实验早就表明字节级模型对噪声鲁棒得多，在拼写和发音敏感的任务上优势明显。另一个常被引用的例子是数字：tokenizer 对数字的切法（逐位切还是成块切）会显著影响算术能力——这是字面意义上的"表示方式决定能力上限"。
 
-**第三笔债我原以为是小事，直到看到系统测量的数据。**大家总觉得 tokenizer 不就是 CPU 上切个字符串么。TokTier（2026 年 7 月）对两个 agent 生态里 15 万余次调用做了统计：编码 agent 的会话模式是"长历史 + 小增量"，中位每次追加约 1.4K 字符；当 prompt 缓存命中率逼近 0.99 时，**tokenization 占首 token 延迟（TTFT）的比例从 10% 涨到了 64%**。GPU 全速运转，CPU 在切词——这在长上下文时代成了真实的系统瓶颈。
+**第三笔债我原以为是小事，直到看到系统测量的数据。**大家总觉得 tokenizer 不就是 CPU 上切个字符串么。TokTier（arXiv:2607.29678，2026-07-31）对 **153,951 次真实调用**做了统计：编码 agent 的会话模式是"长历史 + 小增量"，中位每次追加约 1.4K 字符，只有 1.0% 到 3.6% 的调用会新建或重建会话，但那部分恰恰带着动辄数百万字符的上下文；车队级 prompt 缓存命中率基线为 **94.1%**，而当它逼近 0.99 时，**tokenization 占首 token 延迟（TTFT）的比例从 10% 涨到了 64%**。GPU 全速运转，CPU 在切词——这在长上下文时代成了真实的系统瓶颈。
+
+它的解法也值得记一笔：维护一份精确状态，只在追加点附近的小窗口重新切分，只有当边界检查通过时才拼接，否则扩大窗口或退回全量重新切分；无前缀可复用的调用则走 GPU 上的精确 GPT 系正则预分词加 BPE。论文报告 17 个生产分词器族、1.5×10¹⁰ 次切分比对、12.4 TB 真实语料下**零差异**，接进 vLLM 后 TTFT 中位数下降 16% 到 34%。
 
 ![高缓存命中下 tokenization 在首 token 延迟中的占比变化](images/tokenizer-2026/s03-ttft-share.svg)
 
@@ -150,7 +152,7 @@ BLT 之后，动态边界成了字节级架构的标配，但边界怎么学，�
 
 上面这条线要求从零预训练，门槛太高，所以还有一条更务实路线：保留 subword tokenizer 和已训练的模型，把切分决策改成动态的。
 
-Cambridge 的 Feher、Vulić 和 Minixhofer 做的 retrofitting（ACL 2025）很有代表性。他们的做法是在 batch 级别跑一个受 BPE 启发的合并算法——在同一批输入里统计子词序列的频率，合并频繁片段，然后用一个预训练的超网络（hypernetwork）**现算**合并后新 token 的 embedding。这个设计一石二鸟：encoder 模型（XLM-R）在 14 种语言上平均缩短 token 序列 20% 以上而性能损失不到 2%；应用到 Mistral-7B 的 prefill 时序列最多缩短 40%。更妙的是，超网络意味着模型不再依赖固定词表查表——词表事实上变成无界的，这悄悄改写了"embedding 必须是一张静态表"的默认设定。
+Feher、Vulić 和 Minixhofer 做的 retrofitting 很有代表性。他们的做法是在 batch 级别跑一个受 BPE 启发的合并算法——在同一批输入里统计子词序列的频率，合并频繁片段，然后用一个预训练的超网络（hypernetwork）**现算**合并后新 token 的 embedding。这个设计一石二鸟：encoder 模型（XLM-R）在 14 种语言上平均缩短 token 序列 20% 以上而性能损失不到 2%；应用到 decoder 模型（Mistral-7B）的 prefill 与打分上性能几乎无损，序列最多缩短 **17%**。更妙的是，超网络意味着模型不再依赖固定词表查表——词表事实上变成无界的，这悄悄改写了"embedding 必须是一张静态表"的默认设定。
 
 往预训练里做的人则要处理另一个问题：怎么让边界预测器可微且可控。MAGNET 用 Gumbel 技巧把离散边界松弛成可训练的，再用一个按文字系统分组的二项先验把压缩率锚在目标附近（$k$ 为边界数、$N$ 为字节数、$\beta_S$ 为文字系统 $S$ 的目标压缩率）：
 
@@ -244,14 +246,16 @@ Tokenizer-Free 路线                      注意力效率路线
 5. Slagle. *SpaceByte: Towards Deleting Tokenization from Large Language Modeling*. arXiv:2404.14408.
 6. Pagnoni et al. *Byte Latent Transformer: Patches Scale Better Than Tokens*. arXiv:2412.09871, ACL 2025.
 7. Ahia et al. *MAGNET: Improving the Multilingual Fairness of Language Models with Adaptive Gradient-Based Tokenization*. NeurIPS 2024.
-8. Feher, Vulić & Minixhofer. *Retrofitting Large Language Models with Dynamic Tokenization*. ACL 2025, arXiv:2411.18553.
+8. Feher, Vulić & Minixhofer. *Retrofitting Large Language Models with Dynamic Tokenization*. arXiv:2411.18553, 2024.
 9. Owodunni, Ahia & Kumar. *FLEXITOKENS: Flexible Tokenization for Evolving Language Models*. arXiv:2507.12720.
 10. Deng et al. *ByteFlow: Language Modeling through Adaptive Byte Compression without a Tokenizer*. arXiv:2603.03583.
 11. Kallini et al. *Fast Byte Latent Transformer*. arXiv:2605.08044 (BLT-D/BLT-S/BLT-DV).
 12. Gu & Wang et al. *H-Net: Dynamic Chunking for End-to-End Hierarchical Sequence Modeling*. arXiv:2411.12578（Cartesia）.
 13. Liu et al. *EntropyMoE: Entropy-Aware Sparse Expert Routing for Tokenizer-Free LLMs*. arXiv:2608.06398.
 14. Kadamba & Jaisankar. *GPUTOK: GPU Accelerated Byte Level BPE Tokenization*. arXiv:2603.02597.
-15. Zhang & Cao. *TokTier: Exact Stateful Tokenization for Agentic LLM Serving*. arXiv:2607.29678.
-16. Singh et al. *Cross-Tokenizer LLM Distillation through a Byte-Level Interface*. arXiv:2604.07466.
-17. Minixhofer, Vulić & Ponti. *Universal Cross-Tokenizer Distillation via Approximate Likelihood Matching*. arXiv:2503.20083.
-18. Bao et al. *Distilling Token-Trained Models into Byte-Level Models*. arXiv:2602.01007.
+15. Zhang & Cao. *TokTier: Exact Stateful CPU+GPU Tokenization for Agentic LLM Serving*. arXiv:2607.29678, 2026-07-31（代码 github.com/asu-idi/toktier；153,951 次真实调用、1.5×10¹⁰ 次切分比对零差异）。
+16. Foroutan et al. *Parity-Aware Byte-Pair Encoding: Improving Cross-lingual Fairness in Tokenization*. arXiv:2508.04796, ACL 2026（基尼系数口径的不平等度最多降 89%）。
+17. Liu et al. *SuperBPE: Space Travel for Language Models*. arXiv:2503.13423, COLM 2025.
+18. Singh et al. *Cross-Tokenizer LLM Distillation through a Byte-Level Interface*. arXiv:2604.07466.
+19. Minixhofer, Vulić & Ponti. *Universal Cross-Tokenizer Distillation via Approximate Likelihood Matching*. arXiv:2503.20083.
+20. Bao et al. *Distilling Token-Trained Models into Byte-Level Models*. arXiv:2602.01007.
