@@ -129,13 +129,17 @@ AI Day 2022 公开的结构可以从左到右读（细节以演讲图为准，�
 
 ## 6. 2024-2026：v13 到 v14，参数量、强化学习与视频基础模型
 
-v13 于 2024 年底推送（约 2024 年 11-12 月），官方更新说明的核心表述为"36 Hz、全分辨率 AI4 视频输入"（full-resolution AI4 video inputs）、原生适配 AI4 输入与神经网络架构，并将数据扩展 4.2 倍、训练算力扩展 5 倍；重点为接管率下降与更高分辨率输入；HW3 车型停留在 v12.6 分支，此后两条硬件线各自维护版本。v14 为 2025 年 10 月起向 HW4 推送的大版本，Musk 在发布前约 6 周（2025 年 8 月）预告其特征为**参数量提升 10 倍**，2026 年上半年陆续迭代至 v14.3.x。
+v13 于 2024 年底推送（约 2024 年 11-12 月），官方更新说明的核心表述为"36 Hz、全分辨率 AI4 视频输入"（full-resolution AI4 video inputs）、原生适配 AI4 输入与神经网络架构，并将数据扩展 4.2 倍、训练算力扩展 5 倍；重点为接管率下降与更高分辨率输入；HW3 车型停留在 v12.6 分支，此后两条硬件线各自维护版本。v14 为 2025 年 10 月起向 HW4 推送的大版本，Musk 在发布前约 6 周（2025 年 8 月）预告其特征为**参数量提升 10 倍**，此后按月迭代小版本：截至 2026 年 9 月 23 日，最新为 **v14.3.10**（随软件版本 2026.27.10 与 2026.27.11 推送，存档站口径推送仍在早期阶段），文中后续数字均以更新说明为准。
+
+v14 的小版本里有两条值得单独记录。v14.3.9 新增自动碰撞规避（Automatic Collision Evasion），在检测到驾驶员注意力不足时激活 FSD 避险，官方标注**仅限 HW4**。v14.3.10 的更新说明中最具工程分量的一条不是模型能力而是工具链：用 MLIR 从零重写 AI 编译器与 runtime，官方给出的结果是反应时间加快约 20%；同一份说明还把召唤、FSD 与 Robotaxi 三项功能统一到同一个模型上，并列出后续计划（把推理链扩展到目的地处理以外的全部行为、加入坑洼规避）。
+
+版本线的下一步已有官方表述：v15 正在 Robotaxi 上跑早期版本，v14 阶段的负责人称"其中约 40% 的轨迹已合并到同一模型"，且 v15 将继续运行在 HW4 上而非仅限 HW4+ 或 AI5（Q2 2026 电话会转述，二手）。需要注意 v15 与本文的对照关系：它的可验证性仍与 v14 相同，即只有接管率与里程，没有基准成绩。
 
 综合更新说明与公开演讲，v14 的技术要点可归纳为三项：
 
 1. **强化学习进入训练管线**。2022 年规划器中四项手写代价（碰撞、舒适、接管、类人）由奖励函数替代，v14.3 的更新说明原文为"升级 FSD 神经网络训练中的强化学习阶段"（upgrading the Reinforcement Learning stage of training the FSD neural network）。这是第 2 节与第 5 节所述路线的终点：规则 → 人类示例模仿 → 强化学习；
 2. **视觉编码器升级**。v14.2 的更新说明提到"升级神经网络视觉编码器，用更高分辨率特征改善低可见度场景"；
-3. **跨硬件蒸馏**。HW3 无法承载 10 倍参数的模型，特斯拉将 HW4 上的大模型蒸馏为 HW3 的"V14 Lite"（2026.20.5.1 起推送，2026 年 7 月下旬全量）。同源双权重，是量产约束下的典型技术处理。
+3. **跨硬件蒸馏**。HW3 无法承载 10 倍参数的模型，特斯拉将 HW4 上的大模型蒸馏为 HW3 的"V14 Lite"，官方更新说明的原文为"把 HW4 V14 的智能蒸馏到 HW3，从而把 HW4 上包括强化学习在内的改进带给 HW3"（Distilled the intelligence from HW4 V14 into HW3）。推送节奏可完整追踪：2026.20.5.1 首发（2026 年 6 月 29 日）→ 6 月下旬 wide release → 14.1 Lite（2026 年 8 月 26 日）→ 14.2 Lite（2026 年 9 月 19 日与 23 日），HW3 平台的 Model S 与 Model X 于 9 月 23 日首次收到 14.2 Lite（存量很小）。同源双权重，是量产约束下的典型技术处理；自动碰撞规避等新特性是否随蒸馏进入 Lite 分支，官方更新说明未逐项列明（二手口径称未进入）。
 
 2026 年 CVPR DriveX Workshop 上，Tesla AI 的 Phil Duan 做了题为《Self-Driving at Scale with Foundation Models》的主题演讲。其头衔以个人网站为准：Director of Engineering at Tesla AI，中文媒体另有"AI 工程总监""Autopilot 工程总监""首席软件工程师"等不同译法，引用时以其自述为基准。个人网站载明的履历为：主导 Robotaxi 上线与 FSD v14 发布，此前联合负责（co-led）v12 与 v13 版本，带领数据与感知团队，创建 Occupancy Network，并参与构建数据引擎。按公开分享的 slide，今天特斯拉的感知是一个**视频基础模型**：8 路相机 36 Hz 进一个视觉编码器，出来一排任务头：动作（规划）、全景分割、3D 占据、3D 检测、人体网格、关键点跟踪、文字识别等。同一套模型还同时服务 FSD、实际智能召唤（ASS）和 Robotaxi 三个产品。
 
@@ -153,6 +157,27 @@ v13 于 2024 年底推送（约 2024 年 11-12 月），官方更新说明的核
 
 需要明确的一点是：**端到端并非特斯拉首创**，学术界与 NVIDIA 早有同类工作；特斯拉的贡献在于以百万级 clip 与闭环迭代将其推进至量产上车。第 11 节的 UniAD（CVPR 2023 最佳论文）公开时间即早于 v12。
 
+### 6.1 规模口径：订阅、里程与 Robotaxi
+
+算法讨论之前需要一个前置事实：这套系统实际跑了多少。以下是官方与第三方口径的完整清单，每一行的定义都不同，混用会直接导致数量级误判。
+
+| 指标 | 数值 | 口径与时点 |
+| --- | --- | --- |
+| FSD 有效订阅数 | 148 万 | 含买断、剔除免费试用；2026 Q2 财报，同比 +56% |
+| 北美新车 FSD 附加率 | 超过 55% | 2026 Q2 新交付中含 FSD 订阅的比例 |
+| FSD（监督版）累计里程 | 接近 120 亿英里 | 全车队，2026 Q2 |
+| 欧洲 FSD 累计里程 | 超过 5000 万公里 | 截至 2026 年 7 月；已获批国家含荷兰、立陶宛、爱沙尼亚、丹麦、比利时 |
+| 付费 Robotaxi 累计里程 | 约 240 至 250 万英里 | 2026 Q2 末，**含带安全员的行程** |
+| 无监督 Robotaxi 里程 | 38 万英里（Q2 电话会），9 月 3 日后超过 100 万英里 | 不含安全员行程 |
+| Robotaxi 车队规模 | **未披露** | 第三方可得的仅为注册库数字，非运营车辆数 |
+| 训练数据规模 | **未披露** | 从未公布片段总量或帧数 |
+
+Robotaxi 的运营状态同样存在多套口径。截至 2026 年 9 月，官方口径为七个美国市场，其中 Austin、Dallas、Houston、Miami、Orlando、Tampa 六城运行无监督服务，旧金山湾区因加州法规仍需主驾安全员；Phoenix 与 Las Vegas 在官方材料中标记为"准备中"，无上线日期。2026 年新增城市为 Dallas 与 Houston（4 月）、Miami（7 月 3 日）、Tampa 与 Orlando（7 月 21 日）。车辆侧，Cybercab 于 2026 年 9 月 3 日在 Austin 的非公开活动上发布并在限定区域载客，NHTSA 表示正在评估；Austin 注册库口径为 409 辆 Model Y 与 67 辆 Cybercab，属第三方统计。
+
+里程数字之间的差距需要单独说明：240 万英里是含安全员的商业化全量口径，100 万英里是 9 月以来的无监督口径，两者既不能相加，也不能用全车队 120 亿英里去除以得出"无监督占比"。作为量级参照，Waymo 截至 2026 年 3 月底的无监督里程已超过 2.2 亿英里（路透社引第三方分析），约两个数量级的差距意味着：现有公开里程不足以支撑关于 Robotaxi"是否已验证"的任何结论。
+
+国内侧的对照见本专栏第二篇《国产智驾大横评》。此处仅记两条：蔚来在 2026 年 4 月的公开论坛上明确表示无进入该领域的计划；小鹏与吉利分别停留在测试资质与量产计划阶段，均无收费运营数据。
+
 ## 7. 芯片这条暗线：HW3、HW4 到 AI5
 
 算法演进无法回避硬件因素：特斯拉的算法选择始终受"在几十瓦、几十美元的车规芯片上实时运行"这一约束影响，该约束亦解释了它为何比学术界更早放弃稠密 BEV 网格。
@@ -160,11 +185,11 @@ v13 于 2024 年底推送（约 2024 年 11-12 月），官方更新说明的核
 | 硬件 | 时间 | 算力（公开口径） | 备注 |
 | --- | --- | --- | --- |
 | HW3（FSD 芯片） | 2019 量产 | 双 NPU 合计约 144 TOPS | 14nm，自研起点 |
-| HW4 / AI4 | 2023 起 | 约 3-5 倍于 HW3 | 16GB RAM，256GB 存储 |
-| AI4+（过渡款） | 规划中 | 内存翻倍至每 SoC 32GB | 介于 HW4 与 AI5 之间 |
-| AI5 | 2026 年（官方规划，报道口径） | 报道称 2000+ TOPS，约 AI4 的 8 倍 | 官方称对标 H100 级别的模型推理 |
+| HW4 / AI4 | 2023 起 | 官方从未公布 TOPS 绝对值 | Musk 口头称约为 HW3 的 4 至 5 倍；16GB 内存，256GB 存储 |
+| AI4+ / HW4 Plus | 2026-04 宣布，2027 年中投产 | 算力 +10%、内存带宽 +10% | 每 SoC 内存 16GB 增至 32GB（合计 64GB）；无老车主升级方案 |
+| AI5 | 2026-04 完成设计流片 | 报道称 2000+ TOPS，约 AI4 的 8 倍 | 官方在 Q2 电话会称预计 2027 年中量产，且初期先用于 Optimus |
 
-（TOPS 数字与时间点均来自公开报道与高管访谈，非官方规格书，仅供参考。）
+**这里需要修正一个流传很广的数字习惯：特斯拉从未官方公布过任何一代车端芯片的 TOPS 绝对值。** 网传的 AI4 为 50 至 280 TOPS、HW3 单芯片约 72 TOPS 等均为第三方估算，AI5 的"2000 至 2500 TOPS"同样来自报道与访谈。官方可引用的只有两类表述：倍数关系（Musk 口头称 AI4 约为 HW3 的 4 至 5 倍）与定性定位（称 AI5 对标 H100 级别的模型推理）。本文表格中的 144 TOPS 属早期公开材料，其余均为倍数或定性口径。
 
 下图按发布状态区分已量产与规划中的硬件，实线段为已量产或已发布，虚线段为规划中且时间点未确证。
 
@@ -369,12 +394,22 @@ UniAD 仓库为此设立 Planning Metric 讨论（issue #29），社区围绕开
 
 因此，"特斯拉与学术界孰优孰劣"目前并无定论，双方各有优势：**学术界的优势在可复现与可归因（各模块贡献可经消融实验分离），特斯拉的优势在闭环指标与迭代速度**。研究者可以复现 BEVFormer 的每一项数字，但无法验证特斯拉公布的接管率。
 
+### 13.1 2024-2026：评价体系的迁移与新基准
+
+评价体系的分裂在 2024 至 2026 年间出现了部分缓解，原因不是标准统一，而是基准本身在换代。以下三类变化值得单列，因为它们直接决定了本文前述数字的可比性边界。
+
+**开环基准的开环化终结。** nuScenes 的 L2 协议在 2022 至 2023 年被广泛质疑后，社区转向"用仿真替代真实数据"的路线。NAVSIM v1（NeurIPS 2024）用非反应式仿真加 PDMS 指标，把 nuScenes 式开环评测改造成可控、可重复的准闭环；NAVSIM v2（CoRL 2025）进一步加入反应式背景交通与合成新视角，并支撑 OpenDriveLab 的 Autonomous Grand Challenge 2025。同期 nuPlan 提供了 1200 小时、四座城市的规划基准，CARLA Leaderboard 2.0 与 Bench2Drive（NeurIPS 2024 数据集与基准）承担闭环端到端评测。需要说明：不存在官方发布的"nuScenes 2.0"数据集，相关说法未找到一手来源。
+
+**世界模型从生成走向度量。** Wayve 的 GAIA 系列是这条线最完整的公开记录：GAIA-1（2023）建立生成式驾驶世界模型；GAIA-2（2025 年 3 月）转为潜扩散、多视角与可控生成；GAIA-3（官方博客 2025 年 12 月）规模达 150 亿参数，训练算力与数据约为 GAIA-2 的五倍与十倍，覆盖九个国家，定位从"生成"转向"安全评估"，可生成 NCAP 式安全关键场景；GAIA-4（2026 年 8 月）把 AI Driver 放入回路做闭环安全度量。同期学术界的工作各有侧重：ViDAR（CVPR 2024）以视觉点云预测作为预训练任务；Raw2Drive（NeurIPS 2025）是对齐世界模型的强化学习端到端驾驶；占据方向则有 SparseOcc（ICCV 2023，全稀疏体素 query）、RenderOcc（ECCV 2024，以二维渲染监督替代稠密三维标签）、GDFusion（CVPR 2025，统一梯度下降视角的时序融合）与 ProtoOcc（CVPR 2025，低分辨率 query 加原型感知视角变换）。
+
+**对本文结论的影响有两条。** 其一，第 8 至 12 节引用的 nuScenes 数字依然是感知与开环规划领域的事实基准，但已不足以代表 2026 年的能力上限，跨工作比较时必须同时注明基准与口径。其二，世界模型正在把"生成"变成"度量工具"，这与特斯拉用 NeRF 校验占据网络、理想用仿真做闭环强化学习是同一类做法，即把物理一致性引入训练与验证闭环；这一条是本文第 4 节数据引擎论点最直接的后续印证。
+
 ## 14. 2026 年的合流：VLA、世界模型与开源教师模型
 
 2025-2026 年间，两条路线出现明显趋同，可归纳为四项信号：
 
 1. **特斯拉向学术界靠拢**：CVPR 2026 DriveX keynote 将感知统称为"视频基础模型"，多任务头与共享编码器的表述与学术界的 multi-task foundation model 叙事一致；Phil Duan 在学术 workshop 上公开演讲，此类情况在此前较少出现；
-2. **学术界向特斯拉靠拢**：VAD（ICLR 2026）、RAD（NeurIPS 2025，强化学习后训练）、DiffusionDrive（CVPR 2025）等工作所对应的正是特斯拉 v12→v14 的路径：从模仿学习到生成式规划，再到强化学习；
+2. **学术界向特斯拉靠拢**：VAD（ICLR 2026）、RAD（NeurIPS 2025，强化学习后训练）、Raw2Drive（NeurIPS 2025，对齐世界模型的强化学习端到端驾驶）、DiffusionDrive（CVPR 2025 Highlight）等工作所对应的正是特斯拉 v12→v14 的路径：从模仿学习到生成式规划，再到强化学习；
 3. **VLA 与世界模型成为新主线**：国内厂商（理想、小米等）在 2025-2026 年密集发布 VLA 与世界模型方案（理想公开了世界模型 + 强化学习闭环训练路线，小米 2026 年 5 月开源 OneVL，融合 VLA 与世界模型）；学界有 VLA-World（arXiv 2026）、DriveWorld-VLA（ICML 2026）等工作；
 4. **头部厂商发布"开源教师模型"**：NVIDIA 2026 年 1 月发布 Alpamayo 家族，其中 Alpamayo 1 为 100 亿参数的推理型 VLA 模型，权重在 HuggingFace 开放，官方定位为不直接部署上车、而是作为教师模型蒸馏至各家的系统；配套 AlpaSim 仿真框架（开源）与 1700+ 小时开放驾驶数据。
 
@@ -441,4 +476,7 @@ UniAD 仓库为此设立 Planning Metric 讨论（issue #29），社区围绕开
 - Occupancy: OpenOccupancy ([arXiv:2203.01274](https://arxiv.org/abs/2203.01274))、SurroundOcc ([arXiv:2303.09551](https://arxiv.org/abs/2303.09551))、Occ3D ([arXiv:2306.02851](https://arxiv.org/abs/2306.02851))、[OpenDriveLab/OccNet](https://github.com/OpenDriveLab/OccNet)、[NVlabs/FB-BEV](https://github.com/NVlabs/FB-BEV)
 - VLA 与世界模型: VLA-World ([arXiv:2604.09059](https://arxiv.org/abs/2604.09059))、DriveWorld-VLA ([arXiv:2602.06521](https://arxiv.org/abs/2602.06521))、OneVL ([xiaomi-research/onevl](https://github.com/xiaomi-research/onevl))
 - 综述与追踪：[OpenDriveLab/Birds-eye-view-Perception](https://github.com/OpenDriveLab/Birds-eye-view-Perception)、[isLinXu/paper-list](https://github.com/isLinXu/paper-list)、[LMD0311/Awesome-World-Model](https://github.com/LMD0311/Awesome-World-Model)
-- 数据集：[nuScenes](https://www.nuscenes.org/)（1000 场景 / 5.5 小时 / 140 万图）
+- 数据集：[nuScenes](https://www.nuscenes.org/)（1000 场景 / 5.5 小时 / 140 万图）、[nuPlan](https://www.nuscenes.org/nuplan)（1200 小时 / 4 城规划基准）
+- 新基准与评测：NAVSIM v1（[arXiv:2406.15349](https://arxiv.org/abs/2406.15349)）与 v2（[arXiv:2506.04218](https://arxiv.org/abs/2506.04218)）、Bench2Drive（Bench2Drive-VL：[arXiv:2604.01259](https://arxiv.org/abs/2604.01259)）、[Autonomous Grand Challenge 2025](https://opendrivelab.com/challenge2025/)
+- 世界模型与强化学习：Wayve GAIA-3（[官方博客](https://wayve.ai/thinking/gaia-3/)）与 GAIA-4（[官方博客](https://wayve.ai/thinking/gaia-4/)）、ViDAR（[CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/html/Yang_Visual_Point_Cloud_Forecasting_enables_Scalable_Autonomous_Driving_CVPR_2024_paper.html)）、Raw2Drive（[NeurIPS 2025](https://openreview.net/forum?id=CAz7UGRdLs)）、SparseOcc（[arXiv:2312.17118](https://arxiv.org/abs/2312.17118)）、GDFusion（[arXiv:2504.12959](https://arxiv.org/abs/2504.12959)）、ProtoOcc（[arXiv:2503.15185](https://arxiv.org/abs/2503.15185)）
+- 版本与规模数据：Tesla Q2 2026 Update（[官方 PDF](https://assets-ir.tesla.com/tesla-contents/IR/TSLA-Q2-2026-Update.pdf)）、FSD 版本与更新说明存档（[Not a Tesla App](https://www.notateslaapp.com/fsd-beta/)）、[tesla.com/robotaxi](https://www.tesla.com/robotaxi)、Waymo 无监督里程对照（[路透社](https://www.reuters.com/business/autos-transportation/waymo-expands-san-francisco-testing-2026-07-23/)）

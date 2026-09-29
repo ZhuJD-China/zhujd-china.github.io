@@ -37,21 +37,23 @@
   <rect class="off" x="410" y="150" width="220" height="40" rx="8"/>
   <text class="box1" x="426" y="175">HW4 / AI4</text>
   <text class="d" x="380" y="326">2023 起</text>
-  <text class="d" x="380" y="348">约 3 至 5 倍于 HW3，16GB 内存，256GB 存储</text>
+  <text class="d" x="380" y="348">官方从未公布 TOPS 绝对值</text>
+  <text class="d" x="380" y="370">Musk 口头称约为 HW3 的 4 至 5 倍，16GB 内存</text>
 
   <!-- AI4+ -->
   <rect class="rep" x="730" y="150" width="220" height="40" rx="8"/>
-  <text class="box1" x="746" y="175">AI4+ 过渡款</text>
-  <text class="d" x="700" y="326">规划中</text>
-  <text class="d" x="700" y="348">内存翻倍至每 SoC 32GB，介于 HW4 与 AI5 之间</text>
+  <text class="box1" x="746" y="175">AI4+ / HW4 Plus</text>
+  <text class="d" x="700" y="326">2026-04 宣布</text>
+  <text class="d" x="700" y="348">每 SoC 内存 16GB 增至 32GB，算力 +10%</text>
+  <text class="d" x="700" y="370">2027 年中投产，无老车主升级方案</text>
 
   <!-- AI5 -->
   <rect class="rep" x="1040" y="150" width="120" height="40" rx="8"/>
   <text class="box1" x="1056" y="175">AI5</text>
-  <text class="d" x="1160" y="326" text-anchor="end">2026，官方规划</text>
+  <text class="d" x="1160" y="326" text-anchor="end">2026-04 完成设计流片</text>
   <text class="d" x="1160" y="348" text-anchor="end">报道称 2000+ TOPS，约 AI4 的 8 倍</text>
-  <text class="d" x="1160" y="370" text-anchor="end">官方称对标 H100 级别模型推理</text>
+  <text class="d" x="1160" y="370" text-anchor="end">官方称 2027 年中量产，初期先用于 Optimus</text>
 
   <line class="grid" x1="44" y1="392" x2="1156" y2="392"/>
-  <text class="foot" x="44" y="416">虚线段表示尚未量产或时间点未确证。全部 TOPS 与时间点来自公开报道与高管访谈，非官方规格书；官方未公布过完整的硬件规格表。</text>
+  <text class="foot" x="44" y="416">虚线段表示尚未量产或时间点未确证。特斯拉从未官方公布任何一代车端芯片的 TOPS 绝对值，网传数字均为第三方估算。</text>
 </svg>

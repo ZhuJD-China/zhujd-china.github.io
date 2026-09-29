@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="100%" role="img" aria-label="准入试点与强制国标时间线">
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 740" width="100%" role="img" aria-label="准入试点与强制国标时间线">
   <style>
     .bg{fill:#0b0b10}
     .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -66,16 +66,22 @@
   <text class="ev" x="176" y="550">GB 44721—2026《自动驾驶系统安全要求》发布</text>
   <text class="imp" x="700" y="550">适用 L3 与 L4，含接管能力监测与高快速路附加要求</text>
 
+  <!-- 2026 内 -->
+  <circle class="dot-d" cx="150" cy="588" r="7"/>
+  <text class="date" x="176" y="584">2026 年内</text>
+  <text class="ev" x="176" y="606">司法与保险两条线落地</text>
+  <text class="imp" x="700" y="606">最高法第 271 号指导性案例定责任；北京启动智驾保险试点</text>
+
   <!-- 2027 -->
-  <circle class="dot-f" cx="150" cy="588" r="7"/>
-  <text class="date2" x="176" y="584">2027-01-01</text>
-  <text class="ev" x="176" y="606">GB 47955—2026 正式实施</text>
-  <text class="imp" x="700" y="606">届时“是否达标”成为首个可强制核查的横向维度</text>
+  <circle class="dot-f" cx="150" cy="628" r="7"/>
+  <text class="date2" x="176" y="624">2027-01-01</text>
+  <text class="ev" x="176" y="646">GB 47955—2026 正式实施</text>
+  <text class="imp" x="700" y="646">届时“是否达标”成为首个可强制核查的横向维度</text>
 
-  <circle class="dot-f" cx="150" cy="632" r="7"/>
-  <text class="date2" x="176" y="628">2027-07-01</text>
-  <text class="ev" x="176" y="650">GB 44721—2026 正式实施</text>
-  <text class="imp" x="700" y="650">L3 与 L4 车型准入的统一技术依据</text>
+  <circle class="dot-f" cx="150" cy="668" r="7"/>
+  <text class="date2" x="176" y="664">2027-07-01</text>
+  <text class="ev" x="176" y="686">GB 44721—2026 正式实施</text>
+  <text class="imp" x="700" y="686">L3 与 L4 车型准入的统一技术依据</text>
 
-  <text class="foot" x="44" y="682">读法：在两部国标实施前，任何跨品牌的“智驾能力排名”都缺少可复核的强制依据；这也是本文只做事实对照、不做排名的原因。</text>
+  <text class="foot" x="44" y="718">读法：在两部国标实施前，任何跨品牌的“智驾能力排名”都缺少可复核的强制依据；这也是本文只做事实对照、不做排名的原因。</text>
 </svg>
