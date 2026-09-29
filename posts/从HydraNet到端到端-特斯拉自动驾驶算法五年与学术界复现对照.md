@@ -9,7 +9,9 @@ excerpt: 特斯拉从 Mobileye 时代演进至 AI Day 的 HydraNet 与 Occupancy
 
 《自动驾驶专栏》第一篇。写作缘起是梳理 BEVFormer 仓库时注意到，它与特斯拉 AI Day 公开的技术方案面向同一问题的两种解法：一侧闭源、依托车队数据，一侧开源、以 nuScenes 基准为评价体系。两条路线的技术相互参照、相互追赶，放在一起考察比单独考察任一侧更为完整。
 
-本文首先说明信息边界：特斯拉不开放任何代码，文中关于特斯拉的描述全部来自 AI Day 2021/2022 的公开演讲、官方博客与版本更新说明，属推断之处均会标注；学术界部分的数字全部取自论文或官方仓库的 Model Zoo，可自行复现验证。
+本文首先说明信息边界：特斯拉不开放任何代码，文中关于特斯拉的描述全部来自 AI Day 2021/2022 的公开演讲、官方博客与版本更新说明，属推断之处均会标注；学术界部分的指标取自论文或官方仓库的 Model Zoo，可自行复现验证；显存与时长中标注口径者为社区实测或工程经验值，文中均就近注明。
+
+本文的核心结论有三点：其一，特斯拉五年演进的主线是用学习组件逐级替换人工规则，而"单一 backbone + 多任务头"的骨架自 2021 年起未变；其二，学术界已对这条路线的各环节给出可复现的开源对应物，其价值在于可归因与可复现，而非榜单分数；其三，双方的实质差距在数据规模与闭环评测，而非网络架构；开源教师模型正在缩小前者，但无法替代后者。
 
 ---
 
@@ -37,7 +39,7 @@ excerpt: 特斯拉从 Mobileye 时代演进至 AI Day 的 HydraNet 与 Occupancy
 
 ## 1. 前史（2016-2020）：从买方案到自研，图像空间到向量空间
 
-2016 年之前的特斯拉没有自己的感知栈，Autopilot 1.0 用的是 Mobileye 的 EyeQ3 方案：Mobileye 负责从图像里检测车道线和车辆，特斯拉负责控制。2016 年 5 月的一次致命事故（Joshua Brown 事故，Model S 在 Autopilot 开启状态下撞上横穿的白色拖挂车）之后，双方关系恶化，2017 年底彻底分家。这件事的直接后果是特斯拉必须自己做视觉感知，而当时它的选择比今天少得多。
+2016 年之前的特斯拉没有自己的感知栈，Autopilot 1.0 用的是 Mobileye 的 EyeQ3 方案：Mobileye 负责从图像里检测车道线和车辆，特斯拉负责控制。2016 年 5 月 7 日的致命事故（Joshua Brown 事故，Model S 在 Autopilot 开启状态下撞上横穿的白色拖挂车）之后双方关系恶化；2016 年 7 月 26 日 Mobileye 在财报电话会上宣布合同期满后不再续约，2016 年 10 月特斯拉发布搭载自研感知栈的第二代 Autopilot 硬件（HW2），双方正式分家。其直接后果是特斯拉必须自建视觉感知，而当时它的选择比今天少得多。
 
 Autopilot 2.0 时代（2016-2019）的做法可概括为"每个相机一个 2D 检测器，再行拼接"：8 路相机各自运行一个卷积网络，输出图像平面上的 2D 框、车道线与红绿灯，再依据相机外参将这些 2D 结果投影至车体坐标系，合成一张俯视图。该路线的局限在 AI Day 2022 演讲中由 Tesla 自己归纳为四条：
 
@@ -64,6 +66,8 @@ HydraNet 的输出位于"向量空间"（vector space），即车体坐标系下
 | A* + 导航路线启发 | 约 22,000 |
 | 神经网络引导的蒙特卡洛树搜索（MCTS） | 少于 300 |
 
+（三档数字取自 AI Day 2021 演讲视频的公开复盘；该复盘博客正文另有 A* "近 400,000 次扩展"的写法，此处以视频字幕口径为准。）
+
 综上，2021 年的特斯拉规划器是 MCTS：神经网络为搜索提供先验，搜索在候选轨迹中选择。**该结构的关键在于：感知为神经网络，规划为搜索算法，二者依靠人工编写的代价函数衔接**。这一衔接环节是 2022 年之后全部演进的起点。
 
 ## 3. AI Day 2022：Occupancy Network 逐层拆解
@@ -83,11 +87,11 @@ HydraNet 的输出位于"向量空间"（vector space），即车体坐标系下
 AI Day 2022 公开的结构可以从左到右读（细节以演讲图为准，参数量和分辨率特斯拉从未公布）：
 
 1. **Backbone**：8 路相机图像进 RegNet + BiFPN，2022 年当时的标准多尺度特征提取器；
-2. **注意力模块**：将位置编码（positional image encoding）与固定 query 输入注意力层，产出占据特征体（occupancy feature volume）。固定 query 的语义与 DETR 系列的可学习 query 一脉相承，区别在于查询对象由"框"变为"体素是否占据"；
+2. **注意力模块**：将位置编码（positional image encoding）与固定 query 输入注意力层，产出占据特征体（occupancy feature volume）。固定 query 的语义与 DETR 系列的可学习 query 一脉相承，区别在于查询对象由"框"变为"体素是否占据"（演讲未公布固定 query 的具体设计，此处理解为结构对照）；
 3. **时序融合**：当前时刻的特征体与历史时刻（t-1、t-2……）的特征体融合，形成 4D 占据栅格。这一步靠自车运动做坐标对齐，和 BEVFormer 的 temporal self-attention 要解决的是同一个问题（见第 8 节）；
 4. **反卷积上采样**：输出两样东西，**occupancy volume**（每个体素的占据概率）和 **occupancy flow**（每个体素的运动向量，用色轮编码方向，红进蓝退灰静止）。
 
-按官方口径，该网络推理速度超过 100 FPS，为部署于 HW3 的实时模型。同时特斯拉提出以 NeRF 做校验：离线对场景进行三维重建，与在线预测的占据体比对，借助车队平均（fleet averaging）消除雨雾模糊引入的噪声。
+关于推理速度，公开复盘给出的数字是超过 100 FPS（约为摄像头帧率的三倍），该数字未见于官方规格文件，属二手转述；可确认的是该网络按车载实时部署设计。同时特斯拉提出以 NeRF 做校验：离线对场景进行三维重建，与在线预测的占据体比对，借助车队平均（fleet averaging）消除雨雾模糊引入的噪声。
 
 ### 3.3 和学术界的关系
 
@@ -102,7 +106,7 @@ AI Day 2022 公开的结构可以从左到右读（细节以演讲图为准，�
 - **数据引擎闭环**：影子模式（shadow mode）捕捉人类接管与模型分歧的片段，回流为新的训练 clip，人类标注员仅处理模型无法覆盖的长尾场景；
 - **算力规模**：AI Day 2022 给的数字是训练集群约 1 万张 GPU，另有约 4 千张专门跑自动标注。
 
-对照组为学术界的 nuScenes：1000 个 20 秒场景、约 5.5 小时、140 万张相机图像、39 万帧激光雷达，人工标注 3D 框与地图。**训练集规模相差约四个数量级**，而 nuScenes 已是学术界规模最大、成本最高的公开数据集之一。该差距决定了两侧的训练目标：特斯拉可训练从像素直接输出转向指令的模型，学术界则限于"图像至 3D 框"或"图像至 3 秒轨迹"。
+对照组为学术界的 nuScenes：1000 个 20 秒场景、约 5.5 小时、140 万张相机图像、39 万帧激光雷达，人工标注 3D 框与地图。**训练集规模相差约四个数量级**：按数百万 clip、每 clip 45-60 秒估算，特斯拉侧为数十万至百万小时量级，nuScenes 仅 5.5 小时，量级差约 $10^4$；而 nuScenes 已是学术界规模最大、成本最高的公开数据集之一。该差距决定了两侧的训练目标：特斯拉可训练从像素直接输出转向指令的模型，学术界则限于"图像至 3D 框"或"图像至 3 秒轨迹"。
 
 ## 5. 2023-2024：FSD v12，30 万行 C++ 的退场
 
@@ -119,13 +123,13 @@ AI Day 2022 公开的结构可以从左到右读（细节以演讲图为准，�
 
 ## 6. 2024-2026：v13 到 v14，参数量、强化学习与视频基础模型
 
-v13 于 2024 年底推送（约 2024 年 11-12 月），重点为接管率下降与更高分辨率输入；HW3 车型停留在 v12.6 分支，此后两条硬件线各自维护版本。v14 为 2025 年 10 月起向 HW4 推送的大版本，Musk 在发布前约 6 周（2025 年 8 月）预告其特征为**参数量提升 10 倍**，2026 年上半年陆续迭代至 v14.3.x。
+v13 于 2024 年底推送（约 2024 年 11-12 月），官方更新说明的核心表述为"36 Hz、全分辨率 AI4 视频输入"（full-resolution AI4 video inputs）、原生适配 AI4 输入与神经网络架构，并将数据扩展 4.2 倍、训练算力扩展 5 倍；重点为接管率下降与更高分辨率输入；HW3 车型停留在 v12.6 分支，此后两条硬件线各自维护版本。v14 为 2025 年 10 月起向 HW4 推送的大版本，Musk 在发布前约 6 周（2025 年 8 月）预告其特征为**参数量提升 10 倍**，2026 年上半年陆续迭代至 v14.3.x。
 
 综合更新说明与公开演讲，v14 的技术要点可归纳为三项：
 
-1. **强化学习进入训练管线**。2022 年规划器中四项手写代价（碰撞、舒适、接管、类人）由奖励函数替代，v14.3 的更新说明明确提及"强化学习训练阶段的升级"。这是第 2 节与第 5 节所述路线的终点：规则 → 人类示例模仿 → 强化学习；
+1. **强化学习进入训练管线**。2022 年规划器中四项手写代价（碰撞、舒适、接管、类人）由奖励函数替代，v14.3 的更新说明原文为"升级 FSD 神经网络训练中的强化学习阶段"（upgrading the Reinforcement Learning stage of training the FSD neural network）。这是第 2 节与第 5 节所述路线的终点：规则 → 人类示例模仿 → 强化学习；
 2. **视觉编码器升级**。v14.2 的更新说明提到"升级神经网络视觉编码器，用更高分辨率特征改善低可见度场景"；
-3. **跨硬件蒸馏**。HW3 无法承载 10 倍参数的模型，特斯拉将 HW4 上的大模型蒸馏为 HW3 的"V14 Lite"（2026 年 6 月起推送）。同源双权重，是量产约束下的典型技术处理。
+3. **跨硬件蒸馏**。HW3 无法承载 10 倍参数的模型，特斯拉将 HW4 上的大模型蒸馏为 HW3 的"V14 Lite"（2026.20.5.1 起推送，2026 年 7 月下旬全量）。同源双权重，是量产约束下的典型技术处理。
 
 2026 年 CVPR DriveX Workshop 上，Tesla AI 的 Phil Duan 做了题为《Self-Driving at Scale with Foundation Models》的主题演讲。其头衔以个人网站为准：Director of Engineering at Tesla AI，中文媒体另有"AI 工程总监""Autopilot 工程总监""首席软件工程师"等不同译法，引用时以其自述为基准。个人网站载明的履历为：主导 Robotaxi 上线与 FSD v14 发布，此前联合负责（co-led）v12 与 v13 版本，带领数据与感知团队，创建 Occupancy Network，并参与构建数据引擎。按公开分享的 slide，今天特斯拉的感知是一个**视频基础模型**：8 路相机 36 Hz 进一个视觉编码器，出来一排任务头：动作（规划）、全景分割、3D 占据、3D 检测、人体网格、关键点跟踪、文字识别等。同一套模型还同时服务 FSD、实际智能召唤（ASS）和 Robotaxi 三个产品。
 
@@ -212,7 +216,7 @@ $$\mathrm{SCA}(q, p) = \sum_{l=1}^{L}\sum_{k=1}^{K} A_{lk} \cdot W_l\, x_l\bigl(
 | BEVFormer-small (R101-DCN) | 150×150 | 3 | 47.9 / 37.0 | 约 10.5 GB |
 | BEVFormer-base (R101-DCN) | 200×200 | 4 | 51.7 / 41.6 | 约 28.5 GB |
 
-base 在 val 上对比 DETR3D（R101：42.5 NDS）提升 9.2 个点，主要来自时序融合带来的速度估计（mAVE 从 0.842 降到 0.394，速度误差减半以上）。论文级最佳成绩 56.9 NDS 是用 V2-99 backbone 加额外预训练拿到的。训练成本上，社区实测 base 约需 8×A100 跑两天，单卡约 14 天。
+base 在 val 上对比 DETR3D（R101：42.5 NDS）提升 9.2 个点，主要来自时序融合带来的速度估计（mAVE 从 0.842 降到 0.394，速度误差减半以上）。论文级最佳成绩 56.9 NDS 是用 V2-99 backbone 加额外预训练拿到的。训练成本上，社区口径为 8×A100 约两天（折合约 16 个 GPU-天，若按单卡折算约需两周以上）；官方 Model Zoo 未给出训练时长，仅给出单卡显存 28.5 GB。
 
 一个必须说明的工程事实：这套代码绑定 2022 年的 mmdet3d 0.x / mmcv 1.x 生态（CUDA ≤ 11.3、PyTorch ≤ 1.12），在 4090 及更新的显卡上编译 mmcv 需要打补丁。这是该时期仓库的普遍问题，也是第 15 节实操建议的由来。
 
@@ -220,18 +224,18 @@ base 在 val 上对比 DETR3D（R101：42.5 NDS）提升 9.2 个点，主要来�
 
 BEVFormer 的稠密网格有个天生的账要算：200×200 的网格里绝大多数格子是空的（停车场外的荒地、天上），却都要算注意力。2023 年起，主流转向**稀疏 query**：不做全局网格，只让 query 跟着物体走。这条线恰好也是车端算力约束下的必然选择，和特斯拉的方向殊途同归。
 
-**StreamPETR**（ICCV 2023）继承 PETR 的 query 体系，核心是把时序信息在 query 之间传播（propagation）：上一帧的 query 经过自车运动变换后直接作为下一帧的初始 query，物体为中心的表征随时间延续。官方仓库的数字：
+**StreamPETR**（ICCV 2023）继承 PETR 的 query 体系，核心是把时序信息在 query 之间传播（propagation）：上一帧的 query 经过自车运动变换后直接作为下一帧的初始 query，物体为中心的表征随时间延续。该机制的关键收益在于时序建模的成本随 query 数量增长，而不随空间分辨率增长：序列长度增至 4+ 帧时既不需要像 BEVFormer 那样对齐并维护整张 BEV 网格，也不引入随帧数线性膨胀的稠密特征，这正是其显存显著低于 BEVFormer 的结构性原因（定量对照见第 8 节）。官方仓库的数字：
 
 | 模型 | 训练 | NDS / mAP（val） | FPS（PyTorch） |
 | --- | --- | --- | --- |
-| StreamPETR (V2-99, 900q) | 13 小时 A100 | 57.1 / 48.2 | 12.5 |
+| StreamPETR (V2-99, 900q) | 13 小时 | 57.1 / 48.2 | 12.5 |
 | StreamPETR (R50, 90ep) | 36 小时 | 53.7 / 43.2 | 26.7 |
 | StreamPETR (R50, 428q + nuImg) | 26 小时 | 54.6 / 44.9 | 31.7 |
 | StreamPETR-Large（测试集） | — | 67.6 / 62.0 | — |
 
-末行的意义在于：首个在线多相机方法在测试集上达到激光雷达基线的水平。其显存与速度均显著优于 BEVFormer-base（训练 13 小时 vs 两天），这是稀疏化的直接收益。
+末行的意义在于：首个在线多相机方法在测试集上达到激光雷达基线的水平。其显存与速度均显著优于 BEVFormer-base，这是稀疏化的直接收益。两者的训练时长口径不同，不构成严格对比：README 标注训练均在 8×2080Ti 上进行，13 小时一行的 12.5 FPS 则标注为 RTX 3090 实测，而 BEVFormer 的"两天"出自社区实测（8×A100，折合 16 个 GPU-天）。
 
-**Sparse4D**（CVPR 2023，v2/v3 迭代到 2024）走"稀疏 anchor + 多视角特征采样"的路子，v2 改成递归时序融合，进一步压延迟和显存，v3 加稠密深度辅助。它在工业界落地最多（地平线车端有部署），官方代码在 HorizonRobotics/Sparse4D。
+**Sparse4D**（2022 年 11 月 arXiv 首发，v2/v3 迭代至 2023 年，后正式发表于 TPAMI 2026）走"稀疏 anchor + 多视角特征采样"的路子，v2 改成递归时序融合，进一步压延迟和显存，v3 加稠密深度辅助。它在工业界落地最多（地平线车端有部署），官方代码在 HorizonRobotics/Sparse4D。
 
 **SparseBEV**（ICCV 2023 → TPAMI 2026）回应"稀疏 query 丢失 BEV 稠密上下文"的批评，提出自适应稀疏采样：由 query 依内容决定采样位置，以较小的 query 集合逼近稠密 BEV 的效果。官方 Model Zoo 显示 r50 配置在 8×2080Ti 上训练 21 小时，val NDS 55.6、15.8 FPS；r101 高分辨率配置 val NDS 59.2；此外提供基于 EVA02/ViT 的大 backbone 配置，测试集 NDS 达 70.2。
 
@@ -282,14 +286,14 @@ FSD v12 公开前一年，学术界已给出端到端方案。**UniAD**（CVPR 2
 | 维度 | 特斯拉（AI Day 口径 + 版本说明） | 学术界（开源可复现） |
 | --- | --- | --- |
 | 图像特征 | RegNet + BiFPN（2022）→ 视频基础模型（2026） | ResNet-50/101-DCN、VoVNet、EVA02、ViT |
-| 3D 表征 | Occupancy 体素 + 占据流（100+ FPS 车端） | BEV 网格（BEVFormer）或 稀疏 query（StreamPETR/Sparse4D）；Occ3D 系列复现占据 |
+| 3D 表征 | Occupancy 体素 + 占据流（实时，复盘口径 100+ FPS） | BEV 网格（BEVFormer）或 稀疏 query（StreamPETR/Sparse4D）；Occ3D 系列复现占据 |
 | 图像→3D 的注意力 | 位置编码 + 固定 query 的注意力模块（未开源，细节有限） | 空间交叉注意力：4 参考点 × 8 采样点，投影到 6 相机采 FPN 特征 |
 | 时序融合 | 4D 占据栅格，按自车运动对齐 | temporal self-attention（BEVFormer，队列 4 帧）/ query 传播（StreamPETR） |
 | 规划 | MCTS + 手写代价（2021）→ 端到端模仿（v12）→ 强化学习（v14） | UniAD 开环 L2 模仿 → VAD 矢量化 → RAD 强化学习后训练 |
 | 监督来源 | 4D 重建自动标注，车队规模，约 4 千 GPU 专职标注 | 人工标注 nuScenes：1000 场景 / 5.5 小时；激光雷达投影当占据与深度的老师 |
 | 数据规模 | 量级上大 4 个数量级（数百万 clip） | nuScenes 训练约 700 场景（约 140 万图） |
 | 训练算力 | 约 1 万 GPU 训练集群 | 8×A100 两天（BEVFormer-base）到 8×A100 六天（UniAD 两阶段） |
-| 推理硬件 | HW3 144 TOPS → AI5 传闻 2000+ TOPS，几十瓦 | 数据中心 A100/3090，不受功耗约束 |
+| 推理硬件 | HW3 144 TOPS → AI5 报道称 2000+ TOPS，几十瓦 | 数据中心 A100/3090，不受功耗约束 |
 | 评测 | 无公开基准，以接管率与真实里程为指标 | nuScenes NDS/mAP、开环 L2/碰撞率、CARLA 闭环 |
 | 代码 | 零 | 全部开源，Model Zoo 带权重 |
 
@@ -339,26 +343,26 @@ UniAD 仓库为此设立 Planning Metric 讨论（issue #29），社区围绕开
 
 1. **特斯拉向学术界靠拢**：CVPR 2026 DriveX keynote 将感知统称为"视频基础模型"，多任务头与共享编码器的表述与学术界的 multi-task foundation model 叙事一致；Phil Duan 在学术 workshop 上公开演讲，此类情况在此前较少出现；
 2. **学术界向特斯拉靠拢**：VAD（ICLR 2026）、RAD（NeurIPS 2025，强化学习后训练）、DiffusionDrive（CVPR 2025）等工作所对应的正是特斯拉 v12→v14 的路径：从模仿学习到生成式规划，再到强化学习；
-3. **VLA 与世界模型成为新主线**：国内厂商（理想、小米等）在 2025-2026 年密集发布 VLA 与世界模型方案（理想公开了世界模型 + 强化学习闭环训练路线，小米 2026 年 5 月开源 OneVL，融合 VLA 与世界模型）；学界有 VLA-World（CVPR 2026）、DriveWorld-VLA（ICML 2026）等工作；
+3. **VLA 与世界模型成为新主线**：国内厂商（理想、小米等）在 2025-2026 年密集发布 VLA 与世界模型方案（理想公开了世界模型 + 强化学习闭环训练路线，小米 2026 年 5 月开源 OneVL，融合 VLA 与世界模型）；学界有 VLA-World（arXiv 2026）、DriveWorld-VLA（ICML 2026）等工作；
 4. **头部厂商发布"开源教师模型"**：NVIDIA 2026 年 1 月发布 Alpamayo 家族，其中 Alpamayo 1 为 100 亿参数的推理型 VLA 模型，权重在 HuggingFace 开放，官方定位为不直接部署上车、而是作为教师模型蒸馏至各家的系统；配套 AlpaSim 仿真框架（开源）与 1700+ 小时开放驾驶数据。
 
 第 4 点意义尤为突出："大模型作为教师、蒸馏至车端小模型"，正是特斯拉对 HW4→HW3 的处理方式（V14 Lite）。特斯拉早五年验证的工程路径，如今被头部厂商以开源生态的形式推广至全行业。若说 2022 年的对照格局是"特斯拉 vs 学术界"，2026 年则已转变为"闭源全栈 vs 开源拼图"：后者尚无法企及前者的数据规模，但模型、仿真、数据三个环节的缺口正在被逐个补齐。
 
 ## 15. 实践指南：方案选型与显存需求
 
-将前述各节的运行要求对应到具体显卡（训练，batch=1，官方配置）：
+将前述各节的运行要求对应到具体显卡（训练，batch=1，官方配置）。表中标注"官方"的显存取自 README 的 Model Zoo 实测值，标注"经验值"的为社区实践口径，与"建议显存"一列同属工程参考：
 
 | 目标 | 最低显存 | 建议显存 | 备注 |
 | --- | --- | --- | --- |
-| BEVFormer-tiny 推理 | 8 GB | 12 GB | R50，50×50 网格 |
-| BEVFormer-tiny 训练 | 12 GB | 16 GB | 有 fp16 配置可用 |
-| BEVFormer-small 训练 | 16 GB | 24 GB | R101-DCN，10.5 GB 显存 |
-| BEVFormer-base 训练 | 32 GB | 40-80 GB | 28.5 GB/卡，8 卡两天 |
-| StreamPETR (R50) 训练 | 16 GB | 24 GB | 官方 36 小时，成本低于 base |
-| SparseBEV (r50) 训练 | 16 GB | 24 GB（或 8×2080Ti） | 官方标注 21 小时 |
-| UniAD 第一阶段 | 30 GB（queue=3） | 50 GB | 官方建议 8 卡 |
-| UniAD 第二阶段 | 17 GB | 24 GB | 冻结 BEV encoder，3090 可跑 |
-| VAD-Base 训练 | 24 GB | 40 GB | 推理仅 4.5 FPS（研究代码） |
+| BEVFormer-tiny 推理 | 8 GB（经验值） | 12 GB | R50，50×50 网格 |
+| BEVFormer-tiny 训练 | 6.5 GB（官方） | 16 GB | README 标 6500M，有 fp16 配置可用 |
+| BEVFormer-small 训练 | 10.5 GB（官方） | 24 GB | README 标 10500M，R101-DCN |
+| BEVFormer-base 训练 | 28.5 GB（官方） | 32 GB | README 标 28500M；8×A100 两天为社区口径 |
+| StreamPETR (R50) 训练 | 16 GB（经验值） | 24 GB | 官方 36 小时（8×2080Ti），成本低于 base |
+| SparseBEV (r50) 训练 | 16 GB（经验值） | 24 GB（或 8×2080Ti） | 官方标注 21 小时（8×2080Ti） |
+| UniAD 第一阶段 | 30 GB（queue=3） | 50 GB | 官方建议 8 卡，默认 queue=5 约 50 GB |
+| UniAD 第二阶段 | 17 GB | 24 GB | 官方文档，冻结 BEV encoder，3090 可跑 |
+| VAD-Base 训练 | 24 GB（经验值） | 40 GB | 推理仅 4.5 FPS（研究代码） |
 
 选型建议分三种情况：
 
@@ -385,7 +389,7 @@ UniAD 仓库为此设立 Planning Metric 讨论（issue #29），社区围绕开
 - Tesla AI Day 2021 演讲（HydraNet、MCTS 规划、自动标注）
 - Tesla AI Day 2022 演讲（Occupancy Network、自动标注集群）
 - Think Autonomous: [Tesla's FSD Architecture: From HydraNets to End-To-End](https://www.thinkautonomous.ai/blog/tesla-end-to-end-deep-learning/)、[A Look at Tesla's Occupancy Networks](https://www.thinkautonomous.ai/blog/occupancy-networks/)
-- FSD v12 官方更新说明（"单一端到端神经网络取代 30 万行 C++"）、v14.2/v14.3 更新说明
+- FSD v12 官方更新说明（"单一端到端神经网络取代 30 万行 C++"）、v14.2/v14.3 更新说明（版本与说明存档见 [Not a Tesla App](https://www.notateslaapp.com/software-updates)）
 - Phil Duan, CVPR 2026 DriveX Workshop Keynote: *Self-Driving at Scale with Foundation Models*（[视频](https://youtu.be/cjzFjeSmh8M)，入口亦见 [腾讯新闻](https://news.qq.com/rain/a/20260807A03IBX00)）
 - [philduan.com](https://www.philduan.com/)（Phil Duan 履历一手来源：Director of Engineering at Tesla AI，co-led v12/v13、主导 v14 与 Robotaxi、创建 Occupancy Network）
 - NVIDIA 新闻稿：[Alpamayo 开源模型家族](https://nvidianews.nvidia.com/news/alpamayo-autonomous-vehicle-development)（2026-01-05）
@@ -393,13 +397,14 @@ UniAD 仓库为此设立 Planning Metric 讨论（issue #29），社区围绕开
 **学术侧（论文与官方仓库）**
 
 - BEVFormer: [arXiv:2203.17270](https://arxiv.org/abs/2203.17270) / [fundamentalvision/BEVFormer](https://github.com/fundamentalvision/bevformer)
-- DETR3D、BEVDet（[HuangJunJie2017/BEVDet](https://github.com/HuangJunJie2017/BEVDet)）、BEVDepth（[Megvii-BaseDetection/BEVDepth](https://github.com/Megvii-BaseDetection/BEVDepth)）
-- StreamPETR: [exiawsh/StreamPETR](https://github.com/exiawsh/StreamPETR)（数字取自其 Model Zoo）
-- SparseBEV: [MCG-NJU/SparseBEV](https://github.com/MCG-NJU/SparseBEV)（TPAMI 2026）
-- Sparse4D: [HorizonRobotics/Sparse4D](https://github.com/HorizonRobotics/Sparse4D)
+- DETR3D ([arXiv:2110.06961](https://arxiv.org/abs/2110.06961))、BEVDet（[arXiv:2112.11797](https://arxiv.org/abs/2112.11797) / [HuangJunJie2017/BEVDet](https://github.com/HuangJunJie2017/BEVDet)）、BEVDepth（[arXiv:2206.10092](https://arxiv.org/abs/2206.10092) / [Megvii-BaseDetection/BEVDepth](https://github.com/Megvii-BaseDetection/BEVDepth)）
+- StreamPETR: [arXiv:2303.11926](https://arxiv.org/abs/2303.11926) / [exiawsh/StreamPETR](https://github.com/exiawsh/StreamPETR)（数字取自其 Model Zoo）
+- SparseBEV: [arXiv:2308.09244](https://arxiv.org/abs/2308.09244) / [MCG-NJU/SparseBEV](https://github.com/MCG-NJU/SparseBEV)（TPAMI 2026）
+- Sparse4D: [arXiv:2211.10581](https://arxiv.org/abs/2211.10581) / [HorizonRobotics/Sparse4D](https://github.com/HorizonRobotics/Sparse4D)
 - Far3D: [megvii-research/Far3D](https://github.com/megvii-research/Far3D)
-- UniAD: [OpenDriveLab/UniAD](https://github.com/OpenDriveLab/UniAD)（显存数字取自其 GPU Requirements 一节）
-- VAD / VADv2 / RAD / DiffusionDrive: [hustvl/VAD](https://github.com/hustvl/VAD)
-- Occupancy: OpenOccupancy、SurroundOcc、Occ3D、[OpenDriveLab/OccNet](https://github.com/OpenDriveLab/OccNet)、[NVlabs/FB-BEV](https://github.com/NVlabs/FB-BEV)
+- UniAD: [arXiv:2212.10156](https://arxiv.org/abs/2212.10156) / [OpenDriveLab/UniAD](https://github.com/OpenDriveLab/UniAD)（显存数字取自其 GPU Requirements 一节）
+- VAD / VADv2 / RAD / DiffusionDrive: [arXiv:2303.12077](https://arxiv.org/abs/2303.12077)（VAD）、[arXiv:2403.03347](https://arxiv.org/abs/2403.03347)（DiffusionDrive）、[hustvl/VAD](https://github.com/hustvl/VAD)；SparseDrive: [arXiv:2405.19620](https://arxiv.org/abs/2405.19620)
+- Occupancy: OpenOccupancy ([arXiv:2203.01274](https://arxiv.org/abs/2203.01274))、SurroundOcc ([arXiv:2303.09551](https://arxiv.org/abs/2303.09551))、Occ3D ([arXiv:2306.02851](https://arxiv.org/abs/2306.02851))、[OpenDriveLab/OccNet](https://github.com/OpenDriveLab/OccNet)、[NVlabs/FB-BEV](https://github.com/NVlabs/FB-BEV)
+- VLA 与世界模型: VLA-World ([arXiv:2604.09059](https://arxiv.org/abs/2604.09059))、DriveWorld-VLA ([arXiv:2602.06521](https://arxiv.org/abs/2602.06521))、OneVL ([xiaomi-research/onevl](https://github.com/xiaomi-research/onevl))
 - 综述与追踪：[OpenDriveLab/Birds-eye-view-Perception](https://github.com/OpenDriveLab/Birds-eye-view-Perception)、[isLinXu/paper-list](https://github.com/isLinXu/paper-list)、[LMD0311/Awesome-World-Model](https://github.com/LMD0311/Awesome-World-Model)
 - 数据集：[nuScenes](https://www.nuscenes.org/)（1000 场景 / 5.5 小时 / 140 万图）
