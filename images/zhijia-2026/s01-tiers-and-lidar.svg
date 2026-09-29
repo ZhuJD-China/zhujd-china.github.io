@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="100%" role="img" aria-label="七家方案的分档与激光雷达配置">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .vend{fill:#e8e4dc;font:500 19px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .chip{fill:#e8e4dc;font:500 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .n0{stroke:#6b675c;stroke-width:1.2;fill:#14141c}
+    .n1{stroke:#c9a96a;stroke-width:1.2;fill:#1a1712}
+    .n3{stroke:#cf5a50;stroke-width:1.2;fill:#1d1414}
+    .d0{fill:#14141c;stroke:#6b675c;stroke-width:1.2}
+    .d1{fill:#c9a96a}
+    .d3{fill:#cf5a50}
+    .ln{stroke:#e8e4dc;stroke-opacity:.08;stroke-width:1}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="680" rx="14"/>
+  <text class="ttl" x="44" y="56">七家方案的分档与激光雷达配置</text>
+  <text class="sub" x="44" y="86">每个胶囊为该厂商在售的一个档位，胶囊右侧圆点为该档激光雷达颗数，圆点越多传感器越重</text>
+
+  <text class="sub" x="212" y="126">档位</text>
+  <text class="sub" x="700" y="126">激光雷达颗数</text>
+  <line class="ln" x1="44" y1="140" x2="1156" y2="140"/>
+
+  <!-- 华为乾崑 -->
+  <text class="vend" x="44" y="182">华为乾崑</text>
+  <rect class="n0" x="212" y="156" width="150" height="38" rx="10"/><text class="chip" x="226" y="181">SE 纯视觉</text>
+  <circle class="d0" cx="376" cy="175" r="6"/>
+  <rect class="n1" x="374" y="156" width="150" height="38" rx="10"/><text class="chip" x="388" y="181">Max</text>
+  <circle class="d1" cx="538" cy="175" r="6"/>
+  <rect class="n1" x="536" y="156" width="150" height="38" rx="10"/><text class="chip" x="550" y="181">Ultra 高速 L3</text>
+  <circle class="d1" cx="700" cy="175" r="6"/>
+
+  <!-- 小鹏 -->
+  <text class="vend" x="44" y="252">小鹏</text>
+  <rect class="n0" x="212" y="226" width="474" height="38" rx="10"/><text class="chip" x="226" y="251">全系纯视觉，无激光雷达选装</text>
+  <circle class="d0" cx="700" cy="245" r="6"/>
+
+  <!-- 理想 -->
+  <text class="vend" x="44" y="322">理想</text>
+  <rect class="n1" x="212" y="296" width="150" height="38" rx="10"/><text class="chip" x="226" y="321">AD Pro</text>
+  <circle class="d1" cx="376" cy="315" r="6"/>
+  <rect class="n1" x="374" y="296" width="150" height="38" rx="10"/><text class="chip" x="388" y="321">AD Max</text>
+  <circle class="d1" cx="538" cy="315" r="6"/>
+  <rect class="n3" x="536" y="296" width="150" height="38" rx="10"/><text class="chip" x="550" y="321">新 L9 增侧后向</text>
+  <circle class="d3" cx="700" cy="315" r="6"/><circle class="d3" cx="714" cy="315" r="6"/><circle class="d3" cx="728" cy="315" r="6"/>
+
+  <!-- 蔚来 -->
+  <text class="vend" x="44" y="392">蔚来</text>
+  <rect class="n1" x="212" y="366" width="150" height="38" rx="10"/><text class="chip" x="226" y="391">Banyan</text>
+  <circle class="d1" cx="376" cy="385" r="6"/>
+  <rect class="n3" x="374" y="366" width="150" height="38" rx="10"/><text class="chip" x="388" y="391">NT3.0 加侧向</text>
+  <circle class="d3" cx="538" cy="385" r="6"/><circle class="d3" cx="552" cy="385" r="6"/><circle class="d3" cx="566" cy="385" r="6"/>
+
+  <!-- 比亚迪 -->
+  <text class="vend" x="44" y="462">比亚迪</text>
+  <rect class="n0" x="212" y="436" width="150" height="38" rx="10"/><text class="chip" x="226" y="461">C 三目纯视觉</text>
+  <circle class="d0" cx="376" cy="455" r="6"/>
+  <rect class="n1" x="374" y="436" width="150" height="38" rx="10"/><text class="chip" x="388" y="461">B 激光版</text>
+  <circle class="d1" cx="538" cy="455" r="6"/>
+  <rect class="n3" x="536" y="436" width="150" height="38" rx="10"/><text class="chip" x="550" y="461">A 三激光</text>
+  <circle class="d3" cx="700" cy="455" r="6"/><circle class="d3" cx="714" cy="455" r="6"/><circle class="d3" cx="728" cy="455" r="6"/>
+
+  <!-- 小米 -->
+  <text class="vend" x="44" y="532">小米</text>
+  <rect class="n1" x="212" y="506" width="474" height="38" rx="10"/><text class="chip" x="226" y="531">全系标配 1 颗激光雷达加 4D 毫米波</text>
+  <circle class="d1" cx="700" cy="525" r="6"/>
+
+  <!-- 吉利 -->
+  <text class="vend" x="44" y="602">吉利千里浩瀚</text>
+  <rect class="n1" x="212" y="576" width="94" height="38" rx="10"/><text class="chip" x="226" y="601">H1</text>
+  <circle class="d1" cx="320" cy="595" r="6"/>
+  <rect class="n1" x="318" y="576" width="94" height="38" rx="10"/><text class="chip" x="332" y="601">H5</text>
+  <circle class="d1" cx="426" cy="595" r="6"/>
+  <rect class="n1" x="424" y="576" width="94" height="38" rx="10"/><text class="chip" x="438" y="601">H7</text>
+  <circle class="d1" cx="532" cy="595" r="6"/>
+  <rect class="n3" x="530" y="576" width="94" height="38" rx="10"/><text class="chip" x="544" y="601">H9</text>
+  <circle class="d3" cx="638" cy="595" r="6"/><circle class="d3" cx="650" cy="595" r="6"/><circle class="d3" cx="662" cy="595" r="6"/><circle class="d3" cx="674" cy="595" r="6"/><circle class="d3" cx="686" cy="595" r="6"/>
+
+  <line class="ln" x1="44" y1="636" x2="1156" y2="636"/>
+  <text class="foot" x="44" y="658">口径：颗数按代表车型配置表统计。吉利 H9 为 5 颗（1 长距加 4 补盲）；蔚来 NT3.0 为前向超远距加双侧广角；理想新 L9 为前向之外增加侧向与后向，并增固态雷达。</text>
+</svg>

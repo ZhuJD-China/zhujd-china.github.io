@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="宣布日与推送日的时间差">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .row{fill:#e8e4dc;font:500 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .dim{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .ann{fill:#0b0b10;stroke:#e8e4dc;stroke-opacity:.55;stroke-width:1.6}
+    .push{fill:#c9a96a}
+    .plan{fill:#0b0b10;stroke:#c9a96a;stroke-width:1.6;stroke-dasharray:4 3}
+    .link{stroke:#e8e4dc;stroke-opacity:.35;stroke-width:1.4}
+    .bar{fill:#7aa2c8;fill-opacity:.22;stroke:#7aa2c8;stroke-width:1.2}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
+  <text class="ttl" x="44" y="56">宣布日与推送日：同一件事的三个时间点</text>
+  <text class="sub" x="44" y="86">空心圈为发布会宣布，实心方为开始推送，虚框为计划全量，蓝色区间为推送窗口；两者间距是横评最易出错之处</text>
+
+  <circle class="ann" cx="52" cy="114" r="7"/><text class="dim" x="66" y="119">宣布或发布</text>
+  <rect class="push" x="176" y="107" width="14" height="14" rx="3"/><text class="dim" x="198" y="119">开始推送</text>
+  <rect class="plan" x="296" y="107" width="14" height="14" rx="3"/><text class="dim" x="318" y="119">计划全量</text>
+  <rect class="bar" x="424" y="107" width="14" height="14" rx="3"/><text class="dim" x="446" y="119">推送窗口区间</text>
+
+  <!-- 蔚来 NWM 首版 -->
+  <text class="row" x="44" y="168">蔚来 NWM 首版</text>
+  <rect class="bar" x="343" y="154" width="69" height="22" rx="5"/>
+  <circle class="ann" cx="343" cy="165" r="7"/>
+  <rect class="push" x="412" y="154" width="14" height="22" rx="3"/>
+  <text class="lb" x="438" y="170">2025-05-30 首推，07-16 全量，间隔 47 天</text>
+
+  <!-- 蔚来 NWM 2.0 -->
+  <text class="row" x="44" y="224">蔚来 NWM 2.0</text>
+  <rect class="push" x="696" y="210" width="14" height="22" rx="3"/>
+  <text class="lb" x="722" y="226">2026-01-28 直接推送 Banyan 3.3.0，首批 46 万辆</text>
+
+  <!-- 小鹏 -->
+  <text class="row" x="44" y="280">小鹏 第二代 VLA</text>
+  <circle class="ann" cx="742" cy="271" r="7"/>
+  <text class="lb" x="732" y="256" text-anchor="end">宣布 03-02</text>
+  <rect class="push" x="767" y="260" width="15" height="22" rx="3"/>
+  <rect class="bar" x="782" y="260" width="60" height="22" rx="5"/>
+  <rect class="plan" x="842" y="260" width="15" height="22" rx="3"/>
+  <text class="lb" x="872" y="276">03-19 首批，3 月下旬旗舰全量，4 月主力车型</text>
+
+  <!-- 华为 -->
+  <text class="row" x="44" y="336">华为 ADS 5</text>
+  <circle class="ann" cx="820" cy="327" r="7"/>
+  <text class="lb" x="830" y="312">发布 04-23</text>
+  <line class="link" x1="827" y1="327" x2="957" y2="327"/>
+  <rect class="push" x="957" y="316" width="15" height="22" rx="3"/>
+  <rect class="bar" x="972" y="316" width="184" height="22" rx="5"/>
+  <text class="lb" x="872" y="300">间隔 17 天</text>
+  <text class="lb" x="978" y="352">07-27 首批推送，间隔 3 个月</text>
+  <text class="lb" x="1156" y="308" text-anchor="end">三轮 OTA 持续至 2027-02</text>
+
+  <!-- 比亚迪 -->
+  <text class="row" x="44" y="392">比亚迪 天神之眼 4.0</text>
+  <circle class="ann" cx="870" cy="383" r="7"/>
+  <text class="lb" x="880" y="368">宣布 05-28</text>
+  <line class="link" x1="877" y1="383" x2="1007" y2="383"/>
+  <rect class="push" x="1007" y="372" width="15" height="22" rx="3"/>
+  <line class="link" x1="1022" y1="383" x2="1140" y2="383" stroke-dasharray="4 3"/>
+  <rect class="plan" x="1140" y="372" width="15" height="22" rx="3"/>
+  <text class="lb" x="1156" y="368" text-anchor="end">09 内测，12 月全量，间隔约 6 个月</text>
+
+  <!-- 理想 -->
+  <text class="row" x="44" y="448">理想 马赫 VLA 2.0</text>
+  <rect class="push" x="1020" y="434" width="15" height="22" rx="3"/>
+  <text class="lb" x="1010" y="426" text-anchor="end">2.0 推送 09-10，覆盖近百万车主</text>
+  <line class="link" x1="1035" y1="445" x2="1051" y2="445"/>
+  <rect class="plan" x="1051" y="434" width="15" height="22" rx="3"/>
+  <text class="lb" x="1156" y="466" text-anchor="end">2.5 计划 10 月随新 i9 推送</text>
+
+  <!-- axis -->
+  <line class="grid" x1="300" y1="480" x2="1156" y2="480"/>
+  <line class="grid" x1="300" y1="140" x2="300" y2="480"/>
+  <line class="grid" x1="432.6" y1="140" x2="432.6" y2="480"/>
+  <line class="grid" x1="565.2" y1="140" x2="565.2" y2="480"/>
+  <line class="grid" x1="697.8" y1="140" x2="697.8" y2="480"/>
+  <line class="grid" x1="830.4" y1="140" x2="830.4" y2="480"/>
+  <line class="grid" x1="963" y1="140" x2="963" y2="480"/>
+  <line class="grid" x1="1095.6" y1="140" x2="1095.6" y2="480"/>
+  <text class="ax" x="300" y="500" text-anchor="middle">2025-05</text>
+  <text class="ax" x="432.6" y="500" text-anchor="middle">2025-08</text>
+  <text class="ax" x="565.2" y="500" text-anchor="middle">2025-11</text>
+  <text class="ax" x="697.8" y="500" text-anchor="middle">2026-02</text>
+  <text class="ax" x="830.4" y="500" text-anchor="middle">2026-05</text>
+  <text class="ax" x="963" y="500" text-anchor="middle">2026-08</text>
+  <text class="ax" x="1095.6" y="500" text-anchor="middle">2026-11</text>
+
+  <text class="foot" x="44" y="552">读法一：最短间隔是蔚来与小鹏的半个月到两个月量级，最长是华为 ADS 5 的三个月与比亚迪天神之眼 4.0 的六个月；把发布会日期当作能力到达日期，误差最大可达半年。</text>
+  <text class="foot" x="44" y="580">读法二：“开始推送”与“全量”仍是两件事。华为的推送分三轮并持续到 2027 年初；比亚迪的 4.0 至本文日期仍处内测阶段，全量计划在 12 月。</text>
+</svg>

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="100%" role="img" aria-label="准入试点与强制国标时间线">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .date{fill:#c9a96a;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .date2{fill:#6b675c;font:500 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ev{fill:#e8e4dc;font:400 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .imp{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .axis{stroke:#e8e4dc;stroke-opacity:.16;stroke-width:1.4}
+    .dot-d{fill:#c9a96a}
+    .dot-f{fill:#0b0b10;stroke:#e8e4dc;stroke-opacity:.6;stroke-width:1.6}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="700" rx="14"/>
+  <text class="ttl" x="44" y="56">准入试点与强制国标：2023-11 至 2027-07</text>
+  <text class="sub" x="44" y="86">实心为已发布节点，空心为已公布但尚未生效的节点；右侧一列为该节点对智驾竞争的直接影响</text>
+
+  <line class="axis" x1="150" y1="120" x2="150" y2="640"/>
+
+  <!-- 2023-11 -->
+  <circle class="dot-d" cx="150" cy="140" r="7"/>
+  <text class="date" x="176" y="136">2023-11-17</text>
+  <text class="ev" x="176" y="158">四部门《关于开展智能网联汽车准入和上路通行试点工作的通知》</text>
+  <text class="imp" x="700" y="158">L3 与 L4 获准上路的前提，分申报、测试、许可、通行、暂停五阶段</text>
+
+  <!-- 2024-06 -->
+  <circle class="dot-d" cx="150" cy="196" r="7"/>
+  <text class="date" x="176" y="192">2024-06-04</text>
+  <text class="ev" x="176" y="214">首批 9 个联合体进入试点</text>
+  <text class="imp" x="700" y="214">试点资格本身成为门槛，头部车企与 tier 1 同时入局</text>
+
+  <!-- 2025-02 -->
+  <circle class="dot-d" cx="150" cy="252" r="7"/>
+  <text class="date" x="176" y="248">2025-02-25</text>
+  <text class="ev" x="176" y="270">《关于进一步加强智能网联汽车产品准入、召回及软件在线升级管理的通知》</text>
+  <text class="imp" x="700" y="270">组合驾驶辅助与 OTA 纳入准入，三级以上自动驾驶功能 OTA 须取得许可</text>
+
+  <!-- 2025-04 -->
+  <circle class="dot-d" cx="150" cy="308" r="7"/>
+  <text class="date" x="176" y="304">2025-04-16</text>
+  <text class="ev" x="176" y="326">工信部推进会明确禁止夸大与虚假宣传</text>
+  <text class="imp" x="700" y="326">车展物料普遍撤下“高阶智驾”“解放双手”等表述</text>
+
+  <!-- 2025-07 -->
+  <circle class="dot-d" cx="150" cy="364" r="7"/>
+  <text class="date" x="176" y="360">2025-07-23</text>
+  <text class="ev" x="176" y="382">公安部：当前市售“智驾”均为辅助驾驶，驾驶人是第一责任主体</text>
+  <text class="imp" x="700" y="382">责任边界的官方表述，约束了所有对比性宣传</text>
+
+  <!-- 2025-12 -->
+  <circle class="dot-d" cx="150" cy="420" r="7"/>
+  <text class="date" x="176" y="416">2025-12-15</text>
+  <text class="ev" x="176" y="438">工信部第 401 批公告：首批两款 L3 车型附条件许可</text>
+  <text class="imp" x="700" y="438">限指定路段与限速（50 与 80 km/h），试点车不面向消费者销售</text>
+
+  <!-- 2026-06 -->
+  <circle class="dot-d" cx="150" cy="476" r="7"/>
+  <text class="date" x="176" y="472">2026-06-27</text>
+  <text class="ev" x="176" y="494">GB 47955—2026《组合驾驶辅助系统安全要求》发布</text>
+  <text class="imp" x="700" y="494">覆盖基础车道辅助与领航辅助（NOA），与 UN R171 协调</text>
+
+  <!-- 2026-07 -->
+  <circle class="dot-d" cx="150" cy="532" r="7"/>
+  <text class="date" x="176" y="528">2026-07-30</text>
+  <text class="ev" x="176" y="550">GB 44721—2026《自动驾驶系统安全要求》发布</text>
+  <text class="imp" x="700" y="550">适用 L3 与 L4，含接管能力监测与高快速路附加要求</text>
+
+  <!-- 2027 -->
+  <circle class="dot-f" cx="150" cy="588" r="7"/>
+  <text class="date2" x="176" y="584">2027-01-01</text>
+  <text class="ev" x="176" y="606">GB 47955—2026 正式实施</text>
+  <text class="imp" x="700" y="606">届时“是否达标”成为首个可强制核查的横向维度</text>
+
+  <circle class="dot-f" cx="150" cy="632" r="7"/>
+  <text class="date2" x="176" y="628">2027-07-01</text>
+  <text class="ev" x="176" y="650">GB 44721—2026 正式实施</text>
+  <text class="imp" x="700" y="650">L3 与 L4 车型准入的统一技术依据</text>
+
+  <text class="foot" x="44" y="682">读法：在两部国标实施前，任何跨品牌的“智驾能力排名”都缺少可复核的强制依据；这也是本文只做事实对照、不做排名的原因。</text>
+</svg>

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" width="100%" role="img" aria-label="车端算力对比与口径分层">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lbl{fill:#e8e4dc;font:400 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .val{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .vin{fill:#0b0b10;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .off{fill:#c9a96a}
+    .unk{fill:#14141c;stroke:#6b675c;stroke-width:1.2;stroke-dasharray:5 4}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="660" rx="14"/>
+  <text class="ttl" x="44" y="56">车端算力对比：数值相近，口径不同</text>
+  <text class="sub" x="44" y="86">横轴为标称 TOPS（INT8 峰值），0 至 2600 线性；金色为官方口径，虚线框为官方未公布</text>
+
+  <!-- gridlines -->
+  <line class="grid" x1="330" y1="112" x2="330" y2="570"/>
+  <line class="grid" x1="641" y1="112" x2="641" y2="570"/>
+  <line class="grid" x1="952" y1="112" x2="952" y2="570"/>
+  <line class="grid" x1="1138.6" y1="112" x2="1138.6" y2="570"/>
+  <text class="ax" x="322" y="590" text-anchor="end">0</text>
+  <text class="ax" x="641" y="590" text-anchor="middle">1000</text>
+  <text class="ax" x="952" y="590" text-anchor="middle">2000</text>
+  <text class="ax" x="1138.6" y="590" text-anchor="middle">2600</text>
+  <text class="ax" x="641" y="610" text-anchor="middle">标称峰值 TOPS</text>
+
+  <g>
+    <text class="lbl" x="44" y="138">理想 M100 双颗</text>
+    <rect class="off" x="330" y="122" width="796" height="22" rx="5"/><text class="vin" x="1114" y="138" text-anchor="end">2560</text>
+
+    <text class="lbl" x="44" y="172">小鹏 图灵三颗</text>
+    <rect class="off" x="330" y="156" width="700" height="22" rx="5"/><text class="val" x="1040" y="172">2250</text>
+
+    <text class="lbl" x="44" y="206">比亚迪 璇玑 A3 三颗</text>
+    <rect class="off" x="330" y="190" width="653" height="22" rx="5"/><text class="val" x="993" y="206">2100+</text>
+
+    <text class="lbl" x="44" y="240">理想 M100 单颗</text>
+    <rect class="off" x="330" y="224" width="398" height="22" rx="5"/><text class="val" x="738" y="240">1280</text>
+
+    <text class="lbl" x="44" y="274">吉利 H9 双 Thor-U</text>
+    <rect class="off" x="330" y="258" width="435" height="22" rx="5"/><text class="val" x="775" y="274">1400</text>
+
+    <text class="lbl" x="44" y="308">蔚来 Banyan 4 颗 Orin-X</text>
+    <rect class="off" x="330" y="292" width="316" height="22" rx="5"/><text class="val" x="656" y="308">1016</text>
+
+    <text class="lbl" x="44" y="342">蔚来 神玑 NX9031 单颗</text>
+    <rect class="unk" x="330" y="326" width="316" height="22" rx="5"/><text class="ax" x="656" y="342">官方未公布，仅作 Thor-X 类比</text>
+
+    <text class="lbl" x="44" y="376">小鹏 图灵单颗</text>
+    <rect class="off" x="330" y="360" width="233" height="22" rx="5"/><text class="val" x="573" y="376">750</text>
+
+    <text class="lbl" x="44" y="410">小米 Thor</text>
+    <rect class="off" x="330" y="394" width="218" height="22" rx="5"/><text class="val" x="558" y="410">700</text>
+
+    <text class="lbl" x="44" y="444">比亚迪 天神之眼 A 双 Orin-X</text>
+    <rect class="off" x="330" y="428" width="158" height="22" rx="5"/><text class="val" x="498" y="444">508</text>
+
+    <text class="lbl" x="44" y="478">吉利 H5 Orin-Y</text>
+    <rect class="off" x="330" y="462" width="62" height="22" rx="5"/><text class="val" x="402" y="478">200</text>
+
+    <text class="lbl" x="44" y="512">吉利 H1 双黑芝麻 A1000</text>
+    <rect class="off" x="330" y="496" width="36" height="22" rx="5"/><text class="val" x="376" y="512">116</text>
+  </g>
+
+  <line class="grid" x1="44" y1="546" x2="1156" y2="546"/>
+  <text class="foot" x="44" y="580">口径提醒一：蔚来官方文章未给出神玑 NX9031 的 TOPS，仅以“一颗抵四颗 Orin-X”“与满血 Thor-X 同级”作类比，媒体转述的 1000+ 级别仅供参考。</text>
+  <text class="foot" x="44" y="604">口径提醒二：以上均为标称峰值，不等于有效算力。理想称单颗 M100 有效算力可达 Thor-U 的三倍（二手高管访谈），同一枚芯片在不同口径下可差数倍。</text>
+  <text class="foot" x="44" y="628">口径提醒三：理想 Thor-U 在 i 系列上的算力曾有 556 与 700 两种媒体口径，因来源冲突未纳入本图；吉利 H9 亦有 1000 与 1400 两种说法，此处取 1400。</text>
+</svg>

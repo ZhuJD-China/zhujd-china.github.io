@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="芯片、方案与车企的三层关系">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .layer{fill:#6b675c;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .b1{fill:#14141c;stroke:#c9a96a;stroke-opacity:.5;stroke-width:1.2}
+    .b2{fill:#14141c;stroke:#7aa2c8;stroke-opacity:.55;stroke-width:1.2}
+    .b3{fill:#14141c;stroke:#e8e4dc;stroke-opacity:.22;stroke-width:1.2}
+    .b1f{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .b2f{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .b3f{fill:#e8e4dc;font:400 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .note{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .ln{stroke:#c9a96a;stroke-opacity:.28;stroke-width:1.2;fill:none}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
+  <text class="ttl" x="44" y="56">三层关系：芯片、方案、车企</text>
+  <text class="sub" x="44" y="86">七家中的五家在芯片层已有自研或绑定，方案层则同时存在自研全栈与第三方供应两条路径</text>
+
+  <!-- layer labels -->
+  <text class="layer" x="44" y="150">芯片层</text>
+  <text class="layer" x="44" y="330">方案层</text>
+  <text class="layer" x="44" y="510">车企层</text>
+
+  <!-- 芯片层 boxes -->
+  <rect class="b1" x="140" y="122" width="300" height="52" rx="10"/>
+  <text class="b1f" x="156" y="145">英伟达 Orin-X / Thor 系列</text><text class="note" x="156" y="165">254 TOPS 起，Thor 实发约 700</text>
+
+  <rect class="b1" x="458" y="122" width="300" height="52" rx="10"/>
+  <text class="b1f" x="474" y="145">地平线 征程 6 系列</text><text class="note" x="474" y="165">10 至 560 TOPS，出货破 1500 万套</text>
+
+  <rect class="b1" x="776" y="122" width="300" height="52" rx="10"/>
+  <text class="b1f" x="792" y="145">华为 昇腾加 MDC</text><text class="note" x="792" y="165">MDC 610 平台 160 TOPS（官方）</text>
+
+  <rect class="b1" x="140" y="186" width="300" height="52" rx="10"/>
+  <text class="b1f" x="156" y="209">黑芝麻 A1000 / A2000</text><text class="note" x="156" y="229">A2000 家族 200 至 1000 TOPS</text>
+
+  <rect class="b1" x="458" y="186" width="618" height="52" rx="10"/>
+  <text class="b1f" x="474" y="209">车企自研：蔚来 神玑 NX9031、小鹏 图灵、理想 马赫 M100、比亚迪 璇玑 A3、小米 玄戒 D100</text>
+  <text class="note" x="474" y="229">前四家已量产上车，第五家官方称 2027 年商用</text>
+
+  <!-- 方案层 boxes -->
+  <rect class="b2" x="140" y="292" width="300" height="66" rx="10"/>
+  <text class="b2f" x="156" y="316">华为乾崑 ADS</text>
+  <text class="note" x="156" y="337">Max / Pro / SE / Ultra 四档</text>
+  <text class="note" x="156" y="353">对外供给 25 个品牌 50 余款车型</text>
+
+  <rect class="b2" x="458" y="292" width="300" height="66" rx="10"/>
+  <text class="b2f" x="474" y="316">Momenta 飞轮大模型</text>
+  <text class="note" x="474" y="337">2025 年第三方城市 NOA 份额 61.06%</text>
+  <text class="note" x="474" y="353">合资与二线的默认选择之一</text>
+
+  <rect class="b2" x="776" y="292" width="300" height="66" rx="10"/>
+  <text class="b2f" x="792" y="316">元戎启行、轻舟智航</text>
+  <text class="note" x="792" y="337">城市 NOA 创业公司阵营</text>
+  <text class="note" x="792" y="353">累计交付十万至百万量级</text>
+
+  <rect class="b2" x="140" y="370" width="936" height="52" rx="10"/>
+  <text class="b2f" x="156" y="394">车企全栈自研：小鹏、理想、蔚来、比亚迪、小米、吉利</text>
+  <text class="note" x="156" y="414">六家中五家已完成至少一个大版本的端到端或 VLA 推送，比亚迪 A/B 档软件由 Momenta 提供的说法为媒体口径</text>
+
+  <!-- 车企层 boxes -->
+  <rect class="b3" x="140" y="482" width="300" height="52" rx="10"/>
+  <text class="b3f" x="156" y="505">鸿蒙智行五界、岚图、深蓝、</text>
+  <text class="b3f" x="156" y="525">阿维塔、猛士、方程豹等</text>
+
+  <rect class="b3" x="458" y="482" width="300" height="52" rx="10"/>
+  <text class="b3f" x="474" y="505">小鹏、理想、蔚来、比亚迪、</text>
+  <text class="b3f" x="474" y="525">小米、吉利与极氪、领克</text>
+
+  <rect class="b3" x="776" y="482" width="300" height="52" rx="10"/>
+  <text class="b3f" x="792" y="505">奔驰、奥迪、丰田、本田、别克</text>
+  <text class="b3f" x="792" y="525">大众（与地平线合资酷睿程）</text>
+
+  <!-- connectors -->
+  <path class="ln" d="M290 364 L290 376"/>
+  <path class="ln" d="M608 364 L608 376"/>
+  <path class="ln" d="M926 364 L926 376"/>
+  <path class="ln" d="M290 422 L290 470"/>
+  <path class="ln" d="M608 422 L608 470"/>
+  <path class="ln" d="M926 422 L926 470"/>
+
+  <text class="foot" x="44" y="580">读图：一层芯片已高度分散，国产与自研在 2025 至 2026 年集中落地；二层方案呈现自研与外采并存，比亚迪是唯一同时使用两者的样本；</text>
+  <text class="foot" x="44" y="602">三层车企中，只有合资与二线品牌普遍依赖第三方方案，这构成了国内智驾能力的实际下限。</text>
+</svg>

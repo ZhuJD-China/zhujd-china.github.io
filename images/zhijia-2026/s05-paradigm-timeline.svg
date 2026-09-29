@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="100%" role="img" aria-label="架构范式的叠加式演进时间轴">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .vend{fill:#e8e4dc;font:500 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .in1{fill:#0b0b10;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .in2{fill:#0b0b10;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .in3{fill:#f6efdf;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lg{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .s1{fill:#c9a96a}
+    .s2{fill:#7aa2c8}
+    .s3{fill:#cf5a50}
+    .mark{stroke:#cf5a50;stroke-width:1.4;stroke-dasharray:5 4}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="640" rx="14"/>
+  <text class="ttl" x="44" y="56">架构范式的叠加式演进：2024-01 至 2026-09</text>
+  <text class="sub" x="44" y="86">端到端与 VLA 并非替代关系，世界模型与强化学习叠加在训练环节；三层最终在 2026 年同时出现在七家身上</text>
+
+  <!-- legend -->
+  <rect class="s1" x="44" y="106" width="16" height="16" rx="4"/><text class="lg" x="68" y="119">端到端</text>
+  <rect class="s2" x="150" y="106" width="16" height="16" rx="4"/><text class="lg" x="174" y="119">VLA 与大模型上车</text>
+  <rect class="s3" x="320" y="106" width="16" height="16" rx="4"/><text class="lg" x="344" y="119">世界模型与强化学习</text>
+  <line class="mark" x1="969" y1="100" x2="969" y2="560"/><text class="lg" x="981" y="119">2026 年中，七家三层齐备</text>
+
+  <!-- 华为 -->
+  <text class="vend" x="44" y="172">华为乾崑</text>
+  <rect class="s1" x="257" y="156" width="342" height="24" rx="5"/><text class="in1" x="267" y="172">GOD+PDP 端到端</text>
+  <rect class="s2" x="627" y="156" width="313" height="24" rx="5"/><text class="in2" x="637" y="172">WEWA 云端世界引擎</text>
+  <rect class="s3" x="969" y="156" width="142" height="24" rx="5"/><text class="in3" x="979" y="172">WEWA 2.0</text>
+
+  <!-- 小鹏 -->
+  <text class="vend" x="44" y="226">小鹏</text>
+  <rect class="s1" x="314" y="210" width="285" height="24" rx="5"/><text class="in1" x="324" y="226">天玑端到端三件套</text>
+  <rect class="s2" x="627" y="210" width="285" height="24" rx="5"/><text class="in2" x="637" y="226">第一代 VLA 加 VLM</text>
+  <rect class="s3" x="940" y="210" width="171" height="24" rx="5"/><text class="in3" x="950" y="226">第二代 VLA</text>
+
+  <!-- 理想 -->
+  <text class="vend" x="44" y="280">理想</text>
+  <rect class="s1" x="200" y="264" width="370" height="24" rx="5"/><text class="in1" x="210" y="280">端到端加 VLM 双系统</text>
+  <rect class="s2" x="599" y="264" width="313" height="24" rx="5"/><text class="in2" x="609" y="280">MindVLA</text>
+  <rect class="s3" x="940" y="264" width="171" height="24" rx="5"/><text class="in3" x="950" y="280">MindVLA-o1</text>
+
+  <!-- 蔚来 -->
+  <text class="vend" x="44" y="334">蔚来</text>
+  <rect class="s1" x="200" y="318" width="427" height="24" rx="5"/><text class="in1" x="210" y="334">ADAM 端到端</text>
+  <rect class="s2" x="656" y="318" width="228" height="24" rx="5"/><text class="in2" x="666" y="334">NWM 世界模型</text>
+  <rect class="s3" x="912" y="318" width="199" height="24" rx="5"/><text class="in3" x="922" y="334">NWM 2.0 闭环 RL</text>
+
+  <!-- 比亚迪 -->
+  <text class="vend" x="44" y="388">比亚迪</text>
+  <rect class="s1" x="200" y="372" width="342" height="24" rx="5"/><text class="in1" x="210" y="388">模块化加三档</text>
+  <rect class="s2" x="570" y="372" width="399" height="24" rx="5"/><text class="in2" x="580" y="388">天神之眼 A/B/C 全系铺量</text>
+  <rect class="s3" x="998" y="372" width="114" height="24" rx="5"/><text class="in3" x="1006" y="388">4.0</text>
+
+  <!-- 小米 -->
+  <text class="vend" x="44" y="442">小米</text>
+  <rect class="s1" x="285" y="426" width="513" height="24" rx="5"/><text class="in1" x="295" y="442">端到端（HAD，Clips 训练）</text>
+  <rect class="s2" x="827" y="426" width="85" height="24" rx="5"/><text class="in2" x="833" y="442">增强版</text>
+  <rect class="s3" x="940" y="426" width="171" height="24" rx="5"/><text class="in3" x="950" y="442">XLA</text>
+
+  <!-- 吉利 -->
+  <text class="vend" x="44" y="496">吉利</text>
+  <rect class="s1" x="599" y="480" width="256" height="24" rx="5"/><text class="in1" x="609" y="496">千里浩瀚端到端</text>
+  <rect class="s2" x="884" y="480" width="142" height="24" rx="5"/><text class="in2" x="894" y="496">G-ASD3</text>
+  <rect class="s3" x="1054" y="480" width="57" height="24" rx="5"/>
+  <text class="in3" x="1082" y="472" text-anchor="middle">G-ASD 4.0</text>
+
+  <!-- axis -->
+  <line class="grid" x1="200" y1="520" x2="1156" y2="520"/>
+  <line class="grid" x1="200" y1="140" x2="200" y2="520"/>
+  <line class="grid" x1="541.8" y1="140" x2="541.8" y2="520"/>
+  <line class="grid" x1="883.5" y1="140" x2="883.5" y2="520"/>
+  <line class="grid" x1="1111" y1="140" x2="1111" y2="520"/>
+  <text class="ax" x="200" y="540" text-anchor="middle">2024-01</text>
+  <text class="ax" x="541.8" y="540" text-anchor="middle">2025-01</text>
+  <text class="ax" x="883.5" y="540" text-anchor="middle">2026-01</text>
+  <text class="ax" x="1111" y="540" text-anchor="middle">2026-09</text>
+
+  <text class="foot" x="44" y="588">读图：一，各家起点不同，比亚迪与吉利的端到端化晚于蔚小理与华为；二，VLA 一层集中在 2025 年下半年到 2026 年上半年落地，节奏高度同步；</text>
+  <text class="foot" x="44" y="610">三，世界模型与强化学习最早由华为与蔚来提出表述，2026 年成为七家共同配置，模型本身仍不公开。</text>
+</svg>
