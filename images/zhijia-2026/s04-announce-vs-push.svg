@@ -43,7 +43,7 @@
   <rect class="push" x="767" y="260" width="15" height="22" rx="3"/>
   <rect class="bar" x="782" y="260" width="60" height="22" rx="5"/>
   <rect class="plan" x="842" y="260" width="15" height="22" rx="3"/>
-  <text class="lb" x="872" y="276">03-19 首批，3 月下旬旗舰全量，4 月主力车型</text>
+  <text class="lb" x="867" y="276">03-19 首批，3 月下旬旗舰全量</text>
 
   <!-- 华为 -->
   <text class="row" x="44" y="336">华为 ADS 5</text>
@@ -53,7 +53,8 @@
   <rect class="push" x="957" y="316" width="15" height="22" rx="3"/>
   <rect class="bar" x="972" y="316" width="184" height="22" rx="5"/>
   <text class="lb" x="872" y="300">间隔 17 天</text>
-  <text class="lb" x="978" y="352">07-27 首批推送，间隔 3 个月</text>
+  <text class="lb" x="872" y="352">07-27 首批推送，间隔 3 个月</text>
+  <text class="lb" x="872" y="300">4 月主力车型</text>
   <text class="lb" x="1156" y="308" text-anchor="end">三轮 OTA 持续至 2027-02</text>
 
   <!-- 比亚迪 -->

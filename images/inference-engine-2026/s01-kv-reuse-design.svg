@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="100%" role="img" aria-label="vLLM 与 SGLang 的架构差异对照">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#0b0b10;font:700 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .nm{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .boxA{fill:#1a1712;stroke:#c9a96a;stroke-width:1.3}
+    .boxB{fill:#14161c;stroke:#7aa2c8;stroke-width:1.3}
+    .lnA{stroke:#c9a96a;stroke-opacity:.4;stroke-width:1.2;fill:none}
+    .lnB{stroke:#7aa2c8;stroke-opacity:.4;stroke-width:1.2;fill:none}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="520" rx="14"/>
+  <text class="ttl" x="44" y="56">两种 KV 复用思路：分页与前缀树</text>
+  <text class="sub" x="44" y="86">两者的目标相同——复用已算过的 KV，避免重复 prefill；差别在于如何组织与查找这些可复用的片段</text>
+
+  <!-- vLLM side -->
+  <rect class="boxA" x="44" y="108" width="540" height="36" rx="8"/>
+  <text class="hd" x="60" y="132">vLLM：把 KV Cache 当作分页内存管理</text>
+
+  <rect class="boxA" x="64" y="160" width="150" height="60" rx="6"/>
+  <text class="nm" x="76" y="182">逻辑序列</text>
+  <text class="ds2" x="76" y="202">连续长度的 token 序列</text>
+  <rect class="boxA" x="250" y="160" width="150" height="60" rx="6"/>
+  <text class="nm" x="262" y="182">非连续块</text>
+  <text class="ds2" x="262" y="202">固定大小，可来自任何序列</text>
+  <rect class="boxA" x="436" y="160" width="130" height="60" rx="6"/>
+  <text class="nm" x="448" y="182">块表</text>
+  <text class="ds2" x="448" y="202">逻辑到物理的映射</text>
+  <path class="lnA" d="M214 190 L246 190"/>
+  <path class="lnA" d="M400 190 L432 190"/>
+
+  <text class="ds" x="64" y="252">优势：内存不会因序列长度不同而产生碎片，显存利用率高且可预测</text>
+  <text class="ds" x="64" y="274">代价：块是固定粒度，短前缀无法与长前缀共享；复用以块表查找为主，不做语义层面的合并</text>
+  <text class="ds2" x="64" y="296">适用取向：通用服务、负载长度分布杂的场景</text>
+
+  <!-- SGLang side -->
+  <rect class="boxB" x="616" y="108" width="540" height="36" rx="8"/>
+  <text class="hd" x="632" y="132">SGLang：把 KV Cache 建成前缀树</text>
+
+  <rect class="boxB" x="636" y="160" width="150" height="60" rx="6"/>
+  <text class="nm" x="648" y="182">树根</text>
+  <text class="ds2" x="648" y="202">空前缀</text>
+  <rect class="boxB" x="822" y="160" width="150" height="60" rx="6"/>
+  <text class="nm" x="834" y="182">中间节点</text>
+  <text class="ds2" x="834" y="202">共享的最长公共前缀</text>
+  <rect class="boxB" x="1008" y="160" width="130" height="60" rx="6"/>
+  <text class="nm" x="1020" y="182">叶子</text>
+  <text class="ds2" x="1020" y="202">各自独享的尾部</text>
+  <path class="lnB" d="M786 190 L818 190"/>
+  <path class="lnB" d="M972 190 L1004 190"/>
+
+  <text class="ds" x="636" y="252">优势：相同前缀只存一份，天然支持多轮与多路共享系统提示，命中率更高</text>
+  <text class="ds" x="636" y="274">代价：树结构有额外维护开销，删除与回收比固定块复杂；负载高度相似时收益递减</text>
+  <text class="ds2" x="636" y="296">适用取向：多轮对话、共享系统提示、agent 场景</text>
+
+  <line class="grid" x1="44" y1="316" x2="1156" y2="316"/>
+  <text class="fm" x="44" y="344">两者之外的共同战线</text>
+  <text class="fm" x="44" y="368">连续批处理（逐 token 级调度）、分块 prefill（把长 prompt 切块以避免阶段间等待）、</text>
+  <text class="fm" x="44" y="390">投机解码（用小模型多出 token 换取大模型少解码几轮）、以及把 prefill 与 decode 拆到不同设备池分别扩缩容。</text>
+  <text class="fm" x="44" y="412">这些能力在两边都已是标配，竞争重点因此从"有没有批处理"转向给定负载与硬件下的稳态吞吐与尾延迟。</text>
+
+  <line class="grid" x1="44" y1="410" x2="1156" y2="410"/>
+  <text class="foot" x="44" y="436">本图为架构机制的定性对照，不含吞吐、延迟或占用率的实测数字。两种设计的差异在混合负载下才会显现：长度分布杂时两者接近，共享前缀多时前缀树更优。</text>
+  <text class="foot" x="44" y="462">选型时应同时考虑：是否需要结构化输出、是否跑多模态、是否做 prefill 与 decode 分离、以及团队对其中一套生态的熟悉程度——后者的影响常被低估。</text>
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="KV Cache 显存账本：MHA、MQA 与 GQA 对照">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .fm{fill:#e8e4dc;font:500 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd2{fill:#0b0b10;font:700 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .b1{fill:#cf5a50}
+    .b2{fill:#c9a96a}
+    .b3{fill:#7aa2c8}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+  <text class="ttl" x="44" y="56">KV Cache 显存账本：省的是头数，不是长度</text>
+  <text class="sub" x="44" y="86">解码阶段每多一个 token 都要读写一遍全部 KV。公式固定，差别只来自 K 与 V 的头数</text>
+
+  <rect class="b1" x="44" y="112" width="8" height="26" rx="3"/>
+  <text class="fm" x="64" y="132">KV Cache 大小 = 2 × 层数 × KV 头数 × 头维 × 序列长度 × 元素字节数</text>
+  <text class="fm2" x="64" y="154">前面的 2 是 K 与 V 各一份。层数、头维、序列长度三者不变时，显存与 KV 头数成正比——这是 MQA 与 GQA 唯一的着力点。</text>
+
+  <!-- worked example -->
+  <text class="hd" x="44" y="204">一个具体算例（假设值，用于说明比例关系）</text>
+  <text class="fm2" x="44" y="230">层数 32，Query 头 32，头维 128，序列 8192，BF16 每元素 2 字节</text>
+
+  <line class="grid" x1="330" y1="248" x2="330" y2="440"/>
+  <line class="grid" x1="530" y1="248" x2="530" y2="440"/>
+  <line class="grid" x1="730" y1="248" x2="730" y2="440"/>
+  <line class="grid" x1="930" y1="248" x2="930" y2="440"/>
+  <line class="grid" x1="1130" y1="248" x2="1130" y2="440"/>
+  <text class="ax" x="330" y="458" text-anchor="middle">0</text>
+  <text class="ax" x="530" y="458" text-anchor="middle">1.6 GB</text>
+  <text class="ax" x="730" y="458" text-anchor="middle">3.2 GB</text>
+  <text class="ax" x="930" y="458" text-anchor="middle">4.8 GB</text>
+  <text class="ax" x="1130" y="458" text-anchor="middle">6.4 GB</text>
+
+  <!-- bars: 330 + GB * 125 -->
+  <text class="hd" x="44" y="278">MHA（KV 头 32）</text>
+  <rect class="b1" x="330" y="262" width="800" height="26" rx="5"/>
+  <text class="hd2" x="1118" y="280" text-anchor="end">6.4 GB</text>
+
+  <text class="hd" x="44" y="330">GQA（8 组，KV 头 8）</text>
+  <rect class="b2" x="330" y="314" width="200" height="26" rx="5"/>
+  <text class="hd2" x="518" y="332" text-anchor="end">1.6 GB</text>
+
+  <text class="hd" x="44" y="382">MQA（KV 头 1）</text>
+  <rect class="b3" x="330" y="366" width="25" height="26" rx="5"/>
+  <text class="hd2" x="363" y="384">0.2 GB</text>
+
+  <text class="hd" x="44" y="424">MLA（潜空间压缩，见第 7 节）</text>
+  <rect class="b3" x="330" y="408" width="12" height="26" rx="5"/>
+  <text class="hd2" x="350" y="426">视压缩率而定</text>
+
+  <line class="grid" x1="44" y1="476" x2="1156" y2="476"/>
+  <text class="foot" x="44" y="502">要点一：MHA 到 MQA 是 32 倍的差距，GQA 取中间点，取多少组是可调超参数，这正是"效果逼近 MHA、显存接近 MQA"的来源。</text>
+  <text class="foot" x="44" y="526">要点二：MLA 走的是另一条路，它不减少头数，而是把 K 与 V 联合压缩成低维潜向量再缓存，因此显存下降幅度与压缩率绑定，且需要在推理时做反变换。</text>
+  <text class="foot" x="44" y="550">上表为按公式计算的假设值，用于说明比例关系，不代表任何具体模型的实测显存；真实显存还受分页、量化与前缀缓存策略影响。</text>
+</svg>

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="基准测试的兴衰时间线">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lane{fill:#e8e4dc;font:500 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it{fill:#0b0b10;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it2{fill:#e8e4dc;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .yr{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .a{fill:#c9a96a}
+    .b{fill:#7aa2c8}
+    .c{fill:#cf5a50}
+    .ln{stroke:#e8e4dc;stroke-opacity:.18;stroke-width:1.2;fill:none}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
+  <text class="ttl" x="44" y="56">基准的兴衰：从"刷榜可信"到"刷榜无意义"</text>
+  <text class="sub" x="44" y="86">横轴为首次公开年份。每代基准的寿命，通常等于它被刷穿所需的时间</text>
+
+  <line class="grid" x1="220" y1="118" x2="220" y2="420"/>
+  <line class="grid" x1="420" y1="118" x2="420" y2="420"/>
+  <line class="grid" x1="620" y1="118" x2="620" y2="420"/>
+  <line class="grid" x1="820" y1="118" x2="820" y2="420"/>
+  <line class="grid" x1="1020" y1="118" x2="1020" y2="420"/>
+  <text class="yr" x="220" y="112" text-anchor="middle">2016</text>
+  <text class="yr" x="420" y="112" text-anchor="middle">2018</text>
+  <text class="yr" x="620" y="112" text-anchor="middle">2020</text>
+  <text class="yr" x="820" y="112" text-anchor="middle">2023</text>
+  <text class="yr" x="1020" y="112" text-anchor="middle">2025</text>
+  <text class="yr" x="1156" y="112" text-anchor="end">2026</text>
+
+  <text class="lane" x="44" y="162">理解类</text>
+  <rect class="a" x="230" y="146" width="130" height="24" rx="5"/><text class="it" x="240" y="162">GLUE 九任务</text>
+  <rect class="a" x="300" y="176" width="150" height="24" rx="5"/><text class="it" x="310" y="192">SuperGLUE</text>
+  <path class="ln" d="M186 206 L460 206"/>
+
+  <text class="lane" x="44" y="242">知识与推理</text>
+  <rect class="a" x="560" y="226" width="140" height="24" rx="5"/><text class="it" x="570" y="242">MMLU 五千题</text>
+  <rect class="b" x="740" y="226" width="130" height="24" rx="5"/><text class="it2" x="750" y="242">MMLU-Pro</text>
+  <path class="ln" d="M566 262 L880 262"/>
+
+  <text class="lane" x="44" y="302">代码与执行</text>
+  <rect class="b" x="740" y="286" width="130" height="24" rx="5"/><text class="it2" x="750" y="302">HumanEval</text>
+  <rect class="b" x="890" y="286" width="150" height="24" rx="5"/><text class="it2" x="900" y="302">SWE-bench</text>
+  <rect class="b" x="1050" y="286" width="106" height="24" rx="5"/><text class="it2" x="1060" y="302">终端类</text>
+  <path class="ln" d="M746 322 L1156 322"/>
+
+  <text class="lane" x="44" y="362">偏好与多维</text>
+  <rect class="c" x="840" y="346" width="170" height="24" rx="5"/><text class="it2" x="850" y="362">人类偏好评测</text>
+  <rect class="c" x="1010" y="346" width="146" height="24" rx="5"/><text class="it2" x="1020" y="362">模型互评</text>
+  <path class="ln" d="M846 382 L1156 382"/>
+
+  <text class="lane" x="44" y="422">防污染</text>
+  <rect class="a" x="1000" y="406" width="156" height="24" rx="5"/><text class="it" x="1010" y="422">滚动式新题基准</text>
+  <path class="ln" d="M1006 440 L1156 440"/>
+
+  <line class="grid" x1="44" y1="456" x2="1156" y2="456"/>
+  <text class="foot" x="44" y="482">三代演进：第一代用固定题目测理解能力，随模型能力上涨而饱和；第二代改用人类偏好排序，把"有用"纳入度量；第三代转向可执行的真实任务，用通过率而非分数评价。</text>
+  <text class="foot" x="44" y="510">每一代都在解决上一代的失效原因，但同时制造新问题：固定题被训练数据覆盖，偏好投票被风格与长度带偏，执行任务被针对性优化（reward hacking）。</text>
+  <text class="foot" x="44" y="538">由此产生的纪律性做法：公开题集只用于粗筛，报告成绩必须同时给出题目来源与污染检查；执行类基准需要配套防作弊的评分环境，并保留人工抽检。</text>
+  <text class="foot" x="44" y="566">本图只标示各基准首次公开年份与所属世代，不代表其当前有效性；是否仍具区分度需以当期模型的表现为准逐个核对。</text>
+</svg>

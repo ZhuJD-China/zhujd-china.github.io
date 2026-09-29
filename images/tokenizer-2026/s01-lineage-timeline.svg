@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="分词方案演进谱系">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lane{fill:#e8e4dc;font:500 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it{fill:#0b0b10;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it2{fill:#e8e4dc;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .yr{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .a{fill:#c9a96a}
+    .b{fill:#7aa2c8}
+    .c{fill:#cf5a50}
+    .ln{stroke:#e8e4dc;stroke-opacity:.18;stroke-width:1.2;fill:none}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+  <text class="ttl" x="44" y="56">分词方案演进：三条路线与一次范式转移</text>
+  <text class="sub" x="44" y="86">横轴为首次公开年份。上两条是"改进切分"，第三条是"取消切分"，第四条是"不改模型只改系统"</text>
+
+  <line class="grid" x1="200" y1="120" x2="200" y2="400"/>
+  <line class="grid" x1="370" y1="120" x2="370" y2="400"/>
+  <line class="grid" x1="540" y1="120" x2="540" y2="400"/>
+  <line class="grid" x1="710" y1="120" x2="710" y2="400"/>
+  <line class="grid" x1="880" y1="120" x2="880" y2="400"/>
+  <line class="grid" x1="1050" y1="120" x2="1050" y2="400"/>
+  <text class="yr" x="200" y="114" text-anchor="middle">1994</text>
+  <text class="yr" x="370" y="114" text-anchor="middle">2016</text>
+  <text class="yr" x="540" y="114" text-anchor="middle">2018</text>
+  <text class="yr" x="710" y="114" text-anchor="middle">2020</text>
+  <text class="yr" x="880" y="114" text-anchor="middle">2022</text>
+  <text class="yr" x="1050" y="114" text-anchor="middle">2024</text>
+  <text class="yr" x="1156" y="114" text-anchor="end">2026</text>
+
+  <!-- lane 1: 三种合并准则 -->
+  <text class="lane" x="44" y="162">合并准则</text>
+  <rect class="a" x="210" y="146" width="150" height="24" rx="5"/><text class="it" x="220" y="162">BPE 频率优先</text>
+  <rect class="a" x="350" y="146" width="150" height="24" rx="5"/><text class="it" x="360" y="162">WordPiece 似然</text>
+  <rect class="a" x="520" y="146" width="170" height="24" rx="5"/><text class="it" x="530" y="162">Unigram EM 裁剪</text>
+  <path class="ln" d="M186 178 L700 178"/>
+
+  <!-- lane 2: 工程化与词表扩张 -->
+  <text class="lane" x="44" y="222">工程化</text>
+  <rect class="b" x="520" y="206" width="170" height="24" rx="5"/><text class="it2" x="530" y="222">SentencePiece 语言无关</text>
+  <rect class="b" x="700" y="206" width="180" height="24" rx="5"/><text class="it2" x="710" y="222">多语言大词表成标配</text>
+  <path class="ln" d="M526 238 L886 238"/>
+
+  <!-- lane 3: 字节级 -->
+  <text class="lane" x="44" y="282">字节级</text>
+  <rect class="c" x="700" y="266" width="130" height="24" rx="5"/><text class="it2" x="710" y="282">ByT5 词表 256</text>
+  <rect class="c" x="880" y="266" width="150" height="24" rx="5"/><text class="it2" x="890" y="282">BLT 按熵划 patch</text>
+  <rect class="c" x="1050" y="266" width="100" height="24" rx="5"/><text class="it2" x="1060" y="282">可逆嵌入</text>
+  <path class="ln" d="M706 298 L1156 298"/>
+
+  <!-- lane 4: 动态切分 -->
+  <text class="lane" x="44" y="342">动态切分</text>
+  <rect class="b" x="1050" y="326" width="100" height="24" rx="5"/><text class="it2" x="1060" y="342">动态分词训练</text>
+  <path class="ln" d="M1056 358 L1156 358"/>
+
+  <line class="grid" x1="44" y1="378" x2="1156" y2="378"/>
+  <text class="foot" x="44" y="404">读法一：前两条线是在"给定词表内切得更聪明"，2016 至 2020 年基本收敛，之后增量有限，说明该路线的天花板已经接近。</text>
+  <text class="foot" x="44" y="430">读法二：字节级路线的核心矛盾是序列变长带来的平方开销。BLT 的做法不是均匀分配计算，而是让边界由信息量决定，把预算花在难预测的位置。</text>
+  <text class="foot" x="44" y="456">读法三：2024 年之后的分叉有三条，取消词表（可逆嵌入）、让模型自己学切分、以及在系统侧承认分词是真实成本并在推理链路上优化。前两条仍在论文阶段，第三条已经落地。</text>
+  <text class="foot" x="44" y="482">本图只标示各方案首次公开年份与所属路线，不代表其在具体模型中的采用比例；同一模型可能同时使用多套分词器（如主模型用子词、编码器用字节）。</text>
+</svg>

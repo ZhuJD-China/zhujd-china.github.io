@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="Outlier 问题与五种处理路线">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .yr{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm{fill:#e8e4dc;font:500 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .hdr{fill:#14141c;stroke:#e8e4dc;stroke-opacity:.18;stroke-width:1}
+    .rowbg{fill:#ffffff;fill-opacity:.022}
+    .keep{fill:#cf5a50}
+    .move{fill:#c9a96a}
+    .q{fill:#7aa2c8}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="56">Outlier：量化真正的敌人，与五条处理路线</text>
+  <text class="sub" x="44" y="86">激活值分布中极少数通道的幅值远高于其余通道，把它们压进 8 位整数会放大整体误差。后续所有方法都在回答同一个问题：这些离群通道怎么办</text>
+
+  <rect class="fm" x="44" y="126">为什么偏偏是激活值：权重量化可以离线逐层校准，激活值随输入变化，只能在运行时处理，且离群通道的位置随层而异</rect>
+
+  <!-- table -->
+  <rect class="hdr" x="44" y="152" width="1112" height="36" rx="6"/>
+  <text class="nm" x="60" y="175">路线</text>
+  <text class="nm" x="200" y="175">年份</text>
+  <text class="nm" x="290" y="175">处理对象</text>
+  <text class="nm" x="470" y="175">做法要点</text>
+  <text class="nm" x="880" y="175">代价</text>
+
+  <rect class="rowbg" x="44" y="194" width="1112" height="44" rx="6"/>
+  <text class="nm" x="60" y="221">LLM.int8()</text>
+  <text class="yr" x="200" y="221">2022</text>
+  <text class="ds" x="290" y="221">激活</text>
+  <text class="ds" x="470" y="214">按通道判定离群，混合精度分解</text>
+  <text class="ds2" x="470" y="232">离群通道走 FP16、其余走 INT8</text>
+  <text class="ds" x="880" y="214">双内核，延迟与</text>
+  <text class="ds2" x="880" y="232">实现复杂度偏高</text>
+
+  <rect class="rowbg" x="44" y="244" width="1112" height="44" rx="6"/>
+  <text class="nm" x="60" y="271">GPTQ</text>
+  <text class="yr" x="200" y="271">2022</text>
+  <text class="ds" x="290" y="271">权重</text>
+  <text class="ds" x="470" y="264">逐层近似二阶信息，用</text>
+  <text class="ds2" x="470" y="282">Hessian 加权误差补偿</text>
+  <text class="ds" x="880" y="271">需校准集</text>
+
+  <rect class="rowbg" x="44" y="294" width="1112" height="44" rx="6"/>
+  <text class="nm" x="60" y="321">SmoothQuant</text>
+  <text class="yr" x="200" y="321">2022</text>
+  <text class="ds" x="290" y="321">激活</text>
+  <text class="ds" x="470" y="314">把激活离群难度按可学习</text>
+  <text class="ds2" x="470" y="332">比例迁移到权重，数学等价变换</text>
+  <text class="ds" x="880" y="321">需重标定系数</text>
+
+  <rect class="rowbg" x="44" y="344" width="1112" height="44" rx="6"/>
+  <text class="nm" x="60" y="371">AWQ</text>
+  <text class="yr" x="200" y="371">2023</text>
+  <text class="ds" x="290" y="371">权重</text>
+  <text class="ds" x="470" y="364">按重要性筛出约 1% 的显著</text>
+  <text class="ds2" x="470" y="382">通道，整通道保护、不量化</text>
+  <text class="ds" x="880" y="371">需定制算子</text>
+
+  <rect class="rowbg" x="44" y="394" width="1112" height="44" rx="6"/>
+  <text class="nm" x="60" y="421">QLoRA</text>
+  <text class="yr" x="200" y="421">2023</text>
+  <text class="ds" x="290" y="421">权重（训练期）</text>
+  <text class="ds" x="470" y="414">4 位量化冻结基座，仅训练</text>
+  <text class="ds2" x="470" y="432">低秩适配器，分页管理显存</text>
+  <text class="ds" x="880" y="421">仅省训练显存</text>
+
+  <line class="grid" x1="44" y1="458" x2="1156" y2="458"/>
+  <text class="fm" x="44" y="486">三条路线的分水岭</text>
+  <text class="fm2" x="44" y="512">保留（LLM.int8 提精度、AWQ 提权重通道）、迁移（SmoothQuant 把难度挪给权重）、换格式（QuaRot、SpinQuant 等旋转变换把量化换成等价但更好量化的问题）。</text>
+  <text class="fm2" x="44" y="536">原生低精度路线（FP8 训练、原生 FP4）绕开了这个问题的一部分：位宽更宽、格式原生，激活离群不再需要特殊处理，代价是对硬件与训练栈的依赖更强。</text>
+  <text class="foot" x="44" y="572">本图为方法与处理对象的分类对照，不含误差或速度的实测数字；各方法的相对优劣随模型、任务与校准集而变，需按具体场景实测。</text>
+</svg>

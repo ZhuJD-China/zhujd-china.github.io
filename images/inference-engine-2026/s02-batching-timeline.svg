@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" width="100%" role="img" aria-label="批处理演进造成的 GPU 空闲时间">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:500 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .busy{fill:#c9a96a}
+    .idle{fill:#3a3a44}
+    .arrow{stroke:#7aa2c8;stroke-width:1.4;fill:none}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="470" rx="14"/>
+  <text class="ttl" x="44" y="56">批处理的演进：把 GPU 的空闲填回来</text>
+  <text class="sub" x="44" y="86">横轴为时间。深色为计算占用，浅色为空闲。生成式负载的长度差异极大，静态批处理因此浪费掉大量算力</text>
+
+  <text class="nm" x="44" y="132">静态批处理</text>
+  <rect class="busy" x="200" y="114" width="110" height="26" rx="4"/>
+  <rect class="idle" x="310" y="114" width="60" height="26" rx="4"/>
+  <rect class="busy" x="370" y="114" width="180" height="26" rx="4"/>
+  <rect class="idle" x="550" y="114" width="40" height="26" rx="4"/>
+  <rect class="busy" x="590" y="114" width="300" height="26" rx="4"/>
+  <text class="fm2" x="910" y="132">整批中最短的序列先结束，</text>
+  <text class="fm2" x="910" y="152">其余位置只能等下一轮</text>
+
+  <text class="nm" x="44" y="212">连续批处理</text>
+  <rect class="busy" x="200" y="194" width="690" height="26" rx="4"/>
+  <line class="arrow" x1="200" y1="194" x2="200" y2="176"/>
+  <line class="arrow" x1="890" y1="194" x2="890" y2="176"/>
+  <text class="fm2" x="200" y="180">序列完成即退出，新请求随时进入</text>
+  <text class="fm2" x="910" y="212">空闲基本消失，</text>
+  <text class="fm2" x="910" y="232">但每步都要调度</text>
+
+  <line class="grid" x1="44" y1="262" x2="1156" y2="262"/>
+
+  <text class="fm" x="44" y="292">为什么生成式负载特别吃亏</text>
+  <text class="fm2" x="44" y="316">同一次请求里，prefill 阶段要一次算完整段输入（计算密集），decode 阶段每步只算一个 token（访存密集）。两者对硬件的利用率曲线相反，</text>
+  <text class="fm2" x="44" y="338">而不同请求的长度差异又极大。静态批处理同时踩中"两阶段混排"与"长度不齐"两个坑，因此吞吐损失比分类任务明显得多。</text>
+
+  <text class="fm" x="44" y="374">由此推出的四个设计</text>
+  <text class="fm2" x="44" y="398">分块 prefill：把长 prompt 切成固定块，与 decode 交错执行，避免长 prefill 阻塞其他请求的解码。</text>
+  <text class="fm2" x="44" y="420">阶段分离：把 prefill 与 decode 放到不同设备池，按各自的资源特征（算力与带宽）分别扩缩容。</text>
+  <text class="fm2" x="44" y="442">投机解码：用小模型一次出多个 token 供大模型校验，把访存密集的解码步换成算力密集的批校验。</text>
+  <text class="foot" x="44" y="466">图示为机制示意，深浅色块不按真实时间比例绘制；具体收益随模型规模、请求长度分布与硬件而变，需按自身流量实测。</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" width="100%" role="img" aria-label="多语言 fertility 不公平与 token 账单">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lbl{fill:#e8e4dc;font:400 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .val{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .vin{fill:#0b0b10;font:700 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm{fill:#e8e4dc;font:500 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .b1{fill:#c9a96a}
+    .b2{fill:#7aa2c8}
+    .b3{fill:#cf5a50}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="470" rx="14"/>
+  <text class="ttl" x="44" y="56">同一句话，不同语言，不同账单</text>
+  <text class="sub" x="44" y="86">Ahia 等人（EMNLP 2023）对同一句文本用同一 tokenizer 切分的结果；token 数直接决定 API 费用、上下文占用与推理延迟</text>
+
+  <!-- formula -->
+  <rect class="b2" x="44" y="108" width="8" height="24" rx="3"/>
+  <text class="fm" x="64" y="128">Fertility(L) = 该语言的 token 数 ÷ 该语言的词数</text>
+  <text class="fm2" x="64" y="150">数值越大，切得越碎，单位信息消耗的 token 越多。同一句话在英语上 29 个 token，旁遮普文需要 254 个。</text>
+
+  <!-- bars: 330 + tokens * 3 -->
+  <line class="grid" x1="330" y1="180" x2="330" y2="400"/>
+  <line class="grid" x1="527" y1="180" x2="527" y2="400"/>
+  <line class="grid" x1="724" y1="180" x2="724" y2="400"/>
+  <line class="grid" x1="921" y1="180" x2="921" y2="400"/>
+  <line class="grid" x1="1118" y1="180" x2="1118" y2="400"/>
+  <text class="ax" x="330" y="418" text-anchor="middle">0</text>
+  <text class="ax" x="724" y="418" text-anchor="middle">132</text>
+  <text class="ax" x="1118" y="418" text-anchor="middle">264 个 token</text>
+
+  <text class="lbl" x="44" y="208">英语</text>
+  <rect class="b1" x="330" y="192" width="87" height="26" rx="4"/>
+  <text class="vin" x="405" y="210" text-anchor="end">29</text>
+
+  <text class="lbl" x="44" y="260">日语</text>
+  <rect class="b2" x="330" y="244" width="159" height="26" rx="4"/>
+  <text class="vin" x="477" y="262" text-anchor="end">53</text>
+
+  <text class="lbl" x="44" y="312">旁遮普文</text>
+  <rect class="b3" x="330" y="296" width="762" height="26" rx="4"/>
+  <text class="vin" x="1080" y="314" text-anchor="end">254</text>
+
+  <text class="lbl" x="44" y="364">相对英语的倍数</text>
+  <rect class="b3" x="330" y="348" width="255" height="26" rx="4" fill-opacity=".25"/>
+  <text class="vin" x="573" y="366" text-anchor="end">8.8×</text>
+
+  <line class="grid" x1="44" y1="436" x2="1156" y2="436"/>
+  <text class="foot" x="44" y="458">这个差距是系统性的而非偶然：合并规则由语料频率决定，而公开训练语料以英语为主，非拉丁文字往往被切得更碎，进而同时抬高费用与延迟。</text>
+</svg>

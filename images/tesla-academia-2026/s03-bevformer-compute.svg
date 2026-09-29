@@ -69,8 +69,8 @@
   <rect class="p1" x="676" y="284" width="456" height="140" rx="10"/>
   <text class="bt" x="692" y="310">量级差与代价</text>
   <text class="numg" x="692" y="360">≈ 3.5 万倍</text>
-  <text class="bd" x="692" y="384">这一差距是该模型得以在 A100 上以 batch 1 训练的直接原因</text>
-  <text class="bd" x="692" y="404">代价是采样点由学习得到，缺乏全局视野，视野外信息靠 6 层 encoder 逐层补充</text>
+  <text class="bd" x="692" y="384">这一差距是该模型能在 A100 上以 batch 1 训练的直接原因</text>
+  <text class="bd" x="692" y="404">代价是采样点由学习得到，缺乏全局视野，视野外靠 6 层 encoder 补</text>
 
   <line class="flow" d="M334 354 L356 354" style="marker-end:none"/>
   <path class="flow" d="M650 354 L672 354"/>

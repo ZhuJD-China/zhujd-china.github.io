@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="注意力机制的十年演进谱系">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lane{fill:#e8e4dc;font:500 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it{fill:#0b0b10;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it2{fill:#e8e4dc;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .yr{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .a{fill:#c9a96a}
+    .b{fill:#7aa2c8}
+    .c{fill:#cf5a50}
+    .ln{stroke:#e8e4dc;stroke-opacity:.18;stroke-width:1.2;fill:none}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
+  <text class="ttl" x="44" y="56">注意力十年谱系：四条并行的省法</text>
+  <text class="sub" x="44" y="86">横轴为首次公开年份。四个方向各自回答同一个问题"注意力太贵"，互不替代，且到 2026 年仍在叠加使用</text>
+
+  <!-- year axis -->
+  <line class="grid" x1="180" y1="120" x2="180" y2="430"/>
+  <line class="grid" x1="350" y1="120" x2="350" y2="430"/>
+  <line class="grid" x1="520" y1="120" x2="520" y2="430"/>
+  <line class="grid" x1="690" y1="120" x2="690" y2="430"/>
+  <line class="grid" x1="860" y1="120" x2="860" y2="430"/>
+  <line class="grid" x1="1030" y1="120" x2="1030" y2="430"/>
+  <text class="yr" x="180" y="114" text-anchor="middle">2014</text>
+  <text class="yr" x="350" y="114" text-anchor="middle">2016</text>
+  <text class="yr" x="520" y="114" text-anchor="middle">2018</text>
+  <text class="yr" x="690" y="114" text-anchor="middle">2020</text>
+  <text class="yr" x="860" y="114" text-anchor="middle">2022</text>
+  <text class="yr" x="1030" y="114" text-anchor="middle">2024</text>
+  <text class="yr" x="1156" y="114" text-anchor="end">2026</text>
+
+  <!-- lane A: 打分函数 -->
+  <text class="lane" x="44" y="162">打分函数</text>
+  <rect class="a" x="190" y="146" width="130" height="24" rx="5"/><text class="it" x="200" y="162">加性 + tanh</text>
+  <rect class="a" x="330" y="146" width="120" height="24" rx="5"/><text class="it" x="340" y="162">乘性点积</text>
+  <rect class="a" x="480" y="146" width="190" height="24" rx="5"/><text class="it" x="490" y="162">缩放点积（除根号 dk）</text>
+  <path class="ln" d="M186 178 L700 178"/>
+
+  <!-- lane B: KV 头数 -->
+  <text class="lane" x="44" y="222">KV 头数</text>
+  <rect class="b" x="480" y="206" width="150" height="24" rx="5"/><text class="it2" x="490" y="222">MHA 多头各自一份</text>
+  <rect class="b" x="660" y="206" width="140" height="24" rx="5"/><text class="it2" x="670" y="222">MQA 共享一份</text>
+  <rect class="b" x="830" y="206" width="150" height="24" rx="5"/><text class="it2" x="840" y="222">GQA 分组共享</text>
+  <path class="ln" d="M636 238 L986 238"/>
+
+  <!-- lane C: 内存与计算 -->
+  <text class="lane" x="44" y="282">内存与计算</text>
+  <rect class="c" x="480" y="266" width="140" height="24" rx="5"/><text class="it2" x="490" y="282">FlashAttention</text>
+  <rect class="c" x="650" y="266" width="140" height="24" rx="5"/><text class="it2" x="660" y="282">在线 softmax</text>
+  <path class="ln" d="M486 298 L800 298"/>
+
+  <!-- lane D: 稀疏与潜空间 -->
+  <text class="lane" x="44" y="342">稀疏与潜空间</text>
+  <rect class="c" x="480" y="326" width="150" height="24" rx="5"/><text class="it2" x="490" y="342">滑窗加全局</text>
+  <rect class="c" x="660" y="326" width="130" height="24" rx="5"/><text class="it2" x="670" y="342">块稀疏 MoBA</text>
+  <rect class="c" x="830" y="326" width="150" height="24" rx="5"/><text class="it2" x="840" y="342">可学习选块 NSA</text>
+  <rect class="a" x="1000" y="326" width="150" height="24" rx="5"/><text class="it" x="1010" y="342">潜空间压缩 MLA</text>
+  <path class="ln" d="M486 358 L1156 358"/>
+
+  <!-- lane E: 混合架构 -->
+  <text class="lane" x="44" y="402">混合与状态空间</text>
+  <rect class="b" x="830" y="386" width="150" height="24" rx="5"/><text class="it2" x="840" y="402">线性注意力回归</text>
+  <rect class="b" x="1000" y="386" width="150" height="24" rx="5"/><text class="it2" x="1010" y="402">门控线性注意力</text>
+  <path class="ln" d="M836 418 L1156 418"/>
+
+  <line class="grid" x1="44" y1="446" x2="1156" y2="446"/>
+  <text class="foot" x="44" y="474">读法一：四条线解决的是不同瓶颈。改打分函数省的是计算量，改 KV 头数省的是显存带宽与容量，FlashAttention 省的是数据搬运，稀疏与潜空间省的是平方项。</text>
+  <text class="foot" x="44" y="502">读法二：MQA 与 GQA 属"省缓存"一路，效果逼近 MHA；稀疏注意力省的是长上下文的平方项；线性与门控线性注意力把复杂度降到近线性，代价是表达能力需要靠门控与混合层补回来。</text>
+  <text class="foot" x="44" y="530">读法三：到 2026 年的主流做法不是二选一，而是按层混合：多数层用滑窗加稀疏或全注意力，少数层用线性或门控线性注意力，再配 MLA 一类潜空间压缩处理 KV。</text>
+  <text class="foot" x="44" y="558">本图只标示各方案首次公开的年份与所属方向，不代表其在具体模型中的采用比例；采用情况需逐模型核对模型卡。</text>
+</svg>

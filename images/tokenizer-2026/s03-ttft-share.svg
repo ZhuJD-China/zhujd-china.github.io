@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" width="100%" role="img" aria-label="tokenization 在长上下文下的延迟占比">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lbl{fill:#e8e4dc;font:400 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .val{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .vin{fill:#0b0b10;font:700 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm{fill:#e8e4dc;font:500 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .seg1{fill:#c9a96a}
+    .seg2{fill:#7aa2c8}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="480" rx="14"/>
+  <text class="ttl" x="44" y="56">当分词成为瓶颈：首 token 延迟的构成</text>
+  <text class="sub" x="44" y="86">TokTier（2026 年 7 月）对两个 agent 生态 15 万余次调用的统计；条形为相对构成，不含时间单位</text>
+
+  <rect class="seg2" x="44" y="108" width="8" height="24" rx="3"/>
+  <text class="fm" x="64" y="128">结论：在高前缀缓存命中的长会话里，GPU 满负荷而 CPU 在切词</text>
+  <text class="fm2" x="64" y="150">编码 agent 的会话形态是"长历史加小增量"，中位每次追加约 1.4K 字符；前缀缓存命中率越高，分词在首 token 延迟中的占比越重。</text>
+
+  <!-- stacked bars: total 420px = 100% -->
+  <text class="lbl" x="44" y="206">缓存命中率约 0.90</text>
+  <rect class="seg2" x="330" y="190" width="378" height="30" rx="4"/>
+  <text class="vin" x="696" y="211">tokenization 约 10%</text>
+  <rect class="seg1" x="708" y="190" width="42" height="30" rx="4"/>
+  <text class="val" x="762" y="211">90% 其余</text>
+
+  <text class="lbl" x="44" y="278">缓存命中率约 0.99</text>
+  <rect class="seg2" x="330" y="262" width="269" height="30" rx="4"/>
+  <text class="vin" x="587" y="283">tokenization 约 64%</text>
+  <rect class="seg1" x="599" y="262" width="151" height="30" rx="4"/>
+  <text class="val" x="670" y="283">36% 其余</text>
+
+  <line class="grid" x1="44" y1="322" x2="1156" y2="322"/>
+
+  <text class="fm" x="44" y="356">这条数据的意义</text>
+  <text class="fm2" x="44" y="382">它把"分词是个小事"的判断推翻了一半：当上下文变长、增量变小时，分词的绝对耗时虽小，却成为无法被并行掩盖的串行环节。</text>
+  <text class="fm2" x="44" y="406">实践上对应三条应对：把分词器换成实现更快的版本、对固定前缀提前编码并缓存、以及在服务端把分词与 prompt 组装并行化。</text>
+
+  <line class="grid" x1="44" y1="428" x2="1156" y2="428"/>
+  <text class="foot" x="44" y="452">口径：上图为按原文比例绘制的构成示意，条形长度代表相对占比；原文报告的是特定 agent 生态与特定请求形态下的测量，不等于所有应用的普遍比例。</text>
+</svg>

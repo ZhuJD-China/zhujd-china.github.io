@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="代码智能体两条路线的演进时间线">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lane{fill:#e8e4dc;font:500 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it{fill:#0b0b10;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it2{fill:#e8e4dc;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .yr{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .a{fill:#c9a96a}
+    .b{fill:#7aa2c8}
+    .c{fill:#cf5a50}
+    .ln{stroke:#e8e4dc;stroke-opacity:.18;stroke-width:1.2;fill:none}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="56">两条路线的六轮交替：模型升级与产品化节奏</text>
+  <text class="sub" x="44" y="86">横轴为时间。两条线的产品化程度在同一区间内多次交替，差异主要来自模型发布与开放范围的组合</text>
+
+  <line class="grid" x1="200" y1="118" x2="200" y2="440"/>
+  <line class="grid" x1="350" y1="118" x2="350" y2="440"/>
+  <line class="grid" x1="500" y1="118" x2="500" y2="440"/>
+  <line class="grid" x1="650" y1="118" x2="650" y2="440"/>
+  <line class="grid" x1="800" y1="118" x2="800" y2="440"/>
+  <line class="grid" x1="950" y1="118" x2="950" y2="440"/>
+  <line class="grid" x1="1100" y1="118" x2="1100" y2="440"/>
+  <text class="yr" x="200" y="112" text-anchor="middle">2021</text>
+  <text class="yr" x="350" y="112" text-anchor="middle">2023</text>
+  <text class="yr" x="500" y="112" text-anchor="middle">2024</text>
+  <text class="yr" x="650" y="112" text-anchor="middle">2025 上</text>
+  <text class="yr" x="800" y="112" text-anchor="middle">2025 下</text>
+  <text class="yr" x="950" y="112" text-anchor="middle">2026 上</text>
+  <text class="yr" x="1100" y="112" text-anchor="middle">2026 下</text>
+
+  <text class="lane" x="44" y="162">Codex 线</text>
+  <rect class="a" x="210" y="146" width="130" height="24" rx="5"/><text class="it" x="220" y="162">研究原型</text>
+  <rect class="a" x="510" y="146" width="140" height="24" rx="5"/><text class="it" x="520" y="162">云端开放试用</text>
+  <rect class="a" x="660" y="146" width="150" height="24" rx="5"/><text class="it" x="670" y="162">订阅制产品化</text>
+  <rect class="a" x="800" y="146" width="140" height="24" rx="5"/><text class="it" x="810" y="162">模型换血</text>
+  <rect class="a" x="960" y="146" width="140" height="24" rx="5"/><text class="it" x="970" y="162">编码效率口径</text>
+  <path class="ln" d="M186 182 L1156 182"/>
+
+  <text class="lane" x="44" y="242">Claude Code 线</text>
+  <rect class="b" x="440" y="226" width="150" height="24" rx="5"/><text class="it2" x="450" y="242">研究预览发布</text>
+  <rect class="b" x="580" y="226" width="140" height="24" rx="5"/><text class="it2" x="590" y="242">终端内可用</text>
+  <rect class="b" x="800" y="226" width="160" height="24" rx="5"/><text class="it2" x="810" y="242">平台化与团队版</text>
+  <rect class="b" x="960" y="226" width="160" height="24" rx="5"/><text class="it2" x="970" y="242">本地客户端与后台</text>
+  <path class="ln" d="M446 262 L1156 262"/>
+
+  <text class="lane" x="44" y="322">共同的外部约束</text>
+  <rect class="c" x="440" y="306" width="150" height="24" rx="5"/><text class="it2" x="450" y="322">价格与订阅档</text>
+  <rect class="c" x="660" y="306" width="150" height="24" rx="5"/><text class="it2" x="670" y="322">上下文与限额</text>
+  <rect class="c" x="800" y="306" width="150" height="24" rx="5"/><text class="it2" x="810" y="322">模型与工具边界</text>
+  <rect class="c" x="960" y="306" width="150" height="24" rx="5"/><text class="it2" x="970" y="322">评测口径争议</text>
+  <path class="ln" d="M446 342 L1156 342"/>
+
+  <line class="grid" x1="44" y1="360" x2="1156" y2="360"/>
+  <text class="foot" x="44" y="388">读法一：两条线的产品化节奏高度交错，因此"谁领先"这类结论只在指定时间点成立，跨半年的比较通常没有意义。</text>
+  <text class="foot" x="44" y="416">读法二：真正的差异不在发布时间，而在开放范围与运行位置——终端内运行、后台并行执行、沙箱隔离这三件事决定了它们能否进入日常开发流程。</text>
+  <text class="foot" x="44" y="444">读法三：第三行是与产品无关的外部变量。价格、上下文长度、限额与工具边界的变化往往比模型本身更能影响实际使用体验。</text>
+  <text class="foot" x="44" y="472">本图只标示各阶段的起止区间与性质，不含版本号、价格与性能数字；具体节点与数字需按官方发布记录逐条核对。</text>
+  <text class="foot" x="44" y="500">评测方面需注意：公开的执行式基准分数高度依赖 harness 实现与是否允许网络与工具，同一模型在不同设置下的通过率可以相差数十个百分点，横向比较必须核对设置。</text>
+</svg>

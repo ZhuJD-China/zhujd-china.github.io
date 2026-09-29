@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="100%" role="img" aria-label="评测体系的五层结构与各自失效方式">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lv{fill:#0b0b10;font:700 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .nm{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#6b675c;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .L1{fill:#3a3a44}
+    .L2{fill:#7aa2c8}
+    .L3{fill:#c9a96a}
+    .L4{fill:#cf5a50}
+    .L5{fill:#9a7d45}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="520" rx="14"/>
+  <text class="ttl" x="44" y="56">评测体系应有的五层，而不是一张榜单</text>
+  <text class="sub" x="44" y="86">每一层测的是不同东西，也有不同的失效方式。真实结论需要多层交叉，单一指标只能作为粗筛</text>
+
+  <text class="cm" x="60" y="140">层</text>
+  <text class="cm" x="150" y="140">测什么</text>
+  <text class="cm" x="420" y="140">常见形式</text>
+  <text class="cm" x="700" y="140">典型失效方式</text>
+  <text class="cm" x="1060" y="140">成本</text>
+  <line class="L1" x1="44" y1="150" x2="1156" y2="150" stroke-opacity=".4"/>
+
+  <rect class="L1" x="44" y="164" width="10" height="48" rx="3"/>
+  <text class="nm" x="66" y="186">一 静态题集</text>
+  <text class="ds" x="150" y="186">理解、知识、推理</text>
+  <text class="ds" x="420" y="186">固定选择题、多任务套件</text>
+  <text class="ds" x="700" y="186">被训练数据覆盖，触顶后无区分度</text>
+  <text class="ds" x="1060" y="186">低</text>
+
+  <rect class="L2" x="44" y="224" width="10" height="48" rx="3"/>
+  <text class="nm" x="66" y="246">二 人类偏好</text>
+  <text class="ds" x="150" y="246">有用性、风格、安全感</text>
+  <text class="ds" x="420" y="246">成对比较投票、榜单</text>
+  <text class="ds" x="700" y="246">长度与格式偏好、投票人群偏差</text>
+  <text class="ds" x="1060" y="246">中</text>
+
+  <rect class="L3" x="44" y="284" width="10" height="48" rx="3"/>
+  <text class="nm" x="66" y="306">三 执行式</text>
+  <text class="ds" x="150" y="306">真实任务能否做完</text>
+  <text class="ds" x="420" y="306">带环境的通过率、终端与仓库任务</text>
+  <text class="ds" x="700" y="306">改测试、绕路径、针对评分优化</text>
+  <text class="ds" x="1060" y="306">高</text>
+
+  <rect class="L4" x="44" y="344" width="10" height="48" rx="3"/>
+  <text class="nm" x="66" y="366">四 安全与鲁棒</text>
+  <text class="ds" x="150" y="366">失效模式是否可控</text>
+  <text class="ds" x="420" y="366">对抗样本、极端场景、故障注入</text>
+  <text class="ds" x="700" y="366">场景分布与真实风险不匹配</text>
+  <text class="ds" x="1060" y="366">高</text>
+
+  <rect class="L5" x="44" y="404" width="10" height="48" rx="3"/>
+  <text class="nm" x="66" y="426">五 抗污染</text>
+  <text class="ds" x="150" y="426">评测本身是否可信</text>
+  <text class="ds" x="420" y="426">滚动新题、留出集、污染检测</text>
+  <text class="ds" x="420" y="446"></text>
+  <text class="ds" x="700" y="426">检测方法本身被规避</text>
+  <text class="ds" x="1060" y="426">中</text>
+
+  <line class="L2" x1="44" y1="466" x2="1156" y2="466" stroke-opacity=".25"/>
+  <text class="ds" x="44" y="492">使用建议：一二层用于快速横向比较，三层用于判断"能不能用"，四层用于判断"敢不敢用"，五层用于判断前四层的分数还能不能信。缺第五层时，前四层的分数都应打折看待。</text>
+  <text class="foot" x="44" y="514">本图为分层结构示意，不含任何具体基准的分数；成本列按搭建与维护的大致量级定性标注。</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" width="100%" role="img" aria-label="两个智能体的能力与商业模式对照矩阵">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .dim{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .a{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .b{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .hdA{fill:#0b0b10;font:700 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hdB{fill:#0b0b10;font:700 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .boxA{fill:#1a1712;stroke:#c9a96a;stroke-width:1.2}
+    .boxB{fill:#14161c;stroke:#7aa2c8;stroke-width:1.2}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="480" rx="14"/>
+  <text class="ttl" x="44" y="56">应该比什么：六维对照框架</text>
+  <text class="sub" x="44" y="86">比"谁的分数高"容易得到过期结论；下面六个维度中，只有前三项与模型强相关</text>
+
+  <rect class="boxA" x="300" y="106" width="400" height="34" rx="6"/>
+  <text class="hdA" x="320" y="129">一：云端优先形态</text>
+  <rect class="boxB" x="720" y="106" width="400" height="34" rx="6"/>
+  <text class="hdB" x="740" y="129">二：终端原生形态</text>
+
+  <text class="dim" x="44" y="172">1 底层模型</text>
+  <text class="a" x="300" y="172">自研模型独占，同版本优先供给</text>
+  <text class="b" x="720" y="172">自研模型，多个产品线共享</text>
+
+  <line class="grid" x1="44" y1="186" x2="1156" y2="186"/>
+
+  <text class="dim" x="44" y="216">2 上下文与限额</text>
+  <text class="a" x="300" y="216">额度按周或按任务，重任务易触顶</text>
+  <text class="b" x="720" y="216">按订阅档分级，长会话需配合压缩</text>
+
+  <line class="grid" x1="44" y1="230" x2="1156" y2="230"/>
+
+  <text class="dim" x="44" y="260">3 工具生态</text>
+  <text class="a" x="300" y="260">沙箱化执行，工具集受限于托管环境</text>
+  <text class="b" x="720" y="260">直接调用本地工具链与开发环境</text>
+
+  <line class="grid" x1="44" y1="274" x2="1156" y2="274"/>
+
+  <text class="dim" x="44" y="304">4 运行位置</text>
+  <text class="a" x="300" y="304">服务端为主，适合大规模并行任务</text>
+  <text class="b" x="720" y="304">本地为主，兼顾后台与多会话</text>
+
+  <line class="grid" x1="44" y1="318" x2="1156" y2="318"/>
+
+  <text class="dim" x="44" y="348">5 计费方式</text>
+  <text class="a" x="300" y="348">订阅为主，任务密集时边际成本上升</text>
+  <text class="b" x="720" y="348">订阅加按量，团队版按席位</text>
+
+  <line class="grid" x1="44" y1="362" x2="1156" y2="362"/>
+
+  <text class="dim" x="44" y="392">6 数据与隐私</text>
+  <text class="a" x="300" y="392">代码需上云，私有仓库需额外配置</text>
+  <text class="b" x="720" y="392">代码可留在本地，团队侧需定策略</text>
+
+  <line class="grid" x1="44" y1="406" x2="1156" y2="406"/>
+  <text class="foot" x="44" y="432">本图为对照框架，每格为两类形态的典型取舍，不代表任何具体版本的实际配置；具体限额、价格与工具边界随版本变化，需按官方文档核对。</text>
+  <text class="foot" x="44" y="458">使用建议：前四行决定"能不能用"，第五行决定"用得起吗"，第六行决定"敢不敢用"。跨产品的公开分数只能作为第五行的参考。</text>
+</svg>

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" width="100%" role="img" aria-label="权重量化方法的演进谱系">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .lane{fill:#e8e4dc;font:500 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it{fill:#0b0b10;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .it2{fill:#e8e4dc;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .yr{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .a{fill:#c9a96a}
+    .b{fill:#7aa2c8}
+    .c{fill:#cf5a50}
+    .ln{stroke:#e8e4dc;stroke-opacity:.18;stroke-width:1.2;fill:none}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="470" rx="14"/>
+  <text class="ttl" x="44" y="56">量化方法的五代演进</text>
+  <text class="sub" x="44" y="86">横轴为首次公开年份。每一代都在回答同一个问题：如何在更少的位宽下少损失一点</text>
+
+  <line class="grid" x1="220" y1="120" x2="220" y2="330"/>
+  <line class="grid" x1="400" y1="120" x2="400" y2="330"/>
+  <line class="grid" x1="580" y1="120" x2="580" y2="330"/>
+  <line class="grid" x1="760" y1="120" x2="760" y2="330"/>
+  <line class="grid" x1="940" y1="120" x2="940" y2="330"/>
+  <line class="grid" x1="1120" y1="120" x2="1120" y2="330"/>
+  <text class="yr" x="220" y="114" text-anchor="middle">2018</text>
+  <text class="yr" x="400" y="114" text-anchor="middle">2020</text>
+  <text class="yr" x="580" y="114" text-anchor="middle">2022</text>
+  <text class="yr" x="760" y="114" text-anchor="middle">2024</text>
+  <text class="yr" x="940" y="114" text-anchor="middle">2025</text>
+  <text class="yr" x="1120" y="114" text-anchor="middle">2026</text>
+
+  <text class="lane" x="44" y="164">第一代</text>
+  <rect class="a" x="230" y="148" width="160" height="24" rx="5"/><text class="it" x="240" y="164">训练后量化 PTQ</text>
+  <rect class="a" x="400" y="148" width="170" height="24" rx="5"/><text class="it" x="410" y="164">逐层最小化权重误差</text>
+  <path class="ln" d="M186 182 L580 182"/>
+
+  <text class="lane" x="44" y="224">第二代</text>
+  <rect class="b" x="590" y="208" width="150" height="24" rx="5"/><text class="it2" x="600" y="224">GPTQ 逐层校准</text>
+  <rect class="b" x="750" y="208" width="160" height="24" rx="5"/><text class="it2" x="760" y="224">AWQ 显著通道保护</text>
+  <path class="ln" d="M596 242 L920 242"/>
+
+  <text class="lane" x="44" y="284">第三代</text>
+  <rect class="c" x="950" y="268" width="150" height="24" rx="5"/><text class="it2" x="960" y="284">QuaRot 旋转变换</text>
+  <path class="ln" d="M956 302 L1156 302"/>
+
+  <text class="lane" x="44" y="344">第四代</text>
+  <rect class="a" x="950" y="328" width="180" height="24" rx="5"/><text class="it" x="960" y="344">原生 FP8 与 FP4</text>
+  <path class="ln" d="M956 362 L1156 362"/>
+
+  <line class="grid" x1="44" y1="386" x2="1156" y2="386"/>
+  <text class="foot" x="44" y="414">代际之间的分界不在位宽，而在"谁来承担误差"：第一代靠训练后统计，第二代靠对权重与通道的挑选，第三代靠等价变换把问题变简单，第四代靠硬件原生支持把精度问题绕开。</text>
+  <text class="foot" x="44" y="440">实践含义：若部署目标是现成显卡与通用框架，第二代方法（GPTQ、AWQ）生态最成熟；若目标是最新加速卡且可接受框架约束，原生 FP8 或 FP4 的性价比通常更好。</text>
+  <text class="foot" x="44" y="466">本图只标示各代方法的首次公开年份与代际归属，不代表其在具体模型上的采用比例；实际选型需按目标硬件、精度要求与是否需要训练分别评估。</text>
+</svg>

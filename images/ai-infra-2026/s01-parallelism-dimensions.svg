@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="100%" role="img" aria-label="分布式并行策略的切分维度对照">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#6b675c;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .a{fill:#c9a96a}
+    .b{fill:#7aa2c8}
+    .c{fill:#cf5a50}
+    .d{fill:#9a7d45}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="520" rx="14"/>
+  <text class="ttl" x="44" y="56">并行的五个切分维度：切什么，就决定了通信什么</text>
+  <text class="sub" x="44" y="86">同一次训练通常同时使用多种并行。下表列出各维度切分的对象、主要集合通信原语，以及它引入的额外开销类型</text>
+
+  <text class="cm" x="60" y="136">策略</text>
+  <text class="cm" x="240" y="136">切分对象</text>
+  <text class="cm" x="500" y="136">主要通信</text>
+  <text class="cm" x="700" y="136">适合场景</text>
+  <text class="cm" x="960" y="136">主要代价</text>
+
+  <rect class="a" x="44" y="150" width="1112" height="42" rx="6" fill-opacity=".10"/>
+  <text class="nm" x="60" y="177">数据并行</text>
+  <text class="ds" x="240" y="177">batch 维</text>
+  <text class="ds" x="500" y="177">梯度 AllReduce</text>
+  <text class="ds" x="700" y="177">模型放得下时最省心</text>
+  <text class="ds" x="960" y="177">通信量随步数线性增长</text>
+
+  <text class="nm" x="60" y="219">张量并行</text>
+  <text class="ds" x="240" y="219">权重矩阵维</text>
+  <text class="ds" x="500" y="219">层内 AllReduce 或 ReduceScatter 加 AllGather</text>
+  <text class="ds" x="700" y="219">单层放不下时必须用</text>
+  <text class="ds" x="960" y="219">每层都要通信，且卡间需高带宽</text>
+
+  <text class="nm" x="60" y="261">流水并行</text>
+  <text class="ds" x="240" y="261">层维分段</text>
+  <text class="ds" x="500" y="261">相邻段之间的点对点激活</text>
+  <text class="ds" x="700" y="261">层数多、层内放不下时</text>
+  <text class="ds" x="960" y="261">流水气泡与调度复杂</text>
+
+  <text class="nm" x="60" y="303">序列并行</text>
+  <text class="ds" x="240" y="303">序列维与部分归约维</text>
+  <text class="ds" x="500" y="303">AllGather 与 ReduceScatter 交替</text>
+  <text class="ds" x="700" y="303">长上下文激活过大时</text>
+  <text class="ds" x="700" y="325">通常与张量并行组合使用</text>
+  <text class="ds" x="960" y="303">通信量与张量并行同阶</text>
+
+  <text class="nm" x="60" y="345">专家并行</text>
+  <text class="ds" x="240" y="345">MoE 专家维</text>
+  <text class="ds" x="500" y="345">AllToAll 派发与回收 token</text>
+  <text class="ds" x="700" y="345">MoE 模型必然使用</text>
+  <text class="ds" x="960" y="345">对网络与负载均衡最敏感</text>
+
+  <line class="grid" x1="44" y1="366" x2="1156" y2="366"/>
+  <text class="nm" x="44" y="394">参数与优化器状态切分：ZeRO 一到三阶段、FSDP 一到三代</text>
+  <text class="ds2" x="44" y="418">这类方法不改模型计算图，只改"谁存哪一份"，从只切优化器状态、到切优化器状态与梯度、</text>
+  <text class="ds2" x="44" y="438">到连参数一起切，通信量随之上升而显存占用单调下降。Sharding 与上表正交：它切的是副本，并行切的是计算。</text>
+
+  <line class="grid" x1="44" y1="456" x2="1156" y2="456"/>
+  <text class="foot" x="44" y="480">实用判据：先用数据并行与优化器状态切分把显存压到能放下为止；单层仍放不下再加张量并行；</text>
+  <text class="foot" x="44" y="504">层数不够切或长上下文激活过大时再引入序列并行；MoE 则必须接受 AllToAll 的代价。</text>
+</svg>

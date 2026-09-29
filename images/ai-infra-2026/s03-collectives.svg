@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" width="100%" role="img" aria-label="集合通信原语的通信量对照">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .a{fill:#c9a96a}
+    .b{fill:#7aa2c8}
+    .c{fill:#cf5a50}
+    .d{fill:#9a7d45}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="480" rx="14"/>
+  <text class="ttl" x="44" y="56">集合通信原语：谁往谁发，发多少</text>
+  <text class="sub" x="44" y="86">设每卡持有 m 字节、共 p 张卡。下表给出每张卡在一次调用中的发送与接收总量，是判断并行策略通信开销的基本口径</text>
+
+  <text class="nm" x="60" y="132">原语</text>
+  <text class="nm" x="260" y="132">语义</text>
+  <text class="nm" x="520" y="132">每卡发送</text>
+  <text class="nm" x="700" y="132">每卡接收</text>
+  <text class="nm" x="900" y="132">典型用途</text>
+
+  <rect class="a" x="44" y="146" width="1112" height="40" rx="6" fill-opacity=".10"/>
+  <text class="nm" x="60" y="172">AllReduce</text>
+  <text class="ds" x="260" y="172">规约后每卡都得同一份</text>
+  <text class="ds" x="520" y="172">2m(p-1)/p</text>
+  <text class="ds" x="700" y="172">2m(p-1)/p</text>
+  <text class="ds" x="900" y="165">张量并行层内规约</text>
+  <text class="ds2" x="900" y="183">梯度同步</text>
+
+  <text class="nm" x="60" y="216">ReduceScatter</text>
+  <text class="ds" x="260" y="216">规约后每卡只留一片</text>
+  <text class="ds" x="520" y="216">2m(p-1)/p</text>
+  <text class="ds" x="700" y="216">2m(p-1)/p</text>
+  <text class="ds" x="900" y="209">与 AllGather 配对，</text>
+  <text class="ds2" x="900" y="227">替代 AllReduce</text>
+
+  <text class="nm" x="60" y="260">AllGather</text>
+  <text class="ds" x="260" y="260">每卡汇总全片</text>
+  <text class="ds" x="520" y="260">m(p-1)/p</text>
+  <text class="ds" x="700" y="260">m(p-1)/p</text>
+  <text class="ds" x="900" y="260">参数分片后按层重建</text>
+
+  <rect class="c" x="44" y="282" width="1112" height="40" rx="6" fill-opacity=".08"/>
+  <text class="nm" x="60" y="308">AllToAll</text>
+  <text class="ds" x="260" y="308">每卡向每卡发不同片</text>
+  <text class="ds" x="520" y="308">m(p-1)/p</text>
+  <text class="ds" x="700" y="308">m(p-1)/p</text>
+  <text class="ds" x="900" y="301">MoE 派发与回收 token</text>
+  <text class="ds2" x="900" y="319">对互联最敏感</text>
+
+  <text class="nm" x="60" y="352">点对点</text>
+  <text class="ds" x="260" y="352">两两直传</text>
+  <text class="ds" x="520" y="352">m</text>
+  <text class="ds" x="700" y="352">m</text>
+  <text class="ds" x="900" y="352">流水并行的段间激活</text>
+
+  <line class="grid" x1="44" y1="368" x2="1156" y2="368"/>
+  <text class="fm" x="44" y="396">三条可直接使用的推论</text>
+  <text class="fm2" x="44" y="418">一，AllReduce 与 AllGather 加 ReduceScatter 的通信量相同，但后者把结果留在本卡，前向与反向都能用，</text>
+  <text class="fm2" x="44" y="438">因此全切参数时几乎总是这一对而非 AllReduce。</text>
+  <text class="fm2" x="44" y="458">二，AllToAll 每卡收发量看似不多，实际是全连接模式，对节点内外带宽差异最敏感。</text>
+  <text class="foot" x="44" y="478">三，点对点在规模小时最划算，但随段数增加而变成同步屏障；流水并行的气泡本质就是等待最慢的段。</text>
+  <text class="foot" x="44" y="500">口径：通信量按每卡持有 m 字节、p 张卡的理想模型计算，未计入协议开销、拓扑不对称与实现细节，实际耗时应以测量为准。</text>
+</svg>

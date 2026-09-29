@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="低精度格式与硬件支持矩阵">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm2{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .on{fill:#1a1712;stroke:#c9a96a;stroke-width:1.2}
+    .off{fill:#14141c;stroke:#6b675c;stroke-width:1;stroke-dasharray:4 3}
+    .part{fill:#14161c;stroke:#7aa2c8;stroke-width:1.2}
+    .cellT{fill:#e8e4dc;font:600 13px 'Noto Sans SC','PingFang SC',sans-serif}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+  <text class="ttl" x="44" y="56">低精度格式与硬件支持：三条并行的推进线</text>
+  <text class="sub" x="44" y="86">格式演进（更小的位宽）、标准演进（微缩放格式）、硬件演进（原生支持）三者互相咬合，缺一条则收益打折</text>
+
+  <!-- lane headers -->
+  <text class="hd" x="44" y="128">格式与位宽</text>
+  <line class="grid" x1="200" y1="112" x2="1156" y2="112"/>
+
+  <text class="hd" x="44" y="184">标准</text>
+  <rect class="part" x="200" y="168" width="230" height="26" rx="5"/>
+  <text class="cellT" x="214" y="186">OCP 微缩放格式（MXFP）</text>
+  <rect class="part" x="450" y="168" width="200" height="26" rx="5"/>
+  <text class="cellT" x="464" y="186">BF16（广泛可用）</text>
+
+  <text class="hd" x="44" y="240">硬件</text>
+  <rect class="on" x="200" y="224" width="200" height="26" rx="5"/>
+  <text class="cellT" x="214" y="242">Hopper 原生 FP8</text>
+  <rect class="on" x="420" y="224" width="230" height="26" rx="5"/>
+  <text class="cellT" x="434" y="242">Blackwell 原生 FP4 与 FP6</text>
+  <rect class="part" x="670" y="224" width="200" height="26" rx="5"/>
+  <text class="cellT" x="684" y="242">消费级可软件模拟</text>
+
+  <line class="grid" x1="44" y1="276" x2="1156" y2="276"/>
+
+  <text class="hd" x="44" y="312">位宽阶梯与典型角色</text>
+  <rect class="on" x="200" y="296" width="150" height="26" rx="5"/><text class="cellT" x="214" y="314">FP32 训练主档</text>
+  <rect class="on" x="360" y="296" width="150" height="26" rx="5"/><text class="cellT" x="374" y="314">FP16 / BF16 主流训练</text>
+  <rect class="on" x="520" y="296" width="150" height="26" rx="5"/><text class="cellT" x="534" y="314">FP8 训练与推理</text>
+  <rect class="part" x="680" y="296" width="150" height="26" rx="5"/><text class="cellT" x="694" y="314">INT8 权重量化</text>
+  <rect class="part" x="840" y="296" width="150" height="26" rx="5"/><text class="cellT" x="854" y="314">INT4 权重量化</text>
+  <rect class="off" x="1000" y="296" width="156" height="26" rx="5"/><text class="cellT" x="1014" y="314">FP4 原生与 MXFP4</text>
+
+  <line class="grid" x1="44" y1="350" x2="1156" y2="350"/>
+
+  <text class="hd" x="44" y="386">两个常被混淆的概念</text>
+  <rect class="b1x" x="200" y="366" width="0" height="0"/>
+  <rect class="on" x="200" y="366" width="220" height="26" rx="5"/>
+  <text class="cellT" x="214" y="384">INT4：整数格式</text>
+  <rect class="part" x="440" y="366" width="280" height="26" rx="5"/>
+  <text class="cellT" x="454" y="384">NVFP4 / MXFP4：浮点格式</text>
+  <text class="cm2" x="200" y="414">前者在相同位宽下动态范围更窄但有现成的高效整数内核；后者保留浮点语义，依赖 16 元素共享指数，换来更低量化误差与更好的训练可用性。</text>
+
+  <text class="cm" x="200" y="446">判断一份量化方案的三个问题：权重与激活各用几位？是否为原生格式（有硬件内核）？分组缩放因子如何设定？后两项决定了同样的位宽能换来多少实际收益。</text>
+
+  <line class="grid" x1="44" y1="466" x2="1156" y2="466"/>
+  <text class="foot" x="44" y="490">本图为分类与硬件支持的定性对照，不含吞吐或误差的实测数字；具体支持情况随驱动、框架与算子实现而变，需按目标环境核对官方文档。</text>
+</svg>

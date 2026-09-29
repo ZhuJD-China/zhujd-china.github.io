@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="100%" role="img" aria-label="基准饱和曲线与失效原因">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .fm{fill:#e8e4dc;font:500 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.12;stroke-width:1}
+    .c1{stroke:#c9a96a;stroke-width:2.4;fill:none}
+    .c2{stroke:#7aa2c8;stroke-width:2.4;fill:none}
+    .c3{stroke:#cf5a50;stroke-width:2.4;fill:none}
+    .d1{fill:#c9a96a}
+    .d2{fill:#7aa2c8}
+    .d3{fill:#cf5a50}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="500" rx="14"/>
+  <text class="ttl" x="44" y="56">饱和是必然的：曲线形状与失效原因</text>
+  <text class="sub" x="44" y="86">横轴为模型能力的相对提升，纵轴为基准得分。曲线的斜率随时间下降，区别只在于触顶后的失效方式不同</text>
+
+  <line class="grid" x1="180" y1="120" x2="180" y2="380"/>
+  <line class="grid" x1="180" y1="380" x2="1120" y2="380"/>
+  <line class="grid" x1="180" y1="120" x2="180" y2="120" stroke-opacity="0"/>
+  <text class="ax" x="180" y="400" text-anchor="middle">能力低</text>
+  <text class="ax" x="1120" y="400" text-anchor="middle">能力高</text>
+  <text class="ax" x="160" y="128" text-anchor="end">满分</text>
+  <text class="ax" x="160" y="380" text-anchor="end">基线</text>
+
+  <path class="c1" d="M180 360 C 380 300, 520 210, 660 168 C 780 134, 900 126, 1120 122"/>
+  <circle class="d1" cx="620" cy="180" r="5"/>
+  <text class="fm" x="404" y="168">固定题集：触顶后不再区分</text>
+  <text class="fm2" x="404" y="190">失效原因：训练数据覆盖题目，剩余错误多为标注噪声</text>
+
+  <path class="c2" d="M180 350 C 360 250, 520 170, 700 142 C 840 122, 980 130, 1120 158"/>
+  <circle class="d2" cx="880" cy="148" r="5"/>
+  <text class="fm" x="700" y="112">偏好排序：头部挤在一起</text>
+  <text class="fm2" x="700" y="134">失效原因：投票被风格与长度带偏</text>
+
+  <path class="c3" d="M180 358 C 400 296, 560 214, 720 176 C 860 144, 980 136, 1120 134"/>
+  <circle class="d3" cx="880" cy="222" r="5"/>
+  <text class="fm" x="700" y="240">执行类：会反弹</text>
+  <text class="fm2" x="700" y="262">失效方式不是触顶而是钻空子：改测试、绕路径</text>
+
+  <line class="grid" x1="44" y1="416" x2="1156" y2="416"/>
+  <text class="fm" x="44" y="444">为什么执行类会出现反弹</text>
+  <text class="fm2" x="44" y="468">固定题集与偏好排序的得分由模型直接产出，优化它只需改变输出的分布；</text>
+  <text class="fm2" x="44" y="490">执行类任务的得分由外部环境判定，优化它可以改动评分与被评分两侧的接口。</text>
+  <text class="fm2" x="44" y="512">因此执行类基准必须配套防作弊的评分环境、版本化与人工抽检，这也直接决定了下一张图里的分层方式。</text>
+</svg>

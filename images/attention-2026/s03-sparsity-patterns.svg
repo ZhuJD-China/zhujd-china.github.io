@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="100%" role="img" aria-label="注意力稀疏模式家族对照">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .yr{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .dense{fill:#3a3a44}
+    .win{fill:#7aa2c8}
+    .glo{fill:#c9a96a}
+    .sel{fill:#cf5a50}
+    .lin{fill:#9a7d45}
+    .rowbg{fill:#ffffff;fill-opacity:.022}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="520" rx="14"/>
+  <text class="ttl" x="44" y="56">注意力稀疏模式家族：谁在什么时候看哪些位置</text>
+  <text class="sub" x="44" y="86">横轴为序列位置，一格代表一个 token 块；色块表示被计算注意力的位置，空白表示跳过</text>
+
+  <!-- column headers -->
+  <text class="ax" x="470" y="112" text-anchor="middle">因果方向（只能看左侧与自身）</text>
+  <line class="grid" x1="330" y1="122" x2="1130" y2="122"/>
+  <text class="ax" x="330" y="140">当前位置</text>
+  <text class="ax" x="1130" y="140" text-anchor="end">序列开头</text>
+  <line class="grid" x1="330" y1="140" x2="330" y2="404"/>
+  <line class="grid" x1="395" y1="140" x2="395" y2="404"/>
+  <line class="grid" x1="460" y1="140" x2="460" y2="404"/>
+  <line class="grid" x1="525" y1="140" x2="525" y2="404"/>
+  <line class="grid" x1="590" y1="140" x2="590" y2="404"/>
+  <line class="grid" x1="655" y1="140" x2="655" y2="404"/>
+  <line class="grid" x1="720" y1="140" x2="720" y2="404"/>
+  <line class="grid" x1="785" y1="140" x2="785" y2="404"/>
+  <line class="grid" x1="850" y1="140" x2="850" y2="404"/>
+  <line class="grid" x1="915" y1="140" x2="915" y2="404"/>
+  <line class="grid" x1="980" y1="140" x2="980" y2="404"/>
+  <line class="grid" x1="1045" y1="140" x2="1045" y2="404"/>
+  <line class="grid" x1="1110" y1="140" x2="1110" y2="404"/>
+
+  <!-- row 1: 稠密 -->
+  <rect class="rowbg" x="44" y="150" width="1112" height="36" rx="6"/>
+  <text class="nm" x="56" y="172">全注意力（标准）</text>
+  <text class="cm" x="56" y="190">O(n²)，无任何跳过</text>
+  <rect class="dense" x="330" y="158" width="800" height="20" rx="4"/>
+
+  <!-- row 2: 滑窗 -->
+  <rect class="rowbg" x="44" y="192" width="1112" height="36" rx="6"/>
+  <text class="nm" x="56" y="214">滑动窗口</text>
+  <text class="cm" x="56" y="232">只看附近 w 个，O(n·w)</text>
+  <rect class="win" x="980" y="200" width="150" height="20" rx="4"/>
+
+  <!-- row 3: 滑窗+全局 -->
+  <rect class="rowbg" x="44" y="234" width="1112" height="36" rx="6"/>
+  <text class="nm" x="56" y="256">滑窗加全局 token</text>
+  <text class="cm" x="56" y="274">少数特殊位置与所有位置互看</text>
+  <rect class="glo" x="330" y="242" width="30" height="20" rx="4"/>
+  <rect class="glo" x="850" y="242" width="30" height="20" rx="4"/>
+  <rect class="win" x="980" y="242" width="150" height="20" rx="4"/>
+
+  <!-- row 4: 静态块稀疏 -->
+  <rect class="rowbg" x="44" y="276" width="1112" height="36" rx="6"/>
+  <text class="nm" x="56" y="298">块稀疏（MoBA 等）</text>
+  <text class="cm" x="56" y="316">固定选块 + 路由式选择</text>
+  <rect class="glo" x="330" y="284" width="150" height="20" rx="4"/>
+  <rect class="glo" x="655" y="284" width="150" height="20" rx="4"/>
+  <rect class="win" x="980" y="284" width="150" height="20" rx="4"/>
+
+  <!-- row 5: 可学习选择 -->
+  <rect class="rowbg" x="44" y="318" width="1112" height="36" rx="6"/>
+  <text class="nm" x="56" y="340">可学习选择（NSA、DSA）</text>
+  <text class="cm" x="56" y="358">索引器端到端学重要块</text>
+  <rect class="sel" x="330" y="326" width="90" height="20" rx="4"/>
+  <rect class="sel" x="590" y="326" width="90" height="20" rx="4"/>
+  <rect class="sel" x="850" y="326" width="90" height="20" rx="4"/>
+  <rect class="win" x="980" y="326" width="150" height="20" rx="4"/>
+
+  <!-- row 6: 线性 -->
+  <rect class="rowbg" x="44" y="360" width="1112" height="36" rx="6"/>
+  <text class="nm" x="56" y="382">线性与门控线性注意力</text>
+  <text class="cm" x="56" y="400">改写计算顺序，近线性</text>
+  <rect class="lin" x="330" y="368" width="800" height="20" rx="4"/>
+
+  <line class="grid" x1="44" y1="416" x2="1156" y2="416"/>
+  <text class="foot" x="44" y="442">从第二行到第五行的共同点：把"每个 token 看全部"改为"只看一部分"，差别在于选哪些位置——人工设定、路由式选择，还是端到端学习。</text>
+  <text class="foot" x="44" y="468">第六行是另一类思路：不减少看多少，而是把先算相似度再加权求和的顺序换成可结合的形式，使复杂度近线性，代价是需要门控与状态递推来补表达力。</text>
+  <text class="foot" x="44" y="494">本图为结构示意，色块宽度不代表实际块大小；具体实现中 NSA 的压缩分支还会先对历史做摘要再选择，DSA 则用轻量索引器直接算 top-k。</text>
+</svg>

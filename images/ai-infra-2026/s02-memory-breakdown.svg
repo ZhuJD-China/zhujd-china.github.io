@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="100%" role="img" aria-label="训练显存的四份构成与切分方式">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:500 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .fm2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .s1{fill:#cf5a50}
+    .s2{fill:#c9a96a}
+    .s3{fill:#7aa2c8}
+    .s4{fill:#9a7d45}
+    .tot{fill:#e8e4dc;fill-opacity:.16;stroke:#e8e4dc;stroke-opacity:.35;stroke-width:1}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="500" rx="14"/>
+  <text class="ttl" x="44" y="56">训练显存的四份构成</text>
+  <text class="sub" x="44" y="86">以混合精度 Adam 为例的参数态显存；括号内为 fp16 参数加 fp32 优化器状态的常见假设</text>
+
+  <text class="fm" x="44" y="130">优化器状态（Adam：FP32 一阶矩加二阶矩）</text>
+  <text class="fm" x="440" y="130">参数</text>
+  <text class="fm" x="620" y="130">梯度</text>
+  <text class="fm" x="800" y="130">激活（含临时缓冲）</text>
+  <text class="ax" x="1156" y="130" text-anchor="end">合计约 16 字节每参数</text>
+
+  <!-- stacked bar: total width 1100 = 16 units -> 68.75 px per byte/param -->
+  <rect class="s1" x="56" y="146" width="413" height="56" rx="6"/>
+  <text class="fm2" x="76" y="170" fill="#0b0b10">8 字节</text>
+  <text class="fm2" x="76" y="190" fill="#0b0b10">优化器状态占一半</text>
+
+  <rect class="s2" x="469" y="146" width="69" height="56" rx="6"/>
+  <text class="fm2" x="485" y="178" fill="#0b0b10">2</text>
+
+  <rect class="s3" x="538" y="146" width="69" height="56" rx="6"/>
+  <text class="fm2" x="554" y="178" fill="#0b0b10">2</text>
+
+  <rect class="s4" x="607" y="146" width="275" height="56" rx="6" fill-opacity=".55"/>
+  <text class="fm2" x="627" y="170" fill="#e8e4dc">4 字节（随 batch 与序列长度增长）</text>
+  <text class="fm2" x="627" y="190" fill="#e8e4dc">与并行方式强相关</text>
+
+  <line class="grid" x1="56" y1="222" x2="1156" y2="222"/>
+
+  <text class="nm" x="44" y="256">切分策略与每卡保留量</text>
+  <text class="fm2" x="44" y="282">以卡数 N 为例，下表按参数态 16 字节每参数拆分，说明每卡需要保留多少；激活部分不在此列。</text>
+
+  <text class="fm" x="44" y="316">不切分（数据并行）</text>
+  <text class="fm2" x="300" y="316">每卡 16 字节，全量副本</text>
+  <rect class="tot" x="620" y="304" width="536" height="20" rx="4"/>
+
+  <text class="fm" x="44" y="350">切优化器状态</text>
+  <text class="fm2" x="300" y="350">每卡 4 + 8/N 字节</text>
+  <rect class="tot" x="620" y="338" width="150" height="20" rx="4"/>
+  <rect class="s1" x="770" y="338" width="16" height="20" rx="2" fill-opacity=".5"/>
+
+  <text class="fm" x="44" y="384">切优化器状态与梯度</text>
+  <text class="fm2" x="300" y="384">每卡 2 + 6/N 字节</text>
+  <rect class="tot" x="620" y="372" width="75" height="20" rx="4"/>
+  <rect class="s1" x="695" y="372" width="14" height="20" rx="2" fill-opacity=".5"/>
+
+  <text class="fm" x="44" y="418">全切（含参数）</text>
+  <text class="fm2" x="300" y="418">每卡近似 2/N 字节，加一次性参数收集</text>
+  <rect class="tot" x="620" y="406" width="25" height="20" rx="4"/>
+  <rect class="s1" x="645" y="406" width="12" height="20" rx="2" fill-opacity=".5"/>
+
+  <line class="grid" x1="44" y1="440" x2="1156" y2="440"/>
+  <text class="foot" x="44" y="466">要点一：优化器状态在传统混合精度训练里占参数态显存的一半，因此最早被切分；参数本身反而是最后才切的，因为它在前向与反向里每层都要用。</text>
+  <text class="foot" x="44" y="490">要点二：切得越碎，显存越省但通信越重。全切之后每次迭代都要 AllGather 参数，计算与通信的比例明显恶化，这是"显存换带宽"的典型取舍。激活显存另算。</text>
+</svg>
