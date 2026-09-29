@@ -300,11 +300,11 @@ ICLR 2026 的接收列表里有 91 篇量化论文——这个领域并没有"�
 
 ## 12. 参考资料
 
-- Dettmers et al., *LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale*, 2022
-- Frantar et al., *GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers*, ICLR 2023
+- Dettmers et al., *LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale*, NeurIPS 2022（arXiv:2208.07339）
+- Frantar et al., *GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers*, arXiv:2210.17323（arXiv 标注 ICLR 2023）
 - Xiao et al., *SmoothQuant: Accurate and Efficient Post-Training Quantization for Large Language Models*, ICML 2023
-- Lin et al., *AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration*, MLSys 2024
-- Dettmers et al., *QLoRA: Efficient Finetuning of Quantized LLMs*, NeurIPS 2023
+- Lin et al., *AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration*, MLSys 2024 Best Paper
+- Dettmers et al., *QLoRA: Efficient Finetuning of Quantized LLMs*, arXiv:2305.14314（arXiv 仅标注为 NeurIPS 扩展投稿，未见正式收录记录，引用时不建议写 venue）
 - Ashkboos et al., *QuaRot: Outlier-Free 4-Bit Inference in Rotated LLMs*, NeurIPS 2024
 - Liu et al., *SpinQuant: LLM Quantization with Learned Rotations*, ICLR 2025
 - Liu et al., *KIVI: A Tuning-Free Asymmetric 2-bit Quantization for KV Cache*, ICML 2024

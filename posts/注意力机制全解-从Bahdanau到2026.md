@@ -235,6 +235,8 @@ NSA 拿到了 ACL 2025 最佳论文奖，思路是让"哪些 token 重要"变成
 
 三个分支的输出通过一个可学习的门控加权融合。因为整个流程可微分，NSA 可以**从预训练阶段就直接用稀疏注意力训练**（而不是训练用稠密、推理再稀疏化打折扣），论文里报告在 64k 长度下解码、前向、反向传播全阶段都有实打实的加速，同时基准测试效果不输标准全注意力。同期还有 Kimi 团队提出的 **MoBA（Mixture of Block Attention）**，思路类似，是把历史序列切块、用一个类似 MoE 路由的机制挑选相关的块。
 
+NSA 拿下了 **ACL 2025 最佳论文**（官方获奖名单与 Anthology 收录页均可查），这在注意力这类"老问题"里并不常见。它也确实被迅速带走：2025 年 10 月的 **VideoNSA**（arXiv:2510.02295，ICLR 2026）把同一套机制搬到视频多模态模型上，文本保留稠密注意力、只对视频帧用 NSA，报告可稳定扩到 128K token；表格数据方向也出现了 TabNSA（后发表于 Neurocomputing）。一篇方法被快速移植到三个模态，本身就是它工程成熟度的旁证。
+
 ### 6.3 DeepSeek Sparse Attention（DSA，DeepSeek V3.2，2025 年底）
 
 DSA 是 NSA 思路的延续和"精细化"版本，2025 年底随 DeepSeek-V3.2 系列发布，后来被 GLM-5 系列等模型跟进采用。核心是两个组件：
@@ -376,7 +378,8 @@ DeepSeek-V2 论文里一个有意思的消融实验结论是：**GQA 在同等 K
 
 - Attention Is All You Need（Transformer 原始论文）
 - DeepSeek-V2 / V3 / V3.2 / V4 技术报告
-- Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention (arXiv:2502.11089)
+- Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention (arXiv:2502.11089，**ACL 2025 最佳论文**，ACL Anthology 2025.acl-long.1126)
+- VideoNSA: Native Sparse Attention Scales Video Understanding (arXiv:2510.02295, ICLR 2026)
 - FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling (arXiv:2603.05451)
 - Kimi Linear: An Expressive, Efficient Attention Architecture (arXiv:2510.26692)
 - Gated Sparse Attention (arXiv:2601.15305)；MISA: Mixture of Indexer Sparse Attention (arXiv:2605.07363)
