@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" width="100%" role="img" aria-label="三层定位：模型层、决策与执行层、总线层">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#6b675c;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .a{fill:#c9a96a}
+    .b{fill:#7aa2c8}
+    .bad{fill:#cf5a50}
+    .chev{fill:none;stroke:#a09b8d;stroke-opacity:.55;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="650" rx="14"/>
+  <text class="ttl" x="44" y="56">三层定位：模型层、决策与执行层、总线层</text>
+  <text class="sub" x="44" y="86">总线工具插在决策与执行之间，改写模型的输出，不触及模型本身</text>
+
+  <rect class="b" x="44" y="106" width="1112" height="112" rx="6" fill-opacity=".10"/>
+  <text class="nm" x="64" y="138">模型层</text>
+  <text class="bad" x="1136" y="138" text-anchor="end" font-family="'Noto Sans SC','PingFang SC',sans-serif" font-size="12" font-weight="600">不触及 ✗</text>
+  <text class="ds" x="64" y="170">8 路相机 → 视频基础模型 → 占据特征 → 任务头 → 规划控制，v14 起叠加强化学习</text>
+  <text class="ds2" x="64" y="196">这些计算跑在车载算力上，权重编译进固件或者存在分区里，它从来不出现在 CAN 总线上。</text>
+
+  <path class="chev" d="M 596 223 L 603 230 L 596 237"/>
+
+  <rect class="a" x="44" y="244" width="1112" height="76" rx="6" fill-opacity=".10"/>
+  <text class="nm" x="64" y="274">决策与执行层</text>
+  <text class="ds" x="64" y="304">规划输出之后、执行之前。模型本身照常运行、照常输出 —— 既不改占据网络，也不改端到端规划。</text>
+
+  <path class="chev" d="M 596 327 L 603 334 L 596 341"/>
+
+  <rect class="a" x="44" y="350" width="1112" height="76" rx="6" fill-opacity=".24"/>
+  <text class="nm" x="64" y="380">本文解剖的固件：总线工具</text>
+  <text class="cm" x="1136" y="380" text-anchor="end">改写发生在这里 ▲</text>
+  <text class="ds" x="64" y="410">收一帧 → 按位改几个比特 → 以同一 ID 发回去，不产生任何新信号，也不改变帧的 ID。</text>
+
+  <path class="chev" d="M 596 433 L 603 440 L 596 447"/>
+
+  <rect class="b" x="44" y="456" width="1112" height="94" rx="6" fill-opacity=".10"/>
+  <text class="nm" x="64" y="486">总线层</text>
+  <text class="ds" x="64" y="516">500 kbit/s 车身网络承载状态与意图：转向角、纵向加速度请求、档位、故障码，</text>
+  <text class="ds2" x="64" y="540">以及驾驶辅助系统自己写入的少量策略配置。摄像头画面、点云、中间层都不在这里。</text>
+
+  <line class="grid" x1="44" y1="574" x2="1156" y2="574"/>
+  <text class="foot" x="44" y="600">能力上限被两件事锁死：一是被改那条帧原本承载什么语义，帧里没有的东西改不出来；</text>
+  <text class="foot" x="44" y="624">二是接收方是否接受改动，校验、计数、时序任何一项不过，帧就被丢掉。</text>
+</svg>

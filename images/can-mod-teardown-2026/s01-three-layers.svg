@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="三层序列各自住在哪个文件、由谁触发">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#6b675c;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .a{fill:#c9a96a}
+    .b{fill:#7aa2c8}
+    .d{fill:#9a7d45}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="56">三层序列各自住在哪个文件、由谁触发</text>
+  <text class="sub" x="44" y="86">入口只做选板、选车与转发；启动、运行、业务三段各住在两个文件里，触发方式互不相同</text>
+
+  <text class="cm" x="60" y="136">序列</text>
+  <text class="cm" x="250" y="136">住在哪个文件</text>
+  <text class="cm" x="520" y="136">由谁触发</text>
+  <text class="cm" x="810" y="136">这一段做什么</text>
+
+  <rect class="a" x="44" y="150" width="1112" height="86" rx="6" fill-opacity=".10"/>
+  <text class="nm" x="60" y="180">第一层序列</text>
+  <text class="ds2" x="60" y="208">启动 · 第 3 节</text>
+  <text class="ds" x="250" y="180">include/app.h:29-48</text>
+  <text class="ds2" x="250" y="208">appSetup()</text>
+  <text class="ds" x="520" y="180">上电后入口调用一次</text>
+  <text class="ds2" x="520" y="208">顺序固定，handler 先于驱动</text>
+  <text class="ds" x="810" y="180">建 handler → 起串口 → 驱动 init</text>
+  <text class="ds" x="810" y="208">→ 取 filterIds → 装进硬件 → 开中断</text>
+
+  <rect class="b" x="44" y="244" width="1112" height="86" rx="6" fill-opacity=".10"/>
+  <text class="nm" x="60" y="274">第二层序列</text>
+  <text class="ds2" x="60" y="302">运行 · 第 4 节</text>
+  <text class="ds" x="250" y="274">include/app.h:50-63</text>
+  <text class="ds2" x="250" y="302">appLoop()</text>
+  <text class="ds" x="520" y="274">主循环每一圈都调用</text>
+  <text class="ds2" x="520" y="302">frameReady 由 ISR 置位</text>
+  <text class="ds" x="810" y="274">没活直接返回；有活则排空 read()</text>
+  <text class="ds" x="810" y="302">每读到一帧就转给 handler</text>
+
+  <rect class="d" x="44" y="338" width="1112" height="86" rx="6" fill-opacity=".10"/>
+  <text class="nm" x="60" y="368">第三层序列</text>
+  <text class="ds2" x="60" y="396">业务 · 第 5 节</text>
+  <text class="ds" x="250" y="368">include/handlers.h</text>
+  <text class="ds2" x="250" y="396">三个 handleMessage()</text>
+  <text class="ds" x="520" y="368">appLoop() 每读到一帧一次</text>
+  <text class="ds2" x="520" y="396">选型在编译期，运行时无分支</text>
+  <text class="ds" x="810" y="368">按 ID 与 mux 分支 → 改几个比特</text>
+  <text class="ds" x="810" y="396">→ 以同一 ID 发回去</text>
+
+  <line class="grid" x1="44" y1="444" x2="1156" y2="444"/>
+  <text class="nm" x="44" y="472">入口：RP2040CAN.ino 62 行（Arduino）／ src/main.cpp 45 行（PlatformIO），两者等价</text>
+  <text class="ds2" x="44" y="496">只做三件事：选板子、选车型、转发给 app.h —— 业务逻辑一行都不写在入口里。</text>
+
+  <line class="grid" x1="44" y1="518" x2="1156" y2="518"/>
+  <text class="foot" x="44" y="546">SelectedHandler 是类型别名，三款车的选型在编译期完成，运行时不存在"当前是哪款车"的分支；</text>
+  <text class="foot" x="44" y="570">代价是每种车配每种板子都要单独编译一次。</text>
+</svg>

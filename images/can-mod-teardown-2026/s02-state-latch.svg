@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 530" width="100%" role="img" aria-label="状态缓存的时序耦合：mux 0 写入、mux 2 复用、mux 1 不参与">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#6b675c;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .warn{fill:#cf5a50;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .ok{fill:#c9a96a}
+    .no{fill:#a09b8d}
+    .bad{fill:#cf5a50}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="530" rx="14"/>
+  <text class="ttl" x="44" y="56">状态缓存的时序耦合：谁写、谁读，以及一个被测试钉住的坑</text>
+  <text class="sub" x="44" y="86">同一条 ID 1021 按 data[0] 低 3 位分成三支；状态 FSDEnabled 由 mux 0 独占写入，其余两支只决定读不读</text>
+
+  <text class="cm" x="60" y="136">分支</text>
+  <text class="cm" x="180" y="136">data[0] 低 3 位</text>
+  <text class="cm" x="380" y="136">读缓存 FSDEnabled</text>
+  <text class="cm" x="600" y="136">写缓存 FSDEnabled</text>
+  <text class="cm" x="820" y="136">回发条件</text>
+
+  <rect class="ok" x="44" y="150" width="1112" height="42" rx="6" fill-opacity=".10"/>
+  <text class="nm" x="60" y="177">mux 0</text>
+  <text class="ds" x="180" y="177">0</text>
+  <text class="ds" x="380" y="177">✓ 读 UI 位</text>
+  <text class="ds" x="600" y="177">✓ 独占写入</text>
+  <text class="ds" x="820" y="177">帧自带 UI 状态，无条件刷新</text>
+
+  <text class="nm" x="60" y="219">mux 1</text>
+  <text class="ds" x="180" y="219">1</text>
+  <text class="ds" x="380" y="219">✗ 不读</text>
+  <text class="ds" x="600" y="219">✗ 不写</text>
+  <text class="ds" x="820" y="219">收到就把 bit 19 清零回发</text>
+
+  <rect class="bad" x="44" y="234" width="1112" height="42" rx="6" fill-opacity=".08"/>
+  <text class="nm" x="60" y="261">mux 2</text>
+  <text class="ds" x="180" y="261">2</text>
+  <text class="ds" x="380" y="261">✓ 用缓存</text>
+  <text class="ds" x="600" y="261">✗ 不写</text>
+  <text class="ds" x="820" y="261">仅当 FSDEnabled 为真才回发</text>
+
+  <line class="grid" x1="44" y1="286" x2="1156" y2="286"/>
+
+  <rect class="bad" x="44" y="298" width="1112" height="124" rx="6" fill-opacity=".10"/>
+  <text class="warn" x="64" y="330">回归测试锁死的那个坑</text>
+  <text class="ds" x="64" y="358">mux 2 那支如果除了查缓存还重读一次 UI 位，它自己帧里带的 data[4] 就会把 mux 0 刚写下的</text>
+  <text class="ds" x="64" y="382">FSDEnabled 覆盖 —— 语义上叫变量遮蔽，结果是状态被错误的帧冲掉。修复方式是让读取只发生</text>
+  <text class="ds" x="64" y="406">在 mux 0，再用回归测试把这个行为锁死，测试名把修复意图直接写进去。</text>
+
+  <line class="grid" x1="44" y1="444" x2="1156" y2="444"/>
+  <text class="foot" x="44" y="472">HW3 的 mux 2 带 &amp;&amp; FSDEnabled（handlers.h:104），HW4 的 mux 2 不带（handlers.h:165），Legacy 根本没有 mux 2 这一支。</text>
+  <text class="foot" x="44" y="496">三个 handler 的 mux 1 分支写法一致：不读缓存、也不写缓存，收到帧就改比特回发。</text>
+</svg>
