@@ -298,7 +298,9 @@ $$W_q = \mathrm{clamp}\!\left(\mathrm{round}\!\left(\frac{W}{\gamma}\right),\; -
 
 2025 年 8 月，OpenAI 开源的 gpt-oss-120b 做了一件标志性的事：MoE 权重（占参数量 90% 以上）**原生以 MXFP4 格式发布**——这个模型从来就不存在高精度版本，"量化"这个动作消失了，或者说，被前置进了出厂设置。官方模型卡给出的具体数字是 4.25 bit 每参数、116.8B 总参与 5.1B 激活、权重文件 60.8 GiB（单张 80GB 卡可放）；同系列的 20b 版是 20.9B 总参与 3.6B 激活、12.8 GiB，能塞进 16GB 级别的系统。
 
-MXFP4（OCP 微缩放格式，规范 1.0 发布于 2023 年 9 月，定义 MXFP8/MXFP6/MXFP4 与 MXINT8 四种格式，每 32 个值共享一个 E8M0 二次幂 scale）和 NVIDIA 的 NVFP4（Blackwell 原生）是 2025-2026 年的格式双雄，思路一脉相承：**与其用一个 scale 照顾整个张量，不如每 32 个（MXFP4）或 16 个（NVFP4）值共享一个小数级 scale，上面再叠一层全局 scale**。NVFP4 用 FP8 的 E4M3 做 block scale（比 MXFP4 的 2 的幂次 E8M0 细），再加一个每张量的 FP32 二级 scale，折合 4.5 bit 每值；相对 FP16 显存降约 3.5 倍、相对 FP8 降约 1.8 倍。NVIDIA 报告把 DeepSeek-R1 后训练量化到 NVFP4 后关键任务精度损失不超过 1%，并称 Blackwell 上覆盖权重、激活、KV Cache、attention 的完整 4bit 通路精度接近 16bit。
+MXFP4（OCP 微缩放格式，规范 1.0 发布于 2023 年 9 月，定义 MXFP8/MXFP6/MXFP4 与 MXINT8 四种格式，每 32 个值共享一个 E8M0 二次幂 scale）和 NVIDIA 的 NVFP4（Blackwell 原生）是 2025-2026 年的格式双雄，思路一脉相承：**与其用一个 scale 照顾整个张量，不如每 32 个（MXFP4）或 16 个（NVFP4）值共享一个小数级 scale，上面再叠一层全局 scale**。NVFP4 用 FP8 的 E4M3 做 block scale（比 MXFP4 的 2 的幂次 E8M0 细），再加一个每张量的 FP32 二级 scale。
+
+下面这组数字来自 NVIDIA 官方技术博客《Introducing NVFP4 for Efficient and Accurate Low-Precision Inference》（2025-06-24），可逐项核对：每个值 4 bit 加每 16 值一个 FP8 scale，**折合 4.5 bit 每值**；显存相对 FP16 降约 **3.5 倍**、相对 FP8 降约 **1.8 倍**；把 DeepSeek-R1-0528 从 FP8 后训练量化到 NVFP4 后关键语言建模任务精度损失 **1% 以内**，其中 AIME 2024 反而**高 2%**；相对 H100，Blackwell 与 Blackwell Ultra 的每 token 能效分别最高提升 **25 倍与 50 倍**。官方同时给出了 MXFP4 与 NVFP4 的对照：前者是"每 32 值共享一个 2 的幂次 scale"，后者是"每 16 值共享一个 FP8 scale"，并解释 E8M0 的问题是把 scale 吸附到最近的 2 的幂、容易在块的极值上产生较大误差，E4M3 则让整块误差之和更小（官方给出的平均均方误差为 0.08）。
 
 这两者不是可以自由替换的选项。2026 年的系统研究（MR-GPTQ）给出了一个反直觉的结论：**FP4 并不是 INT4 的自动升级**，小分组的 NVFP4 可以抵消传统的 outlier 抑制手段，而 MXFP4 的二次幂 scale 在同样 4bit 下会明显掉点。硬件侧也需分开看：Hopper 原生支持的是 FP8，FP6 与 FP4 是 Blackwell 才加入的。
 
@@ -306,7 +308,7 @@ MXFP4（OCP 微缩放格式，规范 1.0 发布于 2023 年 9 月，定义 MXFP8
 
 ![NVFP4 的三级缩放结构：16 个值共享 E4M3 块 scale，整个张量再共享一个 FP32 scale](images/quantization-2026/s06-nvfp4-scaling.svg)
 
-图 6｜NVFP4 与 MXFP4 的分组缩放结构。依据 NVIDIA 官方技术说明重绘；下半部分对照 MXFP4 每 32 值共享一个 2 的幂次 scale 的做法。
+图 6｜NVFP4 与 MXFP4 的分组缩放结构。依据 NVIDIA 官方技术博客（2025-06-24）重绘；下半部分对照 MXFP4 每 32 值共享一个 2 的幂次 scale 的做法。
 
 "4bit"这个词从此需要翻译：INT4（GPTQ/AWQ 那一代）、MXFP4、NVFP4 是**三套不同的算法-硬件协同体系**，不能直接比大小。
 

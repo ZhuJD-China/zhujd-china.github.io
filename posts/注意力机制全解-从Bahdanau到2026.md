@@ -215,10 +215,10 @@ GQA 在效果和效率之间取得了很好的平衡，从 LLaMA 2/3 开始被�
 |---|---|---|---|
 | FlashAttention | 2022 | NeurIPS 2022 | 提出 IO 感知的分块 + 在线 softmax，奠基之作 |
 | FlashAttention-2 | 2023 | ICLR 2024 | 把内层循环从"按 K/V 切分"改为"按 Q 切分"（Split-Q），减少线程间同步开销；A100 上达到理论峰值的 50% 到 73% |
-| FlashAttention-3 | 2024 | 未确认 | 针对 Hopper 架构（H100）做异步执行、warp 专精化，并支持 FP8 低精度计算 |
+| FlashAttention-3 | 2024 | **NeurIPS 2024** | 针对 Hopper 架构（H100）做异步执行、warp 专精化，并支持 FP8 低精度计算；正式收录版报告 BF16 达 840 TFLOPs/s（利用率 85%）、FP8 达 1.3 PFLOPs/s |
 | FlashAttention-4 | 2026.3 | 预印本 | 针对 Blackwell 架构"非对称硬件扩展"问题（Tensor Core 算力翻倍，但共享内存带宽与指数运算单元没跟上）重新设计流水线，用软件模拟指数函数缓解 softmax 瓶颈，B200 上 BF16 精度可达约 1600 TFLOPs/s |
 
-（venue 只填查证得到的：FlashAttention-2 的 ICLR 2024 见于 ICLR 官方 proceedings 页面；FlashAttention-3 的收录状态与 FlashAttention-4 的 venue 未从一手页面确认，故标注而非默认填上。）
+（venue 只填能查证的：FlashAttention-2 的 ICLR 2024 见 ICLR 官方 proceedings 页面；FlashAttention-3 的 NeurIPS 2024 见该会议论文集卷 37 第 68658 至 68685 页；FlashAttention-4 目前只有 arXiv 预印本。需注意 FlashAttention-3 的 arXiv v1 与正式收录版数字不同，v1 为 740 TFLOPs/s 与约 1.2 PFLOPs/s。）
 
 **一个重要认知**：FlashAttention 系列**不减少 KV Cache 的大小**，它优化的是"算得快不快"；而 MQA/GQA/MLA/DSA 这些优化的是"要存多少、要读多少"。这两条线是正交的、可以叠加使用的——事实上今天几乎所有推理框架（vLLM、SGLang 等）都是"GQA/MLA + FlashAttention 内核"组合拳。
 
