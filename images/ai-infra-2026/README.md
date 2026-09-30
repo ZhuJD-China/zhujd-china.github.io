@@ -7,6 +7,8 @@
 | `s01-parallelism-dimensions.svg` | 并行的五个切分维度 | 第四节 | 对照表 |
 | `s02-memory-breakdown.svg` | 训练显存的四份构成 | 第四节 | 堆叠条形图 |
 | `s03-collectives.svg` | 集合通信原语的通信量 | 第四节 | 对照表 |
+| `s04-3d-parallelism.svg` | 3D 并行切分与通信代价 | 第 4.4 节 | 结构示意图（重绘自 arXiv:1909.08053 图 1） |
+| `s05-zero-stages.svg` | ZeRO 三阶段切分 | 第 4.3 节 | 切分示意图（重绘自 arXiv:1910.02054） |
 
 ## 更新记录
 

@@ -109,6 +109,12 @@ $$\text{Bubble fraction} = \frac{p-1}{m+p-1}$$
 
 （这几个数字来自论文表 1，是 7.5B 在 64 卡下的实测；网上常见的 112 GB 与 18.8 GB 是按不同模型规模或不同阶段算出来的，引用时应注明口径。）
 
+"切"这个动作在三阶段里指的是不同的东西，看图比看表直观。
+
+![ZeRO 三个阶段：分别切走优化器状态、梯度与参数](images/ai-infra-2026/s05-zero-stages.svg)
+
+图 3｜ZeRO 三阶段切分示意。重绘自 ZeRO 论文 arXiv:1910.02054。图示为 4 卡的切分，显存数字为论文 7.5B 模型 64 路数据并行下的表 1 口径。
+
 ### 4.4 合流：3D 并行
 
 2022 年初，Megatron + DeepSpeed 联手训练 Megatron-Turing NLG 530B，把 TP（机内）+ PP（机间）+ DP（跨副本）组合成完整的"3D 并行"，成了此后所有大模型训练的模板。今天 Megatron 的文档里你能看到更夸张的组合：**TP × PP × CP × EP × DP 五维并行**（CP 切序列长度、EP 切 MoE 专家），总卡数 = 各维乘积——DeepSeek-V3 就是 2048 张 H800 上的 16 路 PP + 64 路 EP + ZeRO-1，且明确不用 TP 的组合。
@@ -118,6 +124,12 @@ $$\text{Bubble fraction} = \frac{p-1}{m+p-1}$$
 ![分布式并行的五个切分维度与各自的主要通信](images/ai-infra-2026/s01-parallelism-dimensions.svg)
 
 图 1｜并行的五个切分维度。同一训练通常同时使用多种；参数与优化器状态切分（ZeRO、FSDP）与此正交，它切的是"副本"而非"计算"。
+
+三个正交维度在 8 张卡上同时切分的样子，是理解"三维并行"这个模板最直观的方式。
+
+![3D 并行：8 张卡上的 TP × PP × DP 切分与各自通信代价](images/ai-infra-2026/s04-3d-parallelism.svg)
+
+图 2｜3D 并行切分示意。重绘自 Megatron-LM 论文 arXiv:1909.08053 原文图 1。真实集群并不都用满三个维度，DeepSeek-V3 就明确不用张量并行。
 
 而 ZeRO 切掉的四份显存，量级关系大致是这样。
 

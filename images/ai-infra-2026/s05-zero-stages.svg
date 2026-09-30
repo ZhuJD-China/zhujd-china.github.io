@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="ZeRO 三个阶段分别切分什么">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .st{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .mem{fill:#c9a96a;font:600 15px 'JetBrains Mono',Consolas,monospace}
+    .opt{fill:#cf5a50;fill-opacity:.85}
+    .grd{fill:#c9a96a;fill-opacity:.85}
+    .prm{fill:#7aa2c8;fill-opacity:.85}
+    .fog{fill:#3a3a44}
+    .rack{fill:#0f0f16;stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .div{stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="52">ZeRO 三个阶段：被切走的是优化器状态、梯度，还是参数</text>
+  <text class="sub" x="44" y="80">重绘自 ZeRO 论文 arXiv:1910.02054。图示为 4 张数据并行卡，数值取论文 7.5B 模型 64 路数据并行下的表 1</text>
+
+  <!-- legend -->
+  <rect class="opt" x="44" y="98" width="14" height="14" rx="3"/><text class="sm" x="66" y="110">优化器状态（每参数 8 字节）</text>
+  <rect class="grd" x="250" y="98" width="14" height="14" rx="3"/><text class="sm" x="272" y="110">梯度（每参数 2 字节）</text>
+  <rect class="prm" x="386" y="98" width="14" height="14" rx="3"/><text class="sm" x="408" y="110">参数（每参数 2 字节）</text>
+  <rect class="fog" x="510" y="98" width="14" height="14" rx="3"/><text class="sm" x="532" y="110">被切走，本卡不存</text>
+
+  <!-- baseline -->
+  <text class="st" x="44" y="152">基线：每卡全量副本</text>
+  <text class="mem" x="240" y="152">120 GB</text>
+  <g transform="translate(44,164)">
+    <rect class="rack" x="0" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="8" y="8" width="52" height="24" rx="3"/><rect class="grd" x="64" y="8" width="52" height="24" rx="3"/><rect class="opt" x="120" y="8" width="112" height="24" rx="3"/>
+    <rect class="rack" x="252" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="260" y="8" width="52" height="24" rx="3"/><rect class="grd" x="316" y="8" width="52" height="24" rx="3"/><rect class="opt" x="372" y="8" width="112" height="24" rx="3"/>
+    <rect class="rack" x="504" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="512" y="8" width="52" height="24" rx="3"/><rect class="grd" x="568" y="8" width="52" height="24" rx="3"/><rect class="opt" x="624" y="8" width="112" height="24" rx="3"/>
+    <rect class="rack" x="756" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="764" y="8" width="52" height="24" rx="3"/><rect class="grd" x="820" y="8" width="52" height="24" rx="3"/><rect class="opt" x="876" y="8" width="112" height="24" rx="3"/>
+  </g>
+
+  <!-- stage 1 -->
+  <text class="st" x="44" y="242">ZeRO-1：切优化器状态</text>
+  <text class="mem" x="240" y="242">31.4 GB</text>
+  <g transform="translate(44,254)">
+    <rect class="rack" x="0" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="8" y="8" width="52" height="24" rx="3"/><rect class="grd" x="64" y="8" width="52" height="24" rx="3"/><rect class="opt" x="120" y="8" width="28" height="24" rx="3"/>
+    <rect class="fog" x="152" y="8" width="80" height="24" rx="3"/>
+    <rect class="rack" x="252" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="260" y="8" width="52" height="24" rx="3"/><rect class="grd" x="316" y="8" width="52" height="24" rx="3"/><rect class="fog" x="372" y="8" width="28" height="24" rx="3"/><rect class="opt" x="404" y="8" width="28" height="24" rx="3"/><rect class="fog" x="436" y="8" width="48" height="24" rx="3"/>
+    <rect class="rack" x="504" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="512" y="8" width="52" height="24" rx="3"/><rect class="grd" x="568" y="8" width="52" height="24" rx="3"/><rect class="fog" x="624" y="8" width="80" height="24" rx="3"/><rect class="opt" x="708" y="8" width="28" height="24" rx="3"/>
+    <rect class="rack" x="756" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="764" y="8" width="52" height="24" rx="3"/><rect class="grd" x="820" y="8" width="52" height="24" rx="3"/><rect class="fog" x="876" y="8" width="112" height="24" rx="3"/>
+  </g>
+  <text class="sm" x="44" y="312">参数与梯度仍为全量副本；只切走占一半的那部分，所以这一步收益最大、通信最省</text>
+
+  <!-- stage 2 -->
+  <text class="st" x="44" y="342">ZeRO-2：再切梯度</text>
+  <text class="mem" x="240" y="342">16.6 GB</text>
+  <g transform="translate(44,354)">
+    <rect class="rack" x="0" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="8" y="8" width="52" height="24" rx="3"/><rect class="grd" x="64" y="8" width="13" height="24" rx="3"/><rect class="opt" x="81" y="8" width="28" height="24" rx="3"/><rect class="fog" x="113" y="8" width="119" height="24" rx="3"/>
+    <rect class="rack" x="252" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="260" y="8" width="52" height="24" rx="3"/><rect class="fog" x="316" y="8" width="13" height="24" rx="3"/><rect class="fog" x="333" y="8" width="13" height="24" rx="3"/><rect class="fog" x="350" y="8" width="13" height="24" rx="3"/><rect class="fog" x="367" y="8" width="13" height="24" rx="3"/><rect class="opt" x="384" y="8" width="28" height="24" rx="3"/><rect class="fog" x="416" y="8" width="68" height="24" rx="3"/>
+    <rect class="rack" x="504" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="512" y="8" width="52" height="24" rx="3"/><rect class="fog" x="568" y="8" width="56" height="24" rx="3"/><rect class="opt" x="628" y="8" width="28" height="24" rx="3"/><rect class="fog" x="660" y="8" width="76" height="24" rx="3"/>
+    <rect class="rack" x="756" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="764" y="8" width="52" height="24" rx="3"/><rect class="fog" x="820" y="8" width="168" height="24" rx="3"/>
+  </g>
+  <text class="sm" x="44" y="412">反向传播时按需取回梯度分片，算完立刻丢弃；多了一轮通信与一次重分片的时机</text>
+
+  <!-- stage 3 -->
+  <text class="st" x="44" y="442">ZeRO-3：再切参数</text>
+  <text class="mem" x="240" y="442">1.88 GB</text>
+  <g transform="translate(44,454)">
+    <rect class="rack" x="0" y="0" width="240" height="40" rx="6"/>
+    <rect class="prm" x="8" y="8" width="13" height="24" rx="3"/><rect class="grd" x="25" y="8" width="13" height="24" rx="3"/><rect class="opt" x="42" y="8" width="28" height="24" rx="3"/><rect class="fog" x="74" y="8" width="158" height="24" rx="3"/>
+    <rect class="rack" x="252" y="0" width="240" height="40" rx="6"/>
+    <rect class="fog" x="260" y="8" width="13" height="24" rx="3"/><rect class="prm" x="277" y="8" width="13" height="24" rx="3"/><rect class="grd" x="294" y="8" width="13" height="24" rx="3"/><rect class="opt" x="311" y="8" width="28" height="24" rx="3"/><rect class="fog" x="343" y="8" width="141" height="24" rx="3"/>
+    <rect class="rack" x="504" y="0" width="240" height="40" rx="6"/>
+    <rect class="fog" x="512" y="8" width="26" height="24" rx="3"/><rect class="prm" x="542" y="8" width="13" height="24" rx="3"/><rect class="grd" x="559" y="8" width="13" height="24" rx="3"/><rect class="fog" x="576" y="8" width="28" height="24" rx="3"/><rect class="opt" x="608" y="8" width="28" height="24" rx="3"/><rect class="fog" x="640" y="8" width="96" height="24" rx="3"/>
+    <rect class="rack" x="756" y="0" width="240" height="40" rx="6"/>
+    <rect class="fog" x="764" y="8" width="26" height="24" rx="3"/><rect class="prm" x="794" y="8" width="13" height="24" rx="3"/><rect class="grd" x="811" y="8" width="13" height="24" rx="3"/><rect class="opt" x="828" y="8" width="28" height="24" rx="3"/><rect class="fog" x="860" y="8" width="128" height="24" rx="3"/>
+  </g>
+  <text class="sm" x="44" y="512">参数只在用到的那一层被临时收集，用完立刻释放——显存换带宽，通信代价最高的一步</text>
+
+  <line class="div" x1="44" y1="532" x2="1156" y2="532"/>
+  <text class="foot" x="44" y="556">读法：三阶段的顺序不是随意排的。先切占比最大且不参与前反向即时读取的优化器状态，收益最直接；参数因为每层都要用，被放到最后切。</text>
+  <text class="foot" x="44" y="580">图中为 4 卡的示意切分（每卡一块参数分片），论文表 1 的 120 / 31.4 / 16.6 / 1.88 GB 对应的是 7.5B 模型 64 路数据并行，两者不可直接对应。</text>
+</svg>

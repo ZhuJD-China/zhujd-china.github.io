@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="3D 并行切分示意：TP × PP × DP">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .gp{fill:#1a1712;stroke:#c9a96a;stroke-width:1.4}
+    .gpp{fill:#14161c;stroke:#7aa2c8;stroke-width:1.4}
+    .gpd{fill:#1d1414;stroke:#cf5a50;stroke-width:1.4}
+    .l1{fill:#c9a96a;fill-opacity:.75}
+    .l2{fill:#7aa2c8;fill-opacity:.75}
+    .l3{fill:#cf5a50;fill-opacity:.75}
+    .arw{stroke:#8a8578;stroke-width:1.5;fill:none;marker-end:url(#p1)}
+    .div{stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <defs>
+    <marker id="p1" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+      <path d="M0 0 L7 4 L0 8 z" fill="#8a8578"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="52">3D 并行：8 张卡上的 TP × PP × DP 切分</text>
+  <text class="sub" x="44" y="80">重绘自 Megatron-LM 论文 arXiv:1909.08053 的经典示意。总卡数 = 三个维度的乘积</text>
+
+  <!-- isometric grid: 2 x 2 x 2 -->
+  <g transform="translate(60,150)">
+    <!-- PP axis: up-right -->
+    <!-- DP axis: right -->
+    <!-- TP axis: down-right -->
+    <!-- draw 8 cells as offset squares -->
+    <!-- back-top-left group -->
+    <rect class="gpd" x="0" y="0" width="86" height="52" rx="6"/>
+    <text class="lb" x="43" y="31" text-anchor="middle" fill="#cf5a50">0</text>
+    <rect class="gp" x="104" y="0" width="86" height="52" rx="6"/>
+    <text class="lb" x="147" y="31" text-anchor="middle" fill="#c9a96a">1</text>
+
+    <rect class="gpp" x="0" y="-70" width="86" height="52" rx="6"/>
+    <text class="lb" x="43" y="-39" text-anchor="middle" fill="#7aa2c8">2</text>
+    <rect class="gpp" x="104" y="-70" width="86" height="52" rx="6"/>
+    <text class="lb" x="147" y="-39" text-anchor="middle" fill="#7aa2c8">3</text>
+
+    <rect class="gpd" x="0" y="72" width="86" height="52" rx="6"/>
+    <text class="lb" x="43" y="103" text-anchor="middle" fill="#cf5a50">4</text>
+    <rect class="gp" x="104" y="72" width="86" height="52" rx="6"/>
+    <text class="lb" x="147" y="103" text-anchor="middle" fill="#c9a96a">5</text>
+
+    <rect class="gpd" x="0" y="2" width="86" height="52" rx="6" transform="translate(104,0)"/>
+    <text class="lb" x="147" y="33" text-anchor="middle" fill="#cf5a50">6</text>
+    <rect class="gp" x="104" y="2" width="86" height="52" rx="6" transform="translate(104,0)"/>
+    <text class="lb" x="147" y="33" text-anchor="middle" fill="#c9a96a">7</text>
+
+    <!-- axis labels -->
+    <text class="sm" x="-8" y="-78" fill="#7aa2c8">流水并行 PP ↑</text>
+    <text class="sm" x="196" y="-4" fill="#cf5a50">数据并行 DP →</text>
+    <text class="sm" x="-8" y="140" fill="#c9a96a">张量并行 TP ↘</text>
+  </g>
+
+  <!-- legend -->
+  <rect class="gp" x="380" y="150" width="14" height="14" rx="3"/>
+  <text class="lb" x="402" y="162">张量并行 TP：同一层的权重矩阵按行或列切开</text>
+  <rect class="gpp" x="380" y="180" width="14" height="14" rx="3"/>
+  <text class="lb" x="402" y="192">流水并行 PP：层按段切开，每段一张卡</text>
+  <rect class="gpd" x="380" y="210" width="14" height="14" rx="3"/>
+  <text class="lb" x="402" y="222">数据并行 DP：完整模型副本，各算各的 batch</text>
+
+  <text class="sm" x="380" y="252">图中编号只是示意位置，不代表论文中的具体编号方式。</text>
+
+  <!-- comm comparison -->
+  <rect class="gp" x="380" y="278" width="720" height="150" rx="10" fill-opacity=".45"/>
+  <text class="pn" x="396" y="302">三种并行各自的通信代价</text>
+  <text class="sm" x="396" y="328">张量并行：每层前向与反向各要一次集合通信，频次最高，必须放在</text>
+  <text class="sm" x="396" y="348">互联最快的机内（NVLink 域）</text>
+  <text class="sm" x="396" y="376">流水并行：只在相邻段之间传激活，通信量小但有气泡，</text>
+  <text class="sm" x="396" y="396">段数与 micro-batch 数共同决定空转比例</text>
+  <text class="sm" x="396" y="424">数据并行：梯度 AllReduce，通信量与模型大小成正比但与层数无关</text>
+
+  <!-- real world note -->
+  <line class="div" x1="44" y1="464" x2="1156" y2="464"/>
+  <text class="hd" x="44" y="492">真实集群的取舍：并不是每个模型都用满三个维度</text>
+  <text class="sm" x="44" y="516">DeepSeek-V3 在 2048 张 H800 上的组合是 16 路 PP 跨 64 路 EP 跨 ZeRO-1，明确不用张量并行——判断依据是跨节点的张量并行通信不划算，把通信集中到 MoE 的 all-to-all 上再单独优化。</text>
+  <text class="sm" x="44" y="540">所以"三维并行"是模板而不是配方：切哪个维度、切多少，取决于单层能否放下、互联拓扑与模型的并行性来源。MoE 模型还多一个专家并行维度。</text>
+
+  <text class="foot" x="44" y="576">重绘自 Shoeybi et al., Megatron-LM 论文 arXiv:1909.08053 原文图 1；DeepSeek-V3 配置取自其技术报告 arXiv:2412.19437。</text>
+</svg>
