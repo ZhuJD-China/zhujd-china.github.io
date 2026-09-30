@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="3D 相机四条路线的精度量级对照">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .nm{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .g1{fill:#cf5a50}
+    .g2{fill:#c9a96a}
+    .g3{fill:#7aa2c8}
+    .g4{fill:#9a7d45}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+  <text class="ttl" x="44" y="52">3D 相机的精度量级：差了两到三个数量级</text>
+  <text class="sub" x="44" y="80">横轴为对数刻度。每条路线的量级差几十倍，混用口径是 3D 选型最常见的错误</text>
+
+  <!-- log axis: 0.01mm .. 1mm, x from 330 to 1120 -->
+  <line class="grid" x1="330" y1="110" x2="330" y2="400"/>
+  <line class="grid" x1="527" y1="110" x2="527" y2="400"/>
+  <line class="grid" x1="725" y1="110" x2="725" y2="400"/>
+  <line class="grid" x1="922" y1="110" x2="922" y2="400"/>
+  <line class="grid" x1="1120" y1="110" x2="1120" y2="400"/>
+  <text class="ax" x="330" y="420" text-anchor="middle">0.01</text>
+  <text class="ax" x="527" y="420" text-anchor="middle">0.05</text>
+  <text class="ax" x="725" y="420" text-anchor="middle">0.25</text>
+  <text class="ax" x="922" y="420" text-anchor="middle">0.5</text>
+  <text class="ax" x="1120" y="420" text-anchor="middle">1 mm</text>
+  <text class="ax" x="330" y="440" text-anchor="start">标称精度绝对值，越靠左越准；对数刻度</text>
+
+  <!-- bars: value -> x = 330 + log10(v/0.01)/log10(100) * 790 -->
+  <text class="nm" x="44" y="146">Mech-Eye 激光轮廓仪</text>
+  <text class="sm" x="44" y="164">Z 重复性 0.4 µm</text>
+  <rect class="g1" x="330" y="128" width="120" height="24" rx="5"/>
+
+  <text class="nm" x="44" y="204">Zivid 2+ M60 结构光</text>
+  <text class="sm" x="44" y="222">点精度 80 µm</text>
+  <rect class="g2" x="330" y="186" width="256" height="24" rx="5"/>
+
+  <text class="nm" x="44" y="262">Photoneo PhoXi S 结构光</text>
+  <text class="sm" x="44" y="280">校准精度 0.050 mm</text>
+  <rect class="g2" x="330" y="244" width="530" height="24" rx="5"/>
+
+  <text class="nm" x="44" y="320">Photoneo MotionCam-3D M+</text>
+  <text class="sm" x="44" y="338">精度 &lt; 0.600 mm（相机模式）</text>
+  <rect class="g3" x="330" y="302" width="575" height="24" rx="5"/>
+
+  <text class="nm" x="44" y="378">Teledyne Bumblebee X 双目</text>
+  <text class="sm" x="44" y="396">官方仅写"亚毫米级"，无数值</text>
+  <rect class="g4" x="330" y="360" width="330" height="24" rx="5"/>
+  <text class="ax" x="672" y="378">此处为示意，厂商未给可引用的数值</text>
+
+  <line class="grid" x1="44" y1="464" x2="1156" y2="464"/>
+  <text class="hd" x="44" y="492">三个必须分清的口径</text>
+  <text class="sm" x="44" y="516">一、绝对精度与相对精度不能混。D455 写"深度精度 &lt; 2%@4 m"，那是相对误差；上表的 µm 与 mm 是绝对值。</text>
+  <text class="sm" x="44" y="538">二、重复性与标定精度不同。Mech-Eye 的 0.4 µm 是 Z 重复性，即多次测同一目标的离散度。</text>
+  <text class="sm" x="44" y="560">三、激光轮廓仪测的是轮廓不是体积：精度最高但量程小，适合测厚与截面。</text>
+  <text class="foot" x="44" y="592">数据取自厂商官方产品页：Mech-Eye 产品目录（2024-02）、Zivid 选型页、Photoneo 产品页（2024-05）、RealSense D455 页（2025-06）。</text>
+</svg>

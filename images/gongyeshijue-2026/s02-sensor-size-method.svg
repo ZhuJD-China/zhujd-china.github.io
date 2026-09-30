@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="如何自己算靶面，以及为什么格式名不可信">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .eq{fill:#c9a96a;font:600 15px 'JetBrains Mono',Consolas,monospace}
+    .b1{fill:#1a1712;stroke:#c9a96a;stroke-width:1.3}
+    .b2{fill:#1d1414;stroke:#cf5a50;stroke-width:1.3}
+    .b3{fill:#14161c;stroke:#7aa2c8;stroke-width:1.3}
+    .ok{fill:#c9a96a;fill-opacity:.55;stroke:#c9a96a;stroke-width:1.4}
+    .bad{fill:#cf5a50;fill-opacity:.28;stroke:#cf5a50;stroke-width:1.4}
+    .div{stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
+  <text class="ttl" x="44" y="52">别信格式名，自己算靶面</text>
+  <text class="sub" x="44" y="80">「1/1.8""「2/3""这类名字源自 1950 年代显像管，是历史遗留的近似值。不同资料对同一名字给出的尺寸并不一致</text>
+
+  <!-- method -->
+  <text class="pn" x="44" y="118">一　可复算的方法</text>
+  <rect class="b1" x="44" y="128" width="1112" height="76" rx="10" fill-opacity=".5"/>
+  <text class="eq" x="60" y="158">宽 = 水平像素数 × 像元尺寸　　对角线 = √(宽² + 高²)</text>
+  <text class="sm" x="60" y="184">两个乘除法就能得到这台相机的真实靶面，任何格式名都可以不要。以下用厂商官方产品页的数据当场验算。</text>
+
+  <!-- worked example 1 -->
+  <text class="pn" x="44" y="232">二　算例一　24.6 MP 彩色面阵（全局快门）</text>
+  <rect class="b3" x="44" y="242" width="546" height="132" rx="10"/>
+  <text class="lb" x="60" y="266">分辨率 5328 × 4608，像元 2.74 µm</text>
+  <text class="eq" x="60" y="292">宽 = 5328 × 2.74 µm = 14.60 mm</text>
+  <text class="eq" x="60" y="316">高 = 4608 × 2.74 µm = 12.63 mm</text>
+  <text class="eq" x="60" y="344">对角线 = 19.31 mm　　厂商标注为 Type 1.2</text>
+  <text class="sm" x="60" y="366">与厂商给出的 19.3 mm 对得上，这条是可核验的</text>
+
+  <!-- worked example 2 -->
+  <text class="pn" x="616" y="232">三　算例二　151 MP 高面阵（滚动快门）</text>
+  <rect class="b3" x="616" y="242" width="546" height="132" rx="10"/>
+  <text class="lb" x="632" y="266">分辨率 14192 × 10640，像元 3.76 µm</text>
+  <text class="eq" x="632" y="292">宽 = 14192 × 3.76 µm = 53.36 mm</text>
+  <text class="eq" x="632" y="316">高 = 10640 × 3.76 µm = 40.01 mm</text>
+  <text class="eq" x="632" y="344">对角线 = 66.70 mm　　厂商标注为 Type 4.2</text>
+  <text class="sm" x="632" y="366">镜头口随之变成 M72，普通 C-mount 已无法覆盖</text>
+
+  <!-- the trap -->
+  <line class="div" x1="44" y1="400" x2="1156" y2="400"/>
+  <text class="hd" x="44" y="428">格式名的分歧不是细节问题，它直接决定你能不能选到镜头</text>
+  <rect class="b2" x="44" y="440" width="546" height="96" rx="10"/>
+  <text class="sm" x="60" y="464">两份公开的靶面对照表，对同一格式给出不同数值：</text>
+  <text class="sm" x="60" y="486">　　1/2"：一处记 6.4 mm，另一处记 8.0 mm</text>
+  <text class="sm" x="60" y="508">　　4/3"：两处一致，都记 21.6 mm</text>
+  <text class="sm" x="60" y="530">即小尺寸区间的命名分歧最大，而这恰好是工业相机最常用的区间</text>
+
+  <rect class="b1" x="616" y="440" width="546" height="96" rx="10"/>
+  <text class="sm" x="632" y="464">唯一可靠的两条硬约束：</text>
+  <text class="sm" x="632" y="486">一　镜头像圈必须不小于靶面对角线，否则四角发暗</text>
+  <text class="sm" x="632" y="508">二　买相机先算对角线，再去挑镜头，而不是反过来</text>
+  <text class="sm" x="632" y="530">用小镜头配大靶面，是这条链上最常见也最贵的错误</text>
+
+  <text class="foot" x="44" y="570">两个算例的原始数据取自 Allied Vision 官方产品页（fxo530CXGE 与 shr411CXGE-T，2025-12 抓取）。</text>
+  <text class="foot" x="44" y="594">格式名分歧对照见 Commonlands 的 CMOS 靶面表（2026-07 更新）与 CCS 技术指南；二者均非标准组织文件，仅用于说明分歧存在。</text>
+  <text class="foot" x="44" y="594">本专栏纪律：凡涉及规格的图，数据一律取自厂商官方页或标准组织页，聚合与经销商页面不用。</text>
+</svg>

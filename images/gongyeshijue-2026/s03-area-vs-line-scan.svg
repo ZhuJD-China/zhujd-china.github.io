@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="面阵与线阵的成像方式对照">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .b1{fill:#1a1712;stroke:#c9a96a;stroke-width:1.3}
+    .b2{fill:#14161c;stroke:#7aa2c8;stroke-width:1.3}
+    .pix{fill:#c9a96a;fill-opacity:.75}
+    .scan{fill:#7aa2c8;fill-opacity:.8}
+    .obj{fill:#cf5a50;fill-opacity:.85}
+    .arw{stroke:#8a8578;stroke-width:1.5;fill:none;marker-end:url(#a1m)}
+    .div{stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <defs>
+    <marker id="a1m" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+      <path d="M0 0 L7 4 L0 8 z" fill="#8a8578"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="52">面阵拍一帧，线阵拍一条线</text>
+  <text class="sub" x="44" y="80">两种范式的差别不在传感器形状，而在"时间"如何进入图像：面阵把整个视野压进同一时刻，线阵把位置交给物体自己的运动</text>
+
+  <!-- area scan -->
+  <text class="pn" x="44" y="118">一　面阵：一次曝光得到完整矩形</text>
+  <rect class="b1" x="44" y="128" width="540" height="216" rx="10"/>
+  <g transform="translate(64,150)">
+    <rect class="b1" x="0" y="0" width="200" height="150" rx="4" fill-opacity=".3"/>
+    <g>
+      <rect class="pix" x="10" y="10" width="16" height="16" rx="2"/>
+      <rect class="pix" x="30" y="10" width="16" height="16" rx="2"/>
+      <rect class="pix" x="50" y="10" width="16" height="16" rx="2"/>
+      <rect class="pix" x="70" y="10" width="16" height="16" rx="2"/>
+      <rect class="pix" x="90" y="10" width="16" height="16" rx="2"/>
+      <rect class="pix" x="110" y="10" width="16" height="16" rx="2"/>
+      <rect class="pix" x="130" y="10" width="16" height="16" rx="2"/>
+      <rect class="pix" x="150" y="10" width="16" height="16" rx="2"/>
+      <rect class="pix" x="170" y="10" width="16" height="16" rx="2"/>
+    </g>
+    <rect class="obj" x="46" y="52" width="48" height="48" rx="3"/>
+    <text class="sm" x="216" y="40">一次曝光</text>
+    <text class="sm" x="216" y="62">整幅同时定格</text>
+    <text class="sm" x="216" y="84">物体的位置</text>
+    <text class="sm" x="216" y="106">与姿态由这一帧决定</text>
+    <text class="sm" x="216" y="132">曝光期间移动了</text>
+    <text class="sm" x="216" y="154">就会留下形变</text>
+  </g>
+  <text class="sm" x="64" y="324">适合：位置固定或运动缓慢的检测。分辨率上限受靶面限制，测长物体需要退远或多次拼接。</text>
+
+  <!-- line scan -->
+  <text class="pn" x="616" y="118">二　线阵：逐行累积，位置由编码器给出</text>
+  <rect class="b2" x="616" y="128" width="540" height="216" rx="10"/>
+  <g transform="translate(636,150)">
+    <rect class="b2" x="0" y="0" width="440" height="150" rx="4" fill-opacity=".3"/>
+    <g>
+      <rect class="scan" x="10" y="12" width="420" height="6" rx="3"/>
+      <rect class="scan" x="10" y="34" width="330" height="6" rx="3"/>
+      <rect class="scan" x="10" y="56" width="420" height="6" rx="3"/>
+      <rect class="scan" x="10" y="78" width="250" height="6" rx="3"/>
+      <rect class="scan" x="10" y="100" width="420" height="6" rx="3"/>
+      <rect class="scan" x="10" y="122" width="380" height="6" rx="3"/>
+    </g>
+    <path class="arw" d="M0 140 L440 140"/>
+    <text class="sm" x="10" y="158">物体沿箭头方向匀速通过视野，每读一行就拼上去</text>
+  </g>
+  <text class="sm" x="636" y="324">适合：连续运行的带材与长物体。行频由物体速度与编码器决定，物体多快都不影响几何保真。</text>
+
+  <line class="div" x1="44" y1="368" x2="1156" y2="368"/>
+
+  <text class="hd" x="44" y="396">行频是线阵唯一的硬指标，且量级常被低估</text>
+  <rect class="b2" x="44" y="408" width="546" height="130" rx="10"/>
+  <text class="sm" x="60" y="432">Basler racer 2 L（8k 像素、CXP-12）</text>
+  <text class="sm" x="60" y="452">　最高行频 240 kHz</text>
+  <text class="sm" x="60" y="476">Basler racer 2 S</text>
+  <text class="sm" x="60" y="496">　最高行频 172 kHz</text>
+  <text class="sm" x="60" y="522">Teledyne Linea HS（TDI 型号）</text>
+  <text class="sm" x="60" y="540">　最高行频 400 kHz</text>
+
+  <rect class="b1" x="616" y="408" width="546" height="130" rx="10"/>
+  <text class="sm" x="632" y="432">换算一下：240 kHz 行频配 2048 像素，等效每秒</text>
+  <text class="sm" x="632" y="454">采集近 5 万行图像。而 Cognex In-Sight 3D-L4000</text>
+  <text class="sm" x="632" y="476">的编码器输入规格是最高 1000 kHz，比相机行频还高</text>
+  <text class="sm" x="632" y="500">因为它描述的是输入信号的能力上限，留的是余量。</text>
+  <text class="sm" x="632" y="524">线阵的可玩空间，往往是触发源而不是相机本身。</text>
+
+  <text class="foot" x="44" y="570">图为工作方式示意，行带长度不按真实行频比例绘制。行频取自 Basler 线阵与 racer 2 产品页、Teledyne Linea 页；</text>
+  <text class="foot" x="44" y="592">编码器规格取自 Cognex 3D-L4000 用户手册。读法：面阵解决"拍下这一刻"，线阵解决"扫过这一段"。</text>
+</svg>
