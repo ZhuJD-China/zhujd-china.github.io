@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="100%" role="img" aria-label="Transformer 编码器与解码器结构">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .eq{fill:#c9a96a;font:600 14px 'JetBrains Mono',Consolas,monospace}
+    .enc{fill:#14161c;stroke:#7aa2c8;stroke-width:1.4}
+    .dec{fill:#1a1712;stroke:#c9a96a;stroke-width:1.4}
+    .blk{fill:#1d1414;stroke:#cf5a50;stroke-width:1.3}
+    .inp{fill:#3a3a44}
+    .arw{stroke:#8a8578;stroke-width:1.6;fill:none;marker-end:url(#t1m)}
+    .arwr{stroke:#cf5a50;stroke-width:1.4;fill:none;marker-end:url(#t2m);stroke-dasharray:4 3}
+    .div{stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <defs>
+    <marker id="t1m" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+      <path d="M0 0 L7 4 L0 8 z" fill="#8a8578"/>
+    </marker>
+    <marker id="t2m" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+      <path d="M0 0 L7 4 L0 8 z" fill="#cf5a50"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="640" rx="14"/>
+  <text class="ttl" x="44" y="52">Transformer：把 RNN 整个扔掉之后，剩下的骨架</text>
+  <text class="sub" x="44" y="80">重绘自 Attention Is All You Need 论文 arXiv:1706.03762（NeurIPS 2017）原文图 1 与图 2</text>
+
+  <!-- encoder stack -->
+  <text class="pn" x="44" y="118">编码器（左）　双向，可以并行</text>
+  <rect class="enc" x="44" y="128" width="300" height="290" rx="10"/>
+  <rect class="inp" x="80" y="146" width="228" height="26" rx="4"/>
+  <text class="sm" x="92" y="164" fill="#e8e4dc">输入嵌入加位置编码</text>
+  <path class="arw" d="M194 176 L194 194"/>
+
+  <g transform="translate(80,194)">
+    <rect class="blk" x="0" y="0" width="228" height="150" rx="8"/>
+    <text class="pn" x="14" y="22">N 层堆叠，每层两处残差</text>
+    <rect class="blk" x="0" y="0" width="228" height="66" rx="8" fill-opacity=".55"/>
+    <text class="lb" x="14" y="26">多头自注意力</text>
+    <text class="sm" x="14" y="48">加位置编码后送入</text>
+    <text class="sm" x="14" y="64">每个位置能看到全部位置</text>
+    <rect class="blk" x="0" y="84" width="228" height="66" rx="8" fill-opacity=".55"/>
+    <text class="lb" x="14" y="110">逐位置前馈网络</text>
+    <text class="sm" x="14" y="132">两层线性加激活，逐位置独立</text>
+  </g>
+  <path class="arw" d="M194 350 L194 366"/>
+  <rect class="inp" x="80" y="366" width="228" height="26" rx="4"/>
+  <text class="sm" x="92" y="384" fill="#e8e4dc">层归一化，输出为编码结果</text>
+
+  <text class="sm" x="44" y="440">原文用 post-LN：残差加法之后才归一化。</text>
+  <text class="sm" x="44" y="460">后续工作多数改成 pre-LN（先归一化再进子层），训练更稳——</text>
+  <text class="sm" x="44" y="480">这个改动本身就是一个独立的改进点。</text>
+
+  <!-- decoder stack -->
+  <text class="pn" x="700" y="118">解码器（右）　因果掩码，自回归</text>
+  <rect class="dec" x="700" y="128" width="300" height="290" rx="10"/>
+  <rect class="inp" x="736" y="146" width="228" height="26" rx="4"/>
+  <text class="sm" x="748" y="164" fill="#e8e4dc">已生成的词嵌入加位置编码</text>
+  <path class="arw" d="M850 176 L850 194"/>
+
+  <g transform="translate(736,194)">
+    <rect class="blk" x="0" y="0" width="228" height="150" rx="8" fill-opacity=".8"/>
+    <text class="pn" x="14" y="22">N 层堆叠，每层三处残差</text>
+    <rect class="blk" x="0" y="0" width="228" height="48" rx="8" fill-opacity=".55"/>
+    <text class="lb" x="14" y="24">带掩码的自注意力</text>
+    <text class="sm" x="14" y="42">只能看到左侧与自身</text>
+    <rect class="blk" x="0" y="52" width="228" height="48" rx="8" fill-opacity=".55"/>
+    <text class="lb" x="14" y="76">交叉注意力</text>
+    <text class="sm" x="14" y="94">Query 来自解码器，K 与 V 来自编码器</text>
+    <rect class="blk" x="0" y="104" width="228" height="46" rx="8" fill-opacity=".55"/>
+    <text class="lb" x="14" y="132">逐位置前馈网络</text>
+  </g>
+  <path class="arw" d="M850 350 L850 366"/>
+  <rect class="inp" x="736" y="366" width="228" height="26" rx="4"/>
+  <text class="sm" x="748" y="384" fill="#e8e4dc">层归一化，接线性与 softmax</text>
+
+  <path class="arw" d="M350 240 L692 240"/>
+  <text class="sm" x="521" y="228" text-anchor="middle">编码结果作为 K 与 V</text>
+
+  <!-- attention internals -->
+  <text class="pn" x="376" y="504">二　缩放点积注意力内部</text>
+  <rect class="blk" x="376" y="514" width="596" height="72" rx="10"/>
+  <text class="eq" x="392" y="544">Attention(Q, K, V) = softmax( Q Kᵀ / √d_k ) V</text>
+  <text class="sm" x="392" y="570">Q 与 K 做点积得到每个位置对每个位置的分数，除以 √d_k 防止 softmax 饱和，再对 V 加权求和。</text>
+
+  <text class="pn" x="44" y="504">一　三处 QKV 从哪来</text>
+  <text class="sm" x="44" y="528">同一份输入分别乘三个权重矩阵得到 Q、K、V。</text>
+  <text class="sm" x="44" y="552">这一步之后，所有"变体"都是在</text>
+  <text class="sm" x="44" y="572">改公式、减头数或改访存方式。</text>
+
+  <line class="div" x1="44" y1="596" x2="1156" y2="596"/>
+  <text class="foot" x="44" y="618">结构图之外的关键前提：完全并行。没有循环依赖，同一层的所有位置可以同时算——这才是它能吃满 GPU 的根本原因，也是 RNN 时代做不到的事。</text>
+  <text class="foot" x="44" y="640">重绘自 Vaswani et al., Attention Is All You Need, arXiv:1706.03762 原文图 1、图 2；post-LN 与 pre-LN 的说明见原文附录。</text>
+</svg>

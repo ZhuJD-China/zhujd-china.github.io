@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="GPTQ 逐列量化与误差补偿示意">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .eq{fill:#c9a96a;font:600 15px 'JetBrains Mono',Consolas,monospace}
+    .b1{fill:#1a1712;stroke:#c9a96a;stroke-width:1.3}
+    .b2{fill:#14161c;stroke:#7aa2c8;stroke-width:1.3}
+    .b3{fill:#1d1414;stroke:#cf5a50;stroke-width:1.3}
+    .q{fill:#c9a96a;fill-opacity:.8}
+    .err{fill:#cf5a50;fill-opacity:.75}
+    .fix{fill:#7aa2c8;fill-opacity:.8}
+    .arw{stroke:#8a8578;stroke-width:1.6;fill:none;marker-end:url(#g1m)}
+    .div{stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <defs>
+    <marker id="g1m" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+      <path d="M0 0 L7 4 L0 8 z" fill="#8a8578"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+  <text class="ttl" x="44" y="52">GPTQ：把整行量化误差的影响，逐列追溯回去修正</text>
+  <text class="sub" x="44" y="80">重绘自 GPTQ 论文 arXiv:2210.17323。关键机制是"近似二阶"——用 Hessian 信息判断每一列的误差会影响后面哪些列</text>
+
+  <!-- step 1: layer inputs -->
+  <text class="pn" x="44" y="118">输入　一层权重 W 与该层的激活 X</text>
+  <rect class="b2" x="44" y="128" width="200" height="66" rx="8"/>
+  <text class="lb" x="60" y="152">W　形状 out × in</text>
+  <text class="sm" x="60" y="174">要压到 3 或 4 bit</text>
+  <rect class="b2" x="260" y="128" width="200" height="66" rx="8"/>
+  <text class="lb" x="276" y="152">X　校准集上的激活</text>
+  <text class="sm" x="276" y="174">只用几百条样本估计</text>
+  <path class="arw" d="M466 161 L506 161"/>
+
+  <!-- step 2: hessian -->
+  <text class="pn" x="514" y="118">估计二阶信息</text>
+  <rect class="b1" x="514" y="128" width="330" height="66" rx="8"/>
+  <text class="eq" x="530" y="156">H = 2 X Xᵀ</text>
+  <text class="sm" x="530" y="178">对角线是各输入通道的敏感度</text>
+  <path class="arw" d="M850 161 L890 161"/>
+
+  <!-- step 3: column loop -->
+  <text class="pn" x="898" y="118">逐列处理</text>
+  <rect class="b3" x="898" y="128" width="254" height="66" rx="8"/>
+  <text class="lb" x="914" y="152">列 j 的量化误差 Δ</text>
+  <text class="sm" x="914" y="174">会传播到后面所有列</text>
+
+  <!-- the compensation loop diagram -->
+  <text class="hd" x="44" y="242">一次迭代里发生的三件事</text>
+
+  <rect class="b1" x="44" y="258" width="300" height="118" rx="10"/>
+  <text class="pn" x="60" y="280">1　量化当前列</text>
+  <g transform="translate(60,294)">
+    <rect class="q" x="0" y="0" width="30" height="30" rx="3"/>
+    <text class="sm" x="40" y="20">逐块取整，得到 4 bit 的近似值</text>
+  </g>
+  <text class="sm" x="60" y="352">块内共用一个 scale，块大小由实现决定</text>
+
+  <rect class="b3" x="376" y="258" width="300" height="118" rx="10"/>
+  <text class="pn" x="392" y="280">2　算出这一列的误差</text>
+  <g transform="translate(392,294)">
+    <text class="eq" x="0" y="22">Δ = (Wⱼ − Qⱼ) · Hⱼⱼ⁻¹</text>
+  </g>
+  <text class="sm" x="392" y="352">用对角元素的逆做尺度，这就是"近似"的来源</text>
+
+  <rect class="b2" x="708" y="258" width="444" height="118" rx="10"/>
+  <text class="pn" x="724" y="280">3　把误差分摊给尚未量化的列</text>
+  <g transform="translate(724,294)">
+    <rect class="err" x="0" y="0" width="120" height="30" rx="4"/>
+    <text class="sm" x="10" y="20" fill="#0b0b10">误差 Δ 记到这里</text>
+    <path class="arw" d="M132 15 L164 15"/>
+    <rect class="fix" x="170" y="0" width="150" height="30" rx="4"/>
+    <text class="sm" x="180" y="20" fill="#0b0b10">后续列提前减去一部分</text>
+  </g>
+  <text class="sm" x="724" y="352">这是 GPTQ 的核心：不是各列独立量化，而是让后面列替前面列分担一部分误差</text>
+
+  <path class="arw" d="M194 386 L194 410 L660 410 L660 430"/>
+
+  <!-- loop back -->
+  <rect class="b1" x="376" y="430" width="568" height="54" rx="10"/>
+  <text class="lb" x="392" y="456">回到第 1 步，处理下一列；整层走完一遍即完成量化</text>
+  <text class="sm" x="392" y="476">用 Cholesky 分解把逆矩阵算成三角形式，保证每列的修正量可增量求出</text>
+
+  <line class="div" x1="44" y1="500" x2="1156" y2="500"/>
+  <text class="foot" x="44" y="524">读法：整层的量化误差被摊平到多列上，单列的误差可能变大，但整层的输出误差更小——这正是"逐 token 量化误差"与"逐层输出误差"的差别。</text>
+  <text class="foot" x="44" y="546">重绘自 Frantar et al., GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers, arXiv:2210.17323 原文图 2；公式为论文的近似二阶更新式。</text>
+</svg>

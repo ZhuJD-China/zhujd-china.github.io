@@ -6,6 +6,7 @@
 | --- | --- | --- | --- |
 | `s01-kv-reuse-design.svg` | 分页与前缀树：两种 KV 复用思路 | 第五节 | 结构对照 |
 | `s02-batching-timeline.svg` | 批处理演进造成的 GPU 空闲 | 第二节 | 时间轴 |
+| `s03-paged-attention.svg` | PagedAttention 分页与块表 | 第 5.1 节 | 结构示意图（重绘自 arXiv:2309.06180 图 2、图 3、图 5） |
 
 ## 更新记录
 

@@ -7,6 +7,7 @@
 | `s01-lineage-timeline.svg` | 分词方案演进：三条路线与一次范式转移 | 第二节 | 三泳道时间线 |
 | `s02-fertility-bars.svg` | 同一句话不同语言不同账单（fertility） | 第三节 | 条形图 |
 | `s03-ttft-share.svg` | 分词在首 token 延迟中的构成 | 第三节 | 堆叠条形图 |
+| `s04-blt-entropy-patching.svg` | BLT 的熵驱动切分 | 第四节 | 机制示意图（重绘自 arXiv:2412.09871 图 1、图 2） |
 
 ## 更新记录
 

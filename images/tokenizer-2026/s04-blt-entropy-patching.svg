@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="Byte Latent Transformer 熵驱动切分示意">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang PC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .eq{fill:#c9a96a;font:600 15px 'JetBrains Mono',Consolas,monospace}
+    .b1{fill:#1a1712;stroke:#c9a96a;stroke-width:1.3}
+    .b2{fill:#14161c;stroke:#7aa2c8;stroke-width:1.3}
+    .b3{fill:#1d1414;stroke:#cf5a50;stroke-width:1.3}
+    .easy{fill:#3a3a44}
+    .mid{fill:#a08f6a}
+    .hard{fill:#cf5a50}
+    .patch{fill:#c9a96a;fill-opacity:.30;stroke:#c9a96a;stroke-width:1.2}
+    .arw{stroke:#8a8578;stroke-width:1.6;fill:none;marker-end:url(#b1m)}
+    .div{stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <defs>
+    <marker id="b1m" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+      <path d="M0 0 L7 4 L0 8 z" fill="#8a8578"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="52">BLT：让边界由信息量决定，而不是由词频决定</text>
+  <text class="sub" x="44" y="80">重绘自 Byte Latent Transformer 论文 arXiv:2412.09871（ACL 2025）。核心主张：预测难度不均匀，就不该给每个字节花同样的算力</text>
+
+  <!-- byte stream with entropy coloring -->
+  <text class="pn" x="44" y="118">一　字节流按可预测性着色</text>
+  <g transform="translate(44,130)">
+    <rect class="b1" x="0" y="0" width="1108" height="56" rx="8"/>
+    <g transform="translate(12,14)">
+      <rect class="easy" x="0" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="30" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="60" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="90" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="120" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="150" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="180" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="210" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="240" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="270" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="300" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="330" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="360" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="390" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="420" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="450" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="480" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="510" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="540" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="570" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="600" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="630" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="660" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="690" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="720" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="750" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="780" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="810" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="840" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="870" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="900" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="930" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="960" y="0" width="26" height="28" rx="3"/>
+      <rect class="easy" x="990" y="0" width="26" height="28" rx="3"/>
+      <rect class="mid" x="1020" y="0" width="26" height="28" rx="3"/>
+      <rect class="hard" x="1050" y="0" width="26" height="28" rx="3"/>
+    </g>
+    <text class="sm" x="12" y="70">灰：几乎可预测（常见词的后缀）　红：几乎不可预测（新词首字节）</text>
+  </g>
+
+  <path class="arw" d="M598 214 L598 240"/>
+
+  <!-- entropy estimator -->
+  <text class="pn" x="44" y="262">二　用小字节模型估计熵</text>
+  <rect class="b2" x="44" y="272" width="1108" height="72" rx="10"/>
+  <text class="lb" x="60" y="300">独立的约一亿参数字节模型，14 层、滑窗 512 字节，只用来算下一字节分布的香农熵</text>
+  <text class="eq" x="60" y="328">H(xᵢ) = − Σ p(v | x&lt;ᵢ) · log p(v | x&lt;ᵢ)</text>
+
+  <path class="arw" d="M598 352 L598 378"/>
+
+  <!-- threshold rule -->
+  <text class="pn" x="44" y="400">三　两条规则任一满足就开新 patch</text>
+  <rect class="b3" x="44" y="410" width="546" height="66" rx="10"/>
+  <text class="lb" x="60" y="436">规则 A　熵超过全局阈值</text>
+  <text class="eq" x="60" y="462">H(xᵢ) &gt; θ_g</text>
+  <rect class="b3" x="614" y="410" width="538" height="66" rx="10"/>
+  <text class="lb" x="630" y="436">规则 B　熵相对前字节突增</text>
+  <text class="eq" x="630" y="462">H(xᵢ) − H(xᵢ₋₁) &gt; θ_r</text>
+
+  <path class="arw" d="M598 484 L598 506"/>
+
+  <!-- resulting patches -->
+  <text class="pn" x="44" y="520">四　切出的 patch：长的都是好预测的连续段</text>
+  <g transform="translate(44,528)">
+    <rect class="patch" x="0" y="0" width="404" height="34" rx="6"/>
+    <text class="sm" x="12" y="22" fill="#e8e4dc">patch 1　长：常见词的字节尾巴，熵低</text>
+    <rect class="patch" x="416" y="0" width="96" height="34" rx="6"/>
+    <text class="sm" x="424" y="22" fill="#e8e4dc">短</text>
+    <rect class="patch" x="524" y="0" width="228" height="34" rx="6"/>
+    <text class="sm" x="534" y="22" fill="#e8e4dc">中等：词中间的过渡</text>
+    <rect class="patch" x="764" y="0" width="58" height="34" rx="6"/>
+    <text class="sm" x="770" y="22" fill="#e8e4dc">极短</text>
+    <rect class="patch" x="834" y="0" width="274" height="34" rx="6"/>
+    <text class="sm" x="844" y="22" fill="#e8e4dc">长：另一段常见内容</text>
+  </g>
+  <text class="sm" x="44" y="586">论文取阈值 1.09 时，平均 patch 约 4.4 字节。关键在于"新词开头"被切得碎，而"常见词的后半段"被整段打包。</text>
+
+  <text class="foot" x="44" y="608">重绘自 Pagnoni et al., Byte Latent Transformer: Patches Scale Better Than Tokens, arXiv:2412.09871 原文图 1 与图 2。</text>
+</svg>

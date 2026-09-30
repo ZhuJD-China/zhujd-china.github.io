@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 580" width="100%" role="img" aria-label="PagedAttention 分页内存与预留式分配对照">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .b1{fill:#1a1712;stroke:#c9a96a;stroke-width:1.3}
+    .b2{fill:#14161c;stroke:#7aa2c8;stroke-width:1.3}
+    .b3{fill:#1d1414;stroke:#cf5a50;stroke-width:1.3}
+    .used{fill:#c9a96a;fill-opacity:.8}
+    .used2{fill:#7aa2c8;fill-opacity:.8}
+    .pad{fill:none;stroke:#e8e4dc;stroke-opacity:.22;stroke-width:1;stroke-dasharray:4 3}
+    .div{stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="580" rx="14"/>
+  <text class="ttl" x="44" y="52">PagedAttention：把 KV Cache 当作分页内存来管</text>
+  <text class="sub" x="44" y="80">重绘自 vLLM 论文 arXiv:2309.06180（SOSP 2023）原文图 2 与图 3。核心问题是连续分配必然产生碎片</text>
+
+  <!-- left: existing systems -->
+  <text class="pn" x="44" y="118">一　此前的做法：为每条序列预留一块连续显存</text>
+  <rect class="b3" x="44" y="128" width="540" height="146" rx="10"/>
+  <g transform="translate(60,146)">
+    <rect class="pad" x="0" y="0" width="118" height="52" rx="4"/>
+    <rect class="used" x="4" y="4" width="46" height="44" rx="3"/>
+    <text class="sm" x="4" y="72" fill="#e8e4dc">序列 A</text>
+    <rect class="pad" x="126" y="0" width="150" height="52" rx="4"/>
+    <rect class="used" x="130" y="4" width="26" height="44" rx="3"/>
+    <text class="sm" x="130" y="72" fill="#e8e4dc">序列 B　大片空着</text>
+    <rect class="pad" x="284" y="0" width="100" height="52" rx="4"/>
+    <rect class="used" x="288" y="4" width="92" height="44" rx="3"/>
+    <text class="sm" x="288" y="72" fill="#e8e4dc">序列 C</text>
+    <rect class="pad" x="392" y="0" width="128" height="52" rx="4"/>
+    <rect class="used" x="396" y="4" width="30" height="44" rx="3"/>
+    <text class="sm" x="396" y="72" fill="#e8e4dc">序列 D　大片空着</text>
+  </g>
+  <text class="sm" x="60" y="252">生成前必须按最大可能长度预留。输出长度事前未知，短序列的空位就永久浪费，</text>
+  <text class="sm" x="60" y="270">且一条长序列可能因为碎片化而无法装进剩余空间——这就是 vLLM 论文量化的浪费来源。</text>
+
+  <!-- right: paged -->
+  <text class="pn" x="616" y="118">二　PagedAttention：固定大小的块，按需分配</text>
+  <rect class="b1" x="616" y="128" width="540" height="146" rx="10"/>
+  <g transform="translate(632,146)">
+    <rect class="used" x="0" y="0" width="34" height="34" rx="3"/>
+    <rect class="used" x="38" y="0" width="34" height="34" rx="3"/>
+    <rect class="used2" x="76" y="0" width="34" height="34" rx="3"/>
+    <rect class="pad" x="114" y="0" width="34" height="34" rx="3"/>
+    <rect class="used" x="152" y="0" width="34" height="34" rx="3"/>
+    <rect class="used2" x="190" y="0" width="34" height="34" rx="3"/>
+    <rect class="used" x="228" y="0" width="34" height="34" rx="3"/>
+    <rect class="pad" x="266" y="0" width="34" height="34" rx="3"/>
+    <rect class="pad" x="304" y="0" width="34" height="34" rx="3"/>
+    <rect class="used" x="342" y="0" width="34" height="34" rx="3"/>
+    <rect class="used2" x="380" y="0" width="34" height="34" rx="3"/>
+    <rect class="pad" x="418" y="0" width="34" height="34" rx="3"/>
+    <rect class="used" x="456" y="0" width="34" height="34" rx="3"/>
+    <text class="sm" x="0" y="60" fill="#e8e4dc">金色：序列 A 的块　蓝色：序列 C 的块　虚线：尚未使用的空块</text>
+  </g>
+  <text class="sm" x="632" y="252">块是固定大小且可来自任意序列，A 和 C 的块可以交错排布。</text>
+  <text class="sm" x="632" y="270">序列增长时按需申请新块，空块留在池子里给下一条序列用。</text>
+
+  <!-- block table -->
+  <text class="hd" x="44" y="308">三　块表：逻辑位置到物理位置的映射</text>
+  <rect class="b2" x="44" y="320" width="540" height="128" rx="10"/>
+  <text class="sm" x="60" y="344">逻辑块号（序列 A 看到的连续编号）</text>
+  <g transform="translate(60,354)">
+    <rect class="b2" x="0" y="0" width="52" height="30" rx="4"/><text class="sm" x="18" y="20" fill="#e8e4dc">0</text>
+    <rect class="b2" x="58" y="0" width="52" height="30" rx="4"/><text class="sm" x="76" y="20" fill="#e8e4dc">1</text>
+    <rect class="b2" x="116" y="0" width="52" height="30" rx="4"/><text class="sm" x="134" y="20" fill="#e8e4dc">2</text>
+    <rect class="b2" x="174" y="0" width="52" height="30" rx="4"/><text class="sm" x="192" y="20" fill="#e8e4dc">3</text>
+  </g>
+  <text class="sm" x="60" y="416">物理块号（实际在显存里的位置）</text>
+  <g transform="translate(60,424)">
+    <rect class="b1" x="0" y="0" width="52" height="30" rx="4"/><text class="sm" x="14" y="20" fill="#0b0b10">7</text>
+    <rect class="b1" x="58" y="0" width="52" height="30" rx="4"/><text class="sm" x="72" y="20" fill="#0b0b10">0</text>
+    <rect class="b1" x="116" y="0" width="52" height="30" rx="4"/><text class="sm" x="130" y="20" fill="#0b0b10">13</text>
+    <rect class="b1" x="174" y="0" width="52" height="30" rx="4"/><text class="sm" x="188" y="20" fill="#0b0b10">2</text>
+  </g>
+  <text class="sm" x="300" y="440">写时复制：被复用的块复制一份，</text>
+  <text class="sm" x="300" y="460">引用计数归零即回收</text>
+
+  <!-- benefits -->
+  <rect class="b1" x="616" y="320" width="540" height="128" rx="10" fill-opacity=".45"/>
+  <text class="pn" x="632" y="344">它换来了三件事</text>
+  <text class="sm" x="632" y="370">1　浪费率接近零：分配粒度就是块大小，与序列长度无关</text>
+  <text class="sm" x="632" y="394">2　几乎不因碎片而拒绝请求：没有"找不到足够连续空间"这回事</text>
+  <text class="sm" x="632" y="418">3　共享变成可能：多个请求可以指向同一批物理块，写时复制即可</text>
+  <text class="sm" x="632" y="440">代价是内核要支持非连续的块与块表查找，这正是 FlashAttention</text>
+  <text class="sm" x="632" y="460">这类分块内核在工程上要额外配合的地方</text>
+
+  <line class="div" x="44" y1="472" x2="1156" y2="472"/>
+  <text class="foot" x="44" y="496">读图：左图的"空着"不是画得夸张，而是这类分配方式的常态——因为输出长度事前不可知，任何按最大值预留的方案都会浪费。</text>
+  <text class="foot" x="44" y="520">右图的块可以来自任意序列，这一性质使得"共享物理块"成为可能，也是后续所有前缀缓存类优化的地基。</text>
+  <text class="foot" x="44" y="544">重绘自 Kwon et al., Efficient Memory Management for Large Language Model Serving with PagedAttention, arXiv:2309.06180（SOSP 2023）原文图 2、图 3 与图 5。</text>
+</svg>

@@ -76,6 +76,12 @@ $$\mathrm{score}(s_t, h_i) = s_t^\top h_i \qquad \text{（通用形式：} s_t^\
 
 2017 年论文《Attention Is All You Need》做了一件激进的事：**把 RNN 整个扔掉**，只用注意力机制（加上前馈网络）就能完成序列建模，还能大规模并行训练。这就是我们今天说的 Transformer。
 
+它的骨架值得看图记住，因为后面所有变体都是在这张图上改部件。
+
+![Transformer 编码器与解码器结构，以及缩放点积注意力内部](images/attention-2026/s06-transformer-architecture.svg)
+
+图 6｜Transformer 骨架。重绘自 arXiv:1706.03762 原文图 1 与图 2。编码器双向可并行，解码器靠因果掩码自回归；去掉循环依赖正是它能吃满 GPU 的根本原因。
+
 ### 3.1 Query / Key / Value 的直觉
 
 把注意力机制想象成一次"图书馆检索"：

@@ -10,6 +10,7 @@
 | `s04-llmint8-mixed-precision.svg` | 混合精度矩阵乘分解 | 第 4 节 | 机制示意图（重绘自 arXiv:2208.07339 图 1、图 3） |
 | `s05-smoothquant-migration.svg` | 等价迁移与 α 权衡 | 第 5.2 节 | 机制示意图（重绘自 arXiv:2211.10438 图 1、图 2） |
 | `s06-nvfp4-scaling.svg` | NVFP4 三级缩放与 MXFP4 对照 | 第 9.3 节 | 结构示意图（依据 NVIDIA 官方说明重绘） |
+| `s07-gptq-error-compensation.svg` | GPTQ 逐列量化与误差补偿 | 第 5.1 节 | 机制示意图（重绘自 arXiv:2210.17323 图 2） |
 
 ## 更新记录
 

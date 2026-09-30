@@ -9,6 +9,7 @@
 | `s03-sparsity-patterns.svg` | 注意力稀疏模式家族 | 第 6 节 | 模式矩阵 |
 | `s04-mla-structure.svg` | MLA 结构、解耦 RoPE 与解码路径 | 第 7.1 节 | 结构示意图（重绘自 arXiv:2405.04434 图 3） |
 | `s05-nsa-three-branches.svg` | NSA 三分支与门控融合 | 第 6.2 节 | 机制示意图（重绘自 arXiv:2502.11089 图 1、图 2） |
+| `s06-transformer-architecture.svg` | Transformer 编码器与解码器骨架 | 第 3 节 | 结构示意图（重绘自 arXiv:1706.03762 图 1、图 2） |
 
 ## 更新记录
 
