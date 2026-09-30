@@ -65,7 +65,7 @@
       <rect class="scan" x="10" y="122" width="380" height="6" rx="3"/>
     </g>
     <path class="arw" d="M0 140 L440 140"/>
-    <text class="sm" x="10" y="158">物体沿箭头方向匀速通过视野，每读一行就拼上去</text>
+    <text class="sm" x="10" y="158">物体沿箭头方向匀速通过视野，逐行拼成一幅完整图像</text>
   </g>
   <text class="sm" x="636" y="324">适合：连续运行的带材与长物体。行频由物体速度与编码器决定，物体多快都不影响几何保真。</text>
 
