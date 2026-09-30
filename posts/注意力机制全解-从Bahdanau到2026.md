@@ -282,6 +282,12 @@ $$K^{(i)} = c_t^{KV} W^{UK}_{(i)}, \qquad V^{(i)} = c_t^{KV} W^{UV}_{(i)} \quad 
 
 用 DeepSeek-V3 的实际数字直观感受一下压缩幅度：标准 MHA 每个 token 需要缓存 $128 \times 128 = 16384$ 个浮点数；MLA 每个 token 只需要缓存大约 576 个数（512 维压缩 KV + 64 维解耦 RoPE），差不多是 **28 倍**的压缩率。
 
+结构上它与 MQA、GQA 的差别值得看图：缓存里放的究竟是什么。
+
+![MLA 结构：只缓存低维潜变量，上投影到各头，含解耦 RoPE 分支与解码路径](images/attention-2026/s04-mla-structure.svg)
+
+图 4｜MLA 结构与解码路径。重绘自 DeepSeek-V2 论文 arXiv:2405.04434 原文图 3。关键在于 MQA/GQA 缓存的是"若干个头的完整 K 与 V"，而 MLA 缓存的是"一个共享的低维潜变量"，它既不是 K 也不是 V。
+
 这条路线到 2026 年 9 月仍在往前推。最新的一版是 **DeepSeek-V4.1-Flash（arXiv:2609.19969，权重已放出）**：552B 骨干、支持 100 万 token，decode 每 token 激活 16B 而 prefill 只要 8B；KV 侧用 CSA2 做跨层复用、再叠加 FP4 KV，把常驻 HBM 的全局 KV 压到 **890 字节每 token**（约为 V4-Flash 的四分之一），常驻 SSD 或主机内存的持久 KV 约为其八分之一。值得注意的是它没有推翻 MLA，而是在其上叠跨层复用与低精度存储——**这是 DeepSeek 一贯的做法。** 同期有一个更"工程"的补丁：**QK-Normed MLA**（arXiv:2606.16310）指出 QK RMSNorm 与 MLA 看似不兼容（归一化似乎需要缓存投影后的完整 key），其实只是实现问题：RMSNorm 可拆成静态仿射权重与动态标量，静态部分吸收进 query 侧投影，动态部分退化为每 token 每组一个标量，从而在保持潜变量解码路径的同时用上 QK 归一化，作者报告 256K 上下文下 H800 解码延迟开销低于 2%。
 
 ### 7.2 Decoupled RoPE（解耦旋转位置编码）

@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="100%" role="img" aria-label="LLM.int8 混合精度矩阵乘分解示意图">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .pn2{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .an{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hot{fill:#cf5a50;font:600 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .g1{fill:#c9a96a}
+    .g1d{fill:#1a1712;stroke:#c9a96a;stroke-width:1.2}
+    .g2d{fill:#1d1414;stroke:#cf5a50;stroke-width:1.2}
+    .g3d{fill:#14161c;stroke:#7aa2c8;stroke-width:1.2}
+    .cell{fill:#c9a96a;fill-opacity:.55}
+    .cellhi{fill:#cf5a50}
+    .div{stroke:#e8e4dc;stroke-opacity:.14;stroke-width:1}
+    .arw{stroke:#8a8578;stroke-width:1.6;fill:none;marker-end:url(#ah)}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+      <path d="M0 0 L7 4 L0 8 z" fill="#8a8578"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="640" rx="14"/>
+  <text class="ttl" x="44" y="52">LLM.int8() 的混合精度分解：把 0.1% 的离群通道单独拎出来算</text>
+  <text class="sub" x="44" y="80">重绘自 LLM.int8() 论文（arXiv:2208.07339）的核心机制图。矩阵乘被拆成两条并行路径，分别累加进同一个 FP32 累加器</text>
+
+  <!-- panel A: activation vector with outliers -->
+  <text class="pn" x="44" y="120">A  输入激活</text>
+  <text class="pn2" x="44" y="144">少数通道幅值突出</text>
+  <g transform="translate(44,158)">
+    <rect class="g1d" x="0" y="0" width="250" height="150" rx="8"/>
+    <!-- 8x8 grid of cells, two highlighted -->
+    <g>
+      <rect class="cell" x="14" y="14" width="24" height="14" rx="2"/>
+      <rect class="cell" x="42" y="14" width="24" height="14" rx="2"/>
+      <rect class="cell" x="70" y="14" width="24" height="14" rx="2"/>
+      <rect class="cell" x="98" y="14" width="24" height="14" rx="2"/>
+      <rect class="cell" x="126" y="14" width="24" height="14" rx="2"/>
+      <rect class="cell" x="154" y="14" width="24" height="14" rx="2"/>
+      <rect class="cell" x="182" y="14" width="24" height="14" rx="2"/>
+      <rect class="cellhi" x="210" y="14" width="24" height="14" rx="2"/>
+      <rect class="cell" x="14" y="32" width="24" height="14" rx="2"/>
+      <rect class="cell" x="42" y="32" width="24" height="14" rx="2"/>
+      <rect class="cell" x="70" y="32" width="24" height="14" rx="2"/>
+      <rect class="cell" x="98" y="32" width="24" height="14" rx="2"/>
+      <rect class="cell" x="126" y="32" width="24" height="14" rx="2"/>
+      <rect class="cell" x="154" y="32" width="24" height="14" rx="2"/>
+      <rect class="cell" x="182" y="32" width="24" height="14" rx="2"/>
+      <rect class="cell" x="210" y="32" width="24" height="14" rx="2"/>
+      <rect class="cell" x="14" y="50" width="24" height="14" rx="2"/>
+      <rect class="cell" x="42" y="50" width="24" height="14" rx="2"/>
+      <rect class="cell" x="70" y="50" width="24" height="14" rx="2"/>
+      <rect class="cell" x="98" y="50" width="24" height="14" rx="2"/>
+      <rect class="cell" x="126" y="50" width="24" height="14" rx="2"/>
+      <rect class="cell" x="154" y="50" width="24" height="14" rx="2"/>
+      <rect class="cell" x="182" y="50" width="24" height="14" rx="2"/>
+      <rect class="cell" x="210" y="50" width="24" height="14" rx="2"/>
+      <rect class="cell" x="14" y="68" width="24" height="14" rx="2"/>
+      <rect class="cell" x="42" y="68" width="24" height="14" rx="2"/>
+      <rect class="cell" x="70" y="68" width="24" height="14" rx="2"/>
+      <rect class="cell" x="98" y="68" width="24" height="14" rx="2"/>
+      <rect class="cell" x="126" y="68" width="24" height="14" rx="2"/>
+      <rect class="cell" x="154" y="68" width="24" height="14" rx="2"/>
+      <rect class="cell" x="182" y="68" width="24" height="14" rx="2"/>
+      <rect class="cellhi" x="210" y="68" width="24" height="14" rx="2"/>
+      <rect class="cell" x="14" y="86" width="24" height="14" rx="2"/>
+      <rect class="cell" x="42" y="86" width="24" height="14" rx="2"/>
+      <rect class="cell" x="70" y="86" width="24" height="14" rx="2"/>
+      <rect class="cell" x="98" y="86" width="24" height="14" rx="2"/>
+      <rect class="cell" x="126" y="86" width="24" height="14" rx="2"/>
+      <rect class="cell" x="154" y="86" width="24" height="14" rx="2"/>
+      <rect class="cell" x="182" y="86" width="24" height="14" rx="2"/>
+      <rect class="cell" x="210" y="86" width="24" height="14" rx="2"/>
+      <rect class="cell" x="14" y="104" width="24" height="14" rx="2"/>
+      <rect class="cell" x="42" y="104" width="24" height="14" rx="2"/>
+      <rect class="cell" x="70" y="104" width="24" height="14" rx="2"/>
+      <rect class="cell" x="98" y="104" width="24" height="14" rx="2"/>
+      <rect class="cell" x="126" y="104" width="24" height="14" rx="2"/>
+      <rect class="cell" x="154" y="104" width="24" height="14" rx="2"/>
+      <rect class="cell" x="182" y="104" width="24" height="14" rx="2"/>
+      <rect class="cell" x="210" y="104" width="24" height="14" rx="2"/>
+    </g>
+    <path d="M234 8 L244 8 L244 128 L234 128" stroke="#cf5a50" stroke-width="1.4" fill="none"/>
+  </g>
+  <text class="an" x="44" y="332">红色为离群通道，固定出现在同样的维度上</text>
+  <text class="an" x="44" y="352">论文实测：6.7B 模型上每 2048 token 序列约有 15 万个离群值，</text>
+  <text class="an" x="44" y="370">却只集中在 6 个 hidden 维度；占输入特征的约 0.1%</text>
+
+  <path class="arw" d="M312 233 L352 233"/>
+
+  <!-- panel B: two parallel GEMM paths -->
+  <text class="pn" x="360" y="120">B  拆成两条并行路径</text>
+  <text class="pn2" x="360" y="144">INT8 走主体</text>
+  <rect class="g1d" x="360" y="158" width="270" height="66" rx="8"/>
+  <text class="lb" x="376" y="184">INT8 × INT8 矩阵乘</text>
+  <text class="an" x="376" y="206">256 列 × 16 行分块，INT32 累加</text>
+
+  <text class="pn2" x="360" y="252">FP16 走离群列</text>
+  <rect class="g2d" x="360" y="266" width="270" height="66" rx="8"/>
+  <text class="lb" x="376" y="292">FP16 × FP16 矩阵乘</text>
+  <text class="an" x="376" y="314">仅少数列，FP32 累加</text>
+
+  <path class="arw" d="M636 191 L676 191 L676 226 L706 226"/>
+  <path class="arw" d="M636 299 L676 299 L676 264 L706 264"/>
+
+  <!-- accumulator -->
+  <text class="pn" x="712" y="120">C  合并累加</text>
+  <rect class="g3d" x="712" y="212" width="220" height="66" rx="8"/>
+  <text class="lb" x="728" y="238">统一 FP32 累加器</text>
+  <text class="an" x="728" y="260">结果与全精度计算一致</text>
+
+  <path class="arw" d="M938 245 L978 245"/>
+  <text class="pn2" x="986" y="238">输出</text>
+  <text class="an" x="986" y="260">Y = X W</text>
+
+  <!-- equation band -->
+  <rect class="g1d" x="360" y="366" width="800" height="96" rx="8" fill-opacity=".5"/>
+  <text class="lb" x="380" y="396">数值口径（论文报告，C4 验证集困惑度，13B）</text>
+  <text class="an" x="380" y="422">FP32 基线 12.45　→　朴素 INT8 absmax 19.08（明显变差）　→　LLM.int8() 12.45（与基线持平）</text>
+  <text class="an" x="380" y="446">判定阈值取 6.0；outlier 维度占比约 0.1%，其余 99.9% 的值仍走 8-bit 乘法</text>
+
+  <text class="foot" x="44" y="600">读法：这条路的代价不是精度，而是多一次小矩阵乘与一次拆分开销；精度上它是当时唯一能同时保住速度与效果的 INT8 方案。</text>
+  <text class="foot" x="44" y="622">重绘自 Dettmers et al., LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale, arXiv:2208.07339（NeurIPS 2022）。原文图 1 与图 3。</text>
+</svg>

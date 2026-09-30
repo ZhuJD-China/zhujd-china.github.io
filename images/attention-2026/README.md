@@ -7,6 +7,7 @@
 | `s01-lineage-timeline.svg` | 注意力十年谱系：四条并行的省法 | 第 1 节 | 双泳道时间线 |
 | `s02-kv-cache-ledger.svg` | KV Cache 显存账本：MHA、MQA 与 GQA | 第 4 节 | 对照条形图 |
 | `s03-sparsity-patterns.svg` | 注意力稀疏模式家族 | 第 6 节 | 模式矩阵 |
+| `s04-mla-structure.svg` | MLA 结构、解耦 RoPE 与解码路径 | 第 7.1 节 | 结构示意图（重绘自 arXiv:2405.04434 图 3） |
 
 ## 更新记录
 
