@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="同一模型在不同 harness 下的分数差">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .val{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .vin{fill:#0b0b10;font:700 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .std{fill:#7aa2c8}
+    .adv{fill:#c9a96a}
+    .gap{fill:#cf5a50;fill-opacity:.28;stroke:#cf5a50;stroke-width:1.2}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="52">同一批模型、同一套题，只换 harness</text>
+  <text class="sub" x="44" y="80">数据取自 ARC Prize 2026 年 9 月公布的 ARC-AGI-3 评测：同一模型在两种脚手架下并列出成绩，而不是只报高分那一栏</text>
+
+  <!-- axis -->
+  <line class="grid" x1="330" y1="120" x2="330" y2="430"/>
+  <line class="grid" x1="556" y1="120" x2="556" y2="430"/>
+  <line class="grid" x1="782" y1="120" x2="782" y2="430"/>
+  <line class="grid" x1="1008" y1="120" x2="1008" y2="430"/>
+  <text class="ax" x="330" y="450" text-anchor="middle">0%</text>
+  <text class="ax" x="556" y="450" text-anchor="middle">25%</text>
+  <text class="ax" x="782" y="450" text-anchor="middle">50%</text>
+  <text class="ax" x="1008" y="450" text-anchor="middle">75%</text>
+  <text class="ax" x="1156" y="450" text-anchor="end">通过率</text>
+
+  <!-- best in each setting -->
+  <text class="pn" x="44" y="132">标准脚手架下的最好成绩</text>
+  <rect class="std" x="330" y="116" width="534" height="24" rx="5"/>
+  <text class="vin" x="852" y="133">62.7%</text>
+
+  <text class="pn" x="44" y="182">Provider Adapter 脚手架下</text>
+  <rect class="adv" x="330" y="166" width="681" height="24" rx="5"/>
+  <text class="vin" x="999" y="183">99.9%</text>
+
+  <!-- gap annotation -->
+  <rect class="gap" x="864" y="116" width="147" height="74" rx="6"/>
+  <text class="val" x="937" y="158" text-anchor="middle" fill="#cf5a50">差 37 个点</text>
+  <text class="sm" x="937" y="180" text-anchor="middle">同一模型，同一批题</text>
+
+  <!-- why -->
+  <line class="grid" x1="44" y1="228" x2="1156" y2="228"/>
+
+  <text class="hd" x="44" y="256">Provider Adapter 这一档多做了什么</text>
+  <text class="sm" x="44" y="284">模型自己带笔记与跨环境迁移，属于 Agent 应当自己掌握的推理能力；</text>
+  <text class="sm" x="44" y="308">而保留不透明的服务端推理状态、跨请求续接思考、长对话压缩，</text>
+  <text class="sm" x="44" y="332">这三项是把"上一轮的内部状态"以非标准方式带进来的——</text>
+  <text class="sm" x="44" y="356">它们不是脚手架该补的能力，而是把推理过程本身外包给了服务商。</text>
+
+  <rect x="44" y="376" width="1112" height="86" rx="10" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".5" stroke-width="1.2"/>
+  <text class="hd" x="60" y="404" fill="#c9a96a">这组数字要读出的结论，不是"某个配置更强"</text>
+  <text class="sm" x="60" y="428">而是在 agentic 评测里，harness 已经不是实验误差的量级，它是成绩的主要决定项。</text>
+  <text class="sm" x="60" y="450">因此任何"某模型在某基准上领先几个点"的说法，如果不附 harness 细节，就不具备可复核性。</text>
+
+  <line class="grid" x1="44" y1="486" x2="1156" y2="486"/>
+  <text class="foot" x="44" y="510">口径：62.7% 与 99.9% 为 ARC Prize 官方在两种 harness 设置下公布的结果，来源见参考资料的 ARC Prize 官方文章。</text>
+  <text class="foot" x="44" y="534">需要注意的对照：本文另一处引用过的 OpenAI 自报 7.8% 与 38.3%，是第三种配置（自家 Responses API 的推理状态保留），属厂商自述口径。</text>
+  <text class="foot" x="44" y="558">三组数字放在一起看恰好说明问题：0 到 100 的跨度里，模型能力只占其中一段，其余由配置决定。</text>
+  <text class="foot" x="44" y="582">这也是本文第 12 节"读别人的分数先问什么协议"这条建议的经验来源。</text>
+</svg>

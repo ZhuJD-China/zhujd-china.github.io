@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 580" width="100%" role="img" aria-label="同一公开题集上三方口径的分数分裂">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .pn{fill:#6b675c;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .val{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ax{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .off{fill:#7aa2c8}
+    .own{fill:#c9a96a}
+    .agg{fill:#cf5a50}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="580" rx="14"/>
+  <text class="ttl" x="44" y="52">同一个基准，三种口径，报出来的数差了 60 个点</text>
+  <text class="sub" x="44" y="80">以 SWE-bench Pro 为例。这是本文第 12 节"先问是谁报的"的现实依据：差距不是模型差距，是口径差距</text>
+
+  <line class="grid" x1="330" y1="120" x2="330" y2="440"/>
+  <line class="grid" x1="556" y1="120" x2="556" y2="440"/>
+  <line class="grid" x1="782" y1="120" x2="782" y2="440"/>
+  <line class="grid" x1="1008" y1="120" x2="1008" y2="440"/>
+  <text class="ax" x="330" y="460" text-anchor="middle">0%</text>
+  <text class="ax" x="556" y="460" text-anchor="middle">20%</text>
+  <text class="ax" x="782" y="460" text-anchor="middle">40%</text>
+  <text class="ax" x="1008" y="460" text-anchor="middle">60%</text>
+  <text class="ax" x="1156" y="460" text-anchor="end">80%</text>
+
+  <!-- scale note -->
+  <text class="pn" x="44" y="132">标准化官方榜（第三方统一 harness）</text>
+  <rect class="off" x="330" y="116" width="42" height="24" rx="5"/>
+  <text class="val" x="382" y="133">38.70%　榜首为开源模型</text>
+  <text class="sm" x="44" y="160">官方说明：公共集顶部分数在 23% 量级，远低于旧版 Verified 的 70% 以上</text>
+
+  <text class="pn" x="44" y="196">厂商自报聚合（各家自有 scaffold）</text>
+  <rect class="own" x="330" y="180" width="617" height="24" rx="5"/>
+  <text class="val" x="957" y="197">80.0%</text>
+  <text class="sm" x="44" y="224">开源权重侧最高的自报约 62.5%，同样不可与上表并列</text>
+
+  <text class="pn" x="44" y="260">旧版 SWE-bench Verified（已弃用）</text>
+  <rect class="agg" x="330" y="244" width="540" height="24" rx="5"/>
+  <text class="val" x="880" y="261">约 70% 以上</text>
+  <text class="sm" x="44" y="288">官方已宣布不再采用，理由是题目缺陷与训练数据污染</text>
+
+  <!-- interpretation -->
+  <line class="grid" x1="44" y1="316" x2="1156" y2="316"/>
+  <text class="hd" x="44" y="344">怎么读这三行</text>
+  <text class="sm" x="44" y="372">第一行是唯一可用于跨模型比较的口径，因为所有提交方跑同一套环境；它同时也是最难看的一行。</text>
+  <text class="sm" x="44" y="396">第二行是各家在自家脚手架上跑出来的，代表"这套方案端到端能做到什么"，也确实有价值，但不能与第一行混排。</text>
+  <text class="sm" x="44" y="420">第三行说明基准更替不是数值游戏：老榜的高分本身建立在有缺陷的题目与被污染的测试上。</text>
+
+  <rect x="44" y="440" width="1112" height="66" rx="10" fill="#1d1414" stroke="#cf5a50" stroke-opacity=".5" stroke-width="1.2"/>
+  <text class="lb" x="60" y="466" fill="#cf5a50">引用一份分数时，先问四件事</text>
+  <text class="sm" x="60" y="490">harness 是谁的　·　题集是公开集还是私有集　·　是否允许多次尝试　·　是否允许网络与外部工具</text>
+
+  <text class="foot" x="44" y="532">口径说明：本图为三类口径的量级对照，横条长度按数值等比绘制；标准化榜数据来自该基准官方排行榜，厂商自报来自第三方聚合站，</text>
+  <text class="foot" x="44" y="556">后两者不可相互比较，也不应与第一行并列。此处并列的目的是展示"同一个名字下能出现多大的分歧"，而非给出模型排名。</text>
+</svg>

@@ -6,6 +6,7 @@
 | --- | --- | --- | --- |
 | `s01-productization-timeline.svg` | 两条路线的六轮交替 | 全篇 | 三泳道时间线 |
 | `s02-comparison-matrix.svg` | 六维对照框架 | 第五节 | 对照矩阵 |
+| `s03-control-flow-paradigms.svg` | 审批优先与沙箱优先的控制流 | 第五节 | 流程对照（抽象图解） |
 
 ## 更新记录
 

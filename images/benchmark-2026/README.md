@@ -7,6 +7,8 @@
 | `s01-benchmark-timeline.svg` | 基准的兴衰时间线 | 全篇 | 四泳道时间线 |
 | `s02-saturation-curves.svg` | 饱和曲线与失效原因 | 第四节 | 曲线图 |
 | `s03-evaluation-layers.svg` | 评测体系的五层结构 | 第十二节 | 分层图 |
+| `s04-harness-gap.svg` | 同一模型换 harness 的分数差 | 第十一节 | 对照条形图（ARC-AGI-3 官方数据） |
+| `s05-three-baselines-one-name.svg` | 同一基准的三种口径 | 第十二节 | 量级对照图 |
 
 ## 更新记录
 
