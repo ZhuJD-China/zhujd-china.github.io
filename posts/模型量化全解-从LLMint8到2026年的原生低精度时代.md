@@ -296,7 +296,11 @@ $$W_q = \mathrm{clamp}\!\left(\mathrm{round}\!\left(\frac{W}{\gamma}\right),\; -
 
 ### 9.3 原生 4bit：gpt-oss 与 NVFP4
 
-2025 年 8 月，OpenAI 开源的 gpt-oss-120b 做了一件标志性的事：MoE 权重（占参数量 90% 以上）**原生以 MXFP4 格式发布**——这个模型从来就不存在高精度版本，"量化"这个动作消失了，或者说，被前置进了出厂设置。官方模型卡给出的具体数字是 4.25 bit 每参数、116.8B 总参与 5.1B 激活、权重文件 60.8 GiB（单张 80GB 卡可放）；同系列的 20b 版是 20.9B 总参与 3.6B 激活、12.8 GiB，能塞进 16GB 级别的系统。
+2025 年 8 月，OpenAI 开源的 gpt-oss-120b 做了一件标志性的事：MoE 权重（占参数量 90% 以上）**原生以 MXFP4 格式发布**——这个模型从来就不存在高精度版本，"量化"这个动作消失了，或者说，被前置进了出厂设置。
+
+官方模型卡（arXiv:2508.10925）给出的口径是：权重经后训练量化为 **4.25 bit 每参数**；120b 版为 **117B 总参与 5.1B 激活**，可装进单张 80GB GPU（如 H100 或 AMD MI300X）；20b 版为 **21B 总参与 3.6B 激活**，可在 **16GB 内存**内运行。模型卡另有一句对做量化对比很关键的话：**所有评测均使用同一 MXFP4 量化配置**，所以拿 gpt-oss 的分数与 BF16 模型横向比较是没有意义的。
+
+架构上它也是一份公开样本：36 层、64 个 query 头配 8 个 KV 头的 GQA、每层 128 个专家取 top-4、词表 201,088（与 o200k_harmony 的槽位上界一致）、位置编码用 RoPE 基频 150K 并以 YaRN 从 4K 扩展到 131K。注意力层在 128 token 滑窗与全注意力之间严格交替（各 18 层），每头带一个可学习的 attention sink。
 
 MXFP4（OCP 微缩放格式，规范 1.0 发布于 2023 年 9 月，定义 MXFP8/MXFP6/MXFP4 与 MXINT8 四种格式，每 32 个值共享一个 E8M0 二次幂 scale）和 NVIDIA 的 NVFP4（Blackwell 原生）是 2025-2026 年的格式双雄，思路一脉相承：**与其用一个 scale 照顾整个张量，不如每 32 个（MXFP4）或 16 个（NVFP4）值共享一个小数级 scale，上面再叠一层全局 scale**。NVFP4 用 FP8 的 E4M3 做 block scale（比 MXFP4 的 2 的幂次 E8M0 细），再加一个每张量的 FP32 二级 scale。
 
@@ -351,7 +355,8 @@ ICLR 2026 的接收列表里有 91 篇量化论文——这个领域并没有"�
 - Ma et al., *The Era of 1-bit LLMs: All Large Language Models are in 1.58 Bits*, 2024
 - Ma et al., *BitNet b1.58 2B4T Technical Report*, 2025
 - Kumar et al., *Scaling Laws for Precision*, ICLR 2025
-- NVIDIA, *Introducing NVFP4 for Efficient and Accurate Low-Precision Inference*, 2025
+- NVIDIA, *Introducing NVFP4 for Efficient and Accurate Low-Precision Inference*, 2025-06-24
+- OpenAI, *gpt-oss Model Card*, arXiv:2508.10925, 2025-08（MoE 权重 MXFP4、4.25 bit/参数、120b 为 117B/5.1B、20b 为 21B/3.6B）
 - NVIDIA, *Pretraining Large Language Models with NVFP4*（arXiv:2509.25149，12B / 10T token 的 4bit 预训练）
 - *Quartet: Native FP4 Training Can Be Optimal for Large Language Models*；*UE5M3 FP4 Block Scaling for Stable Language Model Pretraining*（arXiv:2609.02846）
 - Chen et al., *WUSH: Near-Optimal Adaptive Transforms for LLM Quantization*, ICML 2026（arXiv:2512.00956）
