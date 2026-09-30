@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" width="100%" role="img" aria-label="从检测任务到相机类型的选型决策树">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .q{fill:#e8e4dc;font:500 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .a{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .b1{fill:#1a1712;stroke:#c9a96a;stroke-width:1.4}
+    .b2{fill:#14161c;stroke:#7aa2c8;stroke-width:1.4}
+    .b3{fill:#1d1414;stroke:#cf5a50;stroke-width:1.4}
+    .b4{fill:#1a1712;stroke:#9a7d45;stroke-width:1.4}
+    .arw{stroke:#8a8578;stroke-width:1.6;fill:none;marker-end:url(#dc1m)}
+    .ard{stroke:#8a8578;stroke-width:1.4;fill:none;stroke-dasharray:4 3;marker-end:url(#dc1m)}
+  </style>
+  <defs>
+    <marker id="dc1m" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+      <path d="M0 0 L7 4 L0 8 z" fill="#8a8578"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="660" rx="14"/>
+  <text class="ttl" x="44" y="52">选型决策树：四个问题定相机</text>
+  <text class="sub" x="44" y="80">按顺序回答，前一题的答案决定后一题问什么。多数场景在前两问就能定下来，3D 只在第四问才出现</text>
+
+  <!-- Q1 -->
+  <rect class="b1" x="44" y="106" width="230" height="72" rx="8"/>
+  <text class="a" x="60" y="132">问题一　测的是什么量</text>
+  <text class="sm" x="60" y="154">颜色、灰度、位置、宽度</text>
+  <text class="sm" x="60" y="170">→ 大概率不需要 3D</text>
+  <path class="arw" d="M274 142 L330 142"/>
+
+  <rect class="b1" x="330" y="106" width="230" height="72" rx="8"/>
+  <text class="a" x="346" y="132">问题二　物体在不在动</text>
+  <text class="sm" x="346" y="154">静止或有编码器定位</text>
+  <text class="sm" x="346" y="170">→ 面阵</text>
+  <path class="arw" d="M560 142 L616 142"/>
+
+  <rect class="b2" x="616" y="106" width="230" height="72" rx="8"/>
+  <text class="a" x="632" y="132">连续运动且幅面长</text>
+  <text class="sm" x="632" y="154">必须配编码器触发</text>
+  <text class="sm" x="632" y="170">→ 线阵</text>
+
+  <path class="ard" d="M460 178 L460 208"/>
+  <text class="sm" x="470" y="200">视野装不下</text>
+
+  <rect class="b4" x="330" y="208" width="260" height="64" rx="8"/>
+  <text class="a" x="346" y="234">视野装不下时先想两件事</text>
+  <text class="sm" x="346" y="256">要不要上远心镜头消除视差，还是换更长像元</text>
+
+  <!-- Q3 -->
+  <path class="arw" d="M731 178 L731 300"/>
+  <text class="sm" x="742" y="230">表面反射吃掉信号？</text>
+
+  <rect class="b3" x="616" y="300" width="230" height="72" rx="8"/>
+  <text class="a" x="632" y="326">问题三　表面是否反光</text>
+  <text class="sm" x="632" y="348">镜面、玻璃、金属高光</text>
+  <text class="sm" x="632" y="364">→ 偏振相机 + 交叉照明</text>
+  <path class="arw" d="M616 336 L556 336"/>
+
+  <rect class="b1" x="316" y="300" width="240" height="72" rx="8"/>
+  <text class="a" x="332" y="326">问题四　要不要第三个维度</text>
+  <text class="sm" x="332" y="348">高度、共面度、容积、姿态</text>
+  <text class="sm" x="332" y="364">→ 3D 相机</text>
+
+  <!-- dimension split -->
+  <path class="arw" d="M316 336 L180 336 L180 400"/>
+
+  <rect class="b1" x="44" y="400" width="272" height="96" rx="8"/>
+  <text class="a" x="60" y="426">只需要轮廓尺寸</text>
+  <text class="sm" x="60" y="448">用背光打亮轮廓，</text>
+  <text class="sm" x="60" y="466">2D 面阵就够，</text>
+  <text class="sm" x="60" y="484">精度常在微米级</text>
+
+  <rect class="b2" x="316" y="400" width="272" height="96" rx="8"/>
+  <text class="a" x="332" y="426">需要绝对深度</text>
+  <text class="sm" x="332" y="448">无序抓取、码垛、装配引导</text>
+  <text class="sm" x="332" y="466">→ 结构光或 ToF</text>
+  <text class="sm" x="332" y="484">工作距离决定路线</text>
+
+  <rect class="b3" x="588" y="400" width="272" height="96" rx="8"/>
+  <text class="a" x="604" y="426">需要微米级高度轮廓</text>
+  <text class="sm" x="604" y="448">平面度、共面性、翘曲</text>
+  <text class="sm" x="604" y="466">→ 激光轮廓仪</text>
+  <text class="sm" x="604" y="484">量程小，固定参考距离</text>
+
+  <rect class="b4" x="860" y="400" width="272" height="96" rx="8"/>
+  <text class="a" x="876" y="426">静态物距变化大</text>
+  <text class="sm" x="876" y="448">工件厚度方向浮动</text>
+  <text class="sm" x="876" y="466">→ 先上远心镜头</text>
+  <text class="sm" x="876" y="484">它比 3D 便宜得多</text>
+
+  <!-- rule of thumb -->
+  <rect class="b1" x="44" y="524" width="1088" height="76" rx="10" fill-opacity=".5"/>
+  <text class="a" x="60" y="552" fill="#c9a96a">一条经验法则：先用最便宜的二维方案卡住公差，卡不住再升维度</text>
+  <text class="sm" x="60" y="576">升维度的顺序通常是 远心镜头 → 更好的照明与光学 → 偏振 → 线阵 → 3D。每上一级，成本与集成复杂度都上一个台阶，</text>
+  <text class="sm" x="60" y="594">而收益只解决特定类型的失效。多数项目的真正瓶颈在照明与镜头，而不是"缺一个 Z"维度。</text>
+
+  <text class="foot" x="44" y="632">本图为决策框架汇总，其分支依据对应本文第 4、5、6、7、8、12 各节；具体阈值（公差、速度、视野）需按项目实测确定，图中不给出通用数值。</text>
+</svg>

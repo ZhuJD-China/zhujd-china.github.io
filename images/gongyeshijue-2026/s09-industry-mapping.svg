@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="八个行业场景到相机类型的映射">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .ind{fill:#e8e4dc;font:500 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .hd{fill:#a09b8d;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .area{fill:#c9a96a}
+    .line{fill:#7aa2c8}
+    .d3{fill:#cf5a50}
+    .pol{fill:#9a7d45}
+    .swir{fill:#5b8fa8}
+    .n{stroke:#0b0b10;stroke-width:1.6}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+  <text class="ttl" x="44" y="52">八个行业场景的落点</text>
+  <text class="sub" x="44" y="80">每行是一个行业，实心方块表示该行业的主要相机类型；灰色虚线框表示该行业里"次要但常用"的类型</text>
+
+  <!-- column headers -->
+  <text class="hd" x="330" y="118" text-anchor="middle">面阵 2D</text>
+  <text class="hd" x="450" y="118" text-anchor="middle">线阵</text>
+  <text class="hd" x="570" y="118" text-anchor="middle">3D</text>
+  <text class="hd" x="690" y="118" text-anchor="middle">偏振</text>
+  <text class="hd" x="810" y="118" text-anchor="middle">SWIR</text>
+  <text class="hd" x="960" y="118" text-anchor="middle">关键判据</text>
+  <line class="grid" x1="44" y1="130" x2="1156" y2="130"/>
+
+  <!-- rows: y = 152 + i*42 -->
+  <g>
+    <!-- row 1 锂电极片 -->
+    <text class="ind" x="44" y="176">锂电极片</text>
+    <rect class="line n" x="434" y="158" width="32" height="26" rx="4"/>
+    <rect class="d3 n" x="554" y="158" width="32" height="26" rx="4" fill-opacity=".18" stroke="#cf5a50" stroke-dasharray="4 3"/>
+    <text class="sm" x="700" y="176">线速 120-400 m/min，幅宽 4500-7800 mm</text>
+
+    <!-- row 2 光伏电池片 -->
+    <text class="ind" x="44" y="218">光伏电池片</text>
+    <rect class="area n" x="314" y="200" width="32" height="26" rx="4" fill-opacity=".25"/>
+    <rect class="swir n" x="794" y="200" width="32" height="26" rx="4"/>
+    <text class="sm" x="700" y="218">EL 在近红外，硅 CCD 需 1 s 曝光</text>
+
+    <!-- row 3 半导体 -->
+    <text class="ind" x="44" y="260">半导体封装</text>
+    <rect class="area n" x="314" y="242" width="32" height="26" rx="4"/>
+    <rect class="d3 n" x="554" y="242" width="32" height="26" rx="4"/>
+    <rect class="swir n" x="794" y="242" width="32" height="26" rx="4" fill-opacity=".25" stroke="#5b8fa8" stroke-dasharray="4 3"/>
+    <text class="sm" x="700" y="260">外观 10-50 µm，晶圆需小于 1 µm</text>
+
+    <!-- row 4 3C 电子件 -->
+    <text class="ind" x="44" y="302">3C 结构件</text>
+    <rect class="area n" x="314" y="284" width="32" height="26" rx="4"/>
+    <rect class="d3 n" x="554" y="284" width="32" height="26" rx="4" fill-opacity=".25" stroke="#cf5a50" stroke-dasharray="4 3"/>
+    <text class="sm" x="700" y="302">毫米级公差靠高像素小视场</text>
+
+    <!-- row 5 汽车零部件 -->
+    <text class="ind" x="44" y="344">汽车零部件</text>
+    <rect class="area n" x="314" y="326" width="32" height="26" rx="4"/>
+    <rect class="d3 n" x="554" y="326" width="32" height="26" rx="4"/>
+    <text class="sm" x="700" y="344">2D 管到位，3D 管装配</text>
+
+    <!-- row 6 食品不规则 -->
+    <text class="ind" x="44" y="386">食品不规则</text>
+    <rect class="area n" x="314" y="368" width="32" height="26" rx="4" fill-opacity=".25" stroke="#c9a96a" stroke-dasharray="4 3"/>
+    <rect class="d3 n" x="554" y="368" width="32" height="26" rx="4"/>
+    <text class="sm" x="700" y="386">接触件测体积高度，二维乏力</text>
+
+    <!-- row 7 码读物流 -->
+    <text class="ind" x="44" y="428">码读物流</text>
+    <rect class="area n" x="314" y="410" width="32" height="26" rx="4"/>
+    <text class="sm" x="700" y="428">20 码每秒校验，景深与最小 X 尺寸</text>
+
+    <!-- row 8 玻璃透明 -->
+    <text class="ind" x="44" y="470">玻璃透明件</text>
+    <rect class="pol n" x="674" y="452" width="32" height="26" rx="4"/>
+    <rect class="line n" x="434" y="452" width="32" height="26" rx="4" fill-opacity=".25" stroke="#7aa2c8" stroke-dasharray="4 3"/>
+    <text class="sm" x="700" y="470">测厚分辨率 0.1 µm，交叉暗场</text>
+
+    <text class="ind" x="44" y="512">圆柱件</text>
+    <rect class="line n" x="434" y="494" width="32" height="26" rx="4"/>
+    <text class="sm" x="700" y="512">360 度展开，面阵需多机位拼接</text>
+  </g>
+
+  <line class="grid" x1="290" y1="140" x2="290" y2="540"/>
+  <line class="grid" x1="410" y1="140" x2="410" y2="540"/>
+  <line class="grid" x1="530" y1="140" x2="530" y2="540"/>
+  <line class="grid" x1="650" y1="140" x2="650" y2="540"/>
+  <line class="grid" x1="770" y1="140" x2="770" y2="540"/>
+  <line class="grid" x1="890" y1="140" x2="890" y2="540"/>
+
+  <text class="foot" x="44" y="546">金色面阵、蓝色线阵、红色 3D、棕金偏振、蓝灰 SWIR；虚线框为该行业的次要或可选类型。</text>
+  <text class="foot" x="44" y="564">数据来源见正文各小节标注：ISRA VISION、Hamamatsu、KEYENCE、Cognex、R2D、Ayaha、Chromasens、RTX 等厂商应用页与第三方研究。</text>
+</svg>

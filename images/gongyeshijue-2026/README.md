@@ -9,7 +9,12 @@
 | `s02-sensor-size-method.svg` | 用像元尺寸反推靶面，及格式名的分歧 | 第 5 节 | 方法与验算图 |
 | `s03-area-vs-line-scan.svg` | 面阵与线阵的成像方式、行频量级 | 第 4 节 | 原理对照图 |
 | `s04-3d-accuracy-tiers.svg` | 3D 四条路线的精度量级 | 第 7 节 | 对数刻度条形图 |
-| `s05-emva1288-curve.svg` | 光子传递曲线与六个指标的位置 | 第 10 节 | 曲线标注图 |
+| `s05-emva1288-curve.svg` | 光子传递曲线与六个指标的位置 | 第 11 节 | 曲线标注图 |
+| `s06-bandwidth-budget.svg` | 151 MP 相机在各接口下的帧率上限 | 第 10 节 | 对照条形图 |
+| `s07-hand-eye-configurations.svg` | 手眼标定两种构型与标定对象 | 第 13 节 | 构型示意图 |
+| `s08-selection-decision-tree.svg` | 从检测任务到相机类型的四问决策树 | 第 11 节 | 决策树 |
+| `s09-industry-mapping.svg` | 九个行业场景到相机类型的映射 | 第 12 节 | 矩阵图 |
+| `s10-tolerance-matrix.svg` | 视野与像素数对应的判定公差 | 第 12 节 | 热力矩阵 |
 
 ## 纪律
 
