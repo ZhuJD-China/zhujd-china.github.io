@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="100%" role="img" aria-label="手眼标定的两种构型">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .b1{fill:#1a1712;stroke:#c9a96a;stroke-width:1.3}
+    .b2{fill:#14161c;stroke:#7aa2c8;stroke-width:1.3}
+    .b3{fill:#1d1414;stroke:#cf5a50;stroke-width:1.3}
+    .arm{fill:none;stroke:#8a8578;stroke-width:5;stroke-linecap:round}
+    .joint{fill:#3a3a44;stroke:#8a8578;stroke-width:1.4}
+    .cam{fill:#c9a96a}
+    .board{fill:#7aa2c8}
+    .eq{fill:#c9a96a;font:600 15px 'JetBrains Mono',Consolas,monospace}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="520" rx="14"/>
+  <text class="ttl" x="44" y="52">手眼标定：相机在末端，还是在基座</text>
+  <text class="sub" x="44" y="80">选错构型，求出来的变换就是错的，后面所有视觉定位都会跟着偏。判定只看一件事：相机固定在哪个刚体上</text>
+
+  <!-- eye-in-hand -->
+  <text class="hd" x="44" y="122" fill="#c9a96a">构型一　eye-in-hand（眼在手上）</text>
+  <rect class="b1" x="44" y="134" width="540" height="230" rx="10"/>
+  <g transform="translate(70,160)">
+    <rect class="joint" x="40" y="170" width="46" height="20" rx="4"/>
+    <path class="arm" d="M63 170 L63 96 L170 62"/>
+    <path class="arm" d="M63 120 L130 104"/>
+    <circle class="joint" cx="63" cy="96" r="9"/>
+    <circle class="joint" cx="170" cy="62" r="9"/>
+    <circle class="cam" cx="188" cy="52" r="16"/>
+    <path d="M188 36 L188 4 M168 46 L208 46" stroke="#c9a96a" stroke-width="2" fill="none"/>
+    <text class="sm" x="204" y="30">相机装在末端</text>
+    <rect class="board" x="240" y="150" width="110" height="14" rx="3"/>
+    <text class="sm" x="240" y="140">标定板静止在桌面</text>
+    <text class="sm" x="40" y="214">基座</text>
+  </g>
+  <text class="lb" x="392" y="172">标定对象：相机 ↔ 末端执行器</text>
+  <text class="lb" x="392" y="200">板放在哪：静止不动</text>
+  <text class="lb" x="392" y="228">典型任务：上料、装配、抓取</text>
+  <text class="sm" x="392" y="256">相机跟着臂走，所以每张图对应一组已知的</text>
+  <text class="sm" x="392" y="274">机械臂位姿，这是它易算的原因</text>
+
+  <!-- eye-to-hand -->
+  <text class="hd" x="616" y="122" fill="#7aa2c8">构型二　eye-to-hand（眼在手外）</text>
+  <rect class="b2" x="616" y="134" width="540" height="230" rx="10"/>
+  <g transform="translate(642,160)">
+    <rect class="joint" x="40" y="170" width="46" height="20" rx="4"/>
+    <path class="arm" d="M63 170 L63 96 L170 62"/>
+    <path class="arm" d="M63 120 L130 104"/>
+    <circle class="joint" cx="63" cy="96" r="9"/>
+    <circle class="joint" cx="170" cy="62" r="9"/>
+    <rect class="board" x="196" y="46" width="16" height="34" rx="3"/>
+    <text class="sm" x="182" y="38">板装在末端</text>
+    <circle class="cam" cx="30" cy="30" r="16"/>
+    <path d="M30 14 L30 -18 M10 24 L50 24" stroke="#7aa2c8" stroke-width="2" fill="none"/>
+    <text class="sm" x="46" y="4">相机固定在基座</text>
+    <text class="sm" x="40" y="214">基座</text>
+  </g>
+  <text class="lb" x="964" y="172">标定对象：相机 ↔ 机器人基座</text>
+  <text class="lb" x="964" y="200">板放在哪：装在末端法兰，跟着动</text>
+  <text class="lb" x="964" y="228">典型任务：手术、监控式检测</text>
+  <text class="sm" x="964" y="256">相机不动而板在动，位姿信息来自</text>
+  <text class="sm" x="964" y="274">机器人学模型而非相机自观测</text>
+
+  <rect x="44" y="382" width="1112" height="82" rx="10" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.2"/>
+  <text class="hd" x="60" y="408" fill="#c9a96a">两种构型解同一个方程 AX = XB</text>
+  <text class="eq" x="60" y="432">A = 机器人末端在相邻两位的变换　　B = 相机或靶标在相邻两位的变换　　X = 待求的相机到末端或基座的变换</text>
+  <text class="sm" x="60" y="456">采样要求（HALCON 建议）：至少 10 个位姿，位姿间旋转量至少 30°、最好 60°，且必须覆盖至少两个不同旋转轴。旋转量不足会让 X 退化。</text>
+
+  <text class="foot" x="44" y="494">构型定义引自 Zivid 官方 Hand-Eye 文档与 MVTec HALCON 的 calibrate_hand_eye 手册；采样要求与命名（hand_eye_moving_camera / hand_eye_stationary_camera）同 HALCON 手册。</text>
+  <text class="foot" x="44" y="514">图为构型示意，机械臂姿态不代表实际标定过程中的位姿序列；实际采集时位姿应尽量在三维空间中分散而不是沿单一方向变化。</text>
+</svg>
