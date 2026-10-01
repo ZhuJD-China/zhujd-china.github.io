@@ -841,6 +841,25 @@ html[data-theme="us"] .hljs-deletion { color: #b31d28; background-color: #ffeef0
 .post-body th, .post-body td { padding: 12px 16px; border: 1px solid var(--line-soft); text-align: left; }
 .post-body th { background: rgba(var(--gold-rgb), 0.07); color: var(--gold-bright); font-weight: 500; }
 
+/* ---------- 宽表格横向滚动 ----------
+   body 是 overflow-x: hidden，表格一旦宽过容器就会被裁掉、且没有任何滚动条，
+   内容等于丢失（多列表格必然发生）。由 app.js 的 wrapTables() 给每个表格
+   包一层 .table-scroll 承接横向滚动；表格仍按 width:100% 布局，
+   内容的 min-content 宽度超出容器时由容器滚动而非溢出。 */
+.post-body .table-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  margin: 1.8em 0;
+  -webkit-overflow-scrolling: touch;
+}
+.post-body .table-scroll > table { margin: 0; }
+/* 窄屏收紧单元格内边距与字号，缩短需要横滚的距离 */
+@media (max-width: 760px) {
+  .post-body th, .post-body td { padding: 9px 10px; font-size: 13px; }
+  .post-body table { font-size: 13px; }
+}
+
 /* ---------- 数学公式 ---------- */
 .math-block { overflow-x: auto; overflow-y: hidden; }
 .math-block .katex-display { margin: 1.6em 0; }

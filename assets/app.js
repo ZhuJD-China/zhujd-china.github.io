@@ -805,6 +805,9 @@
     // 语法高亮（无附加 UI：代码块 = 黑底 + 高亮代码）
     highlightCode(shell);
 
+    // 宽表格套上横向滚动容器（body 是 overflow-x:hidden，不包就会被裁掉）
+    wrapTables(shell);
+
     // KaTeX 渲染
     if (window.renderMathInElement) {
       try {
@@ -817,6 +820,23 @@
         });
       } catch (e) {}
     }
+  }
+
+  /* ---------- 宽表格横向滚动 ----------
+     body 设置了 overflow-x:hidden，直接溢出的表格会被裁掉且无法滚动，
+     等于丢内容。这里给每个表格包一层 .table-scroll 承接横向滚动，
+     样式见 style.css。已包裹过的跳过，保证可重复调用。 */
+  function wrapTables(root) {
+    var body = root.querySelector(".post-body");
+    if (!body) return;
+    Array.prototype.forEach.call(body.querySelectorAll("table"), function (t) {
+      var p = t.parentNode;
+      if (p && p.classList && p.classList.contains("table-scroll")) return;
+      var w = document.createElement("div");
+      w.className = "table-scroll";
+      p.insertBefore(w, t);
+      w.appendChild(t);
+    });
   }
 
   function renderError(shell, msg) {
