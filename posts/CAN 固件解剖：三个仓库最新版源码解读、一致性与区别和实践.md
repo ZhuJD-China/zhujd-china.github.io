@@ -22,11 +22,58 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 | **实测** | 18 个板级环境中 17 个可构建；1833 个宿主用例 | 第 8 节 |
 | **边界** | 不烧录、不接车、不验证上车效果；仓库的指南到此为止 | 第 14 节 |
 
+---
+
+## 目录
+
+**第一部分 · 范围与关键分歧**
+
+- **0. 三个版本，先钉死** —— 三个仓库的 commit / tag，与全文的证据分档约定
+- **1. FSD 地域围栏：三仓库的对照** —— 选择位与地域锁两层机制，覆写能力的同形与边界
+
+**第二部分 · 逐仓库解剖**
+
+- **2. `tesla-open-can-mod`：最干净的教学样本** —— 文件地图、三层序列、位操作与校验和、门控清单
+- **3. `flipper-tesla-fsd`：整个生态的重心** —— 两份业务层、发送许可、nag killer 与 bit47 的两次改口
+- **4. `ev-open-can-tools`：最像平台的一个** —— 平台化选型、OTA 闸、驱动回调许可与两处实测故障
+
+**第三部分 · 一致性与区别**
+
+- **5. 一致：同一个骨架** —— 三层序列对照表与五处跨仓库共识
+- **6. 区别：五条维度** —— 选型、发送许可、OTA 期间行为、功能面、许可证与发布
+- **7. 它在哪一层** —— 三层定位图：三个仓库都住在总线层
+
+**第四部分 · 实测与未知**
+
+- **8. 实测汇总** —— 1833 个宿主用例、18 次板级构建与六条报错分组
+- **9. 兼容性：一个诚实的未知** —— 2026.2.11 该编哪个宏，可验证与不可验证的分界
+
+**第五部分 · 一台具体配置的实践**（China HW4.0 / 2025 款 Model 3 / 2026.2.11）
+
+- **10. 先把车钉死：这台车意味着什么** —— HW4、DoIP、X179 针号、SOP 时间线四条硬约束
+- **11. 选什么、买什么** —— 主方案与代价、清单、线材与五套备选
+- **12. 接线：从 X179 到螺丝端子** —— 位置口径、引脚表、终结电阻、供电与十步序列
+- **13. 烧录与上电：两条路** —— Web Flasher 与本地编译，以及两处文档裂缝
+- **14. 板子与车上的操作流程，以及仓库的指南到此为止** —— dashboard 四步、运行约束与边界
+
+**第六部分 · 出处与总结**
+
+- **15. 参考与引用** —— 每一条外部出处、性质分层与可复现入口
+- **16. 总结** —— 四条判断、方法论与全文边界
+
+---
+
 # 第一部分 · 范围与关键分歧
+
+本部分先交代版本与证据约定，再把三个仓库在 FSD 地域围栏这一个具体问题上先行对照。
 
 ## 0. 三个版本，先钉死
 
-行号只有钉在版本上才有意义。下表三格对应第 2–9 节的全部 `file:line`，换一格就要重推；三行均于 2026-10-01 用 `git ls-remote` 实时查询。
+行号只有钉在版本上才有意义，而钉住行号的前提是先钉住版本。三行均于 2026-10-01 用 `git ls-remote` 实时查询。
+
+### 0.1 三个仓库的 commit 与 tag
+
+下表三格对应第 2–9 节的全部 `file:line`，换一格就要重推：
 
 | 仓库 | commit | 版本 | 说明 |
 | --- | --- | --- | --- |
@@ -36,7 +83,7 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 
 第三行涉及一个容易混淆的区分：仓库接口返回的 `pushed_at` 记录 `dev` 的推送时间，默认 clone 拿到的却是 `main`，两者相差 46 天、`VERSION` 分别为 `3.1.1` 与 `4.0.0-beta.3`。若按 `main` 记行号，第 4 节会整节错位。
 
-**证据约定，按结论类型分档，不混用：**
+### 0.2 证据约定：按结论类型分档，不混用
 
 | 结论类型 | 验证方式 |
 | --- | --- |
@@ -47,8 +94,6 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 | X179 引脚、哪对线上是哪条总线 | 仓库文档原文加出处行号；本文未接车、未使用示波器，未实测 |
 | star、日期、tag、价格、兼容性、行业事件 | `git ls-remote`、公开接口、网络检索，附 URL 与页面日期，可复现但未逐行核验 |
 | 烧录之后车会怎么反应 | 完全不验证：没有板子、没有线束、没有车辆，见第 14 节 |
-
-**目录**：第一部分两节给出版本、证据约定，以及三仓库在地域围栏上的对照；第二部分三节逐仓库解剖；第三部分三节讲一致性与分化维度；第四部分两节是实测与兼容性；第五部分七节是实践、参考与总结。
 
 ---
 
@@ -139,6 +184,8 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 ---
 
 # 第二部分 · 逐仓库解剖
+
+三份源码用同一套方法读：先给文件地图，再走启动、运行、业务三层序列，最后是位操作、校验和、驱动这些横切面。
 
 ## 2. `tesla-open-can-mod`：最干净的教学样本
 
@@ -386,7 +433,7 @@ inline void setBit(CanFrame &frame, int bit, bool value)
 
 `setSpeedProfileV12V13` 是读改写的纪律示范。掩码 `~0x06` 保留字节里其他位，只动该动的两比特。误伤相邻字段是这类工具最常见的 bug，掩码写法从结构上堵死了它。
 
-`setBit` 用绝对位号寻址：`bit / 8` 定位字节、`bit % 8` 定位位内偏移，并在 `:33-34` 加了越界护栏。这解释了代码中 19、46、47、59、60 这些魔数的来历——DBC 的"起始位 + 长度"语义在这一层已被手工展开成绝对位号（第 5 节第一条）。
+`setBit` 用绝对位号寻址：`bit / 8` 定位字节、`bit % 8` 定位位内偏移，并在 `:33-34` 加了越界护栏。这解释了代码中 19、46、47、59、60 这些魔数的来历——DBC 的"起始位 + 长度"语义在这一层已被手工展开成绝对位号（第 5.1 节）。
 
 ### 2.6 一处被回归测试钉死的耦合
 
@@ -727,7 +774,7 @@ out->buffer[7] = tesla_additive_checksum(CAN_ID_EPAS_STATUS, out->buffer, 7);
 
 **这是收敛还是抄袭，我判定不了。** flipper 在别处会署名——`fsd_handler.c:50` 写着 `BMS read-only parsers (CAN frame templates from tuncasoftbildik/tesla-can-mod)`，多处注释指向 `ev-open-can-tools`——**这一支却没有署名**。我只能把行号并排放着，方向不猜。
 
-（"只在自己起头发的帧上重算校验和"这个共同点，见第 5 节第二条。）
+（"只在自己起头发的帧上重算校验和"这个共同点，见第 5.2 节。）
 
 ### 3.7 一句结论只活了 24 小时：bit47 的两次改口
 
@@ -1002,21 +1049,31 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 **五处一致性值得单说：**
 
-**一、绝对位号寻址是三家共用的方言。** 三份源码里都是 `setBit(frame, 46, true)` 这种字面量位号，**没有任何一家的代码里存在 DBC 文件**——DBC 的"起始位 + 长度 + 字节序"在这层已被手工展开成绝对位号。魔数最容易互相对齐，也最容易集体出错。
+### 5.1 绝对位号寻址是三家共用的方言
 
-**二、校验和只管自己起的头。** 三家都只在"自己是发送方"的帧上重算（`921`、`0x370`、track、ISA），"原地改 `0x3FD` 再回发"时都不重算——flipper 那 1344 行的 `fsd_handle_autopilot_frame` 里**一次 `tesla_additive_checksum` 都没有**。三家一致，说明不是疏忽。
+三份源码里都是 `setBit(frame, 46, true)` 这种字面量位号，**没有任何一家的代码里存在 DBC 文件**——DBC 的"起始位 + 长度 + 字节序"在这层已被手工展开成绝对位号。魔数最容易互相对齐，也最容易集体出错。
 
-**三、`tesla-open-can-mod` 与 `ev-open` 的业务接口逐字相同。** `CarManagerBase` 的三个纯虚方法名（`handleMessage` / `filterIds` / `filterIdCount`）一字不差——ev-open 的 README 明说它是从同族工具衍生的。
+### 5.2 校验和只管自己起的头
 
-**四、HW3 查 mux 2 的状态缓存、HW4 不查，两个仓库一模一样。** 第 2.4 节 `handlers.h:165` 对 `handlers.h:276`，第 3.4 节 `fsd_handler.c:268` 对 `:311`，同样的不对称，两边的测试也各自锁住了这个行为。
+三家都只在"自己是发送方"的帧上重算（`921`、`0x370`、track、ISA），"原地改 `0x3FD` 再回发"时都不重算——flipper 那 1344 行的 `fsd_handle_autopilot_frame` 里**一次 `tesla_additive_checksum` 都没有**。三家一致，说明不是疏忽。
 
-**五、"先清再置"的读改写纪律是三家共识。** 第 2.5 节的掩码、第 3.5 节 `:1329` 的 `OR-ing 0x40 without clearing leaves level=3 unchanged`、第 4.5 节 `setBit` 的 `~mask`——三处注释、三种写法、同一个教训：**忘了掩码，位操作会静默失效，方式是"看起来生效了一部分"。**
+### 5.3 `tesla-open-can-mod` 与 `ev-open` 的业务接口逐字相同
+
+`CarManagerBase` 的三个纯虚方法名（`handleMessage` / `filterIds` / `filterIdCount`）一字不差——ev-open 的 README 明说它是从同族工具衍生的。
+
+### 5.4 HW3 查 mux 2 的状态缓存、HW4 不查，两个仓库一模一样
+
+第 2.4 节 `handlers.h:165` 对 `handlers.h:276`，第 3.4 节 `fsd_handler.c:268` 对 `:311`，同样的不对称，两边的测试也各自锁住了这个行为。
+
+### 5.5 "先清再置"的读改写纪律是三家共识
+
+第 2.5 节的掩码、第 3.5 节 `:1329` 的 `OR-ing 0x40 without clearing leaves level=3 unchanged`、第 4.5 节 `setBit` 的 `~mask`——三处注释、三种写法、同一个教训：**忘了掩码，位操作会静默失效，方式是"看起来生效了一部分"。**
 
 ## 6. 区别：五条维度
 
 差别比相似更能说明问题。同样三个仓库，五条维度上已经分得很开。
 
-### 维度一：选型发生在哪一层
+### 6.1 维度一：选型发生在哪一层
 
 | | 方式 | 代价 |
 | --- | --- | --- |
@@ -1026,7 +1083,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 三者没有优劣，但**代价的形态不同**：`tesla-open-can-mod` 把代价放在编译期（配错即编不过），flipper 放在运行时（选错要手工回退），ev-open 放在两条路径上（网页面板和固件各自决定）。
 
-### 维度二：发送许可放在哪一层
+### 6.2 维度二：发送许可放在哪一层
 
 这一条是三个仓库**分化最深**的地方：
 
@@ -1040,7 +1097,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 `ev-open` 的许可函数只有两道：`appInjectionReady()` 不通过就 `false`，`summonOnlyInjectionRuntime` 关着就 `true`，否则问 handler 要 `summonOnlyInjectionDecisionAt()` 的裁决。flipper 那三道（Listen-Only / Autopark / OTA）ev-open 一条也没有，实现分在别处。
 
-### 维度三：OTA 期间的行为
+### 6.3 维度三：OTA 期间的行为
 
 三个仓库对"OTA 进行中"的处理完全不在一个强度上：
 
@@ -1050,7 +1107,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 同一句"OTA 进行中不要发帧"，三种实现的边界从"业务层自律"一路推到"运行时整体停摆"。**ev-open 最保守，也最不容易出错。**
 
-### 维度四：功能面
+### 6.4 维度四：功能面
 
 | 功能 | `tesla-open-can-mod` | `flipper-tesla-fsd` | `ev-open-can-tools` |
 | --- | --- | --- | --- |
@@ -1069,7 +1126,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 **这个矩阵就是三个仓库的分野**：`tesla-open-can-mod` 是一个能跑通的最小实现，flipper 是一个带运行时治理的完整应用，ev-open 是一个带面板和插件的平台。**功能面越宽，需要读的源码越多；但功能面越窄，越容易一眼看全它到底发了什么。**
 
-### 维度五：许可证与发布
+### 6.5 维度五：许可证与发布
 
 | | 许可证（打开 `LICENSE` 逐字核对） | 发布形态 | 末次提交 |
 | --- | --- | --- | --- |
@@ -1101,7 +1158,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 ## 8. 实测汇总
 
-**一、宿主测试（`native` / `platform = native`，不碰硬件）**
+### 8.1 宿主测试（`native` / `platform = native`，不碰硬件）
 
 | 仓库 | 版本 | 套件 | 用例 | 结果 |
 | --- | --- | --- | --- | --- |
@@ -1115,7 +1172,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 ev-open 那 2 个失败是真编译错误，根因就是 4.6 节的 `strlcpy`：`plugin_engine.h:747` 在 MinGW 下缺符号，同树的 `native_plugin_engine_custom_key` 套件一起挂——一个 bug 打掉两个套件。倒数第二行的 `waveshare-single-can-firmware` 不在三仓之内，列出只作横向对照。
 
-**二、板级构建（`pio run -e <env>`，真的编固件）**
+### 8.2 板级构建（`pio run -e <env>`，真的编固件）
 
 | 仓库 | 版本 | 实跑 env | 结果 |
 | --- | --- | --- | --- |
@@ -1127,7 +1184,9 @@ ev-open 那 2 个失败是真编译错误，根因就是 4.6 节的 `strlcpy`：
 
 **四个 ESP32-S3 目标全部通过**，`TX=GPIO15`、`RX=GPIO16` 这组引脚是三个仓库各自独立给出的、交叉印证。这是"能编译通过"的最强证据——不是读 README 说的，是链接器和 esptool 说的。
 
-**三、环境：Windows 11，2026-09-30 至 2026-10-01，PlatformIO Core 6.2.0，Python 3.12.10（`PYTHONUTF8=1`，否则 `minify_dashboard.py` 撞 GBK），主机编译器 MinGW-w64 GCC 16.2.0，代理 `http://127.0.0.1:10808`。** 上表全部于 2026-10-01 在第 0 节钉死的三个 commit 上重跑。
+### 8.3 环境与六条报错
+
+环境：Windows 11，2026-09-30 至 2026-10-01，PlatformIO Core 6.2.0，Python 3.12.10（`PYTHONUTF8=1`，否则 `minify_dashboard.py` 撞 GBK），主机编译器 MinGW-w64 GCC 16.2.0，代理 `http://127.0.0.1:10808`。上表全部于 2026-10-01 在第 0 节钉死的三个 commit 上重跑。
 
 **六条报错按性质分两组。A 组四条是 onboarding / 环境类，照做就能过：**
 
@@ -1155,7 +1214,9 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 `strlcpy` 是 BSD/newlib 函数，ESP-IDF 有、本机 MinGW g++ 没有，**大概率平台相关**（完整分析见第 4.6 节）——ev-open 的 9 个 native 套件我这台机器只能过 7 个。另有 `Got the unrecognized status code '403'` 一条，是我下载工具链时的网络问题，配本地代理后恢复，与仓库无关。
 
-**我没有做的事：** 没有烧录（`--target upload` 一条未执行）、没有连车、没有验证任何一帧在真实总线上会被接受、没有跑 `dev` 的测试矩阵、没有对 flipper 的 `ffbb24e` 重跑（827 条在 `6a3404f` 上）。
+### 8.4 没有做的事，以及"编译通过"的边界
+
+没有烧录（`--target upload` 一条未执行）、没有连车、没有验证任何一帧在真实总线上会被接受、没有跑 `dev` 的测试矩阵、没有对 flipper 的 `ffbb24e` 重跑（827 条在 `6a3404f` 上）。
 
 **编译通过不等于能用。** 编译只证明语法、模板、链接成立，不证明任何 CAN 帧语义正确；1833 个用例断的是**开发者自己写的预期**——能证明"代码符合作者意图"，不能证明"作者的意图符合车端实际"。**因此本文关于"车会怎么反应"的句子仍是社区回报，第 9 节的结论一个字都不用改。**
 
@@ -1165,7 +1226,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 **问题：2025 款 Model 3（China HW4.0、OTA 2026.2.11）该编哪个宏？**
 
-### 先给 grep 结果（可复现）
+### 9.1 先给 grep 结果（可复现）
 
 对三个仓库的**全部**文本文件（`.md` / `.h` / `.c` / `.cpp` / `.ino` / `.ini` / `.py` / `.fam` / `.yml` / `.txt`）执行了三个关键字的扫描，扫描文件数分别是 31 / 117 / 103：
 
@@ -1177,7 +1238,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 **这张表本身就是一个结论**：只有 `flipper` 记录了这个版本号，也只有它和 `tesla-open-can-mod` 讲 X179。`ev-open` 三项近乎全空——它讲 OBD-II 与板载端子，`China` 那唯一一条是 `include/can_helpers.h:163` 的注释。
 
-### 但 flipper 那 10 处，没有一处是这台车
+### 9.2 但 flipper 那 10 处，没有一处是这台车
 
 **10 处全部落在文档与 issue 模板里，源码文件（`.c` / `.cpp` / `.h` / `.ino`）零命中。** 这一点很重要：**文档记录版本，源码判断版本——而源码那半边不存在。** 编译期写下 `HW4` 就是 `HW4`，不看车、不看 OTA、不看地区。
 
@@ -1190,7 +1251,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 **同一个 `2026.2.11` 在同一份文档里同时挂着 HW3 和 HW4**——不同车型、不同年款可以停在同一个 OTA 版本上，这恰恰说明**版本号本身推不出硬件代际**。而 Model 3 这个车型，**两条里一条都没有**。
 
-### 那文档呢？文档只差一点就答上了
+### 9.3 那文档呢？文档只差一点就答上了
 
 `README.md:69` 是全仓唯一一条带版本阈值的规则，原文如下：
 
@@ -1229,13 +1290,13 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 把四个词拆开，各自带出一条硬约束。
 
-### 一、`HW4` 三个字，先排掉两个选项
+### 10.1 `HW4` 三个字，先排掉两个选项
 
 第 2.7 节讲过，校验和是 HW4 独有的一支；第 2.4 节的表也列了，三个宏只有 `LEGACY` / `HW3` / `HW4`。所以配置里 HW4.0 这一项直接决定：**Legacy（HW1/HW2）那条路不相关**，选型时只需要在 HW3 与 HW4 之间确认，而答案已经由配置给出。
 
 第 9 节已经把能查的都查了，结论是：**flipper 的兼容矩阵里，"Model 3 + HW4"那行的版本范围是 `< 2026.2.9`，这台车掉在外面**；唯一一条 `HW4 + 2026.2.11` 的正面数据是 Model Y Juniper。
 
-### 二、2025 款 Model 3，第一件该确认的事是 OBD-II 口上是不是 CAN
+### 10.2 2025 款 Model 3，第一件该确认的事是 OBD-II 口上是不是 CAN
 
 `flipper` `HARDWARE.md:39`（`ffbb24e`）：
 
@@ -1247,7 +1308,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 同一节另有一个限定：DoIP 迁移的分类轴是**生产日期与地区，不是"改款与否"**；适用范围仓库自陈 **"not yet pinned down"**。
 
-### 三、X179 的 pin→bus 映射不固定，而唯一的确定判据在车机里
+### 10.3 X179 的 pin→bus 映射不固定，而唯一的确定判据在车机里
 
 `HARDWARE.md:98`：**"The X179 pin→bus map is NOT fixed across builds — verify it on your own car."** 至少存在四种电气配置，而且"按年款推断不可靠"。
 
@@ -1255,7 +1316,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 **那台是 Model Y，不是这台 Model 3。** 所以这一节落到具体车辆上的第一步动作很具体：先打开 Service Mode 的 CAN Port，把针号记下来，再动线。
 
-### 四、生产日期早于 SOP10，但早于 SOP10 不等于 pre-April-2024
+### 10.4 生产日期早于 SOP10，但早于 SOP10 不等于 pre-April-2024
 
 `HARDWARE.md:225` 的 SOP 时间线里，**上海是 2026-03-25（SOP11）**，柏林 2026-04-01，奥斯汀 2025-12-04，弗里蒙特 2025-12-09。2025 年产的车在这条线之前，因此**不属于 post-SOP10 那一档**。
 
@@ -1271,13 +1332,13 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 那台车是 `@0n3-70uch` 用**示波器**量的（issue `#52`，Berlin 产 pre-Juniper、post-April-2024 生产、FW 2026.14.3）。仓库自己给的三条安全建议（`:220` 起）：**接收发器前每一对都用示波器验一遍**；13/14 的 120Ω 检查不过就改试 18/19；+12V（15）与 GND（26）跨 SOP 稳定。**这三条我一条都没执行**——没有板子、没有线束、没有示波器。
 
-### 五、把四个词合成一句话
+### 10.5 把四个词合成一句话
 
 > **这台车的选型前提：HW4 走 HW4 路径；OBD-II 口默认按 DoIP 处理、直接接 X179；X179 先开 Service Mode → CAN Port 记针号，再接线；版本 2026.2.11 上目前唯一的正面数据来自同代际、同地区、同版本但不同车型（Model Y）的社区回报。**
 
 ## 11. 选什么、买什么
 
-### 先说推荐
+### 11.1 先说推荐
 
 **主方案：`hypery11/flipper-tesla-fsd` 的 `waveshare-s3-can`。** 三个理由，按可验证性递减：
 
@@ -1287,7 +1348,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 **但推荐一个东西必须同时写出它的代价**：它的"Model 3 + HW4"记录版本范围是 `< 2026.2.9`（第 9 节），这台车在范围外；而且它是三家里唯一明确记录 VIN 级封禁的（见第 14 节）。
 
-### 主方案清单
+### 11.2 主方案清单
 
 | 项 | 内容 |
 | --- | --- |
@@ -1298,7 +1359,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 | 第三方比价（2026-10-01 检索，**电商商品页**） | Sunsky **$19.46**（`https://www.sunsky-online.com/p/TBD0607022302/Waveshare-Industrial-ESP32-S3-Control-Board-With-RS485-And-CAN-Communication-Interfaces-Onboard-Ante.htm`，2 件起 $19.30）· Amazon **$26.87**（`https://www.amazon.com/dp/B0FNCWZ3D1`）· eBay **$32.98**（`https://www.ebay.co.uk/itm/267437528758`）；另检索到 MiOT **$22.79**、Newegg **$53.99**、elty **€19.71**（卖的是 `-U` 外置天线版）三处，当时未保留深链。**同一块板在不同站点差近三倍，买前先按下一行的规格核对** |
 | 对应构建目标 | `waveshare-s3-can`（`esp32/README.md:159` 明列，TX=15 / RX=16 / LED=46 / BTN=0） |
 
-其余板子、降压模块与 Flipper 那一路的**仓库原始链接**集中在第 15 节「二、厂商文档（一手）」与「三、第三方价格（非一手）」，此处不重复。
+其余板子、降压模块与 Flipper 那一路的**仓库原始链接**集中在第 15.2 节「厂商文档（一手）」与第 15.3 节「第三方价格（非一手）」，此处不重复。
 
 **从 wiki 核实的规格**（不是我推断的）：主控 **ESP32-S3R8**，LX7 双核 240MHz，2.4GHz WiFi + BLE 5；**16MB Flash** / 8MB PSRAM；**板载隔离 CAN**（端子 + TVS + 浪涌 + ESD + 指示灯）；**120Ω 匹配电阻默认 `NC`（断开）、跳线帽使能**——正好符合 `HARDWARE.md:633` 的"不要加第二个 120Ω"；端子供电 **7V ~ 36V**，另有 USB Type-C 5V；导轨式外壳 91.6 × 23.3 × 58.7 mm。
 
@@ -1306,7 +1367,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 > ⚠️ **微雪自己的法律声明**（wiki「Warning」栏）：本产品仅用于合法的开发、学习、研究与工业用途，**严禁将任何 CAN 总线用于未经授权的破解、篡改、解锁或功能劫持**，否则可能构成违法、用户自负全部法律责任——厂商原话，我照译放在这儿。
 
-### 线材与小件
+### 11.3 线材与小件
 
 | 件 | 用途 | 价格与链接 |
 | --- | --- | --- |
@@ -1316,7 +1377,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 | （可选）示波器 | 验每一对是 CAN 还是 DoIP | `HARDWARE.md:220` 的第 1 条建议 |
 | 一字螺丝刀 | 拧螺丝端子 | 微雪包装内附小螺丝刀 |
 
-### 不用买的东西
+### 11.4 不用买的东西
 
 | 件 | 为什么不用 |
 | --- | --- |
@@ -1324,7 +1385,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 | **120Ω 终端电阻** | `HARDWARE.md:633`：Tesla 的总线**已经终结**，别加第二个；微雪这块出厂就是断开的 |
 | **降压模块** | 板子吃 7~36V，X179 的 12V 直接进端子 |
 
-### 备选（`HARDWARE.md:386-563` 的五套，价格是仓库标出的美元）
+### 11.5 备选（`HARDWARE.md:386-563` 的五套，价格是仓库标出的美元）
 
 | 方案 | 内容 | 仓库标价 | env |
 | --- | --- | --- | --- |
@@ -1338,7 +1399,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 ## 12. 接线：从 X179 到螺丝端子
 
-### 一、X179 在哪——三份文档，三种口径
+### 12.1 X179 在哪——三份文档，三种口径
 
 ![X179 在车上的位置：三份文档的三种口径](images/can-mod-teardown-2026/s04-x179-location.svg)
 
@@ -1366,7 +1427,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 两份指南都附了 Enhance Auto 的实拍视频，**实车动手前以视频为准，不要以文字为准。**
 
-### 二、引脚表（仓库原文，**不是实车实测**）
+### 12.2 引脚表（仓库原文，**不是实车实测**）
 
 **20-pin（2021–2023 Model 3/Y，`HARDWARE.md:130-158`，表体 `:140-150`）**
 
@@ -1387,7 +1448,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 `HARDWARE.md:252-256` 同样把「gateway-forwarded mix of buses」标为 **Older notes**，并给出这一对在 `1933903-XX` 线束上的 Service Mode 结论：**Chassis CAN**。原文补了一句 —— **The pin→bus map varies, so check Service Mode → CAN Port on your own car.**
 **26-pin 有两档，`HARDWARE.md:159` 起，且 `:162` 明确写着 `"They are not interchangeable."`**：pre-April-2024 表在 `:176-183`（段落自 `:171` 起）；post-April-2024 的示波器实测表就是第 10 节那张（`:204-210`），9/10 与 12/13 是 DoIP，`:208` 只留一句 **"Vehicle CAN — only working CAN pair"**。
 
-### 三、四根线怎么接
+### 12.3 四根线怎么接
 
 ![四根线怎么接：X179 到螺丝端子](images/can-mod-teardown-2026/s05-x179-wiring.svg)
 
@@ -1410,13 +1471,13 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 - **`:280-286`**：要注入 `0x3C2`，接 **9/10** 或 **OBD-II 6/14**；13/14 上根本没有这一帧
 - **`:299-305`**：HW4-modern 上 `0x370` **不在 Vehicle CAN（9/10/11）** —— 两台车的抓包在 pin 9/10、10/11 上 60 秒内都是 0 帧，`0x370` 出现在 pin **13/14**；Service Mode 随后显示线束 `1933903-XX` 的 13/14 就是 **Chassis CAN**。原文另有一句：把 nag echo 从 13/14 挪到 Vehicle CAN **够不着 EPAS**，对 HW4-modern 不可行
 
-### 四、终结电阻：不要加，并且要量一次
+### 12.4 终结电阻：不要加，并且要量一次
 
 `HARDWARE.md:633`：**"Tesla's CAN buses are already terminated. Do not add a second 120 Ω terminator."** 多数后装模块出厂带终结，接车之前先关掉——微雪这块出厂是 `NC`，不用动。
 
 `:646` 的验证法（**脱车**量）：CAN-H ↔ CAN-L **~120Ω = 正常**（车提供终结）；**~60Ω = 外接模块自带的终结器开着**，关掉。
 
-### 五、供电三个坑
+### 12.5 供电三个坑
 
 1. **OBD-II pin 16 是常电**，车锁了也供（`:653`）。ESP32 静态约 50mA × 12V ≈ **0.6W 持续**，几天能把 12V 电池放干。
 2. **X179 pin 1/15 行为不一**（`:659`）：有的车随唤醒门控、有的常电，**仓库原话是"先用万用表测再依赖它"**。
@@ -1424,7 +1485,7 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 
 永久安装走深睡（`:665` 起）：5 分钟无帧 → 深睡约 10µA。
 
-### 六、上电之前的静态检查
+### 12.6 上电之前的静态检查
 
 | 检查 | 依据 | 判据 |
 | --- | --- | --- |
@@ -1434,7 +1495,7 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 | 服务模式记针号 | `HARDWARE.md:104-105` | CAN Port 页按料号列针 |
 | 确认端子/USB 只走一路供电 | 微雪 wiki FAQ | 同时接可能损坏模块 |
 
-### 七、端到端操作序列：十步
+### 12.7 端到端操作序列：十步
 
 上面六小节是按主题拆开的；下面这一条按执行顺序合起来，每步给出通过判据与出处。前五步不带电、可以反复重来，后五步才带电，且供电路径唯一。
 
@@ -1463,7 +1524,7 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 
 ## 13. 烧录与上电：两条路
 
-### 路一：Web Flasher（零工具链）
+### 13.1 路一：Web Flasher（零工具链）
 
 | | |
 | --- | --- |
@@ -1472,7 +1533,7 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 | 浏览器 | 桌面版 **Chrome / Edge / Opera** |
 | 自己编译 | `esp32/README.md` 给的是 `pio run -e waveshare-s3-can` |
 
-### 路二：自己编（**这一条我实跑了**）
+### 13.2 路二：自己编（**这一条我实跑了**）
 
 ```bash
 git clone https://github.com/hypery11/flipper-tesla-fsd.git
@@ -1482,7 +1543,7 @@ pio run -e waveshare-s3-can
 
 第 8 节记录的本机结果（在上游 `6a3404f` 上复跑）：`waveshare-s3-can` **SUCCESS，RAM 37.4% / Flash 28.0%**；同一棵树的其余 9 个 env 也全部 SUCCESS（**10/10**）。加 `-t upload` 就是烧录。
 
-### 走 `tesla-open-can-mod` 的话，会撞两处裂缝
+### 13.3 走 `tesla-open-can-mod` 的话，会撞两处裂缝
 
 **裂缝一：M4 指南里的宏在源码里不存在。** `guides/INSTALLATION_GUIDE_M4_CAN.md:29` 写着 `#define HW_TARGET TARGET_HW3  // Change to TARGET_LEGACY, TARGET_HW3, or TARGET_HW4`，全仓库 grep `HW_TARGET|TARGET_HW3|TARGET_LEGACY` **只有这一处命中**——没有任何代码读它，真正生效的是 `RP2040CAN.ino:24-26` 的车型宏与 `include/app.h:17-25` 的条件编译。**照指南逐字执行，会定义一个没人读的宏，构建照样撞上 `include/app.h:24` 的 `#error`。** 指南其余部分（装库、选板、接线、验证）都对，只有选型这一行指向了不存在的 API。
 
@@ -1502,7 +1563,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 ## 14. 板子与车上的操作流程，以及仓库的指南到此为止
 
-### 一、到 dashboard 为止的四步
+### 14.1 到 dashboard 为止的四步
 
 这四步是第 12 节图 6 的第 6–10 步，此处只补判据。
 
@@ -1511,7 +1572,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 3. **先看接线对不对**：`esp32/README.md:131` 的 **Wiring Check = `rx_count` + CAN error monitoring**。这一步只读：**帧数在涨、CRC 错误为 0，说明收发对了；反过来先回第 12 节查线。**
 4. **选硬件模式**：`esp32/README.md:123` 的 **HW Override = Auto-detect / Force HW4 / Force HW3 / Force Legacy**，运行时选择、不用重烧。
 
-### 二、仓库自己写下的几条运行约束
+### 14.2 仓库自己写下的几条运行约束
 
 | 约束 | 出处 | 内容 |
 | --- | --- | --- |
@@ -1526,7 +1587,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 **这是仓库自己的陈述（附 issue `#18`），我没有独立核实，也没有车可以核实**——但它写在 HEAD 的 README 里，性质是**项目方的风险自述**，比"社区回报"高一级。
 
-### 三、仓库的指南到此为止
+### 14.3 仓库的指南到此为止
 
 **以上全部是仓库文档与厂商规格的转述，行号都给了，我一条都没执行**——没有板子、没有线束、没有车。
 
@@ -1536,17 +1597,21 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 ---
 
+# 第六部分 · 出处与总结
+
+本部分给出全文引用的每一条外部出处与证据分层，以及四条判断与边界。
+
 ## 15. 参考与引用：本文用到的每一条外部出处
 
 三类性质请勿混用：**一手**＝我能直接拿到原文；**社区回报**＝第三方在 issue/讨论里的单点陈述，我未独立核实；**未核实**＝我明确没有验证。访问日期除另注外均为 **2026-10-01**。
 
-### 一、三个仓库本身
+### 15.1 三个仓库本身
 
 三行的 URL 与 commit 见第 0 节那张表，全部用 `git ls-remote` / 本地 HEAD 复现。
 
 **第 9 节引用的同族项目**（`herrfrei`、`juamiso`、`jvanakker`）与**第 8 节计入测试总数的** `JordanzhaoD/waveshare-single-can-firmware`，我按 URL 与页面日期记录，**未 clone 下来做 `file:line` 核验**。
 
-### 二、厂商文档（一手）
+### 15.2 厂商文档（一手）
 
 | 出处 | URL | 用在哪 |
 | --- | --- | --- |
@@ -1555,9 +1620,9 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | 微雪官方商城 | `https://www.waveshare.net/shop/ESP32-S3-RS485-CAN.htm` | 第 11 节标价（**该站有反爬，页面未直接返回价格**） |
 | PlatformIO | `https://platformio.org/` | 出自 `esp32/README.md`，未另开页面 |
 | Flipper Zero | `https://flipper.net/` | 出自 `HARDWARE.md`，未另开页面 |
-| Tesla 官方 X179 连接器页：料号 `1849225-03-B`、护套 `KSE K30M31014`、色 `GY`，附完整 pinout 表与 `Connector Location` 图示栏位 | `https://service.tesla.com/docs/Model3/ElectricalReference/prog-233/connector/x179/` | 第 11 节线束规格、第 12 节一 |
+| Tesla 官方 X179 连接器页：料号 `1849225-03-B`、护套 `KSE K30M31014`、色 `GY`，附完整 pinout 表与 `Connector Location` 图示栏位 | `https://service.tesla.com/docs/Model3/ElectricalReference/prog-233/connector/x179/` | 第 11 节线束规格、第 12.1 节 |
 
-### 三、第三方价格（非一手）
+### 15.3 第三方价格（非一手）
 
 | 出处 | URL | 页面日期 | 用在哪 |
 | --- | --- | --- | --- |
@@ -1571,11 +1636,11 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | Sunsky 同款（板载天线版，含 $19.30 起阶梯价） | `https://www.sunsky-online.com/p/TBD0607022302/Waveshare-Industrial-ESP32-S3-Control-Board-With-RS485-And-CAN-Communication-Interfaces-Onboard-Ante.htm` | 2026-10-01 | 第 11 节 $19.46 |
 | Amazon 同款 | `https://www.amazon.com/dp/B0FNCWZ3D1` | 2026-10-01 | 第 11 节 $26.87 |
 | eBay UK 同款 | `https://www.ebay.co.uk/itm/267437528758` | 2026-10-01 | 第 11 节 $32.98 |
-| PAC `CP1-TSL1` 厂商目录页，产品描述 "For 26-Pin Connector at Back Of Center Console" | `https://catalog.archive.pac-audio.com/catalog/can-integration/cp1-tsl1` | 2026-10-01 | 第 12 节一 的独立佐证，页面标价 $49.99 |
+| PAC `CP1-TSL1` 厂商目录页，产品描述 "For 26-Pin Connector at Back Of Center Console" | `https://catalog.archive.pac-audio.com/catalog/can-integration/cp1-tsl1` | 2026-10-01 | 第 12.1 节的独立佐证，页面标价 $49.99 |
 
 **"仓库引用"指 URL 出自 `hypery11/flipper-tesla-fsd/HARDWARE.md`，我没另开页面核对价格**；第 11 节表里的美元数字是**仓库标的**（`:388` `:405` `:417` `:437` `:541`），不是我查的。
 
-### 四、社区回报（issue / discussion，我未独立核实）
+### 15.4 社区回报（issue / discussion，我未独立核实）
 
 | 内容 | 出处 | 用在哪 |
 | --- | --- | --- |
@@ -1588,7 +1653,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | **HW4 + 2026.2.11 正面兼容数据** | `changelog.md:243`，`@Tikernel` + `@ViPiMP`，**Model Y Juniper** | 第 9、10 节 |
 | 分版本兼容结论表 | `README.md:280-293` | 第 9 节 |
 
-### 五、工具与可复现入口
+### 15.5 工具与可复现入口
 
 | 内容 | URL |
 | --- | --- |
@@ -1597,14 +1662,14 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | FSD CAN Mod Hub 跟踪页（README 徽章指向） | `https://fsdcanmod.com/project/hypery11-flipper-zero` |
 | Tesla Electrical Reference（仓库引用的官方文档） | `https://service.tesla.com/docs/ModelY/ElectricalReference/` |
 
-### 六、本文的证据分层
+### 15.6 本文的证据分层
 
 | 层 | 用在哪 | 可信度 |
 | --- | --- | --- |
 | 本地源码 `file:line` / 上游 `README.md:N` | 第 2–4 节、第 8、13 节 | **可 grep 复现**，行号与 commit 钉死在第 0 节那张表 |
 | 本机实跑（编译、测试） | 第 8 节 | 输出可重跑，版本标注见表内 |
 | 文件实读 / 关键字检索 | 第 6 节维度五的三个 `LICENSE`、第 9 节三行 grep | 打开读过、可复现（扫描文件数已标注） |
-| 仓库文档转述 / 社区回报 / 未核实 | 第 10–14 节、本节第四组、兼容性状态 | **行号可查，内容我没验或未独立核实；第 9 节的结论不变** |
+| 仓库文档转述 / 社区回报 / 未核实 | 第 10–14 节、第 15.4 节、兼容性状态 | **行号可查，内容我没验或未独立核实；第 9 节的结论不变** |
 
 ---
 
@@ -1612,7 +1677,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 本文开头提出的问题是"操作序列写在代码里，在哪三层"。三个仓库给出同一个答案，差异只在放置位置：启动层 handler 均先于驱动建立，运行层均为"排空读取 + 逐帧转发"、差异在转发前垫入的内容，业务层均为按 mux 分支、读状态、改比特、回发。横切面三家同源，展开见第 5 节。
 
-三条判断。
+四条判断。
 
 其一，`tesla-open-can-mod` 的工程成熟度高于同类工具的平均水准。第 2.6 节的 shadowing 回归测试完整走过"发现隐式耦合 → 修复 → 用测试锁死 → 把意图写进测试名"的流程，随手编写的脚本不会具备这一形态。
 
