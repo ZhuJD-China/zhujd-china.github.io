@@ -7,9 +7,7 @@ order: 3
 excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际最新版重新钉死行号：tesla-open-can-mod 的 815e000、flipper-tesla-fsd 的 ffbb24e（v2.16-beta.34）、ev-open-can-tools 的 6d37392（v4.0.0-beta.3——它不在默认分支上，main 落后 14 个提交）。三份源码用同一套方法读：地图、启动/运行/业务三层序列、位操作与校验和横切面；再把三者的一致骨架和五条分化维度摊开对照；最后落到一台具体车上——China HW4.0、2025 款 Model 3、2026.2.11 的选型、购买、X179 接线与烧录，附实跑数据汇总与外部引用出处。
 ---
 
-《自动驾驶专栏》第三篇，2026-10-01。本文对三个公开仓库的最新版源码作逐行解剖，给出它们在同一组问题上的一致结构与分化路径，并以一台具体车辆（China HW4.0、2025 款 Model 3、2026.2.11）完成选型、采购、接线与烧录的全过程记录。
-
-围绕同一条 CAN 总线，公开实现不止一个。本文考察其中三个：PlatformIO 固件工程 `tesla-open-can-mod`、Flipper Zero 应用 `flipper-tesla-fsd`、ESP-IDF 固件平台 `ev-open-can-tools`。三者形态差异显著，分别采用编译期选型、运行时菜单与网页开关；将三份源码并列后可以看到，收发序列集中于同一批文件，抽象骨架高度重合，分化集中在少数几条明确的维度上。
+《自动驾驶专栏》第三篇，2026-10-01。围绕同一条 CAN 总线的公开实现不止一个，本文考察其中三个：PlatformIO 固件工程 `tesla-open-can-mod`、Flipper Zero 应用 `flipper-tesla-fsd`、ESP-IDF 固件平台 `ev-open-can-tools`——三者形态差异显著，分别采用编译期选型、运行时菜单与网页开关。三份源码作逐行解剖：并列后可以看到，收发序列集中于同一批文件，抽象骨架高度重合，分化集中在少数几条明确的维度上；最后落到一台具体车辆（China HW4.0、2025 款 Model 3、2026.2.11），完成选型、采购、接线与烧录的全过程记录。
 
 **结论前置。** 下表六行是全文的结论，先于证据给出，每一行标注可回查的章节：
 
@@ -393,7 +391,7 @@ if (frame.id == 1021)
 
 mux 0 刷新状态，mux 2 应用缓存，mux 1 完全不理会缓存。mux 2 那支带 `&& FSDEnabled`，用 mux 0 存下的值；mux 1 那支根本没引用 `FSDEnabled`，收到 mux 1 帧即改比特回发。
 
-这不是笔误，2.6 会给出它的回归测试。三个 handler 的 mux 1 分支写法相同，但三者的 mux 2 不一致：HW3 检查缓存（`handlers.h:165`），HW4 不检查（`handlers.h:276` 为光秃秃的 `if (index == 2)`），Legacy 没有 mux 2 这一支。
+**这不是笔误**——mux 0 → mux 2 锁存的回归测试见 2.6，mux 1 分支的断言见 2.10。三个 handler 的 mux 1 分支写法相同，但三者的 mux 2 不一致：HW3 检查缓存（`handlers.h:165`），HW4 不检查（`handlers.h:276` 为光秃秃的 `if (index == 2)`），Legacy 没有 mux 2 这一支。
 
 ### 2.5 横切面一：位操作与读改写纪律
 
@@ -994,7 +992,7 @@ inline void setBit(CanFrame &frame, int bit, bool value)
 }
 ```
 
-`bit / 8`、`bit % 8`、掩码读改写——**与第 2.5 节逐行同构**。唯一多出来的是开头那道边界守卫：**`bit` 越界直接返回，不越界写。** 另外两个仓库的 `setBit` 都没有这一行，越界会直接写到 `data[]` 之外。
+`bit / 8`、`bit % 8`、掩码读改写，连开头那道边界守卫都与第 2.5 节逐字相同——**`bit` 越界直接返回，不越界写**。flipper 的 `tesla_set_bit`（`fsd_can_ops.h:19-27`）同样带护栏（`:20`），三家越界语义一致：都只在 `data[8]` 之内改写。
 
 **校验和**，`include/can_helpers.h:199-214` 的 `computeVehicleChecksum(frame, checksumByteIndex = 7)`：ID 高低字节 + 数据字节累加（跳过校验字节自己）取低 8 位，外加一处 `dlc` 边界判断。**同一个算法**——与第 2.7 节那段内联循环是同一段数学，只是抽成函数、累加顺序反过来。三个仓库，三种封装，一个算法。
 
@@ -1045,7 +1043,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 # 第三部分 · 一致性与区别
 
-三份源码读完了。先看它们**在哪一层其实是一份东西**，再看它们**在哪一层已经分化成三个不同的工具**——这一部分不重复第 2–4 节的行号，只做对照。
+三份源码读完了。先看它们**在哪一层其实是一份东西**，再看它们**在哪一层已经分化成三个不同的工具**——这一部分只作对照与回指，不引入第 2–4 节之外的新证据。
 
 ## 5. 一致：同一个骨架
 
@@ -1109,7 +1107,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 | `flipper-tesla-fsd` | `fsd_can_transmit()` 三道条件 | `fsd_handler.c:41-48` | **业务层每条发送路径各调一次**（`:287` `:876` `:1276` `:1356` `:1772`）——容易漏 |
 | `ev-open-can-tools` | `sendAllowed()` 回调 + `appCanTransmitAllowed()` | `drivers/can_driver.h:21-24`，实现在 `app.h:113-127`，`app.h:324` 挂进驱动 | **挂在驱动的回调上，业务层无法绕过** |
 
-第 2.10 节列过 `tesla-open-can-mod` 的门控清单，它缺一个统一发送许可。另外两个仓库的补法：**flipper 放在业务层每条路径上（靠自律），ev-open 放在驱动回调上（靠结构）**——后者更难写错。
+第 2.10 节列过 `tesla-open-can-mod` 的门控清单，它缺的正是这道统一许可。表中"能否绕过"一列就是本条维度的全部差别：**靠自律的容易漏，靠结构的写不错。**
 
 `ev-open` 的许可函数只有两道：`appInjectionReady()` 不通过就 `false`，`summonOnlyInjectionRuntime` 关着就 `true`，否则问 handler 要 `summonOnlyInjectionDecisionAt()` 的裁决。flipper 那三道（Listen-Only / Autopark / OTA）ev-open 一条也没有，实现分在别处。
 
@@ -1152,7 +1150,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 **许可证这一栏是三者唯一完全收敛的地方——三家都是 GPL-3.0。** 但中间那一格暴露了一个**方法陷阱**：GitHub 的 REST API 对 flipper 返回的 `license` 是 **`NOASSERTION`**，因为它的 `LICENSE` 只有 **929 B**、是那段"如何套用本许可"的说明而非许可全文。**任何只靠 API 做许可证清点的调研，都会把星最多的那个（1094★）报告成"许可证未声明"——而它明明白白写着 GPLv3。** 本表因此按文件本身统计，不采信 API 字段。
 
-发布节奏的分化才是真差异：**`tesla-open-can-mod` 已经 183 天没动**，`flipper` 在查询当天仍在提交，`ev-open` 的默认分支比它的 tag 落后 14 个提交。**"这个仓库还活着吗"和"代码读起来怎么样"是两个独立问题，前一个往往更致命。**
+发布节奏的分化才是真差异——表右两列逐格都写着：**"这个仓库还活着吗"和"代码读起来怎么样"是两个独立问题，前一个往往更致命。**
 
 ## 7. 定位：三个仓库在哪一层
 
@@ -1186,7 +1184,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 | `JordanzhaoD/waveshare-single-can-firmware`（对照） | — | 19（PlatformIO native） | 650 | **650/650 全过** |
 | **合计** | | | **1833** | **1831 过 / 2 个套件编译失败** |
 
-三仓数据于 2026-10-01 在 MinGW-w64 GCC 16.2.0 下重跑，与第 0 节钉死的三个 commit 一致；第 2、3、4 节的全部 `file:line` 与本表同源。
+三仓数据与第 0 节钉死的三个 commit 一致（重跑日期与主机环境见 8.3）；第 2、3、4 节的全部 `file:line` 与本表同源。
 
 ev-open 那 2 个失败是真编译错误，根因就是 4.6 节的 `strlcpy`：`plugin_engine.h:747` 在 MinGW 下缺符号，同树的 `native_plugin_engine_custom_key` 套件一起挂——一个 bug 打掉两个套件。倒数第二行的 `waveshare-single-can-firmware` 不在三仓之内，列出只作横向对照。
 
@@ -1223,14 +1221,7 @@ GET .../v3/packages/autowp/library/MCP2515  →  404 NotFound
 GET .../v3/search?query=autowp             →  autowp/autowp-mcp2515  v1.3.1
 ```
 
-`platformio.ini:7` 改成 `autowp/autowp-mcp2515` 后 `feather_rp2040_can` 立刻通过。第二条是 `ev-open` 的源头级报错（完整解释见第 4.6 节）：
-
-```
-include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; did you mean 'strncpy'?
--- native_plugin_engine:test_native_plugin_engine [ERRORED] --
-```
-
-`strlcpy` 是 BSD/newlib 函数，ESP-IDF 有、本机 MinGW g++ 没有，**大概率平台相关**（完整分析见第 4.6 节）——ev-open 的 9 个 native 套件我这台机器只能过 7 个。另有 `Got the unrecognized status code '403'` 一条，是我下载工具链时的网络问题，配本地代理后恢复，与仓库无关。
+`platformio.ini:7` 改成 `autowp/autowp-mcp2515` 后 `feather_rp2040_can` 立刻通过。第二条是 `ev-open` 的源头级报错：`plugin_engine.h:747` 在 MinGW 下缺 `strlcpy`（报错原文、影响面与平台分析见第 4.6 节）。另有 `Got the unrecognized status code '403'` 一条，是我下载工具链时的网络问题，配本地代理后恢复，与仓库无关。
 
 ### 8.4 没有做的事，以及"编译通过"的边界
 
@@ -1312,7 +1303,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 第 2.7 节讲过，校验和是 HW4 独有的一支；第 2.4 节的表也列了，三个宏只有 `LEGACY` / `HW3` / `HW4`。所以配置里 HW4.0 这一项直接决定：**Legacy（HW1/HW2）那条路不相关**，选型时只需要在 HW3 与 HW4 之间确认，而答案已经由配置给出。
 
-第 9 节已经把能查的都查了，结论是：**flipper 的兼容矩阵里，"Model 3 + HW4"那行的版本范围是 `< 2026.2.9`，这台车掉在外面**；唯一一条 `HW4 + 2026.2.11` 的正面数据是 Model Y Juniper。
+剩下的 `HW3` 与 `HW4` 之间怎么选，第 9 节已经把能查的都查了：没有任何一行正面数据同时覆盖这台车的三个条件（详第 9.3 节）。
 
 ### 10.2 2025 款 Model 3，第一件该确认的事是 OBD-II 口上是不是 CAN
 
