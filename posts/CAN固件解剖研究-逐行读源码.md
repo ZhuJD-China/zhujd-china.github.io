@@ -1204,6 +1204,10 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 ### 三、四根线怎么接
 
+![四根线怎么接：X179 到螺丝端子](images/can-mod-teardown-2026/s04-x179-wiring.svg)
+
+图 4｜选一对 CAN 与固定电源地，四根线进微雪板的螺丝端子；下方三个红框是接车前必查项。
+
 `HARDWARE.md:399` 起的原文示意：
 
 ```
