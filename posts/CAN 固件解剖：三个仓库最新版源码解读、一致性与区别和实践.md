@@ -41,7 +41,7 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 
 - **5. 一致：同一个骨架** —— 三层序列对照表与五处跨仓库共识
 - **6. 区别：五条维度** —— 选型、发送许可、OTA 期间行为、功能面、许可证与发布
-- **7. 它在哪一层** —— 三层定位图：三个仓库都住在总线层
+- **7. 定位：三个仓库在哪一层** —— 三层定位图：三个仓库都住在总线层
 
 **第四部分 · 实测与未知**
 
@@ -99,7 +99,7 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 
 ## 1. FSD 地域围栏：三仓库的对照
 
-三个仓库都实现了同一条路径：绕过车机界面的勾选状态，在总线层直接判定 FSD 已选中；三者也都在各自文档中声明，这条路径不改变车辆权益。两者分属两层彼此独立的机制，本节先分层，再给出三份源码的对应位置与差异。
+三个仓库都实现了同一条路径：绕过车机界面的勾选状态，在总线层直接判定 FSD 已选中；三者也都在各自文档中声明，这条路径不改变车辆权益。这两件事其实分属两层彼此独立的机制——本节先分层，再给出三份源码的对应位置与差异。
 
 ### 1.1 两层机制
 
@@ -188,6 +188,8 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 三份源码用同一套方法读：先给文件地图，再走启动、运行、业务三层序列，最后是位操作、校验和、驱动这些横切面。
 
 ## 2. `tesla-open-can-mod`：最干净的教学样本
+
+> **本节行号与文件行数全部钉在 `815e000` 的检出上**（无 tag、无 release，最后一次 push 停在 2026-04-02，见第 0 节表的第一行）。
 
 三个仓库中，该仓库的抽象分层最清晰、规模最小，适合作为第一个解剖对象。本节要回答的是：所谓"操作序列"在源码中的具体位置。
 
@@ -1029,7 +1031,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 # 第三部分 · 一致性与区别
 
-三份源码读完了。先看它们**在哪一层其实是一份东西**，再看它们**在哪一层已经分化成三个不同的工具**——这一部分不重复第一节的行号，只做对照。
+三份源码读完了。先看它们**在哪一层其实是一份东西**，再看它们**在哪一层已经分化成三个不同的工具**——这一部分不重复第 2–4 节的行号，只做对照。
 
 ## 5. 一致：同一个骨架
 
@@ -1102,7 +1104,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 三个仓库对"OTA 进行中"的处理完全不在一个强度上：
 
 - `tesla-open-can-mod`：**没有这个概念**，全仓 grep 无 OTA 检测。
-- `flipper-tesla-fsd`：`fsd_can_transmit()` 第三道 `state->tesla_ota_in_progress` 返回 `false`——**只拦发送，业务层照常跑**，`main.cpp:1162-1168` 的 OTA 监监控帧还会提前 `return`。
+- `flipper-tesla-fsd`：`fsd_can_transmit()` 第三道 `state->tesla_ota_in_progress` 返回 `false`——**只拦发送，业务层照常跑**，`main.cpp:1162-1168` 的 OTA 监控帧还会提前 `return`。
 - `ev-open-can-tools`：`app.h:391-395` `if (Update.isRunning()) { delay(1); return; }`——**整个主循环停掉，连帧都不读**。
 
 同一句"OTA 进行中不要发帧"，三种实现的边界从"业务层自律"一路推到"运行时整体停摆"。**ev-open 最保守，也最不容易出错。**
@@ -1121,8 +1123,8 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 | 插件机制 | ✗ | ✗ | ✓（`plugin_engine.h` 1641 行） |
 | 仪表 / BMS 只读 | ✗ | ✓（`:1185-1187`） | ✓ |
 | 异常边界（主循环 `catch`） | ✗ | ✗ | ✓（三层 `catch`） |
-| 测试 | 83 断言 | 827 断言（+ 10 个板级 env） | 17 套件 / 237 用例 |
-| 代码规模 | 7 文件 / 177 行业务 | 1344 行业务 + 1110 行副本 | 1218 行业务 + 1641 行插件 |
+| 测试 | 99 断言 / 107 次执行 | 827 断言（648 C 版 + 179 C++ 版；另有 10 个板级 env） | 17 个套件目录 / 249 用例（2 个套件编译失败） |
+| 代码规模 | 7 文件 / 301 行业务（`handlers.h`） | 1344 行业务 + 1110 行副本 | 1218 行业务 + 1641 行插件 |
 
 **这个矩阵就是三个仓库的分野**：`tesla-open-can-mod` 是一个能跑通的最小实现，flipper 是一个带运行时治理的完整应用，ev-open 是一个带面板和插件的平台。**功能面越宽，需要读的源码越多；但功能面越窄，越容易一眼看全它到底发了什么。**
 
@@ -1138,7 +1140,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 发布节奏的分化才是真差异：**`tesla-open-can-mod` 已经 183 天没动**，`flipper` 在查询当天仍在提交，`ev-open` 的默认分支比它的 tag 落后 14 个提交。**"这个仓库还活着吗"和"代码读起来怎么样"是两个独立问题，前一个往往更致命。**
 
-## 7. 它在哪一层
+## 7. 定位：三个仓库在哪一层
 
 把三个仓库放进同一张层图，位置就清楚了：
 
@@ -1157,6 +1159,8 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 数据全部按各自钉死的版本标注，报错原文按证据保留。
 
 ## 8. 实测汇总
+
+本节两组实跑：宿主测试不碰硬件，板级构建真编固件；六条报错按性质分组，未做之事单列。
 
 ### 8.1 宿主测试（`native` / `platform = native`，不碰硬件）
 
@@ -1419,7 +1423,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 一个说**驾驶侧后备箱饰板后**，一个说**副驾脚部空间右侧饰板后**——方向完全相反。三仓全量 grep `footwell|trunk panel` 命中 5 处：除上面两条外，`guides/WIRING_GUIDE.md:18` 的 `right-side footwell panel trim` 与第二条同源；`flipper` `HARDWARE.md:75` 作 `console / passenger footwell area`、`ev-open` `docs/onboarding.md:22` 作 `center-console or front-footwell installation area`，两处都是泛化区间、不构成独立口径。**没有任何一处能仲裁这两条互相矛盾的指南**——连 `tesla-open-can-mod` 自己的 `README.md:301` 也只给 service.tesla.com 的 X179 文档链接，不写文字位置。
 
-**外部有一处独立佐证站在「后排中控台」这一侧。** PAC 的 `CP1-TSL1` 商品页把产品描述为 "For 26-Pin Connector at Back Of Center Console"（厂商目录页 `https://catalog.archive.pac-audio.com/catalog/can-integration/cp1-tsl1`，页面标价 $49.99，访问于 2026-10-01，**厂商商品页**）；Tesla 官方的 X179 页给出料号 `1849225-03-B`、护套 `KSE K30M31014`、色 `GY`、完整 pinout 表与一个 `Connector Location` 图示栏位（`https://service.tesla.com/docs/Model3/ElectricalReference/prog-233/connector/x179/`，**一手**）。**官方页管针脚、不管位置文字**——pinout 可以拿来核对下一节的引脚表，位置仍然只能靠 Service Mode。
+**外部有一处独立佐证站在「后排中控台」这一侧。** PAC 的 `CP1-TSL1` 商品页把产品描述为 "For 26-Pin Connector at Back Of Center Console"（厂商目录页 `https://catalog.archive.pac-audio.com/catalog/can-integration/cp1-tsl1`，页面标价 $49.99，访问于 2026-10-01，**厂商商品页**）；Tesla 官方的 X179 页给出料号 `1849225-03-B`、护套 `KSE K30M31014`、色 `GY`、完整 pinout 表与一个 `Connector Location` 图示栏位（`https://service.tesla.com/docs/Model3/ElectricalReference/prog-233/connector/x179/`，**一手**）。**官方页管针脚、不管位置文字**——pinout 可以拿来核对下一小节的引脚表，位置仍然只能靠 Service Mode。
 
 而两份指南自称的车型还是一致的：`guides/INSTALLATION_GUIDE_M4_CAN.md:3` 写 "2023 Tesla Model 3 with HW3"，`guides/WIRING_GUIDE.md:5` 写 "Photos were taken on a 2023 Model 3 (non-Highland)"。**同一台车，两个位置。**
 
@@ -1565,7 +1569,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 ### 14.1 到 dashboard 为止的四步
 
-这四步是第 12 节图 6 的第 6–10 步，此处只补判据。
+这四步是第 12.7 节图 6 的第 6–10 步，此处只补判据。
 
 1. **接线**（按第 12 节记下的针号）→ **上电**（端子或 USB，二选一）。
 2. **连板子的 WiFi**，浏览器开 **`http://192.168.4.1`**（`esp32/README.md:132`）。
@@ -1679,13 +1683,13 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 四条判断。
 
-其一，`tesla-open-can-mod` 的工程成熟度高于同类工具的平均水准。第 2.6 节的 shadowing 回归测试完整走过"发现隐式耦合 → 修复 → 用测试锁死 → 把意图写进测试名"的流程，随手编写的脚本不会具备这一形态。
+**其一，`tesla-open-can-mod` 的工程成熟度高于同类工具的平均水准。** 第 2.6 节的 shadowing 回归测试完整走过"发现隐式耦合 → 修复 → 用测试锁死 → 把意图写进测试名"的流程，随手编写的脚本不会具备这一形态。
 
-其二，"安全门控"的分化方向是**放在哪一层**，这是全文最核心的发现。`tesla-open-can-mod` 没有统一的发送许可；flipper 放在业务层、每条路径各调一次（五处，易漏）；ev-open 挂在驱动回调上（业务层绕不过）。同一道闸，三家选了三个高度。
+**其二，"安全门控"的分化方向是放在哪一层，这是全文最核心的发现。** `tesla-open-can-mod` 没有统一的发送许可；flipper 放在业务层、每条路径各调一次（五处，易漏）；ev-open 挂在驱动回调上（业务层绕不过）。同一道闸，三家选了三个高度。
 
-其三，行号与文档必须钉死在具体版本上。本文两次遇到该问题：flipper 在写作当天前进 4 个提交、`HARDWARE.md` 每处引用随之漂移；ev-open 的 tag 不在默认分支上，clone 到的 `main` 落后 14 个提交。同一类问题的另一面是文档与代码的落差——`HW_TARGET` 无人读取、车型宏依赖脚本注入、两份指南对 X179 给出相反答案。前两处在编译期终止，第三处只会导致拆错饰板，编译器与 grep 都不介入。
+**其三，行号与文档必须钉死在具体版本上。** 本文两次遇到该问题：flipper 在写作当天前进 4 个提交、`HARDWARE.md` 每处引用随之漂移；ev-open 的 tag 不在默认分支上，clone 到的 `main` 落后 14 个提交。同一类问题的另一面是文档与代码的落差——`HW_TARGET` 无人读取、车型宏依赖脚本注入、两份指南对 X179 给出相反答案。前两处在编译期终止，第三处只会导致拆错饰板，编译器与 grep 都不介入。
 
-其四，"能不能编"与"能不能接"是两个独立问题，后者更硬。前者已由 **17/18 个板级环境、1833 个用例**给出答案；后者一条都未解决：X179 针号需进 Service Mode 才能确定，OBD-II 口是 CAN 还是 DoIP 取决于生产日期与地区，终结电阻需脱车测量，12V 是否常电需万用表验证。编译通过是本文在桌面上能给出的最强证据，它的边界是 USB 线。
+**其四，"能不能编"与"能不能接"是两个独立问题，后者更硬。** 前者已由 **17/18 个板级环境、1833 个用例**给出答案；后者一条都未解决：X179 针号需进 Service Mode 才能确定，OBD-II 口是 CAN 还是 DoIP 取决于生产日期与地区，终结电阻需脱车测量，12V 是否常电需万用表验证。编译通过是本文在桌面上能给出的最强证据，它的边界是 USB 线。
 
 方法论上还有一条：**社区数据的可迁移性取决于同一性，而非相似度。** `changelog.md:243` 那条数据在地区、硬件代际、软件版本上与本文所用配置完全一致，唯独车型是 Model Y，差在何处无数据可依。选型时该问的不是"哪个更好"，而是"哪一份的证据恰好落在我的配置上"。
 
