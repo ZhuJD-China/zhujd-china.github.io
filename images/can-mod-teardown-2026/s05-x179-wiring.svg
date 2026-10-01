@@ -23,7 +23,7 @@
 
   <rect class="bg" x="0" y="0" width="1200" height="650" rx="14"/>
   <text class="ttl" x="44" y="56">四根线怎么接：从 X179 到螺丝端子</text>
-  <text class="sub" x="44" y="86">行号均为 HARDWARE.md；接哪一对由第 9 节记下的 Service Mode 决定 —— 全部是仓库文档转述，我一条都没接车实测</text>
+  <text class="sub" x="44" y="86">行号均为 HARDWARE.md；接哪一对由第 10 节记下的 Service Mode 决定 —— 全部是仓库文档转述，我一条都没接车实测</text>
 
   <text class="cm" x="56" y="130">① 车端 X179 —— 4 对候选，只接其中一对</text>
   <text class="cm" x="394" y="130">② 四根线</text>
@@ -43,13 +43,13 @@
 
   <rect class="chip" x="56" y="228" width="322" height="32" rx="4"/>
   <text class="nm" x="68" y="249">13 / 14</text>
-  <text class="ds" x="150" y="249">网关转发子集</text>
-  <text class="ds2" x="366" y="249" text-anchor="end" fill="#c9a96a">示意 :399</text>
+  <text class="ds" x="150" y="249">Chassis CAN</text>
+  <text class="ds2" x="366" y="249" text-anchor="end" fill="#c9a96a">示意 :316</text>
 
   <rect class="chip" x="56" y="264" width="322" height="32" rx="4"/>
   <text class="nm" x="68" y="285">18 / 19</text>
   <text class="ds" x="150" y="285">Chassis</text>
-  <text class="ds2" x="366" y="285" text-anchor="end">0x370 :293</text>
+  <text class="ds2" x="366" y="285" text-anchor="end">EPAS/刹车 :150</text>
 
   <line class="grid" x1="56" y1="304" x2="378" y2="304"/>
 
@@ -123,12 +123,12 @@
 
   <rect class="bad" x="796" y="404" width="360" height="110" rx="6" fill-opacity=".10"/>
   <text class="warn" x="812" y="430">OBD-II 口先分清是不是 DoIP</text>
-  <text class="ds2" x="812" y="454">2024+ 按生产日期与地区判断（第 9 节）</text>
+  <text class="ds2" x="812" y="454">2024+ 按生产日期与地区判断（第 10 节）</text>
   <text class="ds2" x="812" y="476">9 / 10、12 / 13 可能已不是 CAN</text>
   <text class="ds2" x="812" y="498">以 Service Mode 的 CAN Port 页为准（:104）</text>
 
   <line class="grid" x1="44" y1="540" x2="1156" y2="540"/>
-  <text class="nm" x="44" y="570">上电之前先做这三项静态检查（第 11 节第六步）</text>
+  <text class="nm" x="44" y="570">上电之前先做这三项静态检查（第 12 节第六步）</text>
   <text class="ds2" x="44" y="594">脱车量 CAN-H↔CAN-L → 万用表确认 1 / 15 哪一路有电 → 示波器每一对（区分 CAN 与 DoIP）</text>
   <text class="foot" x="44" y="624">全部转述自 HARDWARE.md 与微雪 wiki，行号可复现；我一条都没接车实测 —— 仓库的指南到此为止。</text>
 </svg>

@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 690" width="100%" role="img" aria-label="端到端操作序列：从选料、定位、定针、接线、静态检查，到烧录、上电、连 WiFi、线路对账、选硬件模式，共十步，含每一行的出处与判定">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#6b675c;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .warn{fill:#cf5a50;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ok{fill:#c9a96a;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .chip{fill:#e8e4dc;fill-opacity:.055;stroke:#e8e4dc;stroke-opacity:.13;stroke-width:1}
+    .cardA{fill:#c9a96a;fill-opacity:.07;stroke:#c9a96a;stroke-opacity:.35;stroke-width:1}
+    .cardB{fill:#7aa2c8;fill-opacity:.07;stroke:#7aa2c8;stroke-opacity:.35;stroke-width:1}
+    .cardR{fill:#cf5a50;fill-opacity:.10;stroke:#cf5a50;stroke-opacity:.40;stroke-width:1}
+    .nA{fill:#0b0b10;stroke:#c9a96a;stroke-width:2}
+    .nB{fill:#0b0b10;stroke:#7aa2c8;stroke-width:2}
+    .ntx{fill:#e8e4dc;font:600 14px 'Noto Sans SC','PingFang SC',sans-serif}
+    .arw{stroke:#e8e4dc;stroke-opacity:.28;stroke-width:1.6;fill:none}
+    .arh{fill:#e8e4dc;fill-opacity:.30}
+  </style>
+
+  <rect class="bg" x="0" y="0" width="1200" height="690" rx="14"/>
+  <text class="ttl" x="44" y="56">端到端操作序列：十个步骤，每步给出出处</text>
+  <text class="sub" x="44" y="86">①–⑤ 车外准备（可反复做），⑥–⑩ 上电验证 —— 全部为仓库文档与厂商规格转述，本文未接车实测</text>
+
+  <!-- ============ ROW A ============ -->
+  <text class="ok" x="44" y="132">阶段一 · 车外准备（不带电，可反复重来）</text>
+
+  <rect class="cardA" x="44" y="146" width="209" height="152" rx="8"/>
+  <circle class="nA" cx="66" cy="172" r="13"/>
+  <text class="ntx" x="66" y="177" text-anchor="middle">1</text>
+  <text class="nm" x="88" y="177">选料</text>
+  <text class="ds2" x="60" y="206">微雪 ESP32-S3-</text>
+  <text class="ds2" x="60" y="226">RS485-CAN 板</text>
+  <text class="ds2" x="60" y="250">四芯线束 / 万用表</text>
+  <text class="cm" x="60" y="278">第 11 节 · HARDWARE.md:386</text>
+
+  <line class="arw" x1="255" y1="222" x2="265" y2="222"/>
+  <path class="arh" d="M265 217 L276 222 L265 227 Z"/>
+
+  <rect class="cardA" x="280" y="146" width="209" height="152" rx="8"/>
+  <circle class="nA" cx="302" cy="172" r="13"/>
+  <text class="ntx" x="302" y="177" text-anchor="middle">2</text>
+  <text class="nm" x="324" y="177">定位</text>
+  <text class="ds2" x="296" y="206">拆后排扶手后的</text>
+  <text class="ds2" x="296" y="226">饰板找 X179</text>
+  <text class="ds2" x="296" y="250">三份口径见图 4</text>
+  <text class="cm" x="296" y="278">HARDWARE.md:92 / :95</text>
+
+  <line class="arw" x1="491" y1="222" x2="501" y2="222"/>
+  <path class="arh" d="M501 217 L512 222 L501 227 Z"/>
+
+  <rect class="cardA" x="516" y="146" width="209" height="152" rx="8"/>
+  <circle class="nA" cx="538" cy="172" r="13"/>
+  <text class="ntx" x="538" y="177" text-anchor="middle">3</text>
+  <text class="nm" x="560" y="177">定针</text>
+  <text class="ds2" x="532" y="206">Service Mode →</text>
+  <text class="ds2" x="532" y="226">CAN Port 页</text>
+  <text class="ds2" x="532" y="250">按线束料号记针</text>
+  <text class="cm" x="532" y="278">HARDWARE.md:104-105 / :98</text>
+
+  <line class="arw" x1="727" y1="222" x2="737" y2="222"/>
+  <path class="arh" d="M737 217 L748 222 L737 227 Z"/>
+
+  <rect class="cardA" x="752" y="146" width="209" height="152" rx="8"/>
+  <circle class="nA" cx="774" cy="172" r="13"/>
+  <text class="ntx" x="774" y="177" text-anchor="middle">4</text>
+  <text class="nm" x="796" y="177">接线</text>
+  <text class="ds2" x="768" y="206">CAN-H / CAN-L</text>
+  <text class="ds2" x="768" y="226">+12V / GND 四线</text>
+  <text class="ds2" x="768" y="250">进螺丝端子</text>
+  <text class="cm" x="768" y="278">HARDWARE.md:316 · 图 5</text>
+
+  <line class="arw" x1="963" y1="222" x2="973" y2="222"/>
+  <path class="arh" d="M973 217 L984 222 L973 227 Z"/>
+
+  <rect class="cardA" x="988" y="146" width="168" height="152" rx="8"/>
+  <circle class="nA" cx="1010" cy="172" r="13"/>
+  <text class="ntx" x="1010" y="177" text-anchor="middle">5</text>
+  <text class="nm" x="1032" y="177">静态检查</text>
+  <text class="ds2" x="1004" y="206">脱车量 ~120Ω</text>
+  <text class="ds2" x="1004" y="226">万用表量 12V</text>
+  <text class="ds2" x="1004" y="250">示波器分 CAN/DoIP</text>
+  <text class="cm" x="1004" y="278">:646 :659 :220</text>
+
+  <!-- 阶段切换箭头 -->
+  <line class="arw" x1="600" y1="306" x2="600" y2="340"/>
+  <path class="arh" d="M595 340 L600 351 L605 340 Z"/>
+  <text class="cm" x="618" y="330">通过后才带电</text>
+
+  <!-- ============ ROW B ============ -->
+  <text class="ok" x="44" y="344" fill="#7aa2c8">阶段二 · 上电验证（有唯一供电路径）</text>
+
+  <rect class="cardB" x="44" y="358" width="209" height="152" rx="8"/>
+  <circle class="nB" cx="66" cy="384" r="13"/>
+  <text class="ntx" x="66" y="389" text-anchor="middle">6</text>
+  <text class="nm" x="88" y="389">烧录</text>
+  <text class="ds2" x="60" y="418">Web Flasher（零工具）</text>
+  <text class="ds2" x="60" y="438">或 pio run -t upload</text>
+  <text class="ds2" x="60" y="462">浏览器用 Chrome/Edge</text>
+  <text class="cm" x="60" y="490">第 13 节</text>
+
+  <line class="arw" x1="255" y1="434" x2="265" y2="434"/>
+  <path class="arh" d="M265 429 L276 434 L265 439 Z"/>
+
+  <rect class="cardB" x="280" y="358" width="209" height="152" rx="8"/>
+  <circle class="nB" cx="302" cy="384" r="13"/>
+  <text class="ntx" x="302" y="389" text-anchor="middle">7</text>
+  <text class="nm" x="324" y="389">上电</text>
+  <text class="ds2" x="296" y="418">端子 7–36V</text>
+  <text class="ds2" x="296" y="438">或 USB Type-C</text>
+  <text class="ds2" x="296" y="462">二选一，不可同时</text>
+  <text class="cm" x="296" y="490">微雪 wiki FAQ · :653</text>
+
+  <line class="arw" x1="491" y1="434" x2="501" y2="434"/>
+  <path class="arh" d="M501 429 L512 434 L501 439 Z"/>
+
+  <rect class="cardB" x="516" y="358" width="209" height="152" rx="8"/>
+  <circle class="nB" cx="538" cy="384" r="13"/>
+  <text class="ntx" x="538" y="389" text-anchor="middle">8</text>
+  <text class="nm" x="560" y="389">连 WiFi</text>
+  <text class="ds2" x="532" y="418">连板子的 AP</text>
+  <text class="ds2" x="532" y="438">开 192.168.4.1</text>
+  <text class="ds2" x="532" y="462">首启为 Listen-Only</text>
+  <text class="cm" x="532" y="490">esp32/README.md:132 / :20</text>
+
+  <line class="arw" x1="727" y1="434" x2="737" y2="434"/>
+  <path class="arh" d="M737 429 L748 434 L737 439 Z"/>
+
+  <rect class="cardB" x="752" y="358" width="209" height="152" rx="8"/>
+  <circle class="nB" cx="774" cy="384" r="13"/>
+  <text class="ntx" x="774" y="389" text-anchor="middle">9</text>
+  <text class="nm" x="796" y="389">线路对账</text>
+  <text class="ds2" x="768" y="418">Wiring Check</text>
+  <text class="ds2" x="768" y="438">rx_count 在涨</text>
+  <text class="ds2" x="768" y="462">CRC 错误 = 0</text>
+  <text class="cm" x="768" y="490">esp32/README.md:131</text>
+
+  <line class="arw" x1="963" y1="434" x2="973" y2="434"/>
+  <path class="arh" d="M973 429 L984 434 L973 439 Z"/>
+
+  <rect class="cardB" x="988" y="358" width="168" height="152" rx="8"/>
+  <circle class="nB" cx="1010" cy="384" r="13"/>
+  <text class="ntx" x="1010" y="389" text-anchor="middle">10</text>
+  <text class="nm" x="1032" y="389">选模式</text>
+  <text class="ds2" x="1004" y="418">HW Override：</text>
+  <text class="ds2" x="1004" y="438">Auto / Force HW4</text>
+  <text class="ds2" x="1004" y="462">Force HW3 / Legacy</text>
+  <text class="cm" x="1004" y="490">esp32/README.md:123</text>
+
+  <!-- ============ 判定区 ============ -->
+  <line class="grid" x1="44" y1="534" x2="1156" y2="534"/>
+
+  <rect class="cardR" x="44" y="550" width="546" height="94" rx="8"/>
+  <text class="warn" x="62" y="576">第 9 步不过 → 回到第 4 / 5 / 3 步</text>
+  <text class="ds2" x="62" y="600">rx_count 不涨＝收不到帧：先查接线与针号；</text>
+  <text class="ds2" x="62" y="620">CRC 错误不为 0＝速率或终结问题：回第 5 步量电阻</text>
+  <text class="cm" x="62" y="638">仓库原话是 Wiring Check = rx_count + CAN error monitoring</text>
+
+  <rect class="chip" x="610" y="550" width="546" height="94" rx="8"/>
+  <text class="nm" x="628" y="576">走到这里，仓库的指南到此为止</text>
+  <text class="ds2" x="628" y="600">第 9 步的对账只证明「收发链路通」，不证明任何功能生效；</text>
+  <text class="ds2" x="628" y="620">本文的证据边界是 firmware.bin 生成与全部引用行号</text>
+  <text class="cm" x="628" y="638">上路之后的验证步骤，仓库文档本身没有给出，本文不予补写</text>
+
+  <text class="foot" x="44" y="672">每一步的完整判据与原文引用见正文第 11、12、13、14 节；行号于 2026-10-01 复核。</text>
+</svg>

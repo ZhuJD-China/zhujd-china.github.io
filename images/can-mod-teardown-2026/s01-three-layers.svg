@@ -24,7 +24,7 @@
 
   <rect class="a" x="44" y="150" width="1112" height="86" rx="6" fill-opacity=".10"/>
   <text class="nm" x="60" y="180">第一层序列</text>
-  <text class="ds2" x="60" y="208">启动 · 第 3 节</text>
+  <text class="ds2" x="60" y="208">启动 · 第 2.2 节</text>
   <text class="ds" x="250" y="180">include/app.h:29-48</text>
   <text class="ds2" x="250" y="208">appSetup()</text>
   <text class="ds" x="520" y="180">上电后入口调用一次</text>
@@ -34,7 +34,7 @@
 
   <rect class="b" x="44" y="244" width="1112" height="86" rx="6" fill-opacity=".10"/>
   <text class="nm" x="60" y="274">第二层序列</text>
-  <text class="ds2" x="60" y="302">运行 · 第 4 节</text>
+  <text class="ds2" x="60" y="302">运行 · 第 2.3 节</text>
   <text class="ds" x="250" y="274">include/app.h:50-63</text>
   <text class="ds2" x="250" y="302">appLoop()</text>
   <text class="ds" x="520" y="274">主循环每一圈都调用</text>
@@ -44,7 +44,7 @@
 
   <rect class="d" x="44" y="338" width="1112" height="86" rx="6" fill-opacity=".10"/>
   <text class="nm" x="60" y="368">第三层序列</text>
-  <text class="ds2" x="60" y="396">业务 · 第 5 节</text>
+  <text class="ds2" x="60" y="396">业务 · 第 2.4 节</text>
   <text class="ds" x="250" y="368">include/handlers.h</text>
   <text class="ds2" x="250" y="396">三个 handleMessage()</text>
   <text class="ds" x="520" y="368">appLoop() 每读到一帧一次</text>

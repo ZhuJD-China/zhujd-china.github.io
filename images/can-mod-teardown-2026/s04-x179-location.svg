@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="100%" role="img" aria-label="X179 在车上的位置：三份仓库文档给出三种互相矛盾的口径，以及仓库给出的唯一确定判据">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#6b675c;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .warn{fill:#cf5a50;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ok{fill:#c9a96a;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .chip{fill:#e8e4dc;fill-opacity:.055;stroke:#e8e4dc;stroke-opacity:.13;stroke-width:1}
+    .body{fill:none;stroke:#e8e4dc;stroke-opacity:.30;stroke-width:1.6}
+    .part{stroke:#e8e4dc;stroke-opacity:.16;stroke-width:1;stroke-dasharray:5 5}
+    .gold{fill:#c9a96a}
+    .red{fill:#cf5a50}
+    .blue{fill:#7aa2c8}
+    .nring{fill:#0b0b10;stroke:#c9a96a;stroke-width:2}
+    .nring2{fill:#0b0b10;stroke:#cf5a50;stroke-width:2}
+    .ntx{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .card-g{fill:#c9a96a;fill-opacity:.10;stroke:#c9a96a;stroke-opacity:.45;stroke-width:1}
+    .card-r{fill:#cf5a50;fill-opacity:.10;stroke:#cf5a50;stroke-opacity:.40;stroke-width:1}
+  </style>
+
+  <rect class="bg" x="0" y="0" width="1200" height="700" rx="14"/>
+  <text class="ttl" x="44" y="56">X179 在车上的哪个位置：三份文档，三种口径</text>
+  <text class="sub" x="44" y="86">行号均为钉死提交的原文 —— 没有任何一处能仲裁另外两处，动手前必须先自己确认</text>
+
+  <text class="cm" x="64" y="130">① 车内俯视（上＝车头，下＝车尾）</text>
+  <text class="cm" x="616" y="130">② 三份文档的原文与出处</text>
+
+  <!-- ===== 左：车内俯视 ===== -->
+  <rect class="body" x="64" y="146" width="470" height="430" rx="70"/>
+
+  <!-- 前排 / 后排 / 后备箱 分界 -->
+  <line class="part" x1="70" y1="246" x2="528" y2="246"/>
+  <line class="part" x1="70" y1="392" x2="528" y2="392"/>
+  <line class="part" x1="70" y1="478" x2="528" y2="478"/>
+
+  <text class="cm" x="80" y="238">前排</text>
+  <text class="cm" x="80" y="384">后排</text>
+  <text class="cm" x="80" y="470">后备箱</text>
+
+  <!-- 中控台 -->
+  <rect class="chip" x="252" y="256" width="94" height="126" rx="6"/>
+  <text class="ds2" x="299" y="326" text-anchor="middle">中控台</text>
+  <rect class="chip" x="268" y="392" width="62" height="72" rx="6"/>
+  <text class="ds2" x="299" y="432" text-anchor="middle">后端</text>
+
+  <!-- 驾驶位（左舵） -->
+  <rect class="chip" x="118" y="256" width="112" height="126" rx="8" fill-opacity=".035"/>
+  <text class="cm" x="174" y="366" text-anchor="middle">驾驶位</text>
+  <rect class="chip" x="368" y="256" width="112" height="126" rx="8" fill-opacity=".035"/>
+  <text class="cm" x="424" y="366" text-anchor="middle">副驾位</text>
+
+  <!-- ① 后排中控台后方 -->
+  <circle class="nring" cx="299" cy="474" r="16"/>
+  <text class="ntx" x="299" y="480" text-anchor="middle">1</text>
+  <text class="ds2" x="299" y="512" text-anchor="middle">后排中控台后方</text>
+
+  <!-- ② 驾驶侧后备箱饰板 -->
+  <circle class="nring2" cx="140" cy="530" r="16"/>
+  <text class="ntx" x="140" y="536" text-anchor="middle">2</text>
+  <text class="ds2" x="140" y="562" text-anchor="middle">驾驶侧后备箱</text>
+
+  <!-- ③ 副驾脚部空间右侧 -->
+  <circle class="nring2" cx="452" cy="288" r="16"/>
+  <text class="ntx" x="452" y="294" text-anchor="middle">3</text>
+  <text class="ds2" x="452" y="320" text-anchor="middle">副驾脚部空间</text>
+
+  <!-- ===== 右：三份文档 ===== -->
+  <!-- 1 -->
+  <rect class="card-g" x="616" y="146" width="540" height="146" rx="8"/>
+  <circle class="nring" cx="644" cy="176" r="15"/>
+  <text class="ntx" x="644" y="181" text-anchor="middle">1</text>
+  <text class="ok" x="672" y="182">flipper-tesla-fsd · HARDWARE.md:92 / :95</text>
+  <text class="nm" x="636" y="214">X179 — behind the rear center console (2021+ Model 3/Y)</text>
+  <text class="ds2" x="636" y="240">Requires removing a trim panel behind the rear armrest.</text>
+  <text class="ds2" x="636" y="266">三家里唯一给出「怎么进去」的一步（拆扶手后饰板）</text>
+  <text class="ds2" x="636" y="284">README.md:210 同口径：X179 (behind the rear center console)</text>
+
+  <!-- 2 -->
+  <rect class="card-r" x="616" y="306" width="540" height="126" rx="8"/>
+  <circle class="nring2" cx="644" cy="336" r="15"/>
+  <text class="ntx" x="644" y="341" text-anchor="middle">2</text>
+  <text class="warn" x="672" y="342">tesla-open-can-mod · guides/INSTALLATION_GUIDE_M4_CAN.md:57</text>
+  <text class="ds2" x="636" y="372">The Enhance Auto Gen 2 Cable plugs into the X179 connector,</text>
+  <text class="ds2" x="636" y="392">located behind the driver's side trunk panel.</text>
+  <text class="ds2" x="636" y="418">指南自称 2023 Model 3 with HW3（:3）</text>
+
+  <!-- 3 -->
+  <rect class="card-r" x="616" y="446" width="540" height="126" rx="8"/>
+  <circle class="nring2" cx="644" cy="476" r="15"/>
+  <text class="ntx" x="644" y="481" text-anchor="middle">3</text>
+  <text class="warn" x="672" y="482">tesla-open-can-mod · guides/WIRING_GUIDE.md:16</text>
+  <text class="ds2" x="636" y="512">The X179 connector is located on the passenger side footwell,</text>
+  <text class="ds2" x="636" y="532">behind the panel on the right.</text>
+  <text class="ds2" x="636" y="558">指南自称 Photos were taken on a 2023 Model 3 (non-Highland)（:5）</text>
+
+  <!-- ===== 底部：判据 ===== -->
+  <line class="grid" x1="64" y1="600" x2="1156" y2="600"/>
+
+  <rect class="chip" x="64" y="616" width="540" height="66" rx="6"/>
+  <text class="nm" x="80" y="642">仓库给的唯一确定判据</text>
+  <text class="ds2" x="80" y="664">车机 Service Mode → CAN Port 页，按线束料号列出每针的总线</text>
+  <text class="ds2" x="80" y="682">（HARDWARE.md:104、:98）—— 推断年款不可靠</text>
+
+  <rect class="chip" x="616" y="616" width="540" height="66" rx="6"/>
+  <text class="nm" x="632" y="642">Tesla 官方 X179 页（pinout 权威出处）</text>
+  <text class="ds2" x="632" y="664">service.tesla.com/docs/Model3/ElectricalReference/prog-233/connector/x179/</text>
+  <text class="ds2" x="632" y="682">料号 1849225-03-B · 护套 KSE K30M31014 · 色 GY · 有 Connector Location 图示</text>
+</svg>
