@@ -606,9 +606,29 @@
     }).catch(function () {});
   }
 
-  /* ---------- 数学公式：在 marked 解析前提取 $$/$$ 与 $/$，防止 Markdown 吞转义 ---------- */
+  /* ---------- 数学公式：在 marked 解析前提取 $$/$$ 与 $/$，防止 Markdown 吞转义 ----------
+     两道防线，都是实测踩出来的（2026-10-01 排查）：
+     1) 围栏代码与行内代码先挖走 —— shell 示例里的 $ 不是公式；
+     2) 候选 tex 里若出现链接语法 `](`、URL `://`、表格分隔符 ` | `，一定不是公式，
+        两个 $ 原样留回。否则 `$35](链接) | ~$239` 会被整段当成公式，
+        连表格分隔符一起吞掉，链接塌成字面量，再被 KaTeX 渲染成一串斜体字符。 */
+  function looksNonMath(tex) {
+    return tex.indexOf("](") >= 0 ||   // 吞掉了链接语法 [文字 $35](url)
+           tex.indexOf("://") >= 0 ||  // 吞掉了 URL
+           tex.indexOf(" | ") >= 0 ||  // 吞掉了表格分隔符
+           /ZcodePH\d+Z/.test(tex);    // 跨过了被挖走的代码
+  }
+
   function extractMath(src) {
     var store = [];
+    var stash = [];
+
+    // 1) 挖走代码块与行内代码
+    src = src.replace(/```[\s\S]*?```|`[^`\n]+`/g, function (m) {
+      stash.push(m);
+      return "ZcodePH" + (stash.length - 1) + "Z";
+    });
+
     // 块级 $$...$$（可跨行）
     src = src.replace(/\$\$([\s\S]+?)\$\$/g, function (m, tex) {
       store.push({ display: true, tex: tex });
@@ -616,9 +636,16 @@
     });
     // 行内 $...$（不跨行；首尾非空白，避免误伤价格等普通 $）
     src = src.replace(/(^|[^\$\\])\$(?!\s)([^\n$]*?[^\s$])\$/g, function (m, pre, tex) {
+      if (looksNonMath(tex)) return m; // 不像公式：两个 $ 都留在原地
       store.push({ display: false, tex: tex });
       return pre + "ZmathPH" + (store.length - 1) + "Z";
     });
+
+    // 2) 把代码还原回去，再交给 marked
+    src = src.replace(/ZcodePH(\d+)Z/g, function (m, i) {
+      return stash[+i] != null ? stash[+i] : m;
+    });
+
     return { src: src, store: store };
   }
 
