@@ -28,7 +28,7 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 
 **第一部分 · 范围与关键分歧**
 
-- **0. 三个版本，先钉死** —— 三个仓库的 commit / tag，与全文的证据分档约定
+- **0. 三个版本，先钉死** —— 三个仓库的 commit / tag、全文的证据分档约定、样本冻结背后的生态下架
 - **1. FSD 地域围栏：三仓库的对照** —— 选择位与地域锁两层机制，覆写能力的同形与边界
 
 **第二部分 · 逐仓库解剖**
@@ -94,6 +94,20 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 | X179 引脚、哪对线上是哪条总线 | 仓库文档原文加出处行号；本文未接车、未使用示波器，未实测 |
 | star、日期、tag、价格、兼容性、行业事件 | `git ls-remote`、公开接口、网络检索，附 URL 与页面日期，可复现但未逐行核验 |
 | 烧录之后车会怎么反应 | 完全不验证：没有板子、没有线束、没有车辆，见第 14 节 |
+
+### 0.3 样本为什么停在 4 月：一次下架与三条延续线
+
+第 0.1 表第一行的"无 tag、无 release、停在 2026-04-02"不是孤例。把各家 README 的自述拼起来（`flipper` 的两处行号来自 `ffbb24e` 检出，一手；`jvanakker` 的引文访问于 2026-10-02），这条线的来历是：
+
+- **原始研究**：`Starmixcraft/tesla-fsd-can-mod`（CanFeather）。`flipper-tesla-fsd` `README.md:374` 称其 "original CanFeather FSD research"，注明 **"GitLab repo removed"**，镜像指向 `Karolynaz/waymo-fsd-can-mod`；`jvanakker/tesla-fsd-can-mod` 的 README 开头自陈 "This is a mirror. Credits for the original repo go to gitlab.com/Starmixcraft/tesla-fsd-can-mod"，并写 **"Original repo and it's successor (Tesla open CAN mod) are taken down according to https://fsdcanmod.com"**（该 README，访问于 2026-10-02）。
+- **后续正统**：`ev-open-can-tools`。`flipper` `README.md:361` 的 Related projects 表称其为 "The upstream community project"，并写 **"Formerly `Tesla-OPEN-CAN-MOD` on GitLab; that group was renamed to `ev-open-can-tools` and the GitLab repo is now dormant (0 open issues/MRs, last commit 2026-04-25)"**。第 4 节解剖的"最像平台"的仓库就是这条线的现存端——三家不是三个孤岛。
+- **下架本身**：两个镜像把原因指向同一处存档站 `fsdcanmod.com`。**该域名在 2026-10-02 已无法解析**（DNS 查询失败，我复核两次）；它的页面内容我只在检索快照里读到，记为 "Both GitLab repos taken down by Tesla DMCA (April 2026)"——**DMCA 的定性归入未核实**，可核实的只有上面两处仓库 README 的 "removed / taken down"。
+
+对本文有三个直接影响：
+
+1. 教学样本 `1-v-1/tesla-open-can-mod` 最后一次 push 是 **2026-04-02**，与 "April 2026" 的下架窗口重合。**时间重合不是因果**——我未查到 `1-v-1` 与 GitLab 原仓的 fork 关系证据（GitHub API 本次访问被限流）；但反过来，把"停更"直接读作"弃坑"同样没有依据。
+2. 第 9 节引用的 `jvanakker` 失效标注（"2026.8.6 与 2026.2.9.x 及以上已不可用"）出自同一个镜像 README 的 `⚠️ UPDATE` 段，**指涉对象是 CanFeather 原始固件**，不是本文第 2 节样本的代码；证据等级维持社区回报。
+3. flipper 把 ev-open 称作 upstream（`:361`），第 5 节那张"几乎能互相覆盖"的骨架表因此有了注脚：**同源，不是巧合**。
 
 ---
 
@@ -1276,7 +1290,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 **叠起来看更难受**：flipper 唯一一条"Model 3 + HW4"的正面数据版本范围是 **`< 2026.2.9`**，这台车 `2026.2.11` **正好掉在范围外**；唯一一条"HW4 + 2026.2.11"的车型是 Model Y Juniper。**两个条件各有一条数据，没有一条同时覆盖两者的车型。**
 
-外部项目的阈值还在流：`herrfrei`、`juamiso` 用 **2026.2.3** 作 FSDV14 分界，`jvanakker` 镜像标注 **2026.8.6 对 2026.2.9.x 及更高已失效**——**同一条分界线上两个版本号在流，同一个 `2026.2.9.x` 一边"正常支持"一边"已失效"**。未必矛盾（FSDV14 可能分批推），但对照着选宏的读者要吃下六个版本号的分歧。
+外部项目的阈值还在流：`herrfrei`、`juamiso` 用 **2026.2.3** 作 FSDV14 分界，`jvanakker` 镜像标注 **2026.8.6 对 2026.2.9.x 及更高已失效**——**同一条分界线上两个版本号在流，同一个 `2026.2.9.x` 一边"正常支持"一边"已失效"**。未必矛盾（FSDV14 可能分批推），但对照着选宏的读者要吃下六个版本号的分歧。另注：`jvanakker` 那条标注挂在 CanFeather 原始固件的镜像 README 上，**指涉对象不是本文第 2 节的样本代码**（见第 0.3 节）。
 
 **flipper 那三行我在 `ffbb24e` 上逐行读、可 grep 复现；其余三个按 URL 与页面日期记录、我没 clone 核验**，都是一线用户的单点回报，无第三方仲裁。
 
@@ -1452,6 +1466,8 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 `HARDWARE.md:252-256` 同样把「gateway-forwarded mix of buses」标为 **Older notes**，并给出这一对在 `1933903-XX` 线束上的 Service Mode 结论：**Chassis CAN**。原文补了一句 —— **The pin→bus map varies, so check Service Mode → CAN Port on your own car.**
 **26-pin 有两档，`HARDWARE.md:159` 起，且 `:162` 明确写着 `"They are not interchangeable."`**：pre-April-2024 表在 `:176-183`（段落自 `:171` 起）；post-April-2024 的示波器实测表就是第 10 节那张（`:204-210`），9/10 与 12/13 是 DoIP，`:208` 只留一句 **"Vehicle CAN — only working CAN pair"**。
 
+**另一只连接器**：`tesla-open-can-mod` `README.md:310-317` 另给 2020 年及更早、未配 X179 的 Model 3 一条备选——**X652**（官方 `prog-187` 页），pin 1 = CAN-H、pin 2 = CAN-L。`flipper` 的 `ffbb24e` 检出根 README 未出现 X652；本文目标车（2025 款）也不适用，记录备查。
+
 ### 12.3 四根线怎么接
 
 ![四根线怎么接：X179 到螺丝端子](images/can-mod-teardown-2026/s05-x179-wiring.svg)
@@ -1613,7 +1629,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 三行的 URL 与 commit 见第 0 节那张表，全部用 `git ls-remote` / 本地 HEAD 复现。
 
-**第 9 节引用的同族项目**（`herrfrei`、`juamiso`、`jvanakker`）与**第 8 节计入测试总数的** `JordanzhaoD/waveshare-single-can-firmware`，我按 URL 与页面日期记录，**未 clone 下来做 `file:line` 核验**。
+**第 9 节引用的同族项目**（`herrfrei`、`juamiso`、`jvanakker`）与**第 8 节计入测试总数的** `JordanzhaoD/waveshare-single-can-firmware`，我按 URL 与页面日期记录，**未 clone 下来做 `file:line` 核验**。第 0.3 节额外引用 `jvanakker/tesla-fsd-can-mod` 与 `Karolynaz/waymo-fsd-can-mod` 两个镜像的 README 陈述（访问于 2026-10-02），同样未 clone 核验；`fsdcanmod.com` 的页面内容仅见检索快照。
 
 ### 15.2 厂商文档（一手）
 
@@ -1664,6 +1680,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | Web Flasher | `https://hypery11.github.io/flipper-tesla-fsd/install/` |
 | Releases | `https://github.com/hypery11/flipper-tesla-fsd/releases` |
 | FSD CAN Mod Hub 跟踪页（README 徽章指向） | `https://fsdcanmod.com/project/hypery11-flipper-zero` |
+| FSD CAN Mod Hub 首页（生态存档站；2026-10-02 DNS 无法解析） | `https://fsdcanmod.com/` |
 | Tesla Electrical Reference（仓库引用的官方文档） | `https://service.tesla.com/docs/ModelY/ElectricalReference/` |
 
 ### 15.6 本文的证据分层
@@ -1674,6 +1691,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | 本机实跑（编译、测试） | 第 8 节 | 输出可重跑，版本标注见表内 |
 | 文件实读 / 关键字检索 | 第 6 节维度五的三个 `LICENSE`、第 9 节三行 grep | 打开读过、可复现（扫描文件数已标注） |
 | 仓库文档转述 / 社区回报 / 未核实 | 第 10–14 节、第 15.4 节、兼容性状态 | **行号可查，内容我没验或未独立核实；第 9 节的结论不变** |
+| 生态下架与镜像关系 | 第 0.3 节 | flipper / jvanakker 的 README 为一手可复现；`fsdcanmod.com` 页面仅存检索快照、站点已无法解析，**DMCA 定性未核实** |
 
 ---
 
