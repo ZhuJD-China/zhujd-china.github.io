@@ -512,8 +512,11 @@
     if (!shell) return;
 
     var file = new URLSearchParams(location.search).get("file") || "";
-    // 安全校验：仅允许 posts/ 下的 .md 文件
-    if (!/^[\w\u4e00-\u9fa5.-]+\.md$/i.test(file)) {
+    // 安全校验：仅允许 posts/ 下的 .md 文件。
+    // 字符类 = ASCII 字母数字下划线 + CJK 汉字 + CJK 符号标点（、。《》）
+    //         + 全角形式（：（）？！等）+ 半角空格与 . -；
+    // 类中不含 / 与 \，因此无法穿越目录，也拼不出 .. 或查询串。
+    if (!/^[\w\u4e00-\u9fff\u3000-\u303f\uff01-\uff5e .\-]+\.md$/i.test(file)) {
       renderError(shell, bi("文章不存在", "Story not found"));
       return;
     }
