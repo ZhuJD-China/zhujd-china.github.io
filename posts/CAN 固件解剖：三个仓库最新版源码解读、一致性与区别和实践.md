@@ -4,7 +4,7 @@ date: 2026-10-01
 tags: [自动驾驶, CAN总线, 嵌入式, 固件分析, 特斯拉, 源码分析]
 album: 自动驾驶专栏
 order: 3
-excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际最新版重新钉死行号：tesla-open-can-mod 的 815e000、flipper-tesla-fsd 的 ffbb24e（v2.16-beta.34）、ev-open-can-tools 的 6d37392（v4.0.0-beta.3——它不在默认分支上，main 落后 14 个提交）。三份源码用同一套方法读：地图、启动/运行/业务三层序列、位操作与校验和横切面；再把三者的一致骨架和五条分化维度摊开对照；最后落到一台具体车上——China HW4.0、2025 款 Model 3、2026.2.11 的选型、购买、X179 接线与烧录，附实跑数据汇总与外部引用出处。
+excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行号后对照同一套骨架，讲清在中国"开启 FSD"的一条链路与三道门，再落到一台具体车——China HW4.0、2025 款Model 3 的选型、购买、X179 接线与烧录。附 1833 个宿主用例与 18 次板级构建的实测汇总。
 ---
 
 《自动驾驶专栏》第三篇，2026-10-01。原理一句话先给：车机上的"已勾选"只是一帧 CAN 报文里的一个比特，所有工具做的事情都是让固件不再去看那一帧；而权益与地域围栏都不在这一帧里——这就是第 1 节的"一条链路、三道门"。围绕同一条 CAN 总线的公开实现不止一个，本文考察其中三个：PlatformIO 固件工程 `tesla-open-can-mod`、Flipper Zero 应用 `flipper-tesla-fsd`、ESP-IDF 固件平台 `ev-open-can-tools`——三者形态差异显著，分别采用编译期选型、运行时菜单与网页开关。三份源码作逐行解剖：并列后可以看到，收发序列集中于同一批文件，抽象骨架高度重合，分化集中在少数几条明确的维度上；最后落到一台具体车辆（China HW4.0、2025 款 Model 3、2026.2.11），完成选型、采购、接线与烧录的全过程记录。
@@ -1247,13 +1247,13 @@ ev-open 那 2 个失败是真编译错误，根因就是 4.6 节的 `strlcpy`：
 
 | 仓库 | 版本 | 实跑 env | 结果 |
 | --- | --- | --- | --- |
-| `tesla-open-can-mod` | `815e000` | `esp32_twai`、`m5stack-atomic-can-base`、`feather_m4_can`、`feather_rp2040_can` | **3/4**（`esp32_twai` / `m5stack-atomic-can-base` RAM 14.6% / Flash 61.7%，`feather_m4_can` 3.7% / 6.0%；`feather_rp2040_can` 失败，见下 B 组第一条） |
+| `tesla-open-can-mod` | `815e000` | `esp32_twai`、`m5stack-atomic-can-base`、`feather_m4_can`、`feather_rp2040_can` | **3/4**；`feather_rp2040_can` 因失效包名失败（见下 B 组第一条） |
 | `JordanzhaoD` | — | `waveshare_single_can_standalone`（`esp32s3box`，16MB） | **SUCCESS**，RAM 15.3% / Flash 28.8% |
-| `flipper-tesla-fsd` | `ffbb24e`（v2.16-beta.34） | `waveshare-s3-can` + 其余 9 个 | **10/10**（`waveshare-s3-can` RAM 37.4% / Flash 28.0%） |
-| `ev-open-can-tools` | `6d37392`（`dev`） | `waveshare_ESP32_S3_RS485_CAN`、`esp32_ext_mcp2515`、`esp32_twai` | **3/3**（依次 RAM 22.6% / Flash 83.7%、22.7% / 42.4%、24.6% / 84.6%） |
+| `flipper-tesla-fsd` | `ffbb24e`（v2.16-beta.34） | `waveshare-s3-can` + 其余 9 个 | **10/10** |
+| `ev-open-can-tools` | `6d37392`（`dev`） | `waveshare_ESP32_S3_RS485_CAN`、`esp32_ext_mcp2515`、`esp32_twai` | **3/3** |
 | **合计** | | **18 次板级构建** | **17/18**，唯一失败是 `feather_rp2040_can` 的失效包名 |
 
-四个 ESP32-S3 目标全部通过，`TX=GPIO15`、`RX=GPIO16` 这组引脚由 `flipper`（`esp32/README.md:159`）与 `ev-open`（`platformio.ini:163-164`）两家独立给出、交叉印证；`tesla-open-can-mod` 没有 S3 目标（见 11.6）。这是"能编译通过"的最强证据——不是读 README 说的，是链接器和 esptool 说的。
+各 env 的 RAM / Flash 占用率见 11.6 的对照表，此处不重复；本节只给"能不能编出来"这个结论。四个 ESP32-S3 目标全部通过，`TX=GPIO15`、`RX=GPIO16` 这组引脚由 `flipper`（`esp32/README.md:159`）与 `ev-open`（`platformio.ini:163-164`）两家独立给出、交叉印证；`tesla-open-can-mod` 没有 S3 目标（见 11.6）。这是"能编译通过"的最强证据——不是读 README 说的，是链接器和 esptool 说的。
 
 ### 8.3 环境与六条报错
 
@@ -1608,7 +1608,7 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 | 3 | 车机 Service Mode → CAN Port 记针号 | 每针对应总线有名字，按线束料号列出 | `HARDWARE.md:104-105`、`:98` |
 | 4 | CAN-H / CAN-L / +12V / GND 四线进螺丝端子 | 端子拧紧、无裸露铜丝 | `HARDWARE.md:316-319` |
 | 5 | 脱车量 CAN-H↔CAN-L；万用表量 12V | ~120Ω 正常、~60Ω＝终结器开着；确认 1 / 15 哪路有电 | `:646`、`:659` |
-| 6 | 烧录：Web Flasher 或 `pio run -t upload` | 页面报成功 / 终端 `SUCCESS` | 第 13 节 |
+| 6 | 烧录：Web Flasher、`ufbt` 装 FAP，或 `pio run -t upload` | 页面报成功 / 终端 `SUCCESS` | 第 13 节 |
 | 7 | 上电：螺丝端子 7–36V 或 USB Type-C，二选一 | 指示灯起、板子不发热 | 微雪 wiki FAQ |
 | 8 | 连板子的 AP，浏览器开 `192.168.4.1` | 页面能打开；首启为 Listen-Only，不发帧 | `esp32/README.md:132`、`:20` |
 | 9 | **线路对账**（Wiring Check） | **`rx_count` 持续增长，且 CAN 错误计数为 0** | `esp32/README.md:131` |
@@ -1621,6 +1621,8 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 本节判据转自文档与厂商规格，我一条都没实测。
 
 ## 13. 烧录与上电：三条路
+
+本节展开第 12.7 节图 6 的第 6–7 步（烧录与首次上电），第 8–10 步在 14.1 接上。
 
 ### 13.1 两条预编译路径（不装任何工具链）
 
