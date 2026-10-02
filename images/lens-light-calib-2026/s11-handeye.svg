@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="手眼标定的两种构型、位姿链与 AX=XB 的推导">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mono{fill:#c9a96a;font:600 14px 'JetBrains Mono',Consolas,monospace}
+    .mon2{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mon3{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .arm{fill:none;stroke:#8a8578;stroke-width:5;stroke-linecap:round}
+    .joint{fill:#3a3a44;stroke:#8a8578;stroke-width:1.4}
+    .cam{fill:#c9a96a}
+    .board{fill:#7aa2c8}
+    .b1{fill:#1a1712;stroke:#c9a96a;stroke-opacity:.5;stroke-width:1.2}
+    .b2{fill:#14161c;stroke:#7aa2c8;stroke-opacity:.5;stroke-width:1.2}
+    .cellA{fill:#1d1414;stroke:#cf5a50;stroke-opacity:.45;stroke-width:1}
+    .cellB{fill:#14161c;stroke:#7aa2c8;stroke-opacity:.45;stroke-width:1}
+    .def{fill:#1a1712;stroke:#8fbf7a;stroke-opacity:.5;stroke-width:1.4}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+  <text class="ttl" x="44" y="48">手眼标定：AX = XB 是怎么来的，以及五种解法</text>
+  <text class="sub" x="44" y="74">判定构型只看一件事：相机固定在哪个刚体上。选错了，后面所有视觉定位都跟着偏</text>
+
+  <!-- 左：eye-in-hand -->
+  <g transform="translate(44,100)">
+    <rect class="b1" x="0" y="0" width="356" height="256" rx="10"/>
+    <text class="hd" x="16" y="26" fill="#c9a96a">eye-in-hand（眼在手上）</text>
+    <g transform="translate(16,40)">
+      <rect class="joint" x="40" y="150" width="46" height="20" rx="4"/>
+      <path class="arm" d="M63 150 L63 76 L170 42"/>
+      <path class="arm" d="M63 100 L130 84"/>
+      <circle class="joint" cx="63" cy="76" r="9"/>
+      <circle class="joint" cx="170" cy="42" r="9"/>
+      <circle class="cam" cx="188" cy="32" r="16"/>
+      <path d="M188 16 L188 -14 M168 26 L208 26" stroke="#c9a96a" stroke-width="2" fill="none"/>
+      <text class="xs" x="206" y="24">相机装在末端</text>
+      <rect class="board" x="216" y="130" width="110" height="14" rx="3"/>
+      <text class="xs" x="216" y="120">标定板静止在桌面</text>
+      <text class="xs" x="40" y="192">基座</text>
+    </g>
+    <text class="sm" x="16" y="212">标定对象：相机 ↔ 末端执行器</text>
+    <text class="xs" x="16" y="234">HALCON 记号 hand_eye_moving_camera（还有 scara 变体，共四种）</text>
+  </g>
+
+  <!-- 中：eye-to-hand -->
+  <g transform="translate(416,100)">
+    <rect class="b2" x="0" y="0" width="356" height="256" rx="10"/>
+    <text class="hd" x="16" y="26" fill="#7aa2c8">eye-to-hand（眼在手外）</text>
+    <g transform="translate(16,40)">
+      <rect class="joint" x="120" y="150" width="46" height="20" rx="4"/>
+      <path class="arm" d="M143 150 L143 76 L250 42"/>
+      <path class="arm" d="M143 100 L210 84"/>
+      <circle class="joint" cx="143" cy="76" r="9"/>
+      <circle class="joint" cx="250" cy="42" r="9"/>
+      <rect class="board" x="276" y="26" width="16" height="34" rx="3"/>
+      <text class="xs" x="262" y="18">板装在末端</text>
+      <circle class="cam" cx="60" cy="40" r="16"/>
+      <path d="M60 24 L60 -6 M40 34 L80 34" stroke="#7aa2c8" stroke-width="2" fill="none"/>
+      <text class="xs" x="78" y="0">相机固定在基座</text>
+      <text class="xs" x="120" y="192">基座</text>
+    </g>
+    <text class="sm" x="16" y="212">标定对象：相机 ↔ 机器人基座</text>
+    <text class="xs" x="16" y="234">HALCON 记号 hand_eye_stationary_camera</text>
+  </g>
+
+  <!-- 右：位姿链与 AX=XB -->
+  <g transform="translate(792,100)">
+    <rect x="0" y="0" width="364" height="256" rx="10" fill="#14161c" stroke="#8a8578" stroke-opacity=".5" stroke-width="1.2"/>
+    <text class="hd" x="16" y="26">位姿链（HALCON 官方记号）</text>
+    <text class="mono" x="16" y="56">cam_H_cal =</text>
+    <text class="mono" x="16" y="82">  cam_H_tool ×</text>
+    <text class="mono" x="16" y="108">  tool_H_base ×</text>
+    <text class="mono" x="16" y="134">  base_H_cal</text>
+    <text class="xs" x="16" y="156">CameraPose　　RobotPoses　　CalibrationPose</text>
+    <line x1="16" y1="170" x2="348" y2="170" stroke="#8a8578" stroke-opacity=".3"/>
+    <text class="sm" x="16" y="192">跨两个位姿各写一遍，把中间的 tool_H_base 消掉：</text>
+    <text class="mon2" x="16" y="216">A · X = X · B</text>
+    <text class="xs" x="16" y="238">A = 机器人末端运动　B = 相机诱导运动　X = 待求变换</text>
+  </g>
+
+  <!-- 下左：五种解法 -->
+  <text class="hd" x="44" y="392">五种解法：第 5 个是 DANIILIDIS，不是第二个 TSAI</text>
+  <g transform="translate(44,410)">
+    <text class="sm" x="0" y="0" fill="#7aa2c8">先估计旋转再估计平移（可分离解）</text>
+    <g transform="translate(0,12)">
+      <rect class="cellB" x="0" y="0" width="146" height="46" rx="6"/>
+      <text class="mon2" x="12" y="20">TSAI</text>
+      <text class="xs" x="12" y="36">Tsai &amp; Lenz 1989 · angle-axis</text>
+    </g>
+    <g transform="translate(154,12)">
+      <rect class="cellB" x="0" y="0" width="146" height="46" rx="6"/>
+      <text class="mon2" x="12" y="20">PARK</text>
+      <text class="xs" x="12" y="36">Park &amp; Martin 1994 · 李群对数</text>
+    </g>
+    <g transform="translate(308,12)">
+      <rect class="cellB" x="0" y="0" width="146" height="46" rx="6"/>
+      <text class="mon2" x="12" y="20">HORAUD</text>
+      <text class="xs" x="12" y="36">Horaud &amp; Dornaika 1995</text>
+    </g>
+
+    <text class="sm" x="0" y="92" fill="#cf5a50">同时估计旋转与平移（同时解）</text>
+    <g transform="translate(0,104)">
+      <rect class="cellA" x="0" y="0" width="146" height="46" rx="6"/>
+      <text class="mon3" x="12" y="20">ANDREFF</text>
+      <text class="xs" x="12" y="36">Andreff 1999 · 在线标定</text>
+    </g>
+    <g transform="translate(154,104)">
+      <rect class="def" x="0" y="0" width="146" height="46" rx="6"/>
+      <text class="mono" x="12" y="20" fill="#8fbf7a">DANIILIDIS</text>
+      <text class="xs" x="12" y="36" fill="#8fbf7a">对偶四元数 · MoveIt 默认</text>
+    </g>
+    <text class="sm" x="320" y="130" fill="#8fbf7a">Horaud &amp; Dornaika：同时解的非线性优化</text>
+    <text class="sm" x="320" y="150" fill="#8fbf7a">对噪声与测量误差「似乎最为鲁棒」</text>
+    <text class="xs" x="0" y="176">可分离解的通病：旋转估计误差会传播到平移部分</text>
+  </g>
+
+  <!-- 下右：采样要求 -->
+  <g transform="translate(792,392)">
+    <text class="hd" x="0" y="0">HALCON 官方采样要求（逐字核实）</text>
+    <g transform="translate(0,14)">
+      <rect x="0" y="0" width="364" height="118" rx="8" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.2"/>
+      <text class="mono" x="16" y="26">10 个或更多姿态（理论下限 3）</text>
+      <text class="mono" x="16" y="48">位姿间旋转 ≥30°，最好 60°</text>
+      <text class="mono" x="16" y="70">覆盖至少 2 个不同旋转轴</text>
+      <text class="sm" x="16" y="94">SCARA 只有一个旋转轴；Z 平移不可观，内部置 0</text>
+      <text class="xs" x="16" y="110">stochastic 优化法建议至少 25 个姿态</text>
+    </g>
+    <text class="sm" x="0" y="156">其他工具链：MoveIt 5 张可算、12–15 张趋平　Zivid 建议 10–20 个</text>
+    <text class="sm" x="0" y="178">Photoneo 最少 9 点　Isaac ROS 最少 5 个采样并给出重投影误差</text>
+  </g>
+
+  <text class="foot" x="44" y="560">口径：位姿链与 CalibSetup 四值命名引自 MVTec HALCON calibrate_hand_eye / hand_eye_calibration 官方文档；采样建议为该文档逐字引文；五种解法的枚举名、文献对应与「可分离解 / 同时解」划分引自 OpenCV 4.13 calib3d 官方文档；鲁棒性结论引自 Horaud &amp; Dornaika；MoveIt 默认求解器与采样数引自 MoveIt 官方手眼标定教程。</text>
+  <text class="foot" x="44" y="580">图为构型与位姿链示意，机械臂姿态不代表实际标定过程中的位姿序列；实际采集时应尽量在三维空间中分散。</text>
+</svg>

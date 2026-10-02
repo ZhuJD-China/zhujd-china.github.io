@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="图像圈与传感器对角线、余量与相对照度滚降">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .g{fill:none;stroke:#8a8578;stroke-width:1}
+    .acc{fill:none;stroke:#c9a96a;stroke-width:2}
+    .acc2{fill:none;stroke:#7aa2c8;stroke-width:2}
+    .d{fill:none;stroke:#cf5a50;stroke-width:1.6;stroke-dasharray:4 3}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+  <text class="ttl" x="44" y="52">图像圈：盖住对角线只是起点</text>
+  <text class="sub" x="44" y="80">硬判据是「图像圈直径 ≥ 传感器对角线」，再留 5–10% 裕量；缩光圈能改善相对照度，但不会明显增大图像圈</text>
+
+  <!-- 左：圆与传感器 -->
+  <text class="hd" x="44" y="122">像圈覆盖：实测型值</text>
+  <g transform="translate(150,300)">
+    <circle cx="0" cy="0" r="118" fill="none" stroke="#8a8578" stroke-width="1" stroke-dasharray="3 3"/>
+    <circle cx="0" cy="0" r="106" fill="none" stroke="#8a8578" stroke-width="1"/>
+    <rect x="-92" y="-69" width="184" height="138" fill="#1a1712" stroke="#c9a96a" stroke-width="1.4"/>
+    <text class="xs" x="-88" y="86">传感器 1.1"（14.1 × 10.3 mm，⌀17.6）</text>
+    <path class="acc" d="M0 0 L92 0"/>
+    <path class="acc" d="M92 0 l-9 -4 l0 8 Z" fill="#c9a96a"/>
+    <text class="mon" x="0" y="-14" text-anchor="middle">r = 8.8</text>
+  </g>
+  <g transform="translate(452,300)">
+    <circle cx="0" cy="0" r="136" fill="none" stroke="#8a8578" stroke-width="1" stroke-dasharray="3 3"/>
+    <circle cx="0" cy="0" r="124" fill="none" stroke="#8a8578" stroke-width="1"/>
+    <rect x="-138" y="-103" width="276" height="206" fill="#1a1712" stroke="#c9a96a" stroke-width="1.4"/>
+    <rect x="-138" y="-103" width="276" height="206" fill="none" stroke="#8a8578" stroke-width="1" stroke-dasharray="2 4"/>
+    <text class="xs" x="-138" y="122">1.4"（45 MP，IMX492）</text>
+    <path class="acc" d="M0 0 L124 0"/>
+    <path class="acc" d="M124 0 l-9 -4 l0 8 Z" fill="#c9a96a"/>
+    <text class="mon" x="0" y="-14" text-anchor="middle">r = 11.55</text>
+    <text class="xs" x="-134" y="-108" fill="#c9a96a">C-mount 特殊设计可达</text>
+  </g>
+
+  <!-- 覆盖对照表 -->
+  <text class="hd" x="628" y="122">三层「靶面上限」必须分开看</text>
+  <g class="sm">
+    <text x="628" y="152">接口机械承载上限　C-mount → 最大 1.5"（约 ⌀20 mm）　Basler 官网</text>
+    <text x="628" y="178">常规镜头系列上限　EO C 系列 → 2/3"（⌀11 mm）　最大像圈 ⌀9.00 mm</text>
+    <text x="628" y="204">特殊设计可达值　Computar MPT → 1.4"（像圈 ⌀23.1 mm）　C-mount 上</text>
+  </g>
+  <g>
+    <rect x="628" y="222" width="380" height="1.4" fill="#8a8578" fill-opacity=".5"/>
+    <text class="sm" x="628" y="248">→ 所以「C-mount 限制 11 mm 对角线」不是接口的物理硬限，</text>
+    <text class="sm" x="628" y="268">　而是常规 C-mount 镜头在该接口上普遍能达到的像圈上限。</text>
+  </g>
+  <g>
+    <text class="hd" x="628" y="308">裕量：超出对角线 5–10%</text>
+    <text class="sm" x="628" y="332">覆盖制造公差、温漂、焦点变化（Sunex 建议）</text>
+    <text class="sm" x="628" y="356">「1.2 倍」这一说法未找到厂商或标准的一手背书，不作规则</text>
+  </g>
+  <g>
+    <text class="hd" x="628" y="396">格式名 ≠ 真实对角线</text>
+    <text class="sm" x="628" y="420">1.1" 的对角线是 ⌀17.6 mm，比 2/3" 的 ⌀11.0 mm 大 60%</text>
+    <text class="sm" x="628" y="444">两者常被当成「差不多的一档」——这是买错镜头的主因之一</text>
+  </g>
+
+  <!-- 右下：相对照度滚降 -->
+  <text class="hd" x="44" y="470">cos⁴θ 滚降：开大光圈的另一面</text>
+  <g transform="translate(60,492)">
+    <line class="g" x1="0" y1="0" x2="0" y2="-0"/>
+    <path class="acc2" d="M0 0 L120 0 L196 -30 L262 -66 L300 -78"/>
+    <circle cx="120" cy="0" r="3" fill="#7aa2c8"/>
+    <circle cx="196" cy="-30" r="3" fill="#7aa2c8"/>
+    <circle cx="262" cy="-66" r="3" fill="#7aa2c8"/>
+    <circle cx="300" cy="-78" r="3" fill="#7aa2c8"/>
+    <text class="moc" x="126" y="14">0°（中心）</text>
+    <text class="moc" x="202" y="-16">15° → −13%</text>
+    <text class="moc" x="268" y="-52">30° → −44%</text>
+    <text class="xs" x="60" y="26">纵轴为中心到角落的相对照度（f/1.4 实测：2/3" 角落 57%、1/2" 角落 72%）</text>
+    <text class="xs" x="60" y="42">缩光圈可改善滚降，但不明显增大图像圈；像方远心可消除</text>
+  </g>
+
+  <text class="foot" x="628" y="524">口径：对角线表与 cos⁴θ 数值引自 Schneider Kreuznach 官方；像圈数字引自 Computar 官网、Edmund Optics 官网与 Basler C-mount 产品页；裕量引自 Sunex。</text>
+  <text class="foot" x="44" y="524">图为示意，比例按标注尺寸绘制；不是任何一支具体镜头的实测像圈图。</text>
+</svg>

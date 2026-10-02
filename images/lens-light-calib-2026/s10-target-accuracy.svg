@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="标定板制造精度分级、平直度与格距误差的传递">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .ax{fill:none;stroke:#8a8578;stroke-width:1.2}
+    .bar1{fill:#cf5a50;fill-opacity:.7}
+    .bar2{fill:#c9a96a;fill-opacity:.6}
+    .bar3{fill:#7aa2c8;fill-opacity:.55}
+    .bar4{fill:#8fbf7a;fill-opacity:.5}
+    .warn{fill:#cf5a50;fill-opacity:.1;stroke:#cf5a50;stroke-opacity:.45;stroke-width:1.2}
+    .cell{fill:#14161c;stroke:#8a8578;stroke-opacity:.3;stroke-width:1}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+  <text class="ttl" x="44" y="48">标定板的精度天花板，以及格距误差怎么传</text>
+  <text class="sub" x="44" y="74">CALITAR 原话：「标定的精度基本上最多只能达到所用标定靶的精度。」—— 这一页给不出那张流传的对照表，改用五组可核验数据</text>
+
+  <!-- 左上：掩模等级 -->
+  <text class="hd" x="44" y="120">① 铬版掩模等级（Opto Engineering）</text>
+  <g transform="translate(44,136)">
+    <text class="xs" x="0" y="0">等级　定位误差 (µm)</text>
+    <g transform="translate(0,10)">
+      <rect class="bar1" x="70" y="0" width="320" height="20" rx="3"/>
+      <text class="sm" x="0" y="15">1</text><text class="mon" x="398" y="15">6.4</text>
+    </g>
+    <g transform="translate(0,34)">
+      <rect class="bar2" x="70" y="0" width="80" height="20" rx="3"/>
+      <text class="sm" x="0" y="15">2</text><text class="mon" x="158" y="15">1.6</text>
+    </g>
+    <g transform="translate(0,68)">
+      <rect class="bar2" x="70" y="0" width="30" height="20" rx="3"/>
+      <text class="sm" x="0" y="15">3</text><text class="mon" x="108" y="15">0.6</text>
+    </g>
+    <g transform="translate(0,102)">
+      <rect class="bar2" x="70" y="0" width="10" height="20" rx="3"/>
+      <text class="sm" x="0" y="15">4</text><text class="mon" x="88" y="15">0.2</text>
+    </g>
+    <text class="xs" x="0" y="150">公差式：±(A + B·C)　grade 2、10 mm → ±0.00168 mm</text>
+  </g>
+
+  <!-- 左下：按基板 -->
+  <text class="hd" x="44" y="330">② 按基板材料（CalibVision）</text>
+  <g transform="translate(44,346)">
+    <g>
+      <rect class="bar4" x="120" y="0" width="10" height="18" rx="2"/>
+      <text class="sm" x="112" y="14" text-anchor="end">熔石英</text><text class="mon" x="138" y="14">±0.5 µm</text>
+      <text class="xs" x="210" y="14">平直度 &lt;1 µm（&lt;50 mm）</text>
+    </g>
+    <g transform="translate(0,30)">
+      <rect class="bar3" x="120" y="0" width="20" height="18" rx="2"/>
+      <text class="sm" x="112" y="14" text-anchor="end">钠钙玻璃+铬</text><text class="mon" x="148" y="14">±1 µm</text>
+      <text class="xs" x="210" y="14">平直度 &lt;5 µm（&lt;100 mm）</text>
+    </g>
+    <g transform="translate(0,60)">
+      <rect class="bar1" x="120" y="0" width="20" height="18" rx="2"/>
+      <text class="sm" x="112" y="14" text-anchor="end">亮面陶瓷</text><text class="mon" x="148" y="14">±1 µm</text>
+      <text class="xs" x="210" y="14">平直度 &lt;30 µm（&lt;100 mm）</text>
+    </g>
+    <g transform="translate(0,90)">
+      <rect class="bar1" x="120" y="0" width="40" height="18" rx="2"/>
+      <text class="sm" x="112" y="14" text-anchor="end">哑光陶瓷</text><text class="mon" x="168" y="14">±2 µm</text>
+      <text class="xs" x="230" y="14">α = 6.7×10⁻⁶/K（40–400 °C）</text>
+    </g>
+    <g transform="translate(0,124)">
+      <line x1="0" y1="0" x2="430" y2="0" stroke="#8a8578" stroke-opacity=".25"/>
+      <text class="xs" x="0" y="18">行业区间：光刻 ±1–2 µm　／　打印或激光切割 ±15–100 µm</text>
+      <text class="xs" x="0" y="36">计量下限：视觉式 CMM 自身约 ±0.5 µm —— 再往下做意义不大</text>
+    </g>
+  </g>
+
+  <!-- 右上：格距误差传递 -->
+  <text class="hd" x="640" y="120">③ 格距误差 = 尺度系统误差</text>
+  <g transform="translate(640,142)">
+    <rect class="warn" x="0" y="0" width="516" height="128" rx="9"/>
+    <text class="moc" x="20" y="30">Z = s · f_x / (u − c_x)</text>
+    <text class="moc" x="300" y="30">⇒  δZ / Z = δs / s</text>
+    <line x1="20" y1="46" x2="496" y2="46" stroke="#8a8578" stroke-opacity=".25"/>
+    <text class="mon" x="20" y="70">格距 s = 100 mm　真值 ±0.05 mm</text>
+    <text class="mor" x="20" y="94">δs/s = 0.05%　→　全场 0.05% 尺度误差</text>
+    <text class="sm" x="20" y="116">300 mm 视野、5000 px → 0.06 mm/px；0.05% = 0.15 mm</text>
+  </g>
+  <g transform="translate(640,292)">
+    <text class="sm" x="0" y="0" fill="#cf5a50">标定输出的 f_x（像素）与格距 s（毫米）只能确定乘积 f_x · s。</text>
+    <text class="sm" x="0" y="22" fill="#cf5a50">所以格距误差与焦距完全共线 —— 优化器发现不了，也刷不掉。</text>
+    <text class="sm" x="0" y="50">→ 千分量级公差必须索要可溯源的格距证书，不是量卷尺。</text>
+    <text class="xs" x="0" y="72">JD Photodata 明确区分：相邻标记 ±0.5 µm　／　全板 ±3 µm（以中心零点为基准）</text>
+  </g>
+
+  <!-- 右下：四类靶标 -->
+  <text class="hd" x="640" y="404">④ 四类靶标的取舍</text>
+  <g transform="translate(640,420)">
+    <rect class="cell" x="0" y="0" width="250" height="88" rx="7"/>
+    <text class="lb" x="12" y="22">棋盘格 X-corner</text>
+    <text class="sm" x="12" y="42">各方向梯度都强，精度高</text>
+    <text class="xs" x="12" y="62">部分可见时无法定姿</text>
+    <text class="xs" x="12" y="78">实测：0.0088 px（无噪声）</text>
+
+    <rect class="cell" x="262" y="0" width="250" height="88" rx="7"/>
+    <text class="lb" x="274" y="22">圆点阵 / 圆阵</text>
+    <text class="sm" x="274" y="42">椭圆拟合反投影中心</text>
+    <text class="xs" x="274" y="62">标记 &gt;10 px 时偏心率误差显著</text>
+    <text class="xs" x="274" y="78">实测：0.01 px 量级</text>
+
+    <rect class="cell" x="0" y="96" width="250" height="76" rx="7"/>
+    <text class="lb" x="12" y="118">AprilGrid</text>
+    <text class="sm" x="12" y="138" fill="#8fbf7a">部分可见可用；姿态完全解出</text>
+    <text class="xs" x="12" y="158">Kalibr 不支持 ChArUco：</text>
+    <text class="xs" x="12" y="172" fill="#cf5a50">配错会静默产生零检测</text>
+
+    <rect class="cell" x="262" y="96" width="250" height="76" rx="7"/>
+    <text class="lb" x="274" y="118">ChArUco</text>
+    <text class="sm" x="274" y="138">允许遮挡与部分视野</text>
+    <text class="xs" x="274" y="158">MoveIt 默认打印 ChArUco</text>
+    <text class="xs" x="274" y="172">迁到 Kalibr 极易踩坑</text>
+  </g>
+
+  <text class="foot" x="44" y="524">口径：掩模等级表与公差式引自 Opto Engineering 校准图案产品页；按基板分级、平直度、陶瓷热膨胀、行业区间与计量下限引自 CalibVision 产品页与技术文章；格距证书引自 JD Photodata；靶标推荐引自 Kalibr（ETH Zurich ASL）官方 wiki；格距误差传递为本节基于 OpenCV 模型 s·p = A[R|t]P_w 的解析推导。</text>
+  <text class="foot" x="44" y="544">条形长度按标注 µm 值等比绘制（同一坐标尺度）。</text>
+</svg>

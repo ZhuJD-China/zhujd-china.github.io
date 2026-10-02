@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="100%" role="img" aria-label="八种照明几何的光路与检出能力">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 12.5px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 11.5px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 10.5px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .camo{fill:none;stroke:#8a8578;stroke-width:2}
+    .ray{fill:none;stroke:#c9a96a;stroke-width:1.5;stroke-opacity:.9}
+    .ray2{fill:none;stroke:#7aa2c8;stroke-width:1.4;stroke-dasharray:4 3;stroke-opacity:.9}
+    .obj{fill:#2a2620;stroke:#8a8578;stroke-width:1.2}
+    .lbl{fill:#c9a96a;font:600 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .box{fill:#14161c;stroke:#8a8578;stroke-opacity:.35;stroke-width:1}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="760" rx="14"/>
+  <text class="ttl" x="44" y="48">八种照明几何：本质是决定「让哪种光进入镜头」</text>
+  <text class="sub" x="44" y="74">同一条划痕，在不同几何下可能完全不可见。下图每格上方为相机，中部为被测面，下方或侧方为光源</text>
+
+  <!-- 行 1 -->
+  <!-- 明场 -->
+  <g transform="translate(44,100)">
+    <rect class="box" x="0" y="0" width="264" height="290" rx="9"/>
+    <text class="lbl" x="16" y="26">① 明场（正面，高角度）</text>
+    <g transform="translate(0,0)">
+      <rect class="camo" x="112" y="40" width="40" height="46" rx="4"/>
+      <circle cx="132" cy="96" r="15" fill="none" stroke="#8a8578" stroke-width="1.4"/>
+      <text class="xs" x="132" y="35" text-anchor="middle">相机</text>
+      <rect class="obj" x="76" y="212" width="112" height="16" rx="2"/>
+      <text class="xs" x="132" y="246" text-anchor="middle">被测面（平面 + 缺陷）</text>
+      <circle cx="30" cy="196" r="9" fill="#c9a96a"/>
+      <text class="xs" x="30" y="216" text-anchor="middle">光源</text>
+      <path class="ray" d="M39 192 L104 186"/>
+      <path class="ray" d="M104 186 L136 110"/>
+      <path class="ray2" d="M160 186 L126 214"/>
+      <text class="xs" x="196" y="120">&gt;45°</text>
+    </g>
+    <text class="sm" x="16" y="272">平面反射光进镜头，非平面特征把光</text>
+    <text class="sm" x="16" y="288">散射到最大接收角之外 → 暗特征/亮背景</text>
+  </g>
+
+  <!-- 暗场 -->
+  <g transform="translate(316,100)">
+    <rect class="box" x="0" y="0" width="264" height="290" rx="9"/>
+    <text class="lbl" x="16" y="26">② 暗场（正面，掠射）</text>
+    <g>
+      <rect class="camo" x="112" y="40" width="40" height="46" rx="4"/>
+      <circle cx="132" cy="96" r="15" fill="none" stroke="#8a8578" stroke-width="1.4"/>
+      <text class="xs" x="132" y="35" text-anchor="middle">相机</text>
+      <rect class="obj" x="76" y="212" width="112" height="16" rx="2"/>
+      <text class="xs" x="132" y="246" text-anchor="middle">被测面</text>
+      <circle cx="34" cy="220" r="9" fill="#c9a96a"/>
+      <text class="xs" x="34" y="240" text-anchor="middle">光源</text>
+      <path class="ray" d="M43 218 L100 214"/>
+      <path class="ray" d="M100 214 L170 212"/>
+      <path class="ray2" d="M112 208 L132 114"/>
+      <text class="xs" x="206" y="206">&lt;45°</text>
+    </g>
+    <text class="sm" x="16" y="272">反射光不进镜头，只收散射光 →</text>
+    <text class="sm" x="16" y="288">划痕、凹坑、压印、异物在暗背景上变亮</text>
+  </g>
+
+  <!-- 背光 -->
+  <g transform="translate(588,100)">
+    <rect class="box" x="0" y="0" width="264" height="290" rx="9"/>
+    <text class="lbl" x="16" y="26">③ 背光 / 透射</text>
+    <g>
+      <rect class="camo" x="112" y="40" width="40" height="46" rx="4"/>
+      <circle cx="132" cy="96" r="15" fill="none" stroke="#8a8578" stroke-width="1.4"/>
+      <text class="xs" x="132" y="35" text-anchor="middle">相机</text>
+      <rect class="obj" x="76" y="212" width="112" height="16" rx="2"/>
+      <text class="xs" x="132" y="246" text-anchor="middle">不透明件 → 纯剪影</text>
+      <rect x="72" y="248" width="120" height="12" rx="3" fill="#c9a96a" fill-opacity=".8"/>
+      <text class="xs" x="132" y="278" text-anchor="middle">光源</text>
+      <path class="ray" d="M132 244 L132 114"/>
+      <path class="ray" d="M132 244 L100 214"/>
+      <path class="ray" d="M132 244 L164 214"/>
+    </g>
+    <text class="sm" x="16" y="302">Cognex：测尺寸/轮廓/有无「最干净的技术」，</text>
+    <text class="sm" x="16" y="318">但「表面细节完全丢失」</text>
+  </g>
+
+  <!-- 同轴 -->
+  <g transform="translate(860,100)">
+    <rect class="box" x="0" y="0" width="296" height="290" rx="9"/>
+    <text class="lbl" x="16" y="26">④ 同轴（半反半透）</text>
+    <g>
+      <rect class="camo" x="118" y="40" width="40" height="46" rx="4"/>
+      <circle cx="138" cy="96" r="15" fill="none" stroke="#8a8578" stroke-width="1.4"/>
+      <text class="xs" x="138" y="35" text-anchor="middle">相机</text>
+      <line x1="138" y1="86" x2="138" y2="118" stroke="#7aa2c8" stroke-width="2"/>
+      <text class="xs" x="146" y="106" fill="#7aa2c8">半反半透</text>
+      <rect class="obj" x="82" y="212" width="112" height="16" rx="2"/>
+      <text class="xs" x="138" y="246" text-anchor="middle">镜面件表面</text>
+      <circle cx="138" cy="176" r="9" fill="#c9a96a"/>
+      <text class="xs" x="138" y="196" text-anchor="middle">光源</text>
+      <path class="ray" d="M138 187 L138 120"/>
+      <path class="ray2" d="M138 208 L138 120" stroke="#7aa2c8"/>
+      <text class="xs" x="164" y="182">镜面反射</text>
+      <text class="xs" x="164" y="196">回相机</text>
+    </g>
+    <text class="sm" x="16" y="272">KEYENCE：镜面反射回相机，漫反射被拒 →</text>
+    <text class="sm" x="16" y="288">光源离目标越远，漫反射被拒越强</text>
+  </g>
+
+  <!-- 行 2 -->
+  <!-- 环形 -->
+  <g transform="translate(44,436)">
+    <rect class="box" x="0" y="0" width="264" height="290" rx="9"/>
+    <text class="lbl" x="16" y="26">⑤ 环形（包围镜头）</text>
+    <g>
+      <rect class="camo" x="112" y="40" width="40" height="46" rx="4"/>
+      <circle cx="132" cy="96" r="15" fill="none" stroke="#8a8578" stroke-width="1.4"/>
+      <text class="xs" x="132" y="35" text-anchor="middle">相机</text>
+      <ellipse cx="132" cy="118" rx="34" ry="8" fill="none" stroke="#c9a96a" stroke-width="2"/>
+      <rect class="obj" x="76" y="212" width="112" height="16" rx="2"/>
+      <text class="xs" x="132" y="246" text-anchor="middle">圆柱件 / 孔 / 螺纹</text>
+      <path class="ray" d="M102 118 L108 210"/>
+      <path class="ray" d="M162 118 L156 210"/>
+      <path class="ray2" d="M120 120 L130 112"/>
+      <path class="ray2" d="M144 120 L134 112"/>
+    </g>
+    <text class="sm" x="16" y="272">Cognex 分三型：CV-R 高角明场 / CV-RLA 低角</text>
+    <text class="sm" x="16" y="288">暗场「凸显高度变化」/ CV-DR 镜面金属</text>
+  </g>
+
+  <!-- 低角度 -->
+  <g transform="translate(316,436)">
+    <rect class="box" x="0" y="0" width="264" height="290" rx="9"/>
+    <text class="lbl" x="16" y="26">⑥ 低角度 / 掠射</text>
+    <g>
+      <rect class="camo" x="112" y="40" width="40" height="46" rx="4"/>
+      <circle cx="132" cy="96" r="15" fill="none" stroke="#8a8578" stroke-width="1.4"/>
+      <text class="xs" x="132" y="35" text-anchor="middle">相机</text>
+      <rect class="obj" x="76" y="216" width="112" height="12" rx="2"/>
+      <text class="xs" x="132" y="248" text-anchor="middle">高度突变（崩边/凸印）</text>
+      <circle cx="20" cy="228" r="9" fill="#c9a96a"/>
+      <path class="ray" d="M29 226 L132 220"/>
+      <path class="ray" d="M29 230 L132 226"/>
+      <path class="ray2" d="M150 216 L133 114"/>
+      <text class="xs" x="186" y="222">≈ 平行</text>
+    </g>
+    <text class="sm" x="16" y="272">KEYENCE：光几乎平行于表面，任何高度变化把</text>
+    <text class="sm" x="16" y="288">正常光路偏折进镜头 → 突出该变化</text>
+  </g>
+
+  <!-- 散射 -->
+  <g transform="translate(588,436)">
+    <rect class="box" x="0" y="0" width="264" height="290" rx="9"/>
+    <text class="lbl" x="16" y="26">⑦ 散射 / 漫射</text>
+    <g>
+      <rect class="camo" x="112" y="40" width="40" height="46" rx="4"/>
+      <circle cx="132" cy="96" r="15" fill="none" stroke="#8a8578" stroke-width="1.4"/>
+      <text class="xs" x="132" y="35" text-anchor="middle">相机</text>
+      <path d="M60 100 Q132 60 204 100 L204 236 L60 236 Z" fill="#14161c" stroke="#8a8578" stroke-opacity=".4" stroke-width="1"/>
+      <rect class="obj" x="76" y="216" width="112" height="12" rx="2"/>
+      <text class="xs" x="132" y="256" text-anchor="middle">反光曲面 / 弧面瓶</text>
+      <path class="ray" d="M76 96 L126 214"/>
+      <path class="ray" d="M110 76 L130 214"/>
+      <path class="ray" d="M156 76 L134 214"/>
+      <path class="ray" d="M188 96 L140 214"/>
+    </g>
+    <text class="sm" x="16" y="284">多方向均匀光，消除方向性阴影与镜面高光</text>
+  </g>
+
+  <!-- 穹顶 -->
+  <g transform="translate(860,436)">
+    <rect class="box" x="0" y="0" width="296" height="290" rx="9"/>
+    <text class="lbl" x="16" y="26">⑧ 穹顶 / Dome</text>
+    <g>
+      <rect class="camo" x="128" y="40" width="40" height="46" rx="4"/>
+      <circle cx="148" cy="96" r="15" fill="none" stroke="#8a8578" stroke-width="1.4"/>
+      <text class="xs" x="148" y="35" text-anchor="middle">相机</text>
+      <path d="M76 122 Q148 66 220 122 L220 232 L76 232 Z" fill="#14161c" stroke="#8a8578" stroke-opacity=".5" stroke-width="1.4"/>
+      <text class="xs" x="148" y="112" text-anchor="middle" fill="#a09b8d">漫射内壁</text>
+      <circle cx="100" cy="196" r="5" fill="#c9a96a"/>
+      <circle cx="148" cy="186" r="5" fill="#c9a96a"/>
+      <circle cx="196" cy="196" r="5" fill="#c9a96a"/>
+      <text class="xs" x="100" y="216" text-anchor="middle">LED</text>
+      <text class="xs" x="148" y="206" text-anchor="middle">朝上</text>
+      <text class="xs" x="196" y="216" text-anchor="middle">LED</text>
+      <rect class="obj" x="96" y="234" width="104" height="10" rx="2"/>
+    </g>
+    <text class="sm" x="16" y="284">必须贴近工件；远离会退化为方向光；开口小于工件出 dead spot</text>
+  </g>
+
+  <!-- 底部提示 -->
+  <rect x="44" y="740" width="1112" height="1" fill="#8a8578" fill-opacity=".25"/>
+  <text class="sm" x="44" y="706">三条选择规律：测轮廓用背光（OPT：测直径/长度/定位通孔时最大化边缘对比的最佳选择）· 明场 &gt;45° 与暗场 &lt;45° 的分界（Cognex）· 短波长更易散射，故蓝检表面、红检透明件（OPT，KEYENCE 实验印证）</text>
+  <text class="xs" x="44" y="724">未找到一手支撑的说法：「正交暗场检划痕、45° 暗场检颗粒」。可支撑的是暗场方位角决定缺陷方向性，需扫角度而非一次定死</text>
+  <text class="foot" x="44" y="748">口径：光路定义引自 Cognex《Machine Vision Lighting Techniques》、KEYENCE CA-DLR/CA-DX/CA-DS/CA-DD 产品页、OPT 几何与技法总览、Edmund Optics 剪影背光与背光应用笔记。</text>
+</svg>

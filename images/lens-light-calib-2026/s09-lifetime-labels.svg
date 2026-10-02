@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="100%" role="img" aria-label="LED 光源寿命指标 L70、B50、MTBF、保修期与 IEC 62471 风险组">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .ax{fill:none;stroke:#8a8578;stroke-width:1.2}
+    .grid{fill:none;stroke:#8a8578;stroke-opacity:.16;stroke-width:1}
+    .c70{fill:none;stroke:#c9a96a;stroke-width:2.2}
+    .c50{fill:none;stroke:#cf5a50;stroke-width:2.2;stroke-dasharray:6 4}
+    .gray{fill:none;stroke:#8a8578;stroke-width:1.6;stroke-dasharray:2 4}
+    .warn{fill:#cf5a50;fill-opacity:.1;stroke:#cf5a50;stroke-opacity:.5;stroke-width:1.2}
+    .grp{fill:#14161c;stroke:#8a8578;stroke-opacity:.4;stroke-width:1.2}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="540" rx="14"/>
+  <text class="ttl" x="44" y="48">寿命：四个指标分别在说什么，为什么不能横向比</text>
+  <text class="sub" x="44" y="74">DOE 明确指出 MTBF 与寿命「直接比较毫无意义，并导致误导性结论」</text>
+
+  <!-- 左：光输出衰减曲线 -->
+  <text class="hd" x="44" y="118">光输出随时间衰减：L70 与「50%」</text>
+  <g transform="translate(96,406)">
+    <line class="grid" x1="0" y1="-40" x2="0" y2="-240"/>
+    <line class="grid" x1="0" y1="-140" x2="440" y2="-140"/>
+    <line class="grid" x1="0" y1="-240" x2="440" y2="-240"/>
+    <line class="grid" x1="220" y1="0" x2="220" y2="-240"/>
+    <line class="grid" x1="440" y1="0" x2="440" y2="-240"/>
+    <line class="ax" x1="-14" y1="0" x2="466" y2="0"/>
+    <line class="ax" x1="0" y1="14" x2="0" y2="-256"/>
+    <text class="sm" x="-10" y="-38" text-anchor="end">100%</text>
+    <text class="sm" x="-10" y="-138" text-anchor="end">50%</text>
+    <text class="sm" x="-10" y="-238" text-anchor="end">0</text>
+    <text class="sm" x="0" y="20" text-anchor="middle">0</text>
+    <text class="sm" x="220" y="20" text-anchor="middle">25,000 h</text>
+    <text class="sm" x="440" y="20" text-anchor="end">50,000 h</text>
+    <text class="sm" x="225" y="44" text-anchor="middle">运行时间</text>
+    <text class="sm" x="-40" y="-140" text-anchor="middle" transform="rotate(-90 -40 -140)">相对光输出</text>
+
+    <path class="c70" d="M0 -240 C120 -238 200 -232 262 -226 C340 -219 400 -212 440 -208"/>
+    <path class="c50" d="M0 -240 C120 -228 180 -202 240 -168 C300 -134 350 -110 400 -96"/>
+    <path class="gray" d="M0 -240 C100 -232 190 -220 250 -204 C320 -184 380 -160 440 -142"/>
+
+    <line class="grid" x1="262" y1="0" x2="262" y2="-226" stroke="#c9a96a" stroke-opacity=".5"/>
+    <line class="grid" x1="400" y1="0" x2="400" y2="-96" stroke="#cf5a50" stroke-opacity=".5"/>
+    <text class="mon" x="268" y="-216">L70　AI 标称 50,000 h</text>
+    <text class="mon" x="268" y="-232">SCHOTT 标称 50,000 h（白 LED）</text>
+    <text class="mor" x="356" y="-86">OPT 的「LED 寿命」= 降到 50%</text>
+    <text class="xs" x="356" y="-70">OPT 口径：亮度降到初始 50%，@25 °C</text>
+    <text class="sm" x="24" y="-196" fill="#a09b8d">灰虚线＝各厂商口径不同，同一支灯在不同资料里可能落在不同曲线上</text>
+  </g>
+
+  <!-- 中：四个指标 -->
+  <g transform="translate(600,116)">
+    <text class="hd" x="0" y="0">四个指标，两个轴</text>
+    <g transform="translate(0,26)">
+      <rect class="grp" x="0" y="0" width="252" height="66" rx="7"/>
+      <text class="lb" x="12" y="24">L70（性能水平）</text>
+      <text class="sm" x="12" y="44">光输出降到 70%；须同时报 L70/Bxx/Fyy</text>
+      <text class="xs" x="12" y="60">AI、SCHOTT、DOE</text>
+    </g>
+    <g transform="translate(0,78)">
+      <rect class="grp" x="0" y="0" width="252" height="66" rx="7"/>
+      <text class="lb" x="12" y="24">B50（时间区间）</text>
+      <text class="sm" x="12" y="44">中位寿命；某些应用不可接受</text>
+      <text class="xs" x="12" y="60">DOE</text>
+    </g>
+    <g transform="translate(0,156)">
+      <rect class="warn" x="0" y="0" width="252" height="66" rx="7"/>
+      <text class="lb" x="12" y="24" fill="#cf5a50">MTBF（平均失效率）</text>
+      <text class="sm" x="12" y="44" fill="#cf5a50">100,000 h 意味着 10 年内 87.6% 失效</text>
+      <text class="xs" x="12" y="60" fill="#cf5a50">OPT datasheet 标 20,000 h @25 °C</text>
+    </g>
+    <g transform="translate(0,234)">
+      <rect class="warn" x="0" y="0" width="252" height="66" rx="7"/>
+      <text class="lb" x="12" y="24" fill="#cf5a50">保修期（不是光学指标）</text>
+      <text class="sm" x="12" y="44" fill="#cf5a50">SVL「10 年保修」≠ L70</text>
+      <text class="xs" x="12" y="60" fill="#cf5a50">采购谈判里两者不可并列</text>
+    </g>
+    <text class="sm" x="0" y="330" fill="#cf5a50">DOE：两者「直接比较毫无意义」</text>
+    <text class="sm" x="0" y="352">灯具寿命 = LED 与驱动两者寿命的较小值</text>
+    <text class="xs" x="0" y="372">DOE 算例：组合系统 52,000 h，低于任一组件单独值</text>
+  </g>
+
+  <!-- 右：IEC 62471 -->
+  <g transform="translate(900,116)">
+    <text class="hd" x="0" y="0">IEC 62471 风险组</text>
+    <g transform="translate(0,22)">
+      <rect class="grp" x="0" y="0" width="256" height="38" rx="6"/>
+      <text class="moc" x="12" y="24">Exempt　豁免，无需进一步测试</text>
+      <text class="xs" x="12" y="52">Basler Ring-120OD 红 / IR；OPT LTRN 系列（红）</text>
+    </g>
+    <g transform="translate(0,68)">
+      <rect x="0" y="0" width="256" height="38" rx="6" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".5" stroke-width="1.2"/>
+      <text class="mon" x="12" y="24">RG1　低风险</text>
+      <text class="xs" x="12" y="52">Basler Ring-120OD 白 / 蓝；OPT LTCL4K090-G</text>
+      <text class="xs" x="12" y="68">Advanced Illumination 470/520/625 nm 与白光</text>
+    </g>
+    <g transform="translate(0,150)">
+      <text class="sm" x="0" y="0">快速判据：亮度 &lt;10,000 cd/m² → RG0</text>
+      <text class="xs" x="0" y="20">（IEC/TR 62778）</text>
+      <text class="sm" x="0" y="48">测量需在两处各做一次：</text>
+      <text class="xs" x="0" y="68">获得 500 lx 的距离处；20 cm 处</text>
+      <text class="xs" x="0" y="92">RG2 中度 / RG3 高风险 —— 工业视觉场景罕见</text>
+    </g>
+  </g>
+
+  <text class="foot" x="44" y="500">口径：L70/B50 定义与「MTBF 不可直接比较」「100,000 h → 10 年内 87.6% 失效」「组合系统 52,000 h」引自美国能源部 DOE《LED Luminaire Lifetime: Recommendations for Testing and Reporting》与《Lifetime and Reliability》；L70 = 50,000 h 引自 Advanced Illumination BL 系列与 SCHOTT VisiLED 产品页；LED 寿命＝降到 50% @25 °C 与 MTBF 20,000 h 引自 OPT 光基础知识与 LTRN036RD datasheet；风险组与 10,000 cd/m² 判据引自 IEC 62471、IEC/TR 62778。</text>
+  <text class="foot" x="44" y="520">曲线为按各厂商口径重绘的示意形态，不是任何一支具体 LED 的实测衰减数据；时间轴不对应具体型号。</text>
+</svg>

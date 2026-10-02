@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 580" width="100%" role="img" aria-label="温度与气压导致的焦距与主点漂移量级、90 分钟暖机时间线">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .ax{fill:none;stroke:#8a8578;stroke-width:1.2}
+    .grid{fill:none;stroke:#8a8578;stroke-opacity:.18;stroke-width:1}
+    .bar1{fill:#cf5a50;fill-opacity:.65}
+    .bar2{fill:#c9a96a;fill-opacity:.6}
+    .bar3{fill:#7aa2c8;fill-opacity:.55}
+    .warn{fill:#cf5a50;fill-opacity:.1;stroke:#cf5a50;stroke-opacity:.45;stroke-width:1.2}
+    .t1{fill:none;stroke:#c9a96a;stroke-width:2.4}
+    .t2{fill:none;stroke:#cf5a50;stroke-width:2.4}
+    .t3{fill:none;stroke:#7aa2c8;stroke-width:2}
+    .dot{fill:#8fbf7a}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="580" rx="14"/>
+  <text class="ttl" x="44" y="48">物理边界：几度温差能吃掉整个标定预算</text>
+  <text class="sub" x="44" y="74">单片玻璃焦距温漂只有 4 ppm/°C，但铝镜筒是 24 ppm/°C——大温差下的焦点误差几乎全来自金属件</text>
+
+  <!-- 左：量级对照 -->
+  <text class="hd" x="44" y="120">六组可核验的漂移量级</text>
+  <g transform="translate(44,140)">
+    <!-- 对数刻度条：1 µm 对应 0px, 1000 µm 对应 300px -->
+    <text class="xs" x="150" y="-8">1 µm</text>
+    <text class="xs" x="450" y="-8">100 µm</text>
+    <text class="xs" x="740" y="-8" text-anchor="end">1000 µm（1 mm）</text>
+    <line class="grid" x1="150" y1="0" x2="150" y2="360"/>
+    <line class="grid" x1="300" y1="0" x2="300" y2="360"/>
+    <line class="grid" x1="450" y1="0" x2="450" y2="360"/>
+    <line class="grid" x1="600" y1="0" x2="600" y2="360"/>
+    <line class="grid" x1="740" y1="0" x2="740" y2="360"/>
+
+    <!-- 1: 气压 -30 kPa -> -79 µm -->
+    <g transform="translate(0,14)">
+      <rect class="bar1" x="150" y="0" width="283" height="22" rx="3"/>
+      <text class="sm" x="0" y="16">气压 −30 kPa（1→0.7 atm）</text>
+      <text class="mor" x="441" y="16">焦平面 −79 µm（长焦端）</text>
+      <text class="xs" x="441" y="30">广角端 −12 µm；变焦镜头专利实测</text>
+    </g>
+    <!-- 2: 100 Pa -> 10 nm wavefront = 0.01 µm -->
+    <g transform="translate(0,66)">
+      <rect class="bar3" x="150" y="0" width="1" height="22" rx="0"/>
+      <text class="sm" x="0" y="16">光刻：0.1 K 或 100 Pa</text>
+      <text class="moc" x="160" y="16">波前 RMS +10 nm（原生 5 nm）</text>
+      <text class="xs" x="160" y="30">2013 年研究；对投影镜不可忽略</text>
+    </g>
+    <!-- 3: 100mm EFL al barrel +240 µm -->
+    <g transform="translate(0,118)">
+      <rect class="bar1" x="150" y="0" width="354" height="22" rx="3"/>
+      <text class="sm" x="0" y="16">铝镜筒 −100 °C（100 mm EFL）</text>
+      <text class="mor" x="512" y="16">焦点误差 +240 µm</text>
+      <text class="xs" x="512" y="30">α_铝 = 24×10⁻⁶/K；+100 °C 时 −160 µm</text>
+    </g>
+    <!-- 4: principal point 0.03mm per 30 deg = 30 µm -->
+    <g transform="translate(0,170)">
+      <rect class="bar2" x="150" y="0" width="222" height="22" rx="3"/>
+      <text class="sm" x="0" y="16">主点：约 30 °C 温变</text>
+      <text class="mon" x="380" y="16">位移约 0.03 mm</text>
+      <text class="xs" x="380" y="30">即每 10 °C 约 0.01 mm（Fritz 实测）</text>
+    </g>
+    <!-- 5: air refr index -30 kPa? no: 5-10 µm/°C -->
+    <g transform="translate(0,222)">
+      <rect class="bar2" x="150" y="0" width="155" height="22" rx="3"/>
+      <text class="sm" x="0" y="16">准直镜（未热补偿）</text>
+      <text class="mon" x="313" y="16">重调焦 5–10 µm/°C</text>
+      <text class="xs" x="313" y="30">视场边缘像移约 1 像素/°C（Deb 实测）</text>
+    </g>
+    <!-- 6: 5x reduction 0.3 µm -->
+    <g transform="translate(0,274)">
+      <rect class="bar3" x="150" y="0" width="30" height="22" rx="3"/>
+      <text class="sm" x="0" y="16">5× 缩小镜头（11 mm 视场）</text>
+      <text class="moc" x="188" y="16">0.3 µm 还原误差</text>
+      <text class="xs" x="188" y="30">气压依赖；Sporon-Fiedler &amp; Williams 1985</text>
+    </g>
+    <!-- 7: glass only -->
+    <g transform="translate(0,326)">
+      <rect class="bar3" x="150" y="0" width="0.5" height="22" rx="0"/>
+      <text class="sm" x="0" y="16">单片玻璃 NBK7 焦距温漂</text>
+      <text class="moc" x="160" y="16">4 ppm/°C（量级极小）</text>
+      <text class="xs" x="160" y="30">dn/dT ≈ 3×10⁻⁶、α ≈ 7×10⁻⁶，两者相消后所剩</text>
+    </g>
+  </g>
+
+  <!-- 中：预算换算 -->
+  <g transform="translate(840,120)">
+    <text class="hd" x="0" y="0">换算成标定预算</text>
+    <rect class="warn" x="0" y="18" width="316" height="112" rx="9"/>
+    <text class="sm" x="16" y="44">300 mm 视野、5000 px 宽 → 0.06 mm/px</text>
+    <text class="mor" x="16" y="68">每 10 °C 主点漂 0.01 mm = 0.17 像素</text>
+    <text class="sm" x="16" y="92">已接近 sub-pixel 标定误差量级（0.1 px）</text>
+    <text class="sm" x="16" y="116" fill="#cf5a50">车间昼夜温差 15 °C 就能吃掉整个预算</text>
+
+    <text class="sm" x="0" y="158">工业经验值：</text>
+    <text class="sm" x="0" y="180">1.5 m 低碳钢（13 µm/m/°C）</text>
+    <text class="mon" x="0" y="202">±1 °C 控温房 → 2 °C 变化 → 39 µm</text>
+    <text class="xs" x="0" y="222">要在这个件上达到 19.5 µm 安全系数，</text>
+    <text class="xs" x="0" y="238">需 7692 px 宽（约 39 MP）</text>
+
+    <text class="sm" x="0" y="272">畸变与焦距对温度不敏感（K₁/K₂/K₃ 无明显相关），</text>
+    <text class="sm" x="0" y="292" fill="#cf5a50">但拆装镜头会改主点——量级与冷态温漂相当。</text>
+    <text class="xs" x="0" y="314">→ 重新标定的触发条件不只是温度，也包括任何一次拆装。</text>
+  </g>
+
+  <!-- 下：暖机时间线 -->
+  <text class="hd" x="44" y="520">90 分钟暖机（Kern 75 mm + uEye 5480CP 实测）</text>
+  <g transform="translate(44,534)">
+    <line class="ax" x1="0" y1="14" x2="640" y2="14"/>
+    <circle class="dot" cx="0" cy="14" r="5"/>
+    <path class="t1" d="M0 14 C80 -8 180 4 280 12"/>
+    <path class="t2" d="M0 22 C80 30 180 24 280 18"/>
+    <path class="t3" d="M0 30 C80 30 180 28 280 22"/>
+    <text class="xs" x="-8" y="46">t = 0</text>
+    <text class="xs" x="200" y="46">45 min</text>
+    <text class="xs" x="280" y="46" text-anchor="middle" fill="#8fbf7a">90 min</text>
+    <text class="mon" x="0" y="-14">机身 23.5 °C → 43.5 °C</text>
+    <text class="mor" x="196" y="4" text-anchor="end">镜头本体 31.0 °C（C-mount）</text>
+    <text class="moc" x="300" y="4">30.5 °C（中环）</text>
+    <text class="sm" x="300" y="24">Photoneo 的维护工具要求设备已运行至少 45 分钟</text>
+    <text class="sm" x="300" y="42">Zivid：预热 + infield correction + 手眼标定要用同一采集周期</text>
+  </g>
+
+  <text class="foot" x="840" y="546">口径条与时间线数字引自 Fritz（ISPRS）、ISPRS Kern 75 mm 长焦论文、Langenbach 1998、Deb（Optics Letters 2002）、University of Arizona 光学机械课程讲义、光刻物镜气压影响研究、Sporon-Fiedler &amp; Williams 1985、变焦镜头专利公开文本、Photoneo 用户手册与 Zivid 支持文档。</text>
+  <text class="foot" x="44" y="576">条形为对数刻度示意（1 µm → 1 mm），不按量纲线性绘制；「气压 0.01%/10 kPa」这一流传数字未找到权威原文，故未采用。</text>
+</svg>
