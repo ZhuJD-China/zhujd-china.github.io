@@ -252,7 +252,18 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 
 # 第二部分 · 逐仓库解剖
 
-三份源码用同一套方法读：先给文件地图，再走启动、运行、业务三层序列，最后是位操作、校验和、驱动这些横切面。
+三份源码用同一套方法读：**文件地图 → 启动 / 运行 / 业务三层序列 → 横切面（位操作、校验和、驱动）→ 测试与实测**。三节的小节编号刻意同构，方便横向对照；每节末尾的小节编号若与其他节不同，是因为该仓在这条骨架上确有一块别家没有的内容（如 2.6 的回归测试、3.5 的 nag killer、3.7 的 bit47 改口、4.6 的两处真故障），我按事实标注而非强行拉齐。
+
+| | 2 `tesla-open-can-mod` | 3 `flipper-tesla-fsd` | 4 `ev-open-can-tools` |
+| --- | --- | --- | --- |
+| 地图 | 2.1 | 3.1 | 4.1 |
+| 启动 / 运行 / 业务 | 2.2 / 2.3 / 2.4 | 3.2 / 3.3 / 3.4 | 4.2 / 4.3 / 4.4 |
+| 横切面 | 2.5 / 2.7 / 2.8 | 3.6 | 4.5 |
+| 门控（本仓特有或前置） | 2.10 | 3.4 | 4.5 |
+| 测试 | 2.9 | **3.8** | **4.7** |
+| 独有内容 | 2.6 回归测试 | 3.5 nag killer、3.7 bit47 改口 | 4.6 两处真故障 |
+
+每节开头都有一句钉住 commit 的说明；行号只在那个 commit 上成立。
 
 ## 2. `tesla-open-can-mod`：最干净的教学样本
 
@@ -869,6 +880,12 @@ beta.34 的 `changelog.md` 开头就写明了理由（逐字）：
 
 这一段的分量不在技术，而在结论的半衰期："bit47 常开"这一判断在上游 HEAD 上已然错误，"beta.33 修好了"这一判断隔日又错。**版本敏感的结论只能连同 commit 一起写。**
 
+### 3.8 测试：827 条断言，分成互不覆盖的两套
+
+第 8 节的 827 条并非一个测试工程的产物，而是两套彼此独立的宿主测试：`test_fsd_core.c`（127.6 KB）编 C 版 `fsd_logic/`，`test_esp32_core.cpp`（31.9 KB）编 ESP32 版 `.firmware/`，入口是 `make -C test check`（不是 PlatformIO，见 8.5）。648 条打前者、179 条打后者。
+
+**没有一条断言同时覆盖两份实现**——这正是 3.1 结尾那个"同一个 bug 要在两处各修一次"的测试层对应物。C 版改了一行判断，C++ 版的断言不会变红，反之亦然。测试数量在这里证明的是覆盖广度，不是两份实现的行为一致性。
+
 ## 4. `ev-open-can-tools`：最像平台的一个
 
 这一节补齐源码阅读，方法与前两节一致。
@@ -1097,6 +1114,12 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 **二、`scripts/minify_dashboard.py` 在中文 Windows 上因编码失败。** 报错 `UnicodeDecodeError: 'gbk' codec can't decode byte 0xa6`——脚本 `open()` 不带 `encoding=`，本机默认编码是 GBK。`set PYTHONUTF8=1` 可绕过。这类问题 README 里不可能写，只能实跑一次记录一次。
 
 ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓表同源）：`2026.2.11` 全仓 0 处、`X179` 0 处；`HW4` 有 224 处——支持很扎实，只是没落到那个具体 OTA 版本。
+
+### 4.7 测试：249 个用例，2 个套件在本机编不过
+
+`test/` 下 **17 个套件目录**、`platformio.ini` **10 个 native env**，第 8 节记的是 249 个用例、247 过。与前两节最大的不同是**测试粒度按功能切开**：光看 env 名就知道覆盖面——`native_bypass_tlssc_requirement`（第 1 节那道选择位）、`native_nag`、`native_injection_after_ap`（对应 1.4 的 AP-First）、`native_plugin_engine` 与 `native_plugin_engine_custom_key`（平台特征）、`native_dev_sim`、`native_mcp2515_recovery`、`native_log_buffer`、`native_dashboard`。这是"平台化"在测试层的投影：三仓里只有它把每个开关都做成一个可单独跑的套件。
+
+代价是它对工具链更敏感——4.6 那个 `strlcpy` 一个 bug 就打掉两个套件（`native_plugin_engine` 与同树的 `native_plugin_engine_custom_key`），9 个 native 套件在本机只能过 7 个。**247/249 这个数字要这样读：不是代码错，是宿主编译环境缺一个 BSD 函数。**
 
 ---
 
