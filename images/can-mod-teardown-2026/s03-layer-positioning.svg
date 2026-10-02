@@ -16,7 +16,7 @@
   </style>
   <rect class="bg" x="0" y="0" width="1200" height="650" rx="14"/>
   <text class="ttl" x="44" y="56">三层定位：模型层、决策与执行层、总线层</text>
-  <text class="sub" x="44" y="86">总线工具插在决策与执行之间，改写模型的输出，不触及模型本身</text>
+  <text class="sub" x="44" y="86">三个仓库都住在最下层的总线层：读一帧、改几个比特、以同一 ID 发回，不触及模型与规划</text>
 
   <rect class="b" x="44" y="106" width="1112" height="112" rx="6" fill-opacity=".10"/>
   <text class="nm" x="64" y="138">模型层</text>
