@@ -24,6 +24,18 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 
 **最短路径：**只想弄懂原理读第 1 节（16 行讲清一条链路、三道门）；只想动手做读 12.7（十一步，唯一带 go / no-go 判据的清单）；想核数据读第 8 节。
 
+> ### 本文的前提，读者先看这一框
+>
+> **分析对象**是三个公开仓库的**源码**，不是车。本文自始至终是一个"读代码的人"，不是"改装过车的人"——这一点决定了下文每一条的效力上限。
+>
+> **能力假设**：工具侧的写入能力**只有一帧**——`0x3FD`（或 Legacy 的 `0x3EE`）上那一位。没有服务端账号、没有以太网、没有 Fleet API、没有硬件密钥。本文讨论的全部固件侧手段，都在这个假设内。
+>
+> **不假设的事**：车端拿到这一帧之后会做什么。三道门里第一道门在总线内，后两道在总线外（1.3、1.4）；本文对后两者只能给出"为什么动不了"的机制说明，**给不出也无法给出"动了会怎样"的预测**。
+>
+> **证据分级**贯穿全文，三档定义见 0.2：**一手**（我能直接拿到原文）／**社区回报**（第三方单点陈述，我未独立核实）／**未核实**（我明确没有验证）。凡是第三档的结论，正文就地标注。
+>
+> **不做的事**：规避检测、隐匿接入、移除车上通信模块——一概不写。这不是姿态，是 1.4 已经给出理由：上游自己那条 "拔 SIM 降低检测风险" 的建议，本文在 1.4 只记录它存在、略去其操作步骤。
+
 **三条读法，按你要的东西选：**
 
 - **只想弄懂原理** → 0.4（帧 ID 与术语）→ 1.1（一条链路、三道门）→ 5、6（一致与分化）。这四节读完，勾选位、权益、地域锁的关系就清楚了。
@@ -36,7 +48,7 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 
 **第一部分 · 范围与关键分歧**
 
-- **0. 三个版本，先钉死** —— 三个仓库的 commit / tag、全文的证据分档约定、样本冻结背后的生态下架、帧 ID 与术语对照
+- **0. 三个版本，先钉死** —— 三个仓库的 commit / tag、证据分档约定、三家同源的来历、帧 ID 与术语对照
 - **1. 在中国"开启"FSD：一条链路，三道门** —— 勾选位、权益与地域围栏三道门的可动性
 
 **第二部分 · 逐仓库解剖**
@@ -66,7 +78,7 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 
 **第六部分 · 出处与总结**
 
-- **15. 参考与引用：本文用到的每一条外部出处** —— 每一条外部出处、性质分层、高频锚点反查与证据分层
+- **15. 参考与引用：本文用到的每一条外部出处** —— 按性质分层的单一出处表、证据分层与高频锚点反查
 - **16. 总结** —— 四条判断、方法论与全文边界
 
 ---
@@ -103,41 +115,38 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 | star、日期、tag、价格、兼容性、行业事件 | `git ls-remote`、公开接口、网络检索，附 URL 与页面日期，可复现但未逐行核验 |
 | 烧录之后车会怎么反应 | 完全不验证：没有板子、没有线束、没有车辆，见第 14 节 |
 
-### 0.3 样本为什么停在 4 月：一次下架与三条延续线
+### 0.3 三家同源，不是巧合
 
-第 0.1 表第一行的"无 tag、无 release、停在 2026-04-02"不是孤例。把各家 README 的自述拼起来（`flipper` 的两处行号来自 `ffbb24e` 检出，一手；`jvanakker` 的引文访问于 2026-10-02），这条线的来历是：
+0.1 表第一行"停在 2026-04-02"不是孤例。把各家 README 的自述拼起来（`flipper` 两处行号取自 `ffbb24e`，一手；`jvanakker` 引文访问于 2026-10-02），这条线是连着的：
 
-- **原始研究**：`Starmixcraft/tesla-fsd-can-mod`（CanFeather）。`flipper` `README.md:374` 称其 "original CanFeather FSD research"，注明 **"GitLab repo removed"**，镜像指向 `Karolynaz/waymo-fsd-can-mod`；`jvanakker/tesla-fsd-can-mod` 的 README 自陈是镜像，并写 **"Original repo and it's successor (Tesla open CAN mod) are taken down according to https://fsdcanmod.com"**（访问于 2026-10-02）。
-- **后续正统**：`ev-open-can-tools`。`flipper` `README.md:361` 的 Related projects 表称其为 "The upstream community project"，并写 **"Formerly `Tesla-OPEN-CAN-MOD` on GitLab; that group was renamed to `ev-open-can-tools` and the GitLab repo is now dormant (0 open issues/MRs, last commit 2026-04-25)"**。第 4 节解剖的"最像平台"的仓库就是这条线的现存端——三家不是三个孤岛。
-- **下架本身**：两个镜像都把原因指向存档站 `fsdcanmod.com`。**该域名在 2026-10-02 已无法解析**（DNS 查询失败，复核两次）；页面内容我只在检索快照里读到，记为 "Both GitLab repos taken down by Tesla DMCA (April 2026)"——**DMCA 的定性归入未核实**，可核实的只有上面两处 README 的 "removed / taken down"。
+- **原始研究** `Starmixcraft/tesla-fsd-can-mod`（CanFeather）——`flipper` `README.md:374` 称其 "original CanFeather FSD research" 并注明 **"GitLab repo removed"**；两个镜像（`jvanakker/tesla-fsd-can-mod`、`Karolynaz/waymo-fsd-can-mod`）自陈是它的副本。
+- **后续正统** `ev-open-can-tools`——`flipper` `README.md:361` 称其为 "The upstream community project"，并写明"Formerly `Tesla-OPEN-CAN-MOD` on GitLab; that group was renamed"。第 4 节那个"最像平台"的仓库就是这条线的现存端。
+- **下架原因**两个镜像都指向存档站 `fsdcanmod.com`，**该域名 2026-10-02 已无法解析**（DNS 查询失败，复核两次）。页面内容我只从检索快照读到 "Both GitLab repos taken down by Tesla DMCA (April 2026)"——**DMCA 的定性归入未核实**，可核实的只有上述两处 README 的 "removed / taken down"。
 
-对本文有三个直接影响：
-
-1. 教学样本 `1-v-1/tesla-open-can-mod` 最后一次 push 是 **2026-04-02**，与"April 2026" 的下架窗口重合。**时间重合不是因果**——我未查到 `1-v-1` 与 GitLab 原仓的 fork 关系证据（GitHub API 本次访问被限流）；但反过来，把"停更"直接读作"弃坑"同样没有依据。
-2. 第 9 节引用的 `jvanakker` 失效标注（"2026.8.6 与 2026.2.9.x 及以上已不可用"）出自同一个镜像 README 的 `⚠️ UPDATE` 段，**指涉对象是 CanFeather 原始固件**，不是本文第 2 节样本的代码；证据等级维持社区回报。
-3. flipper 把 ev-open 称作 upstream（`:361`），第 5 节那张"几乎能互相覆盖"的骨架表因此有了注脚：**同源，不是巧合**。
+**三点直接影响。**其一，教学样本停更与 "April 2026" 的下架窗口时间重合，**但时间重合不是因果**——`1-v-1` 与 GitLab 原仓的 fork 关系我未查到（GitHub API 被限流），反过来把"停更"读作"弃坑"同样没依据。其二，9.3 引用的 `jvanakker` 失效标注出自同一镜像 README，**指涉 CanFeather 原始固件、不是本文第 2 节的样本代码**。其三，flipper 称 ev-open 为 upstream——**这给第 5 节那张"几乎能互相覆盖"的骨架表提供了注脚：同源，不是巧合**。
 
 ### 0.4 帧 ID 与术语对照
 
-后文引用帧时，本文先给十进制（与三份源码里的 `frame.id == ...` 一致），再括注上游文档惯用的十六进制；两者是纯算术换算（`0x3FD` = 3×256 + 0xFD = 1021）。下表的信号名与方向逐条取自 `flipper` 的 CAN ID 表（`README.md:310-325`，钉在 `ffbb24e`），**行号于 2026-10-01 复核**——上游 README 会被改写，若你日后核不上，先确认时点。
+后文引用帧时，本文先给十进制（与三份源码里的 `frame.id == ...` 一致），再括注上游文档惯用的十六进制；两者是纯算术换算（`0x3FD` = 3×256 + 0xFD = 1021）。下表逐条取自 `flipper` 的 CAN ID 表（`README.md:310-329`，**共 18 行，本文只列与本文结论相关的 11 行**），钉在 `ffbb24e`，**行号于 2026-10-01 复核**——上游 README 会被改写，若你日后核不上，先确认时点。
 
 | 十进制 | 十六进制 | 信号名 | 方向 | 本文出现处 |
 | --- | --- | --- | --- | --- |
-| 1021 | `0x3FD` | `UI_autopilotControl` | TX | 选择位所在帧，HW3/HW4（1.1、2.4） |
+| 1021 | `0x3FD` | `UI_autopilotControl` | TX | **选择位（bit 38，读）与 FSD 使能（bit 46，写）都在这一帧**（1.1、2.4） |
 | 1006 | `0x3EE` | `UI_autopilotControl` | TX | 同上，Legacy HW1/HW2（2.4） |
-| 921 | `0x399` | `ISA_speedLimit` / `DAS_status` | TX/RX | 按硬件代际分派：Legacy/HW3 读 DAS 状态，HW4 走 ISA 速度警告抑制（2.7） |
-| 1016 | `0x3F8` | `UI_driverAssistControl` | TX | HW3/HW4 的第二条监听帧；telemetry-off 涉及的位在其中（2.4） |
-| 962 | `0x3C2` | `VCLEFT_switchStatus` | TX | 工具写入以模拟转向柱按键（ScrollPress AP），并决定可见总线（11.5、12.3） |
+| 921 | `0x399` | `ISA_speedLimit` / `DAS_status` | TX/RX | 按硬件代际分派：Legacy/HW3 读 DAS 状态，HW4 走 ISA 速度警告抑制（2.6） |
+| 1016 | `0x3F8` | `UI_driverAssistControl` | TX | HW3/HW4 的第二条监听帧；telemetry-off 涉及的位在其中（2.4、14.2） |
+| 962 | `0x3C2` | `VCLEFT_switchStatus` | TX | 工具写入以模拟转向柱按键（ScrollPress AP），并决定可见总线（1.4、11.5、12.3） |
 | 880 | `0x370` | `EPAS3P_sysStatus` | TX | nag 回声所在的 Chassis CAN 帧（3.5、12.2） |
-| 923 | `0x39B` | `DAS_status` | RX | HW4/Highland HW3 的 AP 状态，AP-First（14.x）读它判断 AP 是否已接合（1.4） |
-| 792 | `0x318` | `GTW_carState` | RX | OTA 检测；新车上 byte6 是滚动计数器（6.3、14.2） |
+| 923 | `0x39B` | `DAS_status` | RX | HW4/Highland HW3 的 AP 状态，AP-First（14.x）读它判断 AP 是否已接合（1.4、10.1） |
+| 792 | `0x318` | `GTW_carState` | RX | OTA 检测（6.3、14.2） |
 | 817 | `0x331` | `DAS_autopilotConfig` | TX | TLSSC Restore（1.4、14.2） |
-| 2047 | `0x7FF` | `GTW_carConfig` | TX | GTW Config Replay（1.4） |
+| 2047 | `0x7FF` | `GTW_carConfig` | TX | GTW Config Replay 与档位覆盖（1.4） |
 | 787 | `0x313` | `UI_trackModeSettings` | TX | Track Mode（平衡 / 稳定 / 散热）。**全文只在 3.6 的校验和清单与 5.2 提过，没有展开**——它不在本文这台车要注入的那几帧上 |
+| *（上表 18 行中未列的 7 行）* | | | | `0x082` 电池预热触发、`0x398` 车型识别、BMS 四帧（`0x132` 电压电流 / `0x292` 电量 / `0x312` 温度 / `0x33A` 能耗）。**它们不参与本文任何一条结论**，故不列；见 `README.md:320`、`322`、`326-329` |
 
-**方向列的 TX/RX 是"工具"视角**：TX＝工具发送、RX＝工具接收。同一 ID 在不同硬件代际下角色会互换——`0x399` 在 Legacy/HW3 上工具只读，在 HW4 上还要写 ISA 抑制位，这是 2.7 那段代码存在的理由。
+**方向列的 TX/RX 是"工具"视角**：TX＝工具发送、RX＝工具接收。同一 ID 在不同硬件代际下角色会互换——`0x399` 在 Legacy/HW3 上工具只读，在 HW4 上还要写 ISA 抑制位，这是 2.6 那段代码存在的理由。
 
-**一处上游自身的命名分歧先记下来**：flipper 的源码注释把选择位所在帧写作 `DAS_autopilotControl`（`fsd_can_ops.h:55`），同一仓库的 README 信号表写作 `UI_autopilotControl`（`README.md:315`）——同一帧（`0x3FD` / `0x3EE`），两种叫法。读源码以注释为准，检索上游文档用后者。
+**两处上游自身的命名分歧先记下来。**其一，flipper 的源码注释把选择位所在帧写作 `DAS_autopilotControl`（`fsd_can_ops.h:55`），同一仓库的 README 信号表写作 `UI_autopilotControl`（`README.md:315`）——同一帧（`0x3FD` / `0x3EE`），两种叫法。读源码以注释为准，检索上游文档用后者。其二，同一份 README 里 **`0x7FF` 与 `0x398` 两个不同的 ID 都被写作 `GTW_carConfig`**（`:319` 与 `:322`），但角色相反——前者 TX 供 GTW Config Replay 与档位覆盖，后者 RX 供车型识别。**同一信号名配两个 ID，这是本文见到最隐蔽的一处上游分歧**，检索时务必带 ID。
 
 读本文需要的八个术语（后两个在后文反复出现，此处一次定死）：
 
@@ -160,11 +169,20 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 
 ### 1.1 一条链路，三道门
 
-**先说链路。** 车机界面上 FSD 那个勾选框本身不改变车辆行为，它只是通过一帧 `UI_autopilotControl`（CAN ID `0x3FD`，即十进制 1021；Legacy 走 `0x3EE` = 1006，帧 ID 与信号名对照见 0.4）告诉车上的自动驾驶计算机"用户已经勾选"——这个状态落在**第 5 个数据字节（`data[4]`）里的第 6 位**（`can_helpers.h:21`、`fsd_can_ops.h:62`；`ev-open-can-tools` 读第 5 位、函数名 `isADSelectedInUI`）。
+**先说链路。**车机界面上 FSD 那个勾选框本身不改变车辆行为，它只是通过一帧 `UI_autopilotControl`（CAN ID `0x3FD`，即十进制 1021；Legacy 走 `0x3EE` = 1006，帧 ID 与信号名对照见 0.4）告诉车上的自动驾驶计算机"用户已经勾选"——这个状态落在**第 5 个数据字节（`data[4]`）里的第 6 位**（`can_helpers.h:21`、`fsd_can_ops.h:62`；`ev-open-can-tools` 读第 5 位、函数名 `isADSelectedInUI`）。
 
-**位号怎么数，别搞混**：后文所有"`byte[4]` 的第 6 位""bit 38"说的是同一个位置——代码里的 `data[4]` 是第 5 个字节（`data` 从 0 数），它内部的第 6 位换算成整帧的比特序号就是 38（`4 × 8 + 6`）。1.4 的 VIN 封禁拆解里那条 `bit 38` 用的正是这个换算。
+**位号怎么数，别搞混**：后文所有"`byte[4]` 的第 6 位""bit 38"说的是同一个位置——代码里的 `data[4]` 是第 5 个字节（`data` 从 0 数），它内部的第 6 位换算成整帧的比特序号就是 38（`4 × 8 + 6`）。
 
-固件要做的只有一件事：读这个位，决定后续帧要不要按"已选中"处理。三个仓库都把它抽成一个无状态判定函数（逐字对照见 1.2）。**所有"在中国开启 FSD"的固件侧手段，动作都只有一个：让这个函数不看帧、直接返回 `true`**；随后的注入、改比特、解除 nag 都在这条分支的下游。
+**一个 bit，两个名字，两种方向——这是全文最容易读错的一处。**`0x3FD` 上有两位必须分开看，`flipper` README 自己在 `:315` 一行里把它们并列写出：
+
+| 位 | mux | 方向 | 含义 | 上游两处叫法 |
+| --- | --- | --- | --- | --- |
+| **bit 38**（`byte[4]` bit 6） | mux 0 | **读** | 那个勾选框的状态本身。上游称它 **TLSSC flag**（`SECURITY.md:28`）；本文一直叫它"选择位"——**同一个 bit** | `UI_fsdStopsControlEnabled`（`1-v-1` README 的 DBC 表）/ "TLSSC bit38"（flipper `:315`） |
+| **bit 46** | mux 0 | **写** | 工具真正写下去的那一位：把"已选中"翻译成车端认的"使能" | "enable FSD"（`1-v-1` README）/ "FSD unlock — bit46/60"（flipper `:315`） |
+
+所以完整的动作是**读 38、写 46**，不是"把 38 改成 1"。这也解释了 1.2 那个判定函数为什么存在：它读 38，handler 才决定要不要去写 46（2.4 的 `setBit(frame, 46, true)`）。**本文此前把 38 同时叫"选择位"和"TLSSC 标志"而没有点明是同一个位，是一处真实的表述缺陷，此处补正。**
+
+固件要做的只有一件事：读 bit 38，决定后续帧要不要按"已选中"处理。三个仓库都把它抽成一个无状态判定函数（逐字对照见 1.2）。**所有"在中国开启 FSD"的固件侧手段，动作都只有一个：让这个函数不看帧、直接返回 `true`**；随后的注入、改比特、解除 nag 都在这条分支的下游。
 
 **再说三道门**，它们决定这条路径能走多远：
 
@@ -242,7 +260,29 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 
 `tesla-open-can-mod` 另有一份面向受限地区的账户操作指南 `guides/FSD_SUBSCRIPTION_GUIDE.md`，其自带免责声明位于 `:5`。本文记录该文件的存在与行号，不转述其步骤。
 
+**这道门有两种失败方式，症状一样、成因不同——不分开就会给出错误的补救建议。**flipper 的 issue `#119`（China HW4 / 2026.8.3.6 / 已购 FSD 但从未接合）里，项目作者本人给出了这个区分（社区回报，本文未 clone 核验该 issue 页面，仅据检索快照）：
+
+| | 被封（banned） | 从未授予（never granted） |
+| --- | --- | --- |
+| 服务端发生了什么 | 权益被**撤销**——检测到 CAN 设备后远程下发 | 权益**从未下发**给这个地区/这辆车 |
+| 症状 | 曾经能用，后来不能 | 装上工具也从来就没能用过 |
+| 能否用总线绕过 | 不能 | 不能 |
+
+作者的判词是 **"Banned = revoked; this = never granted."** 并给出该次的具体机制：在 China HW4 上，**自动驾驶档位由车端从服务端的权益状态重新推导出来**（`0x7FF`），所以往总线上注入 SELF_DRIVING 档位**零效果**（据其引用的 issue `#117`）。issue `#122` 被指向为"合并后的状态说明"。
+
+**这条与 1.4 引的 `SECURITY.md:30` 是同一件事的两次独立陈述**（一个说"主权益路径走以太网"，一个说"档位由服务端状态重新推导、注入无效"），而两者都出自同一个仓库的作者之手。**它把 1.5 的"够不着"从一个论断变成了一个有机制解释的结论：不是缺一帧，是缺一份服务端下发的状态。**
+
+> **一处订正**：本文此前把"档位注入无效"只记在 `SECURITY.md:30` 一处。issue `#119` / `#117` 是上游作者本人在 2026 年夏给出的同向表述，且明确限定在 **China HW4** 上——**与本文这台车同硬件代际、同地区**，尽管版本不同（该例为 2026.8.3.6，本车 2026.2.11）。这一条本文标为社区回报，因为它来自 issue 而非钉死的文件行号。
+
 ### 1.4 第三道门：地域围栏与版本分界
+
+**先说这道门为什么存在——这不是技术问题，是监管问题。**（以下三条全部为媒体报道，非一手，本文标为**未核实**；列出来是因为它们决定了这道门的性质，而不在于本文依赖它们。）
+
+- 中国的 FSD 试点于 2025 年 3 月启动，随后被工信部与市场监管总局叫停（新规要求先进驾驶辅助的重大技术参数变更须事先批准、须报事故、缺陷须报召回计划）。
+- 截至 2026-05-21，完整版 FSD 在中国**仍未获批**；已进入中国的是阉割版，来源明确表示"不是完整版、不是 FSD V14"。
+- 2026-04 的清理行动中，Tesla 在**中国单独就查获逾 10 万辆**装有此类改装的车，涉事设备在亚洲售价 $700–$2,000、欧洲约 €500；车机提示原文为 "Your vehicle has detected an unauthorized third-party device. As a precaution, some driver assistance functions have been disabled for safety reasons"。时间点与 FSD v14.3 的推送重合。
+
+**所以本文这台车面对的不是一个"版本对不对"的问题，而是"这道门什么时候开"的问题。**后文 9 节花整节论证"2026.2.11 该编哪个宏"不可判定——那个问题在这一层其实让位于一个更前置、也本文无法回答的问题。**这也是本文只写"仓库的指南到此为止"而不给操作建议的原因之一。**
 
 这一道门没有源码可查，只有文档自述。`esp32/README.md:422` 先声明了整张兼容性表的性质：
 
@@ -263,7 +303,11 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 - **AP-First (14.x)**（`README.md:123`）：把 `0x3FD` 的注入推迟到 AP 已被接合之后，README 标注它 **"Required for Tesla firmware 2026.14.x"**。它改的是注入时机，不改地域锁本身。
 - **GTW Config Replay**（`README.md:124`，v2.15 起由 "Ban Shield" 改名）：监视 `0x7FF` `GTW_carConfig`，在网关发出被改动的帧时实时重放事先学到的健康广播。README 自陈的边界写得很清楚——**只作用在 CAN 广播层，不撤销 NVRAM 或服务端的封禁状态，也不阻止封禁**。
 
-还有第三个手段必须单列，因为它改变了"14.x 完全解不了"这句话的边界。`ROADMAP.md:12`（钉在 `ffbb24e`）把 **`0x3C2` ScrollPress AP** 记作 **"first confirmed 2026.14.x bypass"**（PR #82）：它不碰 FSD 的任何一位，而是往 `VCLEFT_switchStatus`（`0x3C2`）的 mux=1 帧里**注入一串模拟滚动轮的时序**（按住右滚轮 `swcRightPressed` bits 12-13 约 250 ms → 上滚 `swcRightScrollTicks` bits 24-29 约 150 ms → 再按住 → 再上滚），让车机认为人真的拨了转向柱（`ROADMAP.md:107-110`、`README.md:133`）。
+还有第三个手段必须单列，因为它改变了"14.x 完全解不了"这句话的边界。`ROADMAP.md:12`（钉在 `ffbb24e`）把 **`0x3C2` ScrollPress AP** 记作 **"first confirmed 2026.14.x bypass"**（PR #82）：它不碰 FSD 的任何一位，而是往 `VCLEFT_switchStatus`（`0x3C2`）的 mux=1 帧里**注入一串模拟滚动轮的时序**——按住右滚轮 `swcRightPressed`（bits 12-13）约 250 ms → 上滚 `swcRightScrollTicks`（bits 24-29）约 150 ms → 再按住 → 再上滚，**触发时机是 `DAS_autopilotState` 由 0 跳到 1 的瞬间**（`README.md:133`）。让车机认为人真的拨了转向柱。
+
+`README.md:133` 同一格还记了两条本文此前没有的信息：**它是 @JakNo 在 Highland HW4 / 2026.14.2 上发现并台架验证的（issue `#43`，时序实现 PR `#82`）**；以及 **"no `0x3FD` touch"**——它压根不碰 FSD 位，这正是它能绕开 preflight 的原因。
+
+> **一处订正**：本文上一版把这串时序标为 `ROADMAP.md:107-110`，是错的。本文已于 2026-10-01 复核 `ffbb24e` 检出——`ROADMAP.md:107-110` 是座椅加热与 Track Mode 的路线图条目；**这串时序的唯一出处是 `README.md:133`**，ROADMAP 只在 `:12` 记了一行标签。
 
 **这条我按其原样记录，并把三条限定一起摆出来**，因为它们比"它能用"更重要：
 
@@ -282,7 +326,11 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 | FSD 挂起状态置为 SUSPENDED | `0x259 APP_fsdSuspendState` | 社区研究 |
 | **AP ECU 的主权益路径似乎是 Ethernet** | —— | 社区研究 |
 
-`SECURITY.md:30` 那句是这一整节里最要紧的判断：**单靠影子注入 `0x7FF` 并不能解除封禁，因为主权益路径走的是以太网**——这正好从反面印证了第 1 节第二道门"权益不在总线上"。同一行的下半句又给出实测有效的组合：**TLSSC Restore（`0x331`）+ `0x3FD` mux0 bit38** 由 `@RoyRakete` 在被封的 HW3 / 2026.2.6 上确认能可靠恢复 AP/TACC（issue `#18` 楼中楼）。`SECURITY.md:31-32` 补了两条限定：TLSSC Restore 单独只能部分恢复停车标志/红绿灯、**不恢复完整 FSD**；且 Intel HW3 的封禁执行比 Palladium/HW4 更激进。
+`SECURITY.md:30` 那句是这一整节里最要紧的判断：**单靠影子注入 `0x7FF` 并不能解除封禁，因为主权益路径走的是以太网**——这正好从反面印证了第 1 节第二道门"权益不在总线上"。**这半句推翻了 GTW Config Replay 的全部价值**，也是 1.5 里"够不着"必须限定范围的原因。
+
+同一行的下半句给出一个**必须成对使用**的组合，效果比任何单开关都强：**TLSSC Restore（写 `0x331`）+ `0x3FD` mux0 bit 38** 由 `@RoyRakete` 在被封的 HW3 / 2026.2.6 上确认能可靠重新让 AP/TACC 接合（issue `#18` 楼中楼）。注意 bit 38 就是 1.1 那张表里的**读**位——它在这里被当作"写回勾选状态"用，`SECURITY.md` 原话是这一对**"together"** 才可靠，任一单独开在部分封禁固件上不可靠。`SECURITY.md:31-32` 再补两条限定：TLSSC Restore 单独只能部分恢复停车标志/红绿灯、**不恢复完整 FSD**；且 Intel HW3 的封禁执行比 Palladium/HW4 更激进。
+
+**从这一段能读出工具作者的方法论**：他们没有声称"解开封禁"，只声称"这一对开关能让 AP/TACC 接合"。**把可验证的窄结论与不可验证的宽结论分开写**——本文全文沿用这个纪律，这也是 9 节敢于整节写"不可判定"的原因。
 
 `SECURITY.md:23-24` 另记了一条操作面的事实：封禁**跨账号转移、FSD 重新订阅、乃至 Service 端重装软件都持续存在**，拔 SIM 卡只能降低、不能消除被检测的风险。这解释了为什么第 14 节把 VIN 封禁列为"项目方风险自述"里最高风险的一条。
 
@@ -298,18 +346,18 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 
 # 第二部分 · 逐仓库解剖
 
-三份源码用同一套方法读：**文件地图 → 启动 / 运行 / 业务三层序列 → 横切面（位操作、校验和、驱动）→ 测试与实测**。三节的小节编号刻意同构，方便横向对照；每节末尾的小节编号若与其他节不同，是因为该仓在这条骨架上确有一块别家没有的内容（如 2.6 的回归测试、3.5 的 nag killer、3.7 的 bit47 改口、4.6 的两处真故障），我按事实标注而非强行拉齐。
+三份源码用同一套方法读：**文件地图 → 启动 / 运行 / 业务三层序列 → 横切面（位操作、校验和、驱动）→ 测试与实测**。三节的小节编号刻意同构，方便横向对照；每节末尾的小节编号若与其他节不同，是因为该仓在这条骨架上确有一块别家没有的内容（如 3.5 的 nag killer、3.7 的 bit47 改口、4.6 的两处真故障），我按事实标注而非强行拉齐。
 
 | | 2 `tesla-open-can-mod` | 3 `flipper-tesla-fsd` | 4 `ev-open-can-tools` |
 | --- | --- | --- | --- |
 | 地图 | 2.1 | 3.1 | 4.1 |
 | 启动 / 运行 / 业务 | 2.2 / 2.3 / 2.4 | 3.2 / 3.3 / 3.4 | 4.2 / 4.3 / 4.4 |
-| 横切面 | 2.5 / 2.7 / 2.8 | 3.6 | 4.5 |
-| 门控（本仓特有或前置） | 2.10 | 3.4 | 4.5 |
-| 测试 | 2.9 | **3.8** | **4.7** |
-| 独有内容 | 2.6 回归测试 | 3.5 nag killer、3.7 bit47 改口 | 4.6 两处真故障 |
+| 横切面 | 2.5 / 2.6 / 2.7 | 3.6 | 4.5 |
+| 门控（本仓特有或前置） | 2.9 | 3.4 | 4.5 |
+| 测试 | 2.8 | **3.8** | **4.7** |
+| 独有内容 | — | 3.5 nag killer、3.7 bit47 改口 | 4.6 两处真故障 |
 
-**表里两个约定**：3.4 与 4.5 各出现两次不是笔误——3.4 既是"业务层"也是 flipper 的四道门所在，4.5 既是"横切面"也是 ev-open 发送许可所在；测试行的加粗表示该节是独立小节（3.8 与 4.7 各有引言与结论，2.9 没有）。
+**表里两个约定**：3.4 与 4.5 各出现两次不是笔误——3.4 既是"业务层"也是 flipper 的四道门所在，4.5 既是"横切面"也是 ev-open 发送许可所在；测试行的加粗表示该节是独立小节（3.8 与 4.7 各有引言与结论，2.8 没有）。
 
 每节开头都有一句钉住 commit 的说明；**行号只在那个 commit 上成立。**
 
@@ -319,7 +367,7 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 
 三个仓库中，该仓库的抽象分层最清晰、规模最小，适合作为第一个解剖对象。本节要回答的是：**一段"收到帧、改几个比特、发回去"的逻辑，在源码里究竟落在哪几个文件、哪几层。**
 
-**本节是全文最长的一节，也是后两节的基线**：2.5/2.7/2.8 三个横切面在这里逐字展开，3.6 与 4.5 只讲各自相对它的差量。**只想看原理跳 1.1 与第 5、6 节；只想看这台车怎么接，看 11–14 节。**通读本节的顺序：2.1（地图）→ 2.2/2.3/2.4（三层序列）→ 2.5/2.7/2.8（横切面基线）→ 2.9/2.10（测试与门控）；2.6 是插在其中的一个完整案例，可独立阅读。
+**本节是全文最长的一节，也是后两节的基线**：2.5/2.6/2.7 三个横切面在这里逐字展开，3.6 与 4.5 只讲各自相对它的差量。**只想看原理跳 1.1 与第 5、6 节；只想看这台车怎么接，看 11–14 节。**通读本节的顺序：2.1（地图）→ 2.2/2.3/2.4（三层序列）→ 2.5/2.7/2.8（横切面基线）→ 2.8/2.9（测试与门控）；2.6 是插在其中的一个完整案例，可独立阅读。
 
 ### 2.1 地图：七个文件
 
@@ -442,7 +490,7 @@ struct CarManagerBase
 
 `filterIds()` 与 `handleMessage()` 是一对：同一个类既声明听什么，又实现听到了怎么办。过滤器与处理逻辑因此在代码上强制对齐，改一处不会漏另一处。
 
-三个派生类监听的 ID 各不同（HW4 的 921 分支受编译期宏控制，见 2.7）：
+三个派生类监听的 ID 各不同（HW4 的 921 分支受编译期宏控制，见 2.6）：
 
 | Handler | 行范围 | 监听 ID |
 | --- | --- | --- |
@@ -507,7 +555,15 @@ if (frame.id == 1021)
 
 mux 0 刷新状态，mux 2 应用缓存，mux 1 完全不理会缓存。mux 2 那支带 `&& FSDEnabled`，用 mux 0 存下的值；mux 1 那支根本没引用 `FSDEnabled`，收到 mux 1 帧即改比特回发。
 
-这不是笔误——mux 0 → mux 2 锁存的回归测试见 2.6，mux 1 分支的断言见 2.10。三个 handler 的 mux 1 分支写法相同，但三者的 mux 2 不一致：HW3 检查缓存（`handlers.h:165`），HW4 不检查（`handlers.h:276` 为光秃秃的 `if (index == 2)`），Legacy 没有 mux 2 这一支。
+![状态缓存的时序耦合](images/can-mod-teardown-2026/s02-state-latch.svg)
+
+图 3｜mux 0 写入状态、mux 2 复用状态，mux 1 两者都不做。
+
+**这个耦合曾是个 bug，值得多看一眼。**mux 2 的帧自己带一个 `data[4]`，早期实现若在每个分支都重读 UI 位，这帧会把 mux 0 刚存下的状态覆盖掉——测试注释里叫它 "FSD shadowing fix"（`test/test_native_hw3/test_hw3_handler.cpp:55`，HW4 有孪生测试在 `test_hw4_handler.cpp:62`），说的就是变量遮蔽。修复方式是让读取只发生在 mux 0，并用一条回归测试锁死"mux 2 帧的 `data[4]` 为 0 也不会把 `FSDEnabled` 冲掉"。
+
+**修复本身不是重点，流程才是**：发现隐式耦合、加测试锁死、把修复意图写进测试名。mux 1 分支的断言见 2.9。
+
+三个 handler 的 mux 1 分支写法相同，但三者的 mux 2 不一致：HW3 检查缓存（`handlers.h:165`），HW4 不检查（`handlers.h:276` 为光秃秃的 `if (index == 2)`），Legacy 没有 mux 2 这一支。
 
 ### 2.5 横切面一：位操作与读改写纪律
 
@@ -563,46 +619,9 @@ inline void setBit(CanFrame &frame, int bit, bool value)
 
 `setSpeedProfileV12V13` 是读改写的纪律示范。掩码 `~0x06` 保留字节里其他位，只动该动的两比特。误伤相邻字段是这类工具最常见的 bug，掩码写法从结构上堵死了它。
 
-`setBit` 用绝对位号寻址：`bit / 8` 定位字节、`bit % 8` 定位位内偏移，并在 `:33-34` 加了越界护栏。这解释了代码中 19、46、47、59、60 这些魔数的来历——DBC 的"起始位 + 长度"语义在这一层已被手工展开成绝对位号（第 5.1 节）。
+`setBit` 用绝对位号寻址：`bit / 8` 定位字节、`bit % 8` 定位位内偏移，并在 `:33-34` 加了越界护栏。这解释了代码中 19、46、47、59、60 这些魔数的来历——DBC 的"起始位 + 长度"语义在这一层已被手工展开成绝对位号（5.1）。
 
-### 2.6 一处被回归测试钉死的耦合
-
-2.4 那个"mux 2 复用 mux 0 缓存"的行为值得单独看，因为它曾是个 bug。
-
-`test/test_native_hw3/test_hw3_handler.cpp:55` 的注释直接写着 `// --- FSD shadowing fix regression test ---`，测试本体在同文件 57-74 行，逐字如下：
-
-```cpp
-void test_hw3_fsd_enabled_only_set_on_mux0()
-{
-    // Step 1: mux 0 with FSD bit set -> FSDEnabled should become true
-    CanFrame f0 = {.id = 1021};
-    f0.data[0] = 0x00; // mux 0
-    f0.data[4] = 0x40; // FSD selected
-    handler.handleMessage(f0, mock);
-    TEST_ASSERT_TRUE(handler.FSDEnabled);
-
-    // Step 2: mux 2 with FSD bit NOT set -> FSDEnabled should STAY true
-    mock.reset();
-    CanFrame f2 = {.id = 1021};
-    f2.data[0] = 0x02; // mux 2
-    f2.data[4] = 0x00; // FSD bit not set in this frame
-    handler.handleMessage(f2, mock);
-    TEST_ASSERT_TRUE(handler.FSDEnabled);
-    TEST_ASSERT_EQUAL(1, mock.sent.size()); // mux 2 should still send because FSDEnabled is latched
-}
-```
-
-"shadowing" 点出了原 bug 的性质：mux 2 的帧自己带了一个 `data[4]`，早期实现若在每个分支重读 UI 位，这帧会把 mux 0 刚存下的状态覆盖掉，语义上称为变量遮蔽。
-
-修复方式是让读取只发生在 mux 0，并用回归测试锁死这个行为。HW4 有一份孪生测试（`test_native_hw4/test_hw4_handler.cpp:62`，注释同样写着 `FSD shadowing fix regression test`）。
-
-![状态缓存的时序耦合](images/can-mod-teardown-2026/s02-state-latch.svg)
-
-图 3｜mux 0 写入状态、mux 2 复用状态，mux 1 两者都不做。
-
-修复本身不是重点，流程才是：发现隐式耦合、加测试锁死、把修复意图写进测试名。
-
-### 2.7 横切面二：校验和，HW4 独有的一支
+### 2.6 横切面二：校验和，HW4 独有的一支
 
 `HW4Handler` 的 `921` 分支是其他 handler 没有的（`handlers.h:213-227`），逐字如下：
 
@@ -641,7 +660,7 @@ void test_hw3_fsd_enabled_only_set_on_mux0()
 
 只有原生测试环境把它打开（`platformio.ini:34`、`:40`）。按仓库自带配置构建出的任何硬件固件都不含这条 921 路径；要在车上启用，须自行在 `.ino` 中取消注释，由 `scripts/platformio_sync_ino_defines.py` 同步进 `build_flags`（README `:246-253` 记录了这一机制）。同文件 `handlers.h:263` 的 `EMERGENCY_VEHICLE_DETECTION` 结构相同，默认同样注释于 `RP2040CAN.ino:31`。
 
-### 2.8 横切面三：驱动抽象与过滤器掩码
+### 2.7 横切面三：驱动抽象与过滤器掩码
 
 `include/drivers/can_driver.h` 全文 13 行，接口就是 `init` / `setFilters` / `enableInterrupt` / `read` / `send` 五个纯虚方法加一个虚析构（`can_driver.h:7-12`）。
 
@@ -676,7 +695,7 @@ f_config_.single_filter = true;
 
 **这不是疏忽，是单滤波器的固有代价**：正确性由软件保证，`handleMessage()` 每支都先 `if (frame.id == ...)` 精确比对。硬件过滤只负责省电省中断，不负责语义正确。
 
-### 2.9 测试：99 条断言，107 次执行
+### 2.8 测试：99 条断言，107 次执行
 
 七个测试套件，全部为原生构建，不碰硬件。逐个 `RUN_TEST` 静态计数的结果：
 
@@ -697,7 +716,7 @@ f_config_.single_filter = true;
 
 `-DNATIVE_BUILD` 是关键开关：`include/app.h:9-11` 与 `include/handlers.h:11-13` 都用它隔离 Arduino 头文件。**同一份业务代码既能编译进 MCU，也能编译进主机当纯逻辑跑，这是整个测试体系成立的前提。**测试靠 `MockDriver` 捕获发送：`send()` 不上总线，只 `sent.push_back(frame)`，于是断言发送次数与帧内容成为可能。
 
-### 2.10 门控：有什么，没什么
+### 2.9 门控：有什么，没什么
 
 把仓库中所有"防止乱发帧"的机制列一遍：
 
@@ -825,7 +844,7 @@ bool fsd_can_transmit(const FSDState* state) {
 
 `main.cpp` 里每一条会发帧的路径都要先问它一次：`:287`（挡位序列）、`:876`、`:1276`、`:1356`（nag killer）、`:1772`（预空调用）。
 
-**五处调用是这套机制的全部脆弱点**——加一条新路径忘了问它，那条路径就绕过了三道门。这是第 2.10 节那张门控表最缺的实据：`tesla-open-can-mod` 里不存在这样一个函数，它的发送许可全在编译期宏里（6.2 会把这条与 ev-open 的结构化做法对照）。
+**五处调用是这套机制的全部脆弱点**——加一条新路径忘了问它，那条路径就绕过了三道门。这是 2.9 节那张门控表最缺的实据：`tesla-open-can-mod` 里不存在这样一个函数，它的发送许可全在编译期宏里（6.2 会把这条与 ev-open 的结构化做法对照）。
 
 ### 3.4 第三层序列：业务，四道门在改任何比特之前
 
@@ -851,7 +870,7 @@ bool fsd_handle_autopilot_frame(FSDState* state, CANFRAME* frame, uint32_t now_m
 | `fsd_abort_guard_allows` | 本次接合是否进过 abort | `:203` |
 | `ap_first_minimal` + `ap_inject_count` | 注入预算是否花完 | `:207` |
 
-其中三道是 2026.14.x 之后才加的，注释挂着 issue 号（`#108`、`#100`），`:194-196` 还关联 `ev-open-can-tools#66 / v3.0.2-beta.2` 的一次转向顿挫。**第 2.10 节那份"没有什么"清单里，这四种一个都没有**——这是三仓在发送许可之外最大的一处差距。
+其中三道是 2026.14.x 之后才加的，注释挂着 issue 号（`#108`、`#100`），`:194-196` 还关联 `ev-open-can-tools#66 / v3.0.2-beta.2` 的一次转向顿挫。**2.9 节那份"没有什么"清单里，这四种一个都没有**——这是三仓在发送许可之外最大的一处差距。
 
 过了门才是 mux 分发（`:210-214`）：
 
@@ -919,7 +938,7 @@ out->buffer[7] = tesla_additive_checksum(CAN_ID_EPAS_STATUS, out->buffer, 7);
 
 位操作。 `fsd_handler.c:85-87` 只有一行转发 `tesla_set_bit(frame->buffer, bit, value)`，实现在 `fsd_logic/fsd_can_ops.h:19`，两个平台共用。第 2.5 节那四个原语在这里被压成一个带 `value` 参数的函数——语义等价，词汇量少一半。头文件那行注释叫它 `shared stateless frame primitives`，"无状态"就是这个抽象的全部要点。
 
-**校验和。** `fsd_logic/fsd_checksum.h:28` 的 `tesla_additive_checksum(can_id, data, len)`：ISA / track / nag 放 byte 7、SCCM 左 CRC 放 byte 0（用法注释在 `:22-23`）。ISA 那一支（`fsd_handler.c:391-396`）与 2.7 节逐句对得上，`CAN_ID_ISA_SPEED` 就是 `0x399`——`921 == 0x399`。
+**校验和。** `fsd_logic/fsd_checksum.h:28` 的 `tesla_additive_checksum(can_id, data, len)`：ISA / track / nag 放 byte 7、SCCM 左 CRC 放 byte 0（用法注释在 `:22-23`）。ISA 那一支（`fsd_handler.c:391-396`）与 2.6 节逐句对得上，`CAN_ID_ISA_SPEED` 就是 `0x399`——`921 == 0x399`。
 
 差别只在封装：那边把循环内联进 handler，这边抽成 `static inline` 放共享头，ESP32 版还把字节位换成命名常量 `SIG_ISA_SOUND_ACTIVE_BYTE` / `_MASK`（`fsd_handler.cpp:452-459`）。
 
@@ -1137,9 +1156,9 @@ inline void setBit(CanFrame &frame, int bit, bool value)
 
 `bit / 8`、`bit % 8`、掩码读改写，连开头那道边界守卫都与 2.5 节逐字相同。flipper 的 `tesla_set_bit`（`fsd_can_ops.h:19-27`）同样带护栏（`:20`）——三家越界语义一致：都只在 `data[8]` 之内改写。
 
-校验和，`include/can_helpers.h:199-214` 的 `computeVehicleChecksum(frame, checksumByteIndex = 7)`：ID 高低字节 + 数据字节累加（跳过校验字节自己）取低 8 位，外加一处 `dlc` 边界判断。与 2.7 节那段内联循环是同一段数学，只是抽成函数、累加顺序反过来。**三个仓库，三种封装，一个算法。**
+校验和，`include/can_helpers.h:199-214` 的 `computeVehicleChecksum(frame, checksumByteIndex = 7)`：ID 高低字节 + 数据字节累加（跳过校验字节自己）取低 8 位，外加一处 `dlc` 边界判断。与 2.6 节那段内联循环是同一段数学，只是抽成函数、累加顺序反过来。**三个仓库，三种封装，一个算法。**
 
-驱动接口，`include/drivers/can_driver.h:7-47`。纯虚方法与第 2.8 节完全一致（`init` / `setFilters` / `enableInterrupt` / `read` / `send`），但多了两个回调指针和一个许可函数：
+驱动接口，`include/drivers/can_driver.h:7-47`。纯虚方法与 2.7 节完全一致（`init` / `setFilters` / `enableInterrupt` / `read` / `send`），但多了两个回调指针和一个许可函数：
 
 ```cpp
 struct CanDriver
@@ -1156,7 +1175,7 @@ struct CanDriver
     }
 ```
 
-这就是 2.10 节那个"不存在的东西"，在这里以接口成员的形式存在。实现在 `app.h:113-127`，`app.h:324` 装进驱动（`appDriver->allowSendFrame = appCanTransmitAllowed;`）。前两道问 `appInjectionReady()` 和 `summonOnlyInjectionRuntime`，第三道向 handler 要 `summonOnlyInjectionDecisionAt()` 的裁决。
+这就是 2.9 节那个"不存在的东西"，在这里以接口成员的形式存在。实现在 `app.h:113-127`，`app.h:324` 装进驱动（`appDriver->allowSendFrame = appCanTransmitAllowed;`）。前两道问 `appInjectionReady()` 和 `summonOnlyInjectionRuntime`，第三道向 handler 要 `summonOnlyInjectionDecisionAt()` 的裁决。
 
 **这是三家里把发送许可放在最靠近硬件位置的一个**——业务层根本没法绕过它。三者对比见 6.2。
 
@@ -1201,7 +1220,7 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 | 层 | `tesla-open-can-mod` | `flipper-tesla-fsd` | `ev-open-can-tools` |
 | --- | --- | --- | --- |
 | **选型** | `include/app.h:17-25` 编译期 `#if` | 菜单运行时选（`fsd_state.h` 存 `hw_version`） | `include/app.h:32-52` 编译期 `#if`，面板构建时另有 `DASH_DEFAULT_HW` |
-| **驱动接口** | `drivers/can_driver.h:7-12` 六个纯虚/虚析构（全文 13 行，2.8） | 平台层各写各的 | `drivers/can_driver.h:7-47` 纯虚 + 两个回调 |
+| **驱动接口** | `drivers/can_driver.h:7-12` 六个纯虚/虚析构（全文 13 行，2.7） | 平台层各写各的 | `drivers/can_driver.h:7-47` 纯虚 + 两个回调 |
 | **启动** | `appSetup()`：串口 → 驱动 → 过滤器 → 中断 | `fsd_state_init()`：只清状态，硬件在 `main.cpp` | `app_main_setup()`：NVS → 驱动 → 启动 |
 | **运行** | `appLoop()` `while(read)` 排空 | `main.cpp` 六步：记录 → 丢弃 → 识别 → OTA → 嗅探 → 分发 | `appLoop()`：OTA 闸 → 排空 → 广播 → 分发 |
 | **业务接口** | `CarManagerBase` 纯虚三方法 | `fsd_handle_autopilot_frame()` 函数式 | `CarManagerBase` 纯虚三方法 |
@@ -1219,6 +1238,12 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 ### 5.2 校验和只管自己起的头
 
 三家都只在"自己是发送方"的帧上重算（`921`、`0x370`、track、ISA），"原地改 `0x3FD` 再回发"时都不重算——flipper 那 1344 行里一次 `tesla_additive_checksum` 都没有。三家一致，说明不是疏忽。
+
+**这条纪律为什么是纪律，上游自己给过一次反面教材。**`ROADMAP.md:30` 记着一条已结案的失败：他们**破解了 `0x229 SCCM_rightStalk` 的 AUTOSAR-E2E 校验和**——脚本 `tools/crack_0x229.py`，两次全速率抓包、224/224 真实帧全部算对——然后试图靠往右转向杆注入一个"拉一下"的动作来启动 AP。
+
+**结果是失败的，输在滚动计数器上**：一个自由运行的注入帧会与车端自己那条 SCCM 流**逐比特冲突**，滚动计数器的连续性被破坏，整条链路失效（issue `#95`、`#122`）。加上 Highland / Juniper 根本没有 `0x229` 这一帧——**这就是 `0x3C2` ScrollPress 之所以成为 HW4 唯一那条路的直接原因**（1.4）。
+
+于是这一节的两句话合起来才完整：**校验和能破，但滚动计数器破不了**——前者是纯数学，后者要求你与车的实时发送节奏逐帧对齐。三家都选择只改"自己起的头"的帧，不是省事，是这条失败路径换来的结论。
 
 ### 5.3 `tesla-open-can-mod` 与 `ev-open` 的业务接口逐字相同
 
@@ -1256,7 +1281,7 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 | `flipper-tesla-fsd` | `fsd_can_transmit()` 三道条件 | `fsd_handler.c:41-48` | **业务层每条发送路径各调一次**（`:287` `:876` `:1276` `:1356` `:1772`）——容易漏 |
 | `ev-open-can-tools` | `sendAllowed()` 回调 + `appCanTransmitAllowed()` | `drivers/can_driver.h:21-24`，实现在 `app.h:113-127`，`app.h:324` 挂进驱动 | **挂在驱动的回调上，业务层无法绕过** |
 
-第 2.10 节列过 `tesla-open-can-mod` 的门控清单，它缺的正是这道统一许可。表中"能否绕过"一列就是本条维度的全部差别：靠自律的容易漏，靠结构的写不错。
+2.9 节列过 `tesla-open-can-mod` 的门控清单，它缺的正是这道统一许可。表中"能否绕过"一列就是本条维度的全部差别：靠自律的容易漏，靠结构的写不错。
 
 两家的条件数不同、性质也不同：`ev-open` 那三道是注入就绪与 Summon-only 相关（清单见 4.5），`flipper` 那三道是 Listen-Only / Autopark / OTA。**ev-open 一条 OTA 许可都没有**——它的 OTA 处理不在许可函数里，而在主循环整体停摆（6.3）。
 
@@ -1289,9 +1314,19 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 | 测试 | 99 断言 / 107 次执行 | 827 断言（648 C 版 + 179 C++ 版；另有 10 个板级 env） | 17 个套件目录 / 249 用例（2 个套件编译失败） |
 | 代码规模 | 7 文件 / 301 行业务（`handlers.h`） | 1344 行业务 + 1110 行副本 | 1218 行业务 + 1641 行插件 |
 
-**这个矩阵就是三个仓库的分野：**`tesla-open-can-mod` 是一个能跑通的最小实现，flipper 是一个带运行时治理的完整应用，ev-open 是一个带面板和插件的平台。功能面越宽，需要读的源码越多；功能面越窄，越容易完整判定它究竟发出了什么。
+**这个矩阵就是三个仓库的分野：**`tesla-open-can-mod` 是一个能跑通的最小实现，flipper 是一个带运行时治理的完整应用，ev-open 是一个带面板和插件的平台。功能面越宽，需要读的源码越多；功能面越窄，越容易完整判定它究竟发出的东西。
 
 **最后一行与"测试"行的数字不能直接比大小**：三家的计数口径不同（断言 / 用例 / 套件，见 8.1 开篇），而且断言数会被一个用例里写几条断言放大。**这一列只说明各自的测试组织方式，不说明谁测得更充分。**
+
+**读这张表要认它的判据。**上表每一格都是本文按下面三种依据之一判定的，不是"感觉"：
+
+| 判据 | 含义 | 可靠性 |
+| --- | --- | --- |
+| **grep 确认** | 在钉死的 commit 上全仓搜索无命中（如"滚动计数器"在 `tesla-open-can-mod`） | 强，但只对"不存在"这类否定命题有效 |
+| **代码读到** | 打开了那个文件、看到了那段逻辑（如"异常边界"） | 最强 |
+| **文档自述** | 只有 README 说有，本文未见源码佐证 | 弱，本文会标出 |
+
+**这个分级必须写出来，否则这张表会被当成事实清单而不是判断清单。**一个典型：`tesla-open-can-mod` 的"内嵌网页面板 ✗"是 grep 判的，而社区里的 `lenfien/tesla-open-can-mod-release`（1-v-1 的一个 fork）README 明确列出了实时图表网页面板、29 个 API 端点与 OTA 固件上传。**两者不矛盾——本表只覆盖 `1-v-1` @`815e000` 原仓，不含任何 fork**；读者拿 fork 对照时请记住这条边界。
 
 ### 6.5 维度五：许可证与发布
 
@@ -1317,7 +1352,7 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 
 那差别在哪？**不在纵向的层，而在总线层内部各做了多少"发不发"的裁决。**从简到繁：
 
-- `tesla-open-can-mod`：**只做转换**。收到帧、按业务规则改几个比特、发回同 ID，没有独立的发送裁决层（2.10 节那份"没有什么"清单）。
+- `tesla-open-can-mod`：**只做转换**。收到帧、按业务规则改几个比特、发回同 ID，没有独立的发送裁决层（2.9 节那份"没有什么"清单）。
 - `flipper-tesla-fsd`：自建了一道**运行时治理**——Listen-Only/Active 模式、AP 是否接合、注入预算、abort guard 四道门（3.4）。不替代车辆的决策层，只是在发帧前多做一轮"现在该不该发"。
 - `ev-open-can-tools`：治理之外还有一整套**平台能力**——网页面板、插件机制、把发送许可做成驱动回调（6.2）。
 
@@ -1345,7 +1380,7 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 
 ### 8.1 宿主测试（`native` / `platform = native`，不碰硬件）
 
-**先说计数口径**：下表"用例"一列是**测试用例数**（每个 `RUN_TEST`／`TEST_CASE` 记一次），各家定义见 2.9、3.8、4.7。**断言数与用例数在 flipper 一家相等、在另外两家不等**（同一用例里有多条断言），所以横向只比量级，不比强弱。
+**先说计数口径**：下表"用例"一列是**测试用例数**（每个 `RUN_TEST`／`TEST_CASE` 记一次），各家定义见 2.8、3.8、4.7。**断言数与用例数在 flipper 一家相等、在另外两家不等**（同一用例里有多条断言），所以横向只比量级，不比强弱。
 
 | 仓库 | 版本 | 套件 | 用例 | 结果 |
 | --- | --- | --- | --- | --- |
@@ -1356,7 +1391,7 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 | **三仓小计**（上三行） | | | **1183** | **1181 过 / 2 个套件编译失败** |
 | **含对照仓合计** | | | **1833** | **1831 过 / 2 个套件编译失败** |
 
-**两个合计的区别要说明白**：全文多处引用的"1833"含第四个仓库 `JordanzhaoD` 的 650 例，它只作横向对照、不属本文解剖对象（15.1 有交代）。**只看三个被解剖的仓库，宿主侧是 1183 例、1181 过。**
+**两个合计的区别要说明白**：全文多处引用的"1833"含第四个仓库 `JordanzhaoD` 的 650 例，它只作横向对照、不属本文解剖对象（见 15.1 那张表的末行）。**只看三个被解剖的仓库，宿主侧是 1183 例、1181 过。**
 
 **这张表只有 flipper 一家不在 HEAD 上**：实跑落在 `6a3404f`（beta.33），比第 0 节钉死的 `ffbb24e` 早 4 个提交（8.4 已列）。另两家与第 0 节的 commit 一致（重跑日期与主机环境见 8.3）。第 2、3、4 节的全部 `file:line` 与本表同源，行号按 `ffbb24e`。
 
@@ -1424,7 +1459,7 @@ python --version              # 3.12.10
 ```bash
 git clone https://github.com/1-v-1/tesla-open-can-mod.git && cd tesla-open-can-mod
 git checkout 815e000
-pio test -e native            # 107 次执行，99 条断言（2.9 节的表）
+pio test -e native            # 107 次执行，99 条断言（2.8 节的表）
 pio run -e esp32_twai         # 板级构建；原样 clone 会因 RP2040CAN.ino 未解驱动宏而失败（13.3）
 ```
 
@@ -1526,7 +1561,7 @@ flipper 那三行我在 `ffbb24e` 上逐行读、可 grep 复现；其余三个�
 
 ### 10.1 `HW4` 三个字，先排掉两个选项
 
-**这一步只做减法。**第 2.7 节讲过校验和是 HW4 独有的一支，第 2.4 节的表也列了——三个宏只有 `LEGACY` / `HW3` / `HW4`。配置里"China HW4.0"这一项直接决定：**Legacy（HW1/HW2）那条路不相关，选型只在 HW3 与 HW4 之间二选一。**
+**这一步只做减法。**2.6 节讲过校验和是 HW4 独有的一支，2.4 节的表也列了——三个宏只有 `LEGACY` / `HW3` / `HW4`。配置里"China HW4.0"这一项直接决定：**Legacy（HW1/HW2）那条路不相关，选型只在 HW3 与 HW4 之间二选一。**
 
 **但减法做完不能顺手选 HW4。**第 9.3 节引的规则里，即使硬件是 HW4，车若跑在 FSD v13 上仍应编 `HW3`（`README.md:69`）——也就是说**宏的选择还取决于这车跑的是 v13 还是 v14**，而第 9 节查下来**没有任何一行正面数据能覆盖这台车的三个条件**。**硬件代际由配置给定，编译宏却未必**——这是 10.1 落到实践时最容易被跳过的一步，第 9 节整节不给出答案也是因为它。
 
@@ -1603,7 +1638,7 @@ flipper 那三行我在 `ffbb24e` 上逐行读、可 grep 复现；其余三个�
 | 第三方同款参考价 | `https://www.spotpear.cn/shop/.../ESP32-S3-RS485-CAN.html` 标 **¥99**（页面日期 2025-08-14） |
 | 对应构建目标 | `waveshare-s3-can`（`esp32/README.md:159` 明列，TX=15 / RX=16 / LED=46 / BTN=0）。**注意 flash 规格两处来源不一致**：上游按 **8MB flash/PSRAM** 配置该 env（`esp32/platformio.ini:185-189`），而厂商 wiki 标 **16MB Flash / 8MB PSRAM**（下一段）。按 8MB 配置在两种板子上都不会出错，按 16MB 配置则必须先确认手上这块的实测容量 |
 
-**价格跨度很大，同一块板差近三倍。**2026-10-01 检索到的**电商商品页**报价（完整 URL 见 15.3）：
+**价格跨度很大，同一块板差近三倍。**2026-10-01 检索到的**电商商品页**报价（完整 URL 见 15.1）：
 
 | 站点 | 报价 | 备注 |
 | --- | --- | --- |
@@ -1617,7 +1652,7 @@ flipper 那三行我在 `ffbb24e` 上逐行读、可 grep 复现；其余三个�
 
 **比价之前先按下一段的规格核对是不是同一块板**（flash / PSRAM 容量、是否带天线），否则价格不可比。
 
-其余板子、降压模块与 Flipper 那一路的仓库原始链接集中在第 15.2 节「厂商文档（一手）」与第 15.3 节「第三方价格（非一手）」，此处不重复。
+其余板子、降压模块与 Flipper 那一路的仓库原始链接集中在 15.1 那张表的「非一手」各行，此处不重复。
 
 从 wiki 核实的规格（不是我推断的）：主控 ESP32-S3R8，LX7 双核 240MHz，2.4GHz WiFi + BLE 5；16MB Flash / 8MB PSRAM；板载隔离 CAN（端子 + TVS + 浪涌 + ESD + 指示灯）；120Ω 匹配电阻默认 `NC`（断开）、跳线帽使能——正好符合 `HARDWARE.md:633` 的"不要加第二个 120Ω"；端子供电 7V ~ 36V，另有 USB Type-C 5V；导轨式外壳 91.6 × 23.3 × 58.7 mm。
 
@@ -1946,9 +1981,17 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | **AP-First (14.x)** | 关 | `README.md:123` | 把 `0x3FD` 注入推迟到 AP 已接合之后；README 标注 14.x 固件**需要**它 |
 | **Ignore OTA** | 关 | `README.md:121` | 允许在检测到 `0x318` 报告 OTA 期间仍然发送 |
 | **Abort Guard / Continuous AP** | 关 | `README.md:112` | ESP32 独占的额外保护与连续 AP 选项 |
-| **TLSSC Restore / GTW Config Replay** | 关 | `README.md:122`、`:124` | 针对 VIN 级封禁的两个手段，作用范围与边界见 1.4 |
+| **TLSSC Restore / GTW Config Replay** | 关 | `README.md:122`、`:124` | 针对 VIN 级封禁的两个手段，作用范围与边界见 1.4。**注意 TLSSC Restore 单开不可靠，要与 bit 38 成对使用**（1.4） |
 
 **上表第 2 行为什么挂着两个名字**：两份 README 对同一个开关用了 `FSD Unlock` 与 `Force FSD`，与 0.4 记录的那处 `DAS_autopilotControl` / `UI_autopilotControl` 属于同一类上游命名分歧。**检索时两个名字都要试。**
+
+**第 4 行背后有第二段版本半衰期，值不值得知道。**`README.md:162` 说 Auto-detect 需要 `0x398`，而**很多 Model 3/Y 从不发这一帧**。上游为这个坑走过一次弯（据 Releases 页，钉在 `ffbb24e` 可见的 beta 线）：
+
+1. `beta.20` 加了一条"看到合法的 `0x39B` 就从 HW3 升到 HW4"的补救——本意是帮那些总线上没有 `0x398` 的 HW4 车。
+2. **它弄坏了本来好用的车**：在 HW3 路径本来就正常的车上，强制切到 HW4 会启用 HW4 的 DAS 解析器，而那个解析器的 byte0 锁存不上车——AP 状态卡在 "Waiting"，而且 HW4 式注入产生大量 TX 错误。有用户精确定位到"beta.18 正常，beta.19/20 坏"。
+3. `beta.23` 把这条补救**回退**了，并恢复 beta.18 的行为。
+
+**这条与 3.7 的 bit47 是同一个故事的两幕：结论的生命周期以天计。**区别在于 bit47 是被上游自己改掉的，这一次是被用户的实车日志改回去的——**这也说明为什么本文所有实测结论都标了 commit。**真正的解法放在 `beta.23` 加的 **Hardware 手动选择器**上（也就是上表第 4 行）：知道自己是什么车，就直接说，别让程序猜。
 
 除开关之外，仓库还写下了两条运行约束（`README.md:19`）：**只读功能不依赖 FSD**（诊断、BMS 面板等不需要任何订阅），而 **FSD 功能需要有效权益**（本工具在 CAN 层使能，车辆仍需有效的 FSD 资格）。这两条正好对应 1.3 的第二道门。
 
@@ -1956,9 +1999,11 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 > **Tesla has begun issuing VIN-level bans** (April 2026). Affected vehicles lose the TLSSC toggle silently — no OTA, no warning, persists across account transfers and re-subscriptions. The **TLSSC Restore** feature (v2.10+) can recover stop sign / traffic light control on banned Palladium and HW4 cars via 0x331 DAS config spoofing.
 
-这是仓库自己的陈述（附 issue `#18`），我没有独立核实，也没有车可以核实——但它写在 HEAD 的 README 里，性质是项目方的风险自述，比"社区回报"高一级。机制细节（哪些位被改、主权益路径走以太网）见 1.4 引的 `SECURITY.md`，逐条位级清单在该文件 `SECURITY.md:85-110`。
+这是仓库自己的陈述（附 issue `#18`），我没有独立核实，也没有车可以核实——但它写在 HEAD 的 README 里，性质是项目方的风险自述，比"社区回报"高一级。机制细节（哪些位被改、主权益路径走以太网）见 1.4 引的 `SECURITY.md`。
 
-**同一份文件还有一段比功能列表更值得读**——它列明这个项目**主动不去碰**什么（`SECURITY.md:67-76`）：不动 `0x370` 里 EPAS 的原始帧、不动 brake 相关位、不越过 bit-63 的有效标志。**一个负责任的 CAN 工具如何划定自己的边界，比它有多少个开关更能说明它值不值得用。**
+**最值得一读的不是它的功能列表，是它自己划的边界。**`SECURITY.md:67` 起有一节 "What this project does NOT touch"，逐帧列出 TX 路径到底会写哪些位——`0x3FD` 是 bits 19 / 38 / 39 / 40-42 / 45 / 46 / 47 / 48 / 50 / 59 / 60，外加速度档字段（HW3 是 mux0 bits 49-50，HW4 是 mux2 bits 60-62，**特意留着 bit-63 的有效位不动**）与 HW3 的速度偏移字段（mux2 bits 6-13）（`:72-78`）；`0x370` 只发 counter+1 回声、转矩封顶 ±1.8 Nm，**不屏蔽 EPAS 的原始帧**（`:82-85`）。逐条的完整清单在 `SECURITY.md:72-100`。**一个负责任的 CAN 工具如何划定自己的边界，比它有多少个开关更能说明它值不值得用。**
+
+> **一处订正**：本文上一版把这张"不碰什么"的清单标为 `SECURITY.md:67-76`（14.2 引语）与 `:85-110`（1.4 回指）。2026-10-01 复核 `ffbb24e` 检出后更正为：章节起于 `:67`，逐帧清单到 `:100`；`:85-110` 横跨的是 nag killer 的 EPAS 说明与 Track Mode 路线图，不是位级清单。
 
 ### 14.3 仓库的指南到此为止
 
@@ -1987,85 +2032,65 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 ## 15. 参考与引用：本文用到的每一条外部出处
 
-三类性质请勿混用：一手＝我能直接拿到原文；社区回报＝第三方在 issue/讨论里的单点陈述，我未独立核实；未核实＝我明确没有验证。访问日期除另注外均为 2026-10-01。**15.2–15.5 按性质分类列出每一条出处，15.7 反过来按"读者想追查的结论"给出锚点索引。**
+**三类性质请勿混用**：一手＝我能直接拿到原文；社区回报＝第三方在 issue/讨论里的单点陈述，我未独立核实；未核实＝我明确没有验证。访问日期除另注外均为 2026-10-01。下表按性质分层，每条都标了它在正文哪一节被用过。
 
-### 15.1 三个仓库本身
+**关于三个仓库本身**：URL 与 commit 见 0.1 那张表，全部用 `git ls-remote` / 本地 HEAD 复现。下表里标"未 clone"的那些（`herrfrei`、`juamiso`、`jvanakker`、两个镜像、`JordanzhaoD`）我按 URL 与页面日期记录，**没有做 `file:line` 核验**。
 
-三行的 URL 与 commit 见第 0 节那张表，全部用 `git ls-remote` / 本地 HEAD 复现。
+### 15.1 按性质分层的单一出处表
 
-第 9 节引用的同族项目（`herrfrei`、`juamiso`、`jvanakker`）与第 8 节计入测试总数的 `JordanzhaoD/waveshare-single-can-firmware`，我按 URL 与页面日期记录，**未 clone 下来做 `file:line` 核验**。
-
-第 0.3 节额外引用 `jvanakker/tesla-fsd-can-mod` 与 `Karolynaz/waymo-fsd-can-mod` 两个镜像的 README 陈述（访问于 2026-10-02），同样未 clone 核验；`fsdcanmod.com` 的页面内容仅见检索快照。
-
-### 15.2 厂商文档（一手）
-
-| 出处 | URL | 用在哪 |
+| 出处 | 性质 | 用在哪 |
 | --- | --- | --- |
-| 微雪 Wiki ESP32-S3-RS485-CAN | `https://www.waveshare.com/wiki/ESP32-S3-RS485-CAN` | 第 11 节规格、120Ω 默认 NC、7–36V、双路供电警告、法律声明 |
-| 微雪国际站商品页 | `https://www.waveshare.com/esp32-s3-rs485-can.htm` | 型号 `-U` 外置天线版 |
-| 微雪官方商城 | `https://www.waveshare.net/shop/ESP32-S3-RS485-CAN.htm` | 第 11 节标价（**该站有反爬，页面未直接返回价格**） |
-| PlatformIO | `https://platformio.org/` | 出自 `esp32/README.md`，未另开页面 |
-| Flipper Zero | `https://flipper.net/` | 出自 `HARDWARE.md`，未另开页面 |
-| Tesla 官方 X179 连接器页：料号 `1849225-03-B`、护套 `KSE K30M31014`、色 `GY`，附完整 pinout 表与 `Connector Location` 图示栏位 | `https://service.tesla.com/docs/Model3/ElectricalReference/prog-233/connector/x179/` | 第 11 节线束规格、第 12.1 节 |
+| 微雪 Wiki ESP32-S3-RS485-CAN `https://www.waveshare.com/wiki/ESP32-S3-RS485-CAN` | 一手 | 11 节规格、120Ω 默认 NC、7–36V、双路供电警告、法律声明 |
+| 微雪国际站商品页 `…/esp32-s3-rs485-can.htm` | 一手 | 型号 `-U` 外置天线版 |
+| 微雪官方商城 `…/shop/ESP32-S3-RS485-CAN.htm` | 一手 | 11 节标价（**该站有反爬，未直接返回价格**） |
+| Tesla 官方 X179 连接器页 `…/prog-233/connector/x179/`（料号 `1849225-03-B`、护套 `KSE K30M31014`、色 `GY`、完整 pinout 表与 `Connector Location` 栏位） | 一手 | 11 节线束规格、12.1 节 |
+| Tesla Electrical Reference（Model Y 版） | 一手 | 仓库引用的官方文档入口 |
+| PlatformIO / Flipper Zero 官网 | 一手 | 分别出自 `esp32/README.md` 与 `HARDWARE.md`，未另开页面 |
+| Spotpear 同款 | 非一手 | 11.2 节 ¥99 参考价（页面日期 2025-08-14） |
+| Sunsky 同款（板载天线版，含 $19.30 起阶梯价） | 非一手 | 11.2 节 $19.46 |
+| Amazon / eBay UK 同款 | 非一手 | 11.2 节 $26.87 / $32.98 |
+| M5Stack ATOM Lite、ATOMIC CAN Base；LILYGO T-2CAN、TTGO T-Display；AliExpress XY-3606；Electronic Cats CAN Add-On | 非一手 | 11.5 节方案 B–E，**URL 出自 `HARDWARE.md`，我没另开页面核对价格**；表中美元数字是仓库标的（`:388` `:405` `:417` `:437` `:541`） |
+| MiOT $22.79、Newegg $53.99、elty €19.71 | 未核实 | 11.2 节比价表三处**当时未保留深链**，只有站点名与报价，证据等级低于上列各行 |
+| PAC `CP1-TSL1` 目录页（"For 26-Pin Connector at Back Of Center Console"） | 一手（厂商页） | 12.1 节的独立佐证，标价 $49.99 |
+| post-April-2024 26-pin 只有 18/19 是 CAN | 社区回报 | issue `#52`，`@0n3-70uch` 示波器实测，Berlin 产 EU Model Y，FW 2026.14.3；10、12 节 |
+| `0x3C2` 在 9/10 可见、13/14 不可见 | 社区回报 | issue `#73`，`@JakNo` / `@jewelrylin`；10、12 节 |
+| X179 pin→bus 的 Service Mode 实测表 | 社区回报 | issue `#100`，`@jewelrylin`，harness `1933903-XX`，Model Y Juniper RWD 2025，FW 2026.14.3；10 节 |
+| post-SOP10 针位重排与 X177 | 社区回报 | discussion `#114`，`@mamixsystem`；10 节 |
+| Nag killer 接 Party CAN 2/3 | 社区回报 | `@SkyRaax`，M3 HW4 2026.2.0，issue `#100`；12 节 |
+| **VIN 级封禁研究** | 一手（仓库自述）+ 社区回报 | issue `#18`、仓库 `SECURITY.md`；转述见 `README.md:22`；1.4、14 节 |
+| **HW4 + 2026.2.11 正面兼容数据** | 社区回报 | `changelog.md:243`，`@Tikernel` + `@ViPiMP`，**Model Y Juniper**；9、10 节 |
+| 分版本兼容结论表 | 一手（仓库文档） | `README.md:280-293`；9 节 |
+| Web Flasher `…/flipper-tesla-fsd/install/`、Releases 页 | 一手 | 13.1 节两条预编译路径 |
+| FSD CAN Mod Hub 跟踪页 / 首页 `https://fsdcanmod.com/` | 未核实 | 0.3 节生态存档站；**2026-10-02 DNS 无法解析**，页面内容仅见检索快照，"Tesla DMCA"的定性归入未核实 |
+| `jvanakker/tesla-fsd-can-mod`、`Karolynaz/waymo-fsd-can-mod` 两个镜像的 README（访问于 2026-10-02，未 clone） | 社区回报 | 0.3 节"removed / taken down" 的自陈 |
+| `herrfrei`、`juamiso`、`jvanakker` 三个同族项目的阈值（2026.2.3、2026.8.6 失效标注） | 社区回报 | 9.3 节外部阈值分歧 |
+| `JordanzhaoD/waveshare-single-can-firmware`（未 clone） | 社区回报 | 8.1、8.2 节的横向对照仓，不属解剖对象 |
+| `flipper-tesla-fsd` issue `#119`（China HW4 / 2026.8.3.6 / 已购 FSD 但从未接合）、其引用的 `#117`、以及被指向为合并状态说明的 `#122` | 社区回报 | 1.3"banned vs never granted"与"档位由服务端状态重新推导"两条；**本文未 clone 核验 issue 页面，仅据检索快照** |
+| `flipper-tesla-fsd` Releases 页（`beta.20` → `beta.23` 的 auto-detect 回归与回退） | 一手（仓库文档） | 14.2 Hardware 行背后的版本半衰期；钉在 `ffbb24e` 可见的 beta 线 |
+| `lenfien/tesla-open-can-mod-release`（1-v-1 的 fork，README 检索快照） | 社区回报 | 6.4 用来界定"本表只覆盖 `1-v-1` @`815e000` 原仓、不含 fork"；它自称有网页面板、29 个 API 端点、OTA 固件上传 |
+| `enhauto-re/COMMANDER_VS_TESLAMOD.md`（255 行对比文档，检索快照） | 社区回报 | 与 `SECURITY.md:30` 同向的另一条"ETH 不可达"佐证：171 个动作里约 40 个在以太网侧，MCP2515 物理够不着。**本文未采用为正式引用**，因其为项目方自述 |
+| 中国试点叫停（工信部 / 市场监管总局新规）、完整版 FSD 截至 2026-05-21 未获批、2026-04 清理行动中逾 10 万辆 | **未核实（媒体报道）** | 1.4 开篇说明这道门的性质是监管而非技术。**本文不依赖它们得出任何操作结论** |
 
-### 15.3 第三方价格（非一手）
-
-| 出处 | URL | 页面日期 | 用在哪 |
-| --- | --- | --- | --- |
-| Spotpear 同款 | `https://www.spotpear.cn/shop/ESP32-S3-IOT-RS485-CAN-WIFI-Bluetooth/ESP32-S3-RS485-CAN.html` | 2025-08-14 | 第 11 节 ¥99 参考价 |
-| M5Stack ATOM Lite | `https://shop.m5stack.com/products/atom-lite-esp32-development-kit` | 仓库引用 | 方案 B |
-| M5Stack ATOMIC CAN Base | `https://shop.m5stack.com/products/atomic-can-base` | 仓库引用 | 方案 B |
-| LILYGO T-2CAN | `https://lilygo.cc/products/t-2can` | 仓库引用 | 方案 C |
-| LILYGO TTGO T-Display | `https://lilygo.cc/products/lilygo%C2%AE-ttgo-t-display-1-14-inch-lcd-esp32-control-board` | 仓库引用 | 方案 D |
-| AliExpress XY-3606 降压 | `https://www.aliexpress.com/wholesale-xy3606.html` | 仓库引用 | 方案 D |
-| Electronic Cats CAN Add-On | `https://electroniccats.com/store/flipper-addon-canbus/` | 仓库引用 | 方案 E |
-| Sunsky 同款（板载天线版，含 $19.30 起阶梯价） | `https://www.sunsky-online.com/p/TBD0607022302/Waveshare-Industrial-ESP32-S3-Control-Board-With-RS485-And-CAN-Communication-Interfaces-Onboard-Ante.htm` | 2026-10-01 | 第 11 节 $19.46 |
-| Amazon 同款 | `https://www.amazon.com/dp/B0FNCWZ3D1` | 2026-10-01 | 第 11 节 $26.87 |
-| eBay UK 同款 | `https://www.ebay.co.uk/itm/267437528758` | 2026-10-01 | 第 11 节 $32.98 |
-| PAC `CP1-TSL1` 厂商目录页，产品描述"For 26-Pin Connector at Back Of Center Console" | `https://catalog.archive.pac-audio.com/catalog/can-integration/cp1-tsl1` | 2026-10-01 | 第 12.1 节的独立佐证，页面标价 $49.99 |
-
-"仓库引用"指 URL 出自 `hypery11/flipper-tesla-fsd/HARDWARE.md`，我没另开页面核对价格；第 11 节表里的美元数字是仓库标的（`:388` `:405` `:417` `:437` `:541`），不是我查的。
-
-11.2 那张比价表里的 **MiOT $22.79 / Newegg $53.99 / elty €19.71** 三处**当时未保留深链**，因此不列在上表——它们只有站点名与报价，没有可回查的 URL，证据等级低于本表其余各行。
-
-### 15.4 社区回报（issue / discussion，我未独立核实）
-
-| 内容 | 出处 | 用在哪 |
-| --- | --- | --- |
-| post-April-2024 26-pin 只有 18/19 是 CAN | issue `#52`，`@0n3-70uch` 示波器实测，Berlin 产 EU Model Y，FW 2026.14.3 | 第 10、12 节 |
-| `0x3C2` 在 9/10 可见、13/14 不可见 | issue `#73`，`@JakNo` / `@jewelrylin` | 第 10、12 节 |
-| X179 pin→bus 的 Service Mode 实测表 | issue `#100`，`@jewelrylin`，harness `1933903-XX`，Model Y Juniper RWD 2025，FW 2026.14.3 | 第 10 节 |
-| post-SOP10 针位重排与 X177 | discussion `#114`，`@mamixsystem` | 第 10 节 |
-| Nag killer 接 Party CAN 2/3 | `@SkyRaax`，M3 HW4 2026.2.0，issue `#100` | 第 12 节 |
-| **VIN 级封禁研究** | issue `#18`、仓库 `SECURITY.md`；转述见 `README.md:22` | 第 14 节 |
-| **HW4 + 2026.2.11 正面兼容数据** | `changelog.md:243`，`@Tikernel` + `@ViPiMP`，**Model Y Juniper** | 第 9、10 节 |
-| 分版本兼容结论表 | `README.md:280-293` | 第 9 节 |
-
-### 15.5 工具与可复现入口
-
-| 内容 | URL |
-| --- | --- |
-| Web Flasher | `https://hypery11.github.io/flipper-tesla-fsd/install/` |
-| Releases | `https://github.com/hypery11/flipper-tesla-fsd/releases` |
-| FSD CAN Mod Hub 跟踪页（README 徽章指向） | `https://fsdcanmod.com/project/hypery11-flipper-zero` |
-| FSD CAN Mod Hub 首页（生态存档站；2026-10-02 DNS 无法解析） | `https://fsdcanmod.com/` |
-| Tesla Electrical Reference（仓库引用的官方文档） | `https://service.tesla.com/docs/ModelY/ElectricalReference/` |
-
-### 15.6 本文的证据分层
+### 15.2 本文的证据分层
 
 | 层 | 用在哪 | 可信度 |
 | --- | --- | --- |
 | 本地源码 `file:line` / 上游 `README.md:N` | 第 2–4 节、第 8、13 节 | **可 grep 复现**，行号与 commit 钉死在第 0 节那张表 |
 | 本机实跑（编译、测试） | 第 8 节 | 输出可重跑，版本标注见表内 |
 | 文件实读 / 关键字检索 | 第 6 节维度五的三个 `LICENSE`、第 9 节三行 grep | 打开读过、可复现（扫描文件数已标注） |
-| 仓库文档转述 / 社区回报 / 未核实 | 第 10–14 节、第 15.4 节、兼容性状态 | **行号可查，内容我没验或未独立核实；第 9 节的结论不变** |
-| 生态下架与镜像关系 | 第 0.3 节 | flipper / jvanakker 的 README 为一手可复现；`fsdcanmod.com` 页面仅存检索快照、站点已无法解析，**DMCA 定性未核实** |
+| 仓库文档转述 / 社区回报 / 未核实 | 第 10–14 节、上表"社区回报"各行、兼容性状态 | **行号可查，内容我没验或未独立核实；第 9 节的结论不变** |
+| 生态下架与镜像关系 | 0.3 节 | flipper / jvanakker 的 README 为一手可复现；`fsdcanmod.com` 页面仅存检索快照、站点已无法解析，**DMCA 定性未核实** |
 
-### 15.7 从结论回查：高频锚点索引
+### 15.3 从结论回查：高频锚点索引
+
+**这张表是上一张的倒排**——想追查某条结论时，先在左列找到那句话，再拿中列的锚点回到正文或仓库核。
 
 | 它回答什么 | 锚点（钉在第 0 节 commit / 上游文档） | 证据层 |
 | --- | --- | --- |
-| FSD 选择位在哪一帧哪一位 | `UI_autopilotControl` `0x3FD`（1021），Legacy `0x3EE`（1006）；`byte[4]` 的第 6 位＝整帧 bit 38（换算见 1.1）；`can_helpers.h:21`、`fsd_can_ops.h:62`、`can_helpers.h:80` | 一手（源码） |
+| **读哪一位、写哪一位** | **读 `0x3FD` mux0 bit 38（= `byte[4]` bit 6，"TLSSC flag"/`UI_fsdStopsControlEnabled`）、写 mux0 bit 46**（"enable FSD"）。**同一个 bit 38 上游有两个名字，这是本文最易读错处**（见 1.1）。交叉印证：`flipper` `README.md:315` 一行并列写出、`SECURITY.md:28`、`1-v-1` README 的 DBC 表 | 一手（源码 + 两仓文档） |
+| FSD 选择位在哪一帧哪一位 | `UI_autopilotControl` `0x3FD`（1021），Legacy `0x3EE`（1006）；`can_helpers.h:21`、`fsd_can_ops.h:62`、`can_helpers.h:80` | 一手（源码） |
+| **封禁为何总线解不了** | `SECURITY.md:30`（主权益路径走以太网，影子注入 `0x7FF` 无效）+ 同一行给的可用组合 **TLSSC Restore（`0x331`）+ bit 38 必须成对**；独立佐证见 issue `#119`（China HW4，档位由服务端状态重新推导） | 一手（仓库自述）+ 社区回报 |
+| **校验和能破、滚动计数器破不了** | `ROADMAP.md:30`：`0x229` SCCM 的 AUTOSAR-E2E 校验和已被 `tools/crack_0x229.py` 破掉（两次抓包 224/224 帧全对），但注入仍因滚动计数器冲突而失败（`#95`、`#122`） | 一手（仓库文档，含可复现脚本） |
 | 判定函数"宏→标志→帧位"三段式 | `isFSDSelectedInUI` `can_helpers.h:13-23`、`tesla_is_fsd_selected` `fsd_can_ops.h:55-63`、`isADSelectedInUI` `can_helpers.h:76-81` | 一手（源码） |
 | 地域锁在哪一层、哪一版 | `esp32/README.md:429`、`:430`（off-CAN region lock）；`.catalog/README.md:7` | 一手（仓库文档） |
 | 权益不由总线表达 | `CAN_DICTIONARY.md:73-74`（`UI_enableFullSelfDriving` / `UI_hasFullSelfDriving`） | 一手（仓库文档） |
@@ -2091,7 +2116,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 **四条判断**：
 
-**其一，`tesla-open-can-mod` 的工程成熟度高于同类工具的平均水准。**2.6 节的 shadowing 回归测试完整走过"发现隐式耦合 → 修复 → 用测试锁死 → 把意图写进测试名"，随手编写的脚本不会具备这一形态。
+**其一，`tesla-open-can-mod` 的工程成熟度高于同类工具的平均水准。**2.4 节那处 shadowing 回归测试完整走过"发现隐式耦合 → 修复 → 用测试锁死 → 把意图写进测试名"，随手编写的脚本不会具备这一形态。
 
 **其二，"安全门控"的分化方向是放在哪一层，这是全文最核心的发现。** `tesla-open-can-mod` 没有统一的发送许可；flipper 放在业务层、每条路径各调一次（五处，易漏）；ev-open 挂在驱动回调上（业务层绕不过）。同一道闸，三家选了三个高度。
 
