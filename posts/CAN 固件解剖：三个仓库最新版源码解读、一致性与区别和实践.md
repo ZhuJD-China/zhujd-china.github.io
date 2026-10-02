@@ -103,6 +103,16 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 
 第三行有个容易踩的坑：仓库接口返回的 `pushed_at` 记录的是 `dev` 的推送时间，而默认 clone 拿到的是 `main`——两者相差 46 天。
 
+**这三个 commit 的检出已被全文逐条复核过。**三个仓都 clone 到本地并 `checkout` 到上表的 commit，然后逐条比对本文的每一处 `file:line`：
+
+| 仓库 | 核出的错误 | 状态 |
+| --- | --- | --- |
+| `flipper-tesla-fsd` `ffbb24e` | **源码行号零错误**（`fsd_can_ops.h:7-10/19-27/55-63`、`fsd_handler.c:41-48/191-214/1239-1339`、`README.md` 与 `HARDWARE.md` 全部吻合）；但两处**文档行号引错**：`ROADMAP.md:107-110` → 应为 `README.md:133`，`SECURITY.md:85-110` → 应为 `:67`–`:100` | 已订正，正文就地标注 |
+| `1-v-1` `815e000` | 一处：`can_helpers.h:5-46` → **应为 `:6-46`**（文件头 `#pragma once` + 2 个 include + 2 个空行共占 `:1-5`）。其余全部 `app.h` / `handlers.h` / `platformio.ini` / `guides/*.md` / 测试文件行号逐条吻合 | 已订正 |
+| `ev-open-can-tools` `6d37392` | 一处：4.4 把 **`HW4Handler`（实为 `:1000`）与 `NagHandler`（实为 `:691`）行号写反**。其余 `app.h:32-51`、`:113-127`、`:324`、`can_helpers.h:6-12/52/76-81/163/199-230`、`plugin_engine.h:747-749`、`src/main.cpp:84-252` 全部吻合 | 已订正 |
+
+**另一类错误机器查不出来，是判断错**——13.3 的"裂缝二"原本说"README 要求修改 `src/main.cpp` 中那行并不存在的 define"，复核发现 `src/main.cpp` 全文 47 行只做驱动分派、根本不含车型 define，而 README 让改的 `RP2040CAN.ino:24-26` 那三行一直都在。**行号对、事实错**，这一类只能靠读，已在 13.3 就地重写。
+
 ### 0.2 证据约定：按结论类型分档，不混用
 
 | 结论类型 | 验证方式 |
@@ -567,7 +577,7 @@ mux 0 刷新状态，mux 2 应用缓存，mux 1 完全不理会缓存。mux 2 �
 
 ### 2.5 横切面一：位操作与读改写纪律
 
-`include/can_helpers.h` 全文 46 行，是整个项目的词汇表，`can_helpers.h:5-46` 逐字如下：
+`include/can_helpers.h` 全文 46 行，是整个项目的词汇表，`can_helpers.h:6-46` 逐字如下（`:1-5` 是 `#pragma once`、两行 `#include` 与两个空行）：
 
 ```cpp
 inline Shared<bool> forceFSDRuntime{false};
@@ -1121,7 +1131,9 @@ OTA 更新进行中，整个主循环直接停掉。这比第 3.3 节 flipper �
 };
 ```
 
-五个派生类：`LegacyHandler`（`:352`）、`HW3Handler`（`:480`）、`HW4Handler`（`:691`）、`NagHandler`（`:1000`），外加 `SummonUnlockHandler`。"同一个类既声明听什么、又实现听到了怎么办"这个设计，三个仓库里有两个在用，而且连 `filterIds` 这个方法名都一样。
+五个派生类（**按它们在文件里出现的先后**）：`LegacyHandler`（`:352`）、`HW3Handler`（`:480`）、`NagHandler`（`:691`）、`HW4Handler`（`:1000`），外加 `SummonUnlockHandler`。"同一个类既声明听什么、又实现听到了怎么办"这个设计，三个仓库里有两个在用，而且连 `filterIds` 这个方法名都一样。
+
+> **一处订正**：本文上一版写作"`HW4Handler`（`:691`）、`NagHandler`（`:1000`）"，**两者行号写反了**。2026-10-01 复核 `6d37392` 检出：`:691` 是 `struct NagHandler`，`:1000` 才是 `struct HW4Handler`——顺带说明它们在文件里的先后也是 Nag 在前、HW4 在后，本文此前的列举顺序与之不符。
 
 `LegacyHandler` 的过滤清单（`:356`）比第 2.4 节宽得多：
 
@@ -1927,7 +1939,13 @@ Flipper 侧的本地构建是 `ufbt`（`README.md:248-249`），产物同样是 
 
 真正生效的是 `RP2040CAN.ino:24-26` 的车型宏与 `include/app.h:17-25` 的条件编译。**照指南逐字执行，会定义一个没人读的宏，构建照样撞上 `include/app.h:24` 的 `#error`。** 指南其余部分（装库、选板、接线、验证）都对，只有选型这一行指向了不存在的 API。
 
-**裂缝二：PlatformIO 路径缺一个车型定义——但上游用脚本堵上了。** `include/app.h:24` 的错误信息要求往 `build_flags` 写入 `HW4/HW3/LEGACY`，而 `platformio.ini` 四个板级 env 的 `build_flags` **只有驱动宏**（`:8`、`:16`、`:24`、`:30`）；README `:215-217` 又要求修改 `src/main.cpp` 中的"那行 define"——**用定冠词暗示它已经存在，实际上不存在**。
+**裂缝二：两条构建路径读的不是同一个地方，靠一个脚本搭桥。**`include/app.h:24` 的 `#error` 要求往 **`build_flags`** 写入 `HW4/HW3/LEGACY`；而 `platformio.ini` 四个板级 env 的 `build_flags` **只有驱动宏**（`:8`、`:16`、`:24`、`:30`）——车型宏一个都没有。
+
+README 让你改的却是另一处：`:207` 明写 "Near the top of **`RP2040CAN.ino`**, uncomment the line"，`:215` 接着让你选车型，代码块在 `:217-221`（`#define LEGACY` / `//#define HW3` / `//#define HW4`）——**而那三行就在 `RP2040CAN.ino:24-26`，一直都在**。
+
+**Arduino 路径读 `.ino`，PlatformIO 路径读 `build_flags`，两者中间靠 `extra_scripts = pre:scripts/platformio_sync_ino_defines.py` 搭桥**（`:5`、`:14`、`:23`；第四个 env 通过 `:28` 的 `extends` 继承）。**去掉那一行，四个 env 就都缺车型宏。**
+
+> **一处订正**：本文上一版把这条写成"README `:215-217` 要求修改 `src/main.cpp` 中的'那行 define'——用定冠词暗示它已经存在，实际上不存在"。2026-10-01 复核 `815e000` 检出后确认**两处都不对**：`src/main.cpp` 全文 47 行只做驱动分派（`:10-25` 分派、`:27` `setup`、`:38` `loop`），**里面没有任何车型 define，README 也没让读者改它**；而 `RP2040CAN.ino:24-26` 那三行本来就存在，只是被注释着。**真实裂缝不是"文档指向不存在的 API"——那是裂缝一——而是"配置不自洽、靠脚本兜"。** 两者性质不同，值得分开记：裂缝一是死引用，裂缝二是隐式依赖。
 
 **实跑的结果和预想不同：失败点不在 `include/app.h:24`，而在更早一步。**原样 clone 直接 `pio run -e esp32_twai`，报的是驱动宏：
 
@@ -1939,7 +1957,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 在 `.ino` 里解开那两行驱动宏之后，同一条命令成功，脚本打印 `Synced RP2040CAN.ino defines for esp32_twai: HW4`。
 
-**准确表述是**：填补 `include/app.h:24` 那个空缺的不是源码，而是 `scripts/platformio_sync_ino_defines.py` 把 `.ino` 的车型宏同步进 `build_flags`。**把 `extra_scripts` 从 `platformio.ini` 里去掉，那个空缺会原样暴露出来**——这才是"上游用脚本堵上了"的含义。
+**准确表述是**：填补 `include/app.h:24` 那个空缺的不是源码，而是 `scripts/platformio_sync_ino_defines.py` 把 `.ino` 的车型宏同步进 `build_flags`——**同一个文件里，读的是 `.ino`、喂给编译器的却是 `build_flags`，脚本是唯一的转换点**。把 `extra_scripts` 从 `platformio.ini` 里去掉，那个空缺会原样暴露出来；这就是裂缝二的全部内容。
 
 ### 13.4 上电之后的第一状态：只听
 
