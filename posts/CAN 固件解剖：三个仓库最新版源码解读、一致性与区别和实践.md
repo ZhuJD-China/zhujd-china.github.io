@@ -1384,7 +1384,8 @@ pio run -e esp32_twai         # 板级构建；原样 clone 会因 RP2040CAN.ino
 git clone https://github.com/hypery11/flipper-tesla-fsd.git && cd flipper-tesla-fsd
 git checkout ffbb24e
 make -C test check            # 两个宿主套件：C 版 test_fsd_core + C++ 版 test_esp32_core
-cd esp32 && pio run -e waveshare-s3-can -t upload -t monitor
+cd esp32 && pio run -e waveshare-s3-can                 # 板级构建：这条我真编过（8.2）
+cd esp32 && pio run -e waveshare-s3-can -t upload -t monitor   # 烧录+看串口：这条我【未】实跑，照文档抄的
 ```
 
 **`ev-open-can-tools/ev-open-can-tools`（`6d37392`，`dev` 分支）——宿主测试与板级构建**
@@ -1399,7 +1400,7 @@ pio run -e waveshare_ESP32_S3_RS485_CAN
 
 三条容易踩的坑，各对应一节：驱动宏与车型宏的关系（13.3）、`PYTHONUTF8=1` 与 GBK（8.3）、`strlcpy` 的平台相关失败（4.6）。
 
-**我只做了不接硬件的部分**——宿主测试全部在本机跑过，板级构建也真编了固件，但**没有对任何仓库执行过 `--target upload`**，所以上面 ESP32 一节的烧录命令是照仓库文档写的、未实跑（8.4）。
+**我只做了不接硬件的部分**——宿主测试全部在本机跑过，板级构建也真编了固件，但**没有对任何仓库执行过 `--target upload`**。上面代码块里凡带 `-t upload` 的，都是照仓库文档抄的未跑命令，其余为实跑（8.4）。
 
 ## 9. 兼容性：一个诚实的未知
 
@@ -1438,7 +1439,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 > **Note:** HW4 vehicles on firmware **2026.2.9.X** are on **FSD v14**. However, versions on the **2026.8.X** branch are still on **FSD v13**. If your vehicle is running FSD v13 (including the 2026.8.X branch or anything older than 2026.2.9), compile with `HW3` even if your vehicle has HW4 hardware.
 
-照这条规则推：`2026.2.11` 不早于 `2026.2.9`，也不在 `2026.8.X` 分支上，所以该编 `HW4`。推得出来，但有两处不舒服。
+照这条规则推：`2026.2.11` 不早于 `2026.2.9`，也不在 `2026.8.X` 分支上，所以该编 `HW4`。**但这是机械外推、不是结论**——下面两条推力足以掀翻它，10.1 节也因此提醒"硬件是 HW4"读不成"该编 HW4 宏"。
 
 **其一，`2026.2.11` 不等于 `2026.2.9.X`。** README 写的是补丁位通配（`2026.2.9.11`），实车版本是次版本位（`2026.2.11`）。两者能否对上，README 未作说明，源码中也没有解析器完成该判定。
 
