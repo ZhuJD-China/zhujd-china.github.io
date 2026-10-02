@@ -62,7 +62,7 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 
 **第六部分 · 出处与总结**
 
-- **15. 参考与引用** —— 每一条外部出处、性质分层与可复现入口
+- **15. 参考与引用** —— 每一条外部出处、性质分层、高频锚点反查与证据分层
 - **16. 总结** —— 四条判断、方法论与全文边界
 
 ---
@@ -1822,7 +1822,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 ## 15. 参考与引用：本文用到的每一条外部出处
 
-三类性质请勿混用：一手＝我能直接拿到原文；社区回报＝第三方在 issue/讨论里的单点陈述，我未独立核实；未核实＝我明确没有验证。访问日期除另注外均为 2026-10-01。
+三类性质请勿混用：一手＝我能直接拿到原文；社区回报＝第三方在 issue/讨论里的单点陈述，我未独立核实；未核实＝我明确没有验证。访问日期除另注外均为 2026-10-01。**15.2–15.5 按性质分类列出每一条出处，15.7 反过来按"读者想追查的结论"给出锚点索引。**
 
 ### 15.1 三个仓库本身
 
@@ -1893,6 +1893,28 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | 文件实读 / 关键字检索 | 第 6 节维度五的三个 `LICENSE`、第 9 节三行 grep | 打开读过、可复现（扫描文件数已标注） |
 | 仓库文档转述 / 社区回报 / 未核实 | 第 10–14 节、第 15.4 节、兼容性状态 | **行号可查，内容我没验或未独立核实；第 9 节的结论不变** |
 | 生态下架与镜像关系 | 第 0.3 节 | flipper / jvanakker 的 README 为一手可复现；`fsdcanmod.com` 页面仅存检索快照、站点已无法解析，**DMCA 定性未核实** |
+
+### 15.7 从结论回查：高频锚点索引
+
+| 它回答什么 | 锚点（钉在第 0 节 commit / 上游文档） | 证据层 |
+| --- | --- | --- |
+| FSD 选择位在哪一帧哪一位 | `UI_autopilotControl` `0x3FD`（1021），Legacy `0x3EE`（1006）；`can_helpers.h:21`、`fsd_can_ops.h:62`、`can_helpers.h:80` | 一手（源码） |
+| 判定函数"宏→标志→帧位"三段式 | `isFSDSelectedInUI` `can_helpers.h:13-23`、`tesla_is_fsd_selected` `fsd_can_ops.h:55-63`、`isADSelectedInUI` `can_helpers.h:76-81` | 一手（源码） |
+| 地域锁在哪一层、哪一版 | `esp32/README.md:429`、`:430`（off-CAN region lock）；`.catalog/README.md:7` | 一手（仓库文档） |
+| 权益不由总线表达 | `CAN_DICTIONARY.md:73-74`（`UI_enableFullSelfDriving` / `UI_hasFullSelfDriving`） | 一手（仓库文档） |
+| 注入总开关默认关 | `esp32/README.md:336`、`README.md:112`、`:120` | 一手（仓库文档） |
+| HW4 速度档与 ISA 校验和 | `handlers.h:213-227`（921 / `0x399`）；`fsd_checksum.h:28` | 一手（源码） |
+| mux 0 写缓存 / mux 2 复用 | `handlers.h:129-173`、`:165`、`:276`；`fsd_handler.c:268`、`:311` | 一手（源码） |
+| bit47 实为 Summon 使能位 | `can_signals.h:44`；`README.md` beta.34 changelog、`esp32/README.md` 同记 | 一手（源码 + changelog） |
+| VIN 级封禁与 TLSSC Restore | `README.md:22`；issue `#18`、`SECURITY.md` | 一手（仓库自述）+ 社区回报（issue） |
+| X179 在哪、怎么进 | `HARDWARE.md:92`、`:94-95`、`:98`、`:104-105`；`README.md:210` | 一手（仓库文档） |
+| 26-pin 哪对是 CAN | `HARDWARE.md:204-210`（仅一句"only working CAN pair"）；issue `#52` 示波器实测 | 一手（仓库文档）+ 社区回报 |
+| 终结电阻别加第二个 | `HARDWARE.md:633`（Tesla 总线已终结）、`:646`（脱车量法） | 一手（仓库文档） |
+| 厂商规格（引脚/护套/料号） | 微雪 wiki、service.tesla.com `prog-233` 连接器页 | 一手（厂商页） |
+| 三仓实测数据 | 本机 `pio test` / `make -C test check` / `pio run`，见 8.1、8.2 | 一手（本机可重跑） |
+| 2026.2.11 该编哪个宏 | 三仓均无版本→宏映射；`changelog.md:243`（Model Y，非本车） | **不可判定**（见第 9 节） |
+
+任一行里标"一手（源码）"的，都能在第 0 节钉死的 commit 上按 `file:line` 逐字核到；标"社区回报"的只有单点来源、无第三方仲裁；标"不可判定"的，本文明确承认答不出、不给结论。
 
 ---
 
