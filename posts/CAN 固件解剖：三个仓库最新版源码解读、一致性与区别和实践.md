@@ -58,7 +58,7 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 - **11. 选什么、买什么** —— 主方案与代价、清单、线材、五套备选与三家的 ESP32-S3 支持实践
 - **12. 接线：从 X179 到螺丝端子** —— 位置口径、引脚表、终结电阻、供电与十步序列
 - **13. 烧录与上电：三条路** —— 两条预编译路径（ESP32 / Flipper）与本地编译，以及两处文档裂缝
-- **14. 板子与车上的操作流程，以及仓库的指南到此为止** —— dashboard 四步、运行约束、抓帧回放与边界
+- **14. 板子与车上的操作流程，以及仓库的指南到此为止** —— dashboard 四步、面板开关清单、抓帧回放与边界
 
 **第六部分 · 出处与总结**
 
@@ -162,6 +162,10 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 3. **地域围栏**——2026.8.6 起是神经网络层的区域检查，2026.14.x 起明写位于总线之外（1.4）。
 
 第一道门能动；第三道门连绕的入口都没有；夹在中间的权益门，工具能做的只是把读者引到官方流程上去。
+
+![一条链路与三道门：勾选状态是一帧 CAN 报文里的一个比特](images/can-mod-teardown-2026/s00-fsd-chain.svg)
+
+图 1｜一条链路与三道门：工具能动的只有第一道（选择位），权益与地域围栏都不在这一帧里。
 
 ### 1.2 第一道门：选择位——同一种形状，三种命名
 
@@ -274,7 +278,7 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 
 ![三层序列的位置与分工](images/can-mod-teardown-2026/s01-three-layers.svg)
 
-图 1｜三层序列各自住在哪个文件、由谁触发。
+图 2｜三层序列各自住在哪个文件、由谁触发。
 
 ### 2.2 第一层序列：启动
 
@@ -533,7 +537,7 @@ void test_hw3_fsd_enabled_only_set_on_mux0()
 
 ![状态缓存的时序耦合](images/can-mod-teardown-2026/s02-state-latch.svg)
 
-图 2｜mux 0 写入状态、mux 2 复用状态，mux 1 两者都不做。
+图 3｜mux 0 写入状态、mux 2 复用状态，mux 1 两者都不做。
 
 修复本身不是重点，流程才是：发现隐式耦合、加测试锁死、把修复意图写进测试名。
 
@@ -1213,7 +1217,7 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 
 ![三层定位：模型层、决策与执行层、总线层](images/can-mod-teardown-2026/s03-layer-positioning.svg)
 
-图 3｜三层定位：模型层、决策与执行层、总线层。
+图 4｜三层定位：模型层、决策与执行层、总线层。
 
 **它们全部位于最下层**——直接对 CAN 总线收发帧，不参与感知、不参与规划、不决定"要往哪开"。所谓"操作序列"的物理形态就是几组位掩码加一个时间窗口，而非任何模型或决策层。
 
@@ -1283,6 +1287,50 @@ GET .../v3/search?query=autowp             →  autowp/autowp-mcp2515  v1.3.1
 没有烧录（`--target upload` 一条未执行）、没有连车、没有验证任何一帧在真实总线上会被接受、没有跑 `dev` 的测试矩阵、没有对 flipper 的 `ffbb24e` 重跑（827 条在 `6a3404f` 上）。
 
 **编译通过不等于能用。**编译只证明语法、模板、链接成立，不证明任何 CAN 帧语义正确；1833 个用例断的是开发者自己写的预期——能证明"代码符合作者意图"，不能证明"作者的意图符合车端实际"。因此本文关于"车会怎么反应"的句子仍是社区回报，第 9 节的结论一个字都不用改。
+
+### 8.5 复现本文所需的命令
+
+本节把散在各处的操作收在一处。三仓的 commit 见第 0 节那张表——**行号只在这些 commit 上成立**，换 commit 需重新核对。
+
+**通用前置**（Windows，我本机的配置）：
+
+```powershell
+$env:PYTHONUTF8 = "1"        # 否则 minify_dashboard.py 与部分脚本按 GBK 解码失败
+pio --version                 # PlatformIO Core 6.2.0
+python --version              # 3.12.10
+```
+
+**`1-v-1/tesla-open-can-mod`（`815e000`）——宿主测试与板级构建**
+
+```bash
+git clone https://github.com/1-v-1/tesla-open-can-mod.git && cd tesla-open-can-mod
+git checkout 815e000
+pio test -e native            # 107 次执行，99 条断言（2.9 节的表）
+pio run -e esp32_twai         # 板级构建；原样 clone 会因 RP2040CAN.ino 未解驱动宏而失败（13.3）
+```
+
+**`hypery11/flipper-tesla-fsd`（`ffbb24e`）——宿主测试与板级构建**
+
+```bash
+git clone https://github.com/hypery11/flipper-tesla-fsd.git && cd flipper-tesla-fsd
+git checkout ffbb24e
+make -C test check            # 两个宿主套件：C 版 test_fsd_core + C++ 版 test_esp32_core
+cd esp32 && pio run -e waveshare-s3-can -t upload -t monitor
+```
+
+**`ev-open-can-tools/ev-open-can-tools`（`6d37392`，`dev` 分支）——宿主测试与板级构建**
+
+```bash
+git clone https://github.com/ev-open-can-tools/ev-open-can-tools.git && cd ev-open-can-tools
+git checkout 6d37392
+cp platformio_profile.example.h platformio_profile.h   # 不复制则所有 env 报 Missing platformio_profile.h
+pio test -e native            # 10 个 native env，249 个用例；其中 2 个套件在本机 MinGW 下编不过（4.6 节）
+pio run -e waveshare_ESP32_S3_RS485_CAN
+```
+
+三条容易踩的坑，各对应一节：驱动宏与车型宏的关系（13.3）、`PYTHONUTF8=1` 与 GBK（8.3）、`strlcpy` 的平台相关失败（4.6）。
+
+**我只做了不接硬件的部分**——宿主测试全部在本机跑过，板级构建也真编了固件，但**没有对任何仓库执行过 `--target upload`**，所以上面 ESP32 一节的烧录命令是照仓库文档写的、未实跑（8.4）。
 
 ## 9. 兼容性：一个诚实的未知
 
@@ -1493,7 +1541,7 @@ ESP32-S3 是这三家唯一共同支持的平台族，因此值得单独对照�
 
 ![X179 在车上的位置：三份文档的三种口径](images/can-mod-teardown-2026/s04-x179-location.svg)
 
-图 4｜X179 在车上的位置：`flipper` 给出了「怎么进去」的一步，另两份指南互相矛盾。
+图 5｜X179 在车上的位置：`flipper` 给出了「怎么进去」的一步，另两份指南互相矛盾。
 
 `HARDWARE.md:92` 的小标题直接给了位置：`X179 — behind the rear center console (2021+ Model 3/Y)`（后排中控台后方），`:94-95` 接着给出进入方式："Tesla's own service/diagnostic connector. Requires removing a trim panel behind the rear armrest." —— 拆掉后排扶手后方的饰板。`flipper` 根 `README.md:210` 同口径，且标为 recommended。
 
@@ -1548,7 +1596,7 @@ Tesla 官方的 X179 页给出料号 `1849225-03-B`、护套 `KSE K30M31014`、�
 
 ![四根线怎么接：X179 到螺丝端子](images/can-mod-teardown-2026/s05-x179-wiring.svg)
 
-图 5｜选一对 CAN 与固定电源地，四根线进微雪板的螺丝端子；下方三个红框是接车前必查项。
+图 6｜选一对 CAN 与固定电源地，四根线进微雪板的螺丝端子；下方三个红框是接车前必查项。
 
 `HARDWARE.md:316-319` 的原文示意：
 
@@ -1599,7 +1647,7 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 
 ![端到端操作序列：从选料到选硬件模式的十个步骤](images/can-mod-teardown-2026/s06-procedure.svg)
 
-图 6｜十个步骤，前五步车外准备、后五步上电验证；第 9 步是整条链上唯一的 go / no-go 判据。
+图 7｜十个步骤，前五步车外准备、后五步上电验证；第 9 步是整条链上唯一的 go / no-go 判据。
 
 | 步 | 动作 | 通过判据 | 出处 |
 | --- | --- | --- | --- |
@@ -1622,7 +1670,7 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 
 ## 13. 烧录与上电：三条路
 
-本节展开第 12.7 节图 6 的第 6–7 步（烧录与首次上电），第 8–10 步在 14.1 接上。
+本节展开第 12.7 节图 7 的第 6–7 步（烧录与首次上电），第 8–10 步在 14.1 接上。
 
 ### 13.1 两条预编译路径（不装任何工具链）
 
@@ -1672,21 +1720,39 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 ### 14.1 到 dashboard 为止的四步
 
-这四步是第 12.7 节图 6 的第 6–10 步，此处只补判据。
+这四步是第 12.7 节图 7 的第 6–10 步，此处只补判据。
 
 1. **接线**（按第 12 节记下的针号）→ **上电**（端子或 USB，二选一）。
 2. **连板子的 WiFi**，浏览器开 **`http://192.168.4.1`**（`esp32/README.md:132`）。
 3. **先看接线对不对**：`esp32/README.md:131` 的 **Wiring Check = `rx_count` + CAN error monitoring**。这一步只读：**帧数在涨、CRC 错误为 0，说明收发对了；反过来先回第 12 节查线。**
 4. **选硬件模式**：`esp32/README.md:123` 的 **HW Override = Auto-detect / Force HW4 / Force HW3 / Force Legacy**，运行时选择、不用重烧。
 
-### 14.2 仓库自己写下的几条运行约束
+### 14.2 面板开关清单：哪些默认开、哪些默认关
 
-| 约束 | 出处 | 内容 |
-| --- | --- | --- |
-| OTA 检测 | `esp32/README.md:128` | 检测到 OTA 更新会**自动停止 TX**（`0x318`），除非显式开 Ignore OTA |
-| 只读功能不依赖 FSD | `README.md:19` | 仓库原话：非 FSD 功能（诊断、BMS 面板等）不需要任何订阅 |
-| FSD 功能需要有效权益 | `README.md:19` | 仓库原话：本工具在 CAN 层使能，**车辆仍需有效的 FSD 资格** |
-| Listen-Only 首启默认 | `esp32/README.md:130` | 首次启动只听，模式保存、恢复出厂回到只听 |
+**这一节是全文最容易让人白忙的地方，先说结论：FSD 的注入主开关默认是关的。**
+
+> `esp32/README.md:336`：*Device starts in Listen-Only mode… Single click button → Active mode (TX on). **FSD injection also needs FSD Unlock switched on in the dashboard (off by default)***
+
+也就是说，切到 Active 只让设备"可以发帧"；真正决定要不要往总线上注入 `0x3FD` 的，是另一个开关。`README.md:112` 把它列为 ESP32 独占的 **"master switch for the `0x3FD` FSD bits, off by default"**。同一个仓库里它还有另一个名字——`README.md:120` 的设置表把它写作 **Force FSD**，并给出与第 1 节三道门完全对应的说明：
+
+> **Force FSD** — Bypass the `isFSDSelectedInUI` check. **Does not bypass Tesla's server-side entitlement — only affects local CAN frame flow.**
+
+三家的开关对照（ESP32 构建；Flipper 端把其中几项放进了主菜单）：
+
+| 开关 | 默认 | 出处 | 作用 |
+| --- | --- | --- | --- |
+| **Mode** | **Listen-Only** | `README.md:118`、`esp32/README.md:130` | 首启只听；MCP2515 处于硬件 listen-only，物理上不能 TX。要发帧必须切 Active |
+| **FSD Unlock / Force FSD** | **关** | `README.md:112`、`:120`；`esp32/README.md:336` | `0x3FD` 各 FSD 位的主开关。**不打开则切到 Active 也不会注入** |
+| **China Mode** | 关 | `README.md:112` | 区域相关开关，仅 ESP32 分支存在；与 Force FSD 是两个独立开关（`web_dashboard.cpp:494-499`） |
+| **Hardware** | Auto-detect | `esp32/README.md:123` | Auto / Force HW4 / HW3 / Legacy。自动识别需要 `0x398`，不少 Model 3/Y 不发这一帧，识别错了就手动钉住（`README.md:162`） |
+| **AP-First (14.x)** | 关 | `README.md:123` | 把 `0x3FD` 注入推迟到 AP 已接合之后；README 标注 14.x 固件**需要**它 |
+| **Ignore OTA** | 关 | `README.md:121` | 允许在检测到 `0x318` 报告 OTA 期间仍然发送 |
+| **Abort Guard / Continuous AP** | 关 | `README.md:112` | ESP32 独占的额外保护与连续 AP 选项 |
+| **TLSSC Restore / GTW Config Replay** | 关 | `README.md:122`、`:124` | 针对 VIN 级封禁的两个手段，作用范围与边界见 1.4 |
+
+两份 README 对同一个开关用了 `FSD Unlock` 与 `Force FSD` 两个名字，与 0.4 记录的那处 `DAS_autopilotControl` / `UI_autopilotControl` 属于同一类上游命名分歧。
+
+除开关之外，仓库还写下了两条运行约束（`README.md:19`）：**只读功能不依赖 FSD**（诊断、BMS 面板等不需要任何订阅），而 **FSD 功能需要有效权益**（本工具在 CAN 层使能，车辆仍需有效的 FSD 资格）。这两条正好对应 1.3 的第二道门。
 
 **另有一条须单独拿出来**——`README.md:22`：
 

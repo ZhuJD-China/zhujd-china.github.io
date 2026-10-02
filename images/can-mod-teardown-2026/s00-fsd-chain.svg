@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="在中国开启 FSD 的一条链路与三道门：勾选状态是一帧 CAN 报文里的一个比特，固件覆写它；权益与地域围栏不在这一帧里">
+  <style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 27px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .nm{fill:#e8e4dc;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .ds2{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .cm{fill:#6b675c;font:500 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .warn{fill:#cf5a50;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .okt{fill:#c9a96a;font:600 15px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
+    .box{fill:#12121a;stroke:#e8e4dc;stroke-opacity:.28;stroke-width:1}
+    .ok{fill:#c9a96a}
+    .no{fill:#a09b8d}
+    .bad{fill:#cf5a50}
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
+  <text class="ttl" x="44" y="54">一条链路，三道门：工具能动的是第一道</text>
+  <text class="sub" x="44" y="84">车机上的勾选状态只是一帧 CAN 报文里的一个比特；固件的全部手段就是让判定函数不再去看它</text>
+
+  <!-- 链路 -->
+  <text class="cm" x="44" y="126">链路（三个仓库在此处完全同形）</text>
+
+  <rect class="box" x="44" y="140" width="216" height="84" rx="8"/>
+  <text class="nm" x="60" y="168">车机 UI 勾选 FSD</text>
+  <text class="ds2" x="60" y="192">用户在触摸屏上打勾</text>
+  <text class="ds2" x="60" y="212">本身不改变车辆行为</text>
+
+  <line class="grid" x1="260" y1="182" x2="316" y2="182"/>
+  <polygon points="316,176 330,182 316,188" fill="#a09b8d"/>
+
+  <rect class="box" x="330" y="140" width="248" height="84" rx="8"/>
+  <text class="nm" x="346" y="168">一帧 CAN 报文</text>
+  <text class="ds2" x="346" y="192">UI_autopilotControl</text>
+  <text class="ds2" x="346" y="212">ID 0x3FD（1021）· Legacy 0x3EE</text>
+
+  <line class="grid" x1="578" y1="182" x2="634" y2="182"/>
+  <polygon points="634,176 648,182 634,188" fill="#a09b8d"/>
+
+  <rect class="box" x="648" y="140" width="228" height="84" rx="8"/>
+  <text class="nm" x="664" y="168">判定函数</text>
+  <text class="ds2" x="664" y="192">读 data[4] 的第 6 位</text>
+  <text class="ds2" x="664" y="212">编译期宏 → 运行时标志 → 帧位</text>
+
+  <line class="grid" x1="876" y1="182" x2="932" y2="182"/>
+  <polygon points="932,176 946,182 932,188" fill="#a09b8d"/>
+
+  <rect class="box" x="946" y="140" width="210" height="84" rx="8"/>
+  <text class="nm" x="962" y="168">注入 / 改比特 / 回发</text>
+  <text class="ds2" x="962" y="192">速度档 · nag · TLSSC</text>
+  <text class="ds2" x="962" y="212">改完立即重发</text>
+
+  <rect class="ok" x="640" y="232" width="244" height="30" rx="6" fill-opacity=".12"/>
+  <text class="okt" x="656" y="252">三个仓库的动作只有这一个</text>
+
+  <line class="grid" x1="44" y1="288" x2="1156" y2="288"/>
+
+  <!-- 三道门 -->
+  <text class="cm" x="44" y="320">三道门：前一道能动，后两道不在这一帧里</text>
+
+  <rect class="ok" x="44" y="334" width="1112" height="70" rx="6" fill-opacity=".10"/>
+  <text class="okt" x="64" y="362">第一道门 · 选择位 —— 在总线上，可被固件覆写</text>
+  <text class="ds" x="64" y="388">覆盖上面的判定函数：让它不看帧、直接返回 true。上游文档对同一开关的原话是——绕过 isFSDSelectedInUI 检查，只影响本地 CAN 帧流（README.md:120）。</text>
+
+  <rect class="no" x="44" y="416" width="1112" height="70" rx="6" fill-opacity=".08"/>
+  <text class="nm" x="64" y="444">第二道门 · 权益 —— 在账号与服务端，固件改不了</text>
+  <text class="ds" x="64" y="470">订阅与购买状态不由总线帧表达（CAN_DICTIONARY.md:73-74 把 UI_enableFullSelfDriving 与 UI_hasFullSelfDriving 列为两个信号）。覆写只作用于前者。</text>
+
+  <rect class="bad" x="44" y="498" width="1112" height="70" rx="6" fill-opacity=".08"/>
+  <text class="warn" x="64" y="526">第三道门 · 地域围栏 —— 2026.14.x 起位于总线之外</text>
+  <text class="ds" x="64" y="552">该版本区间地域锁不由总线帧表达，覆写路径对它不生效（esp32/README.md:430）；仓库对此明写不解锁（.catalog/README.md:7）。</text>
+
+  <line class="grid" x1="44" y1="584" x2="1156" y2="584"/>
+  <text class="foot" x="44" y="606">能打通的只有从勾选位到注入之间的那一段；再往后是账号、服务端与激活预检的地界。</text>
+</svg>
