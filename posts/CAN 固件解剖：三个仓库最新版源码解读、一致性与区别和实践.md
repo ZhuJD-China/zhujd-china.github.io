@@ -103,13 +103,13 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 
 第三行有个容易踩的坑：仓库接口返回的 `pushed_at` 记录的是 `dev` 的推送时间，而默认 clone 拿到的是 `main`——两者相差 46 天。
 
-**这三个 commit 的检出已被全文逐条复核过。**三个仓都 clone 到本地并 `checkout` 到上表的 commit，然后逐条比对本文的每一处 `file:line`：
+**这三个 commit 的检出已被全文逐条复核过。**三个仓都 clone 到本地并 `checkout` 到上表的 commit，然后机械抽出全文 **263 处 `file:line` 引用**逐条比对（先按小节归属定仓，再取该文件在该 commit 下那一行的实际内容）：
 
-| 仓库 | 核出的错误 | 状态 |
-| --- | --- | --- |
-| `flipper-tesla-fsd` `ffbb24e` | **源码行号零错误**（`fsd_can_ops.h:7-10/19-27/55-63`、`fsd_handler.c:41-48/191-214/1239-1339`、`README.md` 与 `HARDWARE.md` 全部吻合）；但两处**文档行号引错**：`ROADMAP.md:107-110` → 应为 `README.md:133`，`SECURITY.md:85-110` → 应为 `:67`–`:100` | 已订正，正文就地标注 |
-| `1-v-1` `815e000` | 一处：`can_helpers.h:5-46` → **应为 `:6-46`**（文件头 `#pragma once` + 2 个 include + 2 个空行共占 `:1-5`）。其余全部 `app.h` / `handlers.h` / `platformio.ini` / `guides/*.md` / 测试文件行号逐条吻合 | 已订正 |
-| `ev-open-can-tools` `6d37392` | 一处：4.4 把 **`HW4Handler`（实为 `:1000`）与 `NagHandler`（实为 `:691`）行号写反**。其余 `app.h:32-51`、`:113-127`、`:324`、`can_helpers.h:6-12/52/76-81/163/199-230`、`plugin_engine.h:747-749`、`src/main.cpp:84-252` 全部吻合 | 已订正 |
+| 仓库 | 复核结果 |
+| --- | --- |
+| `flipper-tesla-fsd` `ffbb24e` | **源码行号零错误**——`fsd_can_ops.h:7-10/19-27/55-63`、`fsd_handler.c:7-48/85-324/391-1239-1339`、`fsd_state.h:23-365`、`esp32/.firmware/main.cpp:71-1772`、`prefs.cpp:27-28`、`can_signals.h:44`、`config.h:165`、`README.md`、`HARDWARE.md`、`SECURITY.md` 全部吻合，含 `fsd_handler.c:50` 的署名注释与 `:1329` 的 `OR-ing` 注释逐字一致。**两处文档行号引错**：`ROADMAP.md:107-110` → 应为 `README.md:133`；`SECURITY.md:85-110` / `:67-76` → 应为 `:67`–`:100`。**已订正** |
+| `1-v-1` `815e000` | `app.h:9-87`、`handlers.h:11-301`（30 余处）、`platformio.ini:7-40`、`RP2040CAN.ino:24-32`、`can_driver.h:7-12`、`twai_driver.h:10-130`、`guides/*.md`、7 个测试文件全部吻合；`HW_TARGET` 全仓只命中 `INSTALLATION_GUIDE_M4_CAN.md:29` 一处，**证实 13.3 裂缝一成立**。**一处行号错**：`can_helpers.h:5-46` → 应为 `:6-46`。**已订正** |
+| `ev-open-can-tools` `6d37392` | `app.h:32-458`（含 `:113-127`、`:324`、`appDriver->allowSendFrame = appCanTransmitAllowed;` 逐字一致）、`can_helpers.h:6-231`（`:80` 的 `>> 5` 证实"读第 5 位"）、`handlers.h:346-1218`、`plugin_engine.h:747-749`、`src/main.cpp:84-256`、`platformio.ini:5-164`（`:163-164` 独立印证 `TX=GPIO_NUM_15` / `RX=GPIO_NUM_16`）、`docs/onboarding.md:3-28` 全部吻合；文件行数 `handlers.h` 1218 / `plugin_engine.h` 1641 / `mcp2515_dashboard.h` 4561 / 21 个 env 与 4.1 的表全对。**一处行号互换**：4.4 的 `HW4Handler`（实为 `:1000`）与 `NagHandler`（实为 `:691`）写反。**已订正** |
 
 **另一类错误机器查不出来，是判断错**——13.3 的"裂缝二"原本说"README 要求修改 `src/main.cpp` 中那行并不存在的 define"，复核发现 `src/main.cpp` 全文 47 行只做驱动分派、根本不含车型 define，而 README 让改的 `RP2040CAN.ino:24-26` 那三行一直都在。**行号对、事实错**，这一类只能靠读，已在 13.3 就地重写。
 
