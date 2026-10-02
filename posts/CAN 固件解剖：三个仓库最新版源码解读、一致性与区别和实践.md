@@ -133,7 +133,11 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 - **后续正统** `ev-open-can-tools`——`flipper` `README.md:361` 称其为 "The upstream community project"，并写明"Formerly `Tesla-OPEN-CAN-MOD` on GitLab; that group was renamed"。第 4 节那个"最像平台"的仓库就是这条线的现存端。
 - **下架原因**两个镜像都指向存档站 `fsdcanmod.com`，**该域名 2026-10-02 已无法解析**（DNS 查询失败，复核两次）。页面内容我只从检索快照读到 "Both GitLab repos taken down by Tesla DMCA (April 2026)"——**DMCA 的定性归入未核实**，可核实的只有上述两处 README 的 "removed / taken down"。
 
-**三点直接影响。**其一，教学样本停更与 "April 2026" 的下架窗口时间重合，**但时间重合不是因果**——`1-v-1` 与 GitLab 原仓的 fork 关系我未查到（GitHub API 被限流），反过来把"停更"读作"弃坑"同样没依据。其二，9.3 引用的 `jvanakker` 失效标注出自同一镜像 README，**指涉 CanFeather 原始固件、不是本文第 2 节的样本代码**。其三，flipper 称 ev-open 为 upstream——**这给第 5 节那张"几乎能互相覆盖"的骨架表提供了注脚：同源，不是巧合**。
+**三点直接影响。**其一，教学样本停更与 "April 2026" 的下架窗口时间重合，**但时间重合不是因果**——`1-v-1` 与 GitLab 原仓的 fork 关系我未查到（GitHub API 被限流），反过来把"停更"读作"弃坑"同样没依据。其二，9.3 引用的 `jvanakker` 失效标注出自同一镜像 README，**指涉 CanFeather 原始固件、不是本文第 2 节的样本代码**。
+
+**其三，flipper 称 ev-open 为 upstream（`README.md:361`）——这给第 5 节那张"几乎能互相覆盖"的骨架表提供了注脚：同源，不是巧合。**而这条注脚**还有第三方视角的独立佐证**：另一家独立项目 `tuncasoftbildik/tesla-can-mod`（ESP32-C6 + LCD，2026-10-01 clone 于 HEAD `5656dbe`）在自己的对比表里评价 flipper 时写道 —— "`hypery11/flipper-tesla-fsd` is the mature Flipper-first stack and **we cross-reference its excellent CAN research**"（`README.md:60-62`），并且在 Chassis CAN 的位号上直接引用了 flipper 的研究作为来源（同文件 `:15`）。
+
+**两处佐证的性质不同，别混**：flipper 那是**自述同源**，而 `tuncasoftbildik` 是**外部项目自陈受益于它的研究**——后者的证据等级更高，因为它没有动机替 flipper 圆场。三家同源这件事因此比 0.1 那一行 commit 信息可靠得多。
 
 ### 0.4 帧 ID 与术语对照
 
@@ -341,6 +345,12 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 同一行的下半句给出一个**必须成对使用**的组合，效果比任何单开关都强：**TLSSC Restore（写 `0x331`）+ `0x3FD` mux0 bit 38** 由 `@RoyRakete` 在被封的 HW3 / 2026.2.6 上确认能可靠重新让 AP/TACC 接合（issue `#18` 楼中楼）。注意 bit 38 就是 1.1 那张表里的**读**位——它在这里被当作"写回勾选状态"用，`SECURITY.md` 原话是这一对**"together"** 才可靠，任一单独开在部分封禁固件上不可靠。`SECURITY.md:31-32` 再补两条限定：TLSSC Restore 单独只能部分恢复停车标志/红绿灯、**不恢复完整 FSD**；且 Intel HW3 的封禁执行比 Palladium/HW4 更激进。
 
 **从这一段能读出工具作者的方法论**：他们没有声称"解开封禁"，只声称"这一对开关能让 AP/TACC 接合"。**把可验证的窄结论与不可验证的宽结论分开写**——本文全文沿用这个纪律，这也是 9 节敢于整节写"不可判定"的原因。
+
+**同一仓库的第三份文件从另一条路走到了同一个结论，这就是第二条独立佐证。**`enhauto-re/COMMANDER_VS_TESLAMOD.md` 是一份把某商业 dongle 的 171 个动作逐条对到本项目上的对比文档（数据来自厂商 Android app 的 `.so` 反编译、`tesla-can-explorer` 的 MCU3 信号 dump 与 `opendbc` 的 DBC，见 `:9-15`）。它的总线对照表（`:19-25`）把 `ETH` 一行标成 **"NO — need Fleet API or MCU tap"**，汇总表（`:234`、`:237`）给出 **171 个动作里约 40 个是 ETH-only、Flipper + MCP2515 侧"0（physically unreachable via MCP2515）"**，结论段（`:246-250`）说得很直白：
+
+> **The Commander's real value is not CAN injection — it's the ETH bus access**… Most of the features… are on the Ethernet bus that a simple CAN transceiver cannot reach.
+
+**这份文档与 `SECURITY.md:30` 讲的完全不是一回事**——一个在讲封禁机制，一个在讲商业产品的功能落点——却落在同一个结构性事实上：**这台车上有一部分功能根本不经过 CAN 总线，任何 CAN 收发器都够不着。**两处都在 `ffbb24e` 检出里，都可按行号核。
 
 `SECURITY.md:23-24` 另记了一条操作面的事实：封禁**跨账号转移、FSD 重新订阅、乃至 Service 端重装软件都持续存在**，拔 SIM 卡只能降低、不能消除被检测的风险。这解释了为什么第 14 节把 VIN 封禁列为"项目方风险自述"里最高风险的一条。
 
@@ -1338,7 +1348,7 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 | **代码读到** | 打开了那个文件、看到了那段逻辑（如"异常边界"） | 最强 |
 | **文档自述** | 只有 README 说有，本文未见源码佐证 | 弱，本文会标出 |
 
-**这个分级必须写出来，否则这张表会被当成事实清单而不是判断清单。**一个典型：`tesla-open-can-mod` 的"内嵌网页面板 ✗"是 grep 判的，而社区里的 `lenfien/tesla-open-can-mod-release`（1-v-1 的一个 fork）README 明确列出了实时图表网页面板、29 个 API 端点与 OTA 固件上传。**两者不矛盾——本表只覆盖 `1-v-1` @`815e000` 原仓，不含任何 fork**；读者拿 fork 对照时请记住这条边界。
+**这个分级必须写出来，否则这张表会被当成事实清单而不是判断清单。**一个典型：`tesla-open-can-mod` 的"内嵌网页面板 ✗"是 grep 判的，而社区里的 `lenfien/tesla-open-can-mod-release`（1-v-1 的一个 fork，2026-10-01 clone 于 HEAD `5fbb30a`）README 自称有：单页 Web 面板（WiFi 热点 `TeslaCAN`，`:44`）、**29 个 HTTP 端点**（`:215` 原话 "exposes 29 HTTP endpoints"）、OTA 固件上传带 MD5 校验（`:60`、`:242`）、`0x082 UI_tripPlanning` 电池预热注入（`:39`、`:96`）。**两者不矛盾——本表只覆盖 `1-v-1` @`815e000` 原仓，不含任何 fork**；读者拿 fork 对照时请记住这条边界。
 
 ### 6.5 维度五：许可证与发布
 
@@ -2085,8 +2095,9 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | `JordanzhaoD/waveshare-single-can-firmware`（未 clone） | 社区回报 | 8.1、8.2 节的横向对照仓，不属解剖对象 |
 | `flipper-tesla-fsd` issue `#119`（China HW4 / 2026.8.3.6 / 已购 FSD 但从未接合）、其引用的 `#117`、以及被指向为合并状态说明的 `#122` | 社区回报 | 1.3"banned vs never granted"与"档位由服务端状态重新推导"两条；**本文未 clone 核验 issue 页面，仅据检索快照** |
 | `flipper-tesla-fsd` Releases 页（`beta.20` → `beta.23` 的 auto-detect 回归与回退） | 一手（仓库文档） | 14.2 Hardware 行背后的版本半衰期；钉在 `ffbb24e` 可见的 beta 线 |
-| `lenfien/tesla-open-can-mod-release`（1-v-1 的 fork，README 检索快照） | 社区回报 | 6.4 用来界定"本表只覆盖 `1-v-1` @`815e000` 原仓、不含 fork"；它自称有网页面板、29 个 API 端点、OTA 固件上传 |
-| `enhauto-re/COMMANDER_VS_TESLAMOD.md`（255 行对比文档，检索快照） | 社区回报 | 与 `SECURITY.md:30` 同向的另一条"ETH 不可达"佐证：171 个动作里约 40 个在以太网侧，MCP2515 物理够不着。**本文未采用为正式引用**，因其为项目方自述 |
+| `lenfien/tesla-open-can-mod-release`（1-v-1 的 fork，2026-10-01 clone 于 HEAD `5fbb30a`，**已 clone 核验**） | 一手（仓库文档） | 6.4 用来界定"本表只覆盖 `1-v-1` @`815e000` 原仓、不含 fork"。它自称有：WiFi 热点单页 Web 面板（`:44`）、**29 个 HTTP 端点**（`:215` 原话 "exposes 29 HTTP endpoints"）、OTA 固件上传带 MD5（`:60`、`:242`）、`0x082 UI_tripPlanning` 电池预热注入（`:39`、`:96`） |
+| `tuncasoftbildik/tesla-can-mod`（ESP32-C6 + LCD 的独立项目，2026-10-01 clone 于 HEAD `5656dbe`） | 一手（仓库文档） | 0.3 用作"三家同源"的**第三方视角佐证**：该项目的 README 评价 flipper 时写 "we cross-reference its excellent CAN research"（`:60-62`），并在 Chassis CAN 位号上直接引其研究为来源（`:15`） |
+| `flipper-tesla-fsd` 的 `enhauto-re/COMMANDER_VS_TESLAMOD.md`（259 行商业 dongle 对比文档，**已随本仓 clone 核验**） | 一手（仓库文档） | 1.4 里"ETH 侧功能 CAN 物理够不着"的第二条独立佐证：`:234` 171 个动作、`:237` 其中约 40 个 ETH-only 且"0（physically unreachable via MCP2515）"、`:19-25` 总线对照表。**本文上一版把它标为"未 clone 核验、检索快照"，是错的**——它本来就在 `ffbb24e` 检出里 |
 | 中国试点叫停（工信部 / 市场监管总局新规）、完整版 FSD 截至 2026-05-21 未获批、2026-04 清理行动中逾 10 万辆 | **未核实（媒体报道）** | 1.4 开篇说明这道门的性质是监管而非技术。**本文不依赖它们得出任何操作结论** |
 
 ### 15.2 本文的证据分层
