@@ -1109,7 +1109,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 第 2.10 节列过 `tesla-open-can-mod` 的门控清单，它缺的正是这道统一许可。表中"能否绕过"一列就是本条维度的全部差别：**靠自律的容易漏，靠结构的写不错。**
 
-`ev-open` 的许可函数只有两道：`appInjectionReady()` 不通过就 `false`，`summonOnlyInjectionRuntime` 关着就 `true`，否则问 handler 要 `summonOnlyInjectionDecisionAt()` 的裁决。flipper 那三道（Listen-Only / Autopark / OTA）ev-open 一条也没有，实现分在别处。
+`ev-open` 的许可函数只有两道，清单见第 4.5 节；`flipper` 那三道（Listen-Only / Autopark / OTA）ev-open 一条也没有，实现分在别处。
 
 ### 6.3 维度三：OTA 期间的行为
 
@@ -1221,7 +1221,7 @@ GET .../v3/packages/autowp/library/MCP2515  →  404 NotFound
 GET .../v3/search?query=autowp             →  autowp/autowp-mcp2515  v1.3.1
 ```
 
-`platformio.ini:7` 改成 `autowp/autowp-mcp2515` 后 `feather_rp2040_can` 立刻通过。第二条是 `ev-open` 的源头级报错：`plugin_engine.h:747` 在 MinGW 下缺 `strlcpy`（报错原文、影响面与平台分析见第 4.6 节）。另有 `Got the unrecognized status code '403'` 一条，是我下载工具链时的网络问题，配本地代理后恢复，与仓库无关。
+`platformio.ini:7` 改成 `autowp/autowp-mcp2515` 后 `feather_rp2040_can` 立刻通过。第二条是 `ev-open` 的源头级报错：`plugin_engine.h:747` 缺 `strlcpy`（详见第 4.6 节）。另有 `Got the unrecognized status code '403'` 一条，是我下载工具链时的网络问题，配本地代理后恢复，与仓库无关。
 
 ### 8.4 没有做的事，以及"编译通过"的边界
 
@@ -1339,7 +1339,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 | 15 | +12V（不变） |
 | 26 | GND（不变） |
 
-那台车是 `@0n3-70uch` 用**示波器**量的（issue `#52`，Berlin 产 pre-Juniper、post-April-2024 生产、FW 2026.14.3）。仓库自己给的三条安全建议（`:220` 起）：**接收发器前每一对都用示波器验一遍**；13/14 的 120Ω 检查不过就改试 18/19；+12V（15）与 GND（26）跨 SOP 稳定。**这三条我一条都没执行**——没有板子、没有线束、没有示波器。
+那台车是 `@0n3-70uch` 用**示波器**量的（issue `#52`，Berlin 产 pre-Juniper、post-April-2024 生产、FW 2026.14.3）。仓库自己给的三条安全建议（`:220` 起）：**接收发器前每一对都用示波器验一遍**；13/14 的 120Ω 检查不过就改试 18/19；+12V（15）与 GND（26）跨 SOP 稳定。**这三条我一条都没执行**——板子、线束、示波器一样都没有。
 
 ### 10.5 把四个词合成一句话
 
@@ -1412,7 +1412,7 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 ![X179 在车上的位置：三份文档的三种口径](images/can-mod-teardown-2026/s04-x179-location.svg)
 
-图 4｜X179 在车上的位置：`flipper` 给出了「怎么进去」的一步，`tesla-open-can-mod` 的两份指南互相矛盾，没有任何一处能仲裁。
+图 4｜X179 在车上的位置：`flipper` 给出了「怎么进去」的一步，另两份指南互相矛盾。
 
 `HARDWARE.md:92` 的小标题直接给了位置：**`X179 — behind the rear center console (2021+ Model 3/Y)`**（后排中控台后方），`:94-95` 接着给出进入方式：**"Tesla's own service/diagnostic connector. Requires removing a trim panel behind the rear armrest."** —— 拆掉后排扶手后方的饰板。`flipper` 根 `README.md:210` 同口径，且标为 recommended。
 
@@ -1531,7 +1531,7 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 
 **第 9 步通过也只证明一件事：收发链路是通的。** 它不证明任何功能生效——这一条与第 14 节的边界是同一句话。
 
-**这一节全部是仓库文档与厂商规格的转述，我一条都没实测。**
+**本节判据转自文档与厂商规格，我一条都没实测。**
 
 ## 13. 烧录与上电：两条路
 
