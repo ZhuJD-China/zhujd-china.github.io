@@ -248,6 +248,19 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 - **AP-First (14.x)**（`README.md:123`）：把 `0x3FD` 的注入推迟到 AP 已被接合之后，README 标注它 **"Required for Tesla firmware 2026.14.x"**。它改的是注入时机，不改地域锁本身。
 - **GTW Config Replay**（`README.md:124`，v2.15 起由 "Ban Shield" 改名）：监视 `0x7FF` `GTW_carConfig`，在网关发出被改动的帧时实时重放事先学到的健康广播。README 自陈的边界写得很清楚——**只作用在 CAN 广播层，不撤销 NVRAM 或服务端的封禁状态，也不阻止封禁**。
 
+**第三条边界比上面两条更硬，来自另一份一手文件。** `SECURITY.md:19-32`（钉在 `ffbb24e`）把 VIN 封禁的机制拆到了位一级，并逐条标明证据来源（"community research, April 2026"，即社区研究、引用 issue `#18`）：
+
+| 机制 | 位置 | 状态 |
+| --- | --- | --- |
+| `GTW_autopilot` 档位从 SELF_DRIVING(3) 降为 ENHANCED(2) | `0x7FF` mux=2 byte[5] bits 4:2 | 社区研究 |
+| TLSSC 标志位被独立清零 | `0x3FD` mux=0 byte[4] bit 6（bit 38）；同字节 bit 7 是 Continue on Green，不是 TLSSC | 社区研究 |
+| FSD 挂起状态置为 SUSPENDED | `0x259 APP_fsdSuspendState` | 社区研究 |
+| **AP ECU 的主权益路径似乎是 Ethernet** | —— | 社区研究 |
+
+`SECURITY.md:30` 那句是这一整节里最要紧的判断：**单靠影子注入 `0x7FF` 并不能解除封禁，因为主权益路径走的是以太网**——这正好从反面印证了第 1 节第二道门"权益不在总线上"。同一行的下半句又给出实测有效的组合：**TLSSC Restore（`0x331`）+ `0x3FD` mux0 bit38** 由 `@RoyRakete` 在被封的 HW3 / 2026.2.6 上确认能可靠恢复 AP/TACC（issue `#18` 楼中楼）。`SECURITY.md:31-32` 补了两条限定：TLSSC Restore 单独只能部分恢复停车标志/红绿灯、**不恢复完整 FSD**；且 Intel HW3 的封禁执行比 Palladium/HW4 更激进。
+
+`SECURITY.md:23-24` 另记了一条操作面的事实：封禁**跨账号转移、FSD 重新订阅、乃至 Service 端重装软件都持续存在**，拔 SIM 卡只能降低、不能消除被检测的风险。这解释了为什么第 14 节把 VIN 封禁列为"项目方风险自述"里最高风险的一条。
+
 ### 1.5 本节结论
 
 三道门的可动性各不相同。第一道门在总线上，三仓库的覆写能力高度同形，差异集中在是否提供区域相关的独立开关、编译期与运行时的取舍、以及判定所读的位；后两道门都不在总线上，三份文档口径一致——覆写产生不了权益，2026.14.x 起也够不着地域锁，只有 `flipper-tesla-fsd` 明确记出了这条版本分界。所以"开启 FSD"里能被工具推进的，只有从勾选位到注入之间的那一段，再往后是账号、服务端与激活预检的地界。第 5、6 节将把这一组对照纳入更大的一致性与分化维度中考察。
@@ -1528,6 +1541,10 @@ flipper 那三行我在 `ffbb24e` 上逐行读、可 grep 复现；其余三个�
 | （可选）示波器 | 验每一对是 CAN 还是 DoIP | `HARDWARE.md:220` 的第 1 条建议 |
 | 一字螺丝刀 | 拧螺丝端子 | 微雪包装内附小螺丝刀 |
 
+顺带记一个本文此前没提、但对新手最省事的入口：`ev-open` 另有一个独立的交互式引导站（`docs/onboarding.md:3` 指向的 GitHub Pages）。它按"一次只问一个决策"的方式走八步——选目标（观察 / 后续装插件 / SavvyCAN 记录 / 台架研究）→ 定车型年款与 Legacy/HW3/HW4 模式 → 比板 → 出配件清单 → 看安装区域示意 → **生成对应的 PlatformIO env 与构建命令** → 按安全顺序上电与观测 → 下载或打印个性化清单（`docs/onboarding.md:9-16`）。
+
+它的边界也写得很清楚，值得一并知道：进度只存浏览器 `localStorage`、不联设备、不外传（`:18`）；那些插图**刻意不是连接器照片或引脚表**，因为连接器与总线归属会随车型、工厂与生产日期变化，接线前仍须以官方电气文档为准（`:22-24`）；整站只在 GitHub Pages 上、不属固件、也改不了设备配置（`:28`）。
+
 ### 11.4 不用买的东西
 
 | 件 | 为什么不用 |
@@ -1797,7 +1814,9 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 > **Tesla has begun issuing VIN-level bans** (April 2026). Affected vehicles lose the TLSSC toggle silently — no OTA, no warning, persists across account transfers and re-subscriptions. The **TLSSC Restore** feature (v2.10+) can recover stop sign / traffic light control on banned Palladium and HW4 cars via 0x331 DAS config spoofing.
 
-这是仓库自己的陈述（附 issue `#18`），我没有独立核实，也没有车可以核实——但它写在 HEAD 的 README 里，性质是项目方的风险自述，比"社区回报"高一级。
+这是仓库自己的陈述（附 issue `#18`），我没有独立核实，也没有车可以核实——但它写在 HEAD 的 README 里，性质是项目方的风险自述，比"社区回报"高一级。机制细节（哪些位被改、主权益路径走以太网）见 1.4 引的 `SECURITY.md`，逐条位级清单在该文件 `SECURITY.md:85-110`。
+
+同一份文件另有一段值得单独摘出——它列明这个项目**主动不去碰**什么（`SECURITY.md:67-76`）：不动 `0x370` 里 EPAS 的原始帧、不动 brake 相关位、不越过 bit-63 的有效标志。读懂"一个负责任的 CAN 工具如何划定自己的边界"，比读它的功能列表更能判断它值不值得用。
 
 ### 14.3 仓库的指南到此为止
 
@@ -1910,7 +1929,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 | HW4 速度档与 ISA 校验和 | `handlers.h:213-227`（921 / `0x399`）；`fsd_checksum.h:28` | 一手（源码） |
 | mux 0 写缓存 / mux 2 复用 | `handlers.h:129-173`、`:165`、`:276`；`fsd_handler.c:268`、`:311` | 一手（源码） |
 | bit47 实为 Summon 使能位 | `can_signals.h:44`；`README.md` beta.34 changelog、`esp32/README.md` 同记 | 一手（源码 + changelog） |
-| VIN 级封禁与 TLSSC Restore | `README.md:22`；issue `#18`、`SECURITY.md` | 一手（仓库自述）+ 社区回报（issue） |
+| VIN 级封禁与 TLSSC Restore | `README.md:22`；issue `#18`、`SECURITY.md`（机制拆到位：`0x7FF` mux2 byte[5] bits4:2 降档、`0x259 APP_fsdSuspendState`、**主权益路径走以太网**） | 一手（仓库自述）+ 社区回报（issue；`SECURITY.md` 自标 community research） |
 | X179 在哪、怎么进 | `HARDWARE.md:92`、`:94-95`、`:98`、`:104-105`；`README.md:210` | 一手（仓库文档） |
 | 26-pin 哪对是 CAN | `HARDWARE.md:204-210`（仅一句"only working CAN pair"）；issue `#52` 示波器实测 | 一手（仓库文档）+ 社区回报 |
 | 终结电阻别加第二个 | `HARDWARE.md:633`（Tesla 总线已终结）、`:646`（脱车量法） | 一手（仓库文档） |
