@@ -20,6 +20,12 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 | **实测** | 18 个板级环境中 17 个可构建；1833 个宿主用例 | 第 8 节 |
 | **边界** | 不烧录、不接车、不验证上车效果；仓库的指南到此为止 | 第 14 节 |
 
+**三条读法，按你要的东西选：**
+
+- **只想弄懂原理** → 0.4（帧 ID 与术语）→ 1.1（一条链路、三道门）→ 5、6（一致与分化）。这四节读完，勾选位、权益、地域锁的关系就清楚了。
+- **只想马上动手** → 11.6（三家对 S3 的支持实践）→ 11.2（买什么）→ 12.7（十步操作序列）→ 13.1（两条预编译路径）→ 14.1、14.4（面板四步与抓帧回放）。
+- **想核我的实测数据** → 8（宿主测试与板级构建）→ 0.2（证据分档约定）。第 2–4 节的所有 `file:line` 都与 8 的表同源。
+
 ---
 
 ## 目录
@@ -192,9 +198,11 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 
 两处具体差异：
 
-其一，读的位不同。`tesla-open-can-mod` 与 `flipper-tesla-fsd` 取 `data[4]` 的第 6 位（`can_helpers.h:21`、`fsd_can_ops.h:62`），`ev-open-can-tools` 取第 5 位（`can_helpers.h:80`），且其函数名为 `isADSelectedInUI`，判定的并非同一个信号。本文不推断两者的信号映射。
+**其一，读的位不同。** `tesla-open-can-mod` 与 `flipper-tesla-fsd` 取 `data[4]` 的第 6 位（`can_helpers.h:21`、`fsd_can_ops.h:62`），`ev-open-can-tools` 取第 5 位（`can_helpers.h:80`），且其函数名为 `isADSelectedInUI`，判定的并非同一个信号。本文不推断两者的信号映射。
 
-其二，只有 `flipper-tesla-fsd` 带有区域相关的独立开关。`fsd_state.h:299` 的字段注释为 `bypass FSD UI selection check for China vehicles`；该开关只在 ESP32 分支存在，Flipper 分支传 `false`（`fsd_logic/fsd_handler.c:94`）。这一平台差异由仓库自身记录于 `fsd_can_ops.h:7-10`，并由 `test/test_fsd_core.c:1274` 用一条断言覆盖了 Flipper 包装层到不了的路径。网页控制台上，`force_fsd` 与 `china_mode` 是两个独立开关（`esp32/.firmware/web_dashboard.cpp:494-499`）。
+**其二，只有 `flipper-tesla-fsd` 带有区域相关的独立开关。** `fsd_state.h:299` 的字段注释为 `bypass FSD UI selection check for China vehicles`；该开关只在 ESP32 分支存在，Flipper 分支传 `false`（`fsd_logic/fsd_handler.c:94`）。
+
+这一平台差异由仓库自身记录于 `fsd_can_ops.h:7-10`，并由 `test/test_fsd_core.c:1274` 用一条断言覆盖了 Flipper 包装层到不了的路径。网页控制台上，`force_fsd` 与 `china_mode` 是两个独立开关（`esp32/.firmware/web_dashboard.cpp:494-499`）。
 
 ### 1.3 第二道门：权益在总线之外
 
@@ -599,7 +607,9 @@ f_config_.acceptance_mask = (differ << 21) | 0x001FFFFF;
 f_config_.single_filter = true;
 ```
 
-逻辑是任意两个 ID 异或，不同的位就是"不关心"位；并起来当掩码，剩下的位必须匹配第一个 ID。副作用是掩码越宽、接受的 ID 越多——Legacy 的两个 ID（69 和 1006）差得远，掩码会放过一堆无关 ID，测试文件自己承认（`test_native_twai/test_twai_filter.cpp:135`：`// --- Legacy: wide gap means wider mask (false positives expected) ---`）。这不是疏忽，是单滤波器的固有代价：正确性由软件保证，`handleMessage()` 每支都先 `if (frame.id == ...)` 精确比对。硬件过滤只负责省电省中断，不负责语义正确。
+逻辑是任意两个 ID 异或，不同的位就是"不关心"位；并起来当掩码，剩下的位必须匹配第一个 ID。副作用是掩码越宽、接受的 ID 越多——Legacy 的两个 ID（69 和 1006）差得远，掩码会放过一堆无关 ID，测试文件自己承认（`test_native_twai/test_twai_filter.cpp:135`：`// --- Legacy: wide gap means wider mask (false positives expected) ---`）。
+
+**这不是疏忽，是单滤波器的固有代价**：正确性由软件保证，`handleMessage()` 每支都先 `if (frame.id == ...)` 精确比对。硬件过滤只负责省电省中断，不负责语义正确。
 
 ### 2.9 测试：99 条断言，107 次执行
 
@@ -827,7 +837,9 @@ out->buffer[7] = tesla_additive_checksum(CAN_ID_EPAS_STATUS, out->buffer, 7);
 
 位操作。 `fsd_handler.c:85-87` 只有一行转发 `tesla_set_bit(frame->buffer, bit, value)`，实现在 `fsd_logic/fsd_can_ops.h:19`，两个平台共用。第 2.5 节那四个原语在这里被压成一个带 `value` 参数的函数——语义等价，词汇量少一半。头文件那行注释叫它 `shared stateless frame primitives`，"无状态"就是这个抽象的全部要点。
 
-校验和。 `fsd_logic/fsd_checksum.h:28` 的 `tesla_additive_checksum(can_id, data, len)`：ISA / track / nag 放 byte 7、SCCM 左 CRC 放 byte 0（用法注释在 `:22-23`）。ISA 那一支（`fsd_handler.c:391-396`）与第 2.7 节逐句对得上，`CAN_ID_ISA_SPEED` 就是 `0x399`——`921 == 0x399`。差别只在封装：那边把循环内联进 handler，这边抽成 `static inline` 放共享头，ESP32 版还把字节位换成命名常量 `SIG_ISA_SOUND_ACTIVE_BYTE` / `_MASK`（`fsd_handler.cpp:452-459`）。
+**校验和。** `fsd_logic/fsd_checksum.h:28` 的 `tesla_additive_checksum(can_id, data, len)`：ISA / track / nag 放 byte 7、SCCM 左 CRC 放 byte 0（用法注释在 `:22-23`）。ISA 那一支（`fsd_handler.c:391-396`）与第 2.7 节逐句对得上，`CAN_ID_ISA_SPEED` 就是 `0x399`——`921 == 0x399`。
+
+差别只在封装：那边把循环内联进 handler，这边抽成 `static inline` 放共享头，ESP32 版还把字节位换成命名常量 `SIG_ISA_SOUND_ACTIVE_BYTE` / `_MASK`（`fsd_handler.cpp:452-459`）。
 
 这是收敛还是抄袭，我判定不了。 flipper 在别处会署名——`fsd_handler.c:50` 写着 `BMS read-only parsers (CAN frame templates from tuncasoftbildik/tesla-can-mod)`，多处注释指向 `ev-open-can-tools`——这一支却没有署名。我只能把行号并排放着，方向不猜。
 
@@ -849,7 +861,7 @@ beta.34 的 `changelog.md` 开头就写明了理由（逐字）：
 
 > **ESP32: the nag killer no longer sets 0x3FD bit47 on HW4.** bit47 is the Summon-enable bit (confirmed on-car in #163), not part of nag suppression — the nag killer works through the bit19 clear and the 0x370 EPAS echo. ... The misnamed constant is renamed to SIG_AP_SUMMON_ENABLE_BIT. No change to nag behaviour.
 
-于是 `esp32/.firmware/can_signals.h:44` 从 `#define SIG_AP_HW4_NAG_CONFIRM_BIT 47` 变成 `#define SIG_AP_SUMMON_ENABLE_BIT 47`——一个常量名骗了所有人：它叫"Nag 确认位"，其实是"Summon 使能位"。同一提交还加了 `config.h:165` 的 `SUMMON_DISABLE_SPEED_KPH 3.0f`，让 Summon 在车速超 3 km/h 时自动撤销（`main.cpp:1307-1321` 的 0x257 速度分支）。
+于是 `esp32/.firmware/can_signals.h:44` 从 `#define SIG_AP_HW4_NAG_CONFIRM_BIT 47` 变成 `#define SIG_AP_SUMMON_ENABLE_BIT 47`——**一个常量名骗了所有人：它叫"Nag 确认位"，其实是"Summon 使能位"。** 同一提交还加了 `config.h:165` 的 `SUMMON_DISABLE_SPEED_KPH 3.0f`，让 Summon 在车速超 3 km/h 时自动撤销（`main.cpp:1307-1321` 的 `0x257` 速度分支）。
 
 这一段的分量不在技术，而在结论的半衰期："bit47 常开"这一判断在上游 HEAD 上已然错误，"beta.33 修好了"这一判断隔日又错。**版本敏感的结论只能连同 commit 一起写。**
 
@@ -1062,7 +1074,7 @@ struct CanDriver
 
 ### 4.6 实测到的两处真故障
 
-一、`plugin_engine.h:747` 的 `strlcpy` 编不过。在 `main` 上跑 native 测试时，`native_plugin_engine` 直接编译失败：
+**其一，`plugin_engine.h:747` 的 `strlcpy` 编不过。** 在 `main` 上跑 native 测试时，`native_plugin_engine` 直接编译失败：
 
 ```
 include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; did you mean 'strncpy'?
@@ -1078,7 +1090,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 `strlcpy` 是 BSD/newlib 函数，ESP-IDF 里有，本机的 MinGW g++ 没有；Linux 上 glibc 2.38 之后也有。所以这大概率是平台相关的——但在我这台 Windows 上，它的 native 套件只能过 7/9。从 `main` 到 `v4.0.0-beta.3` 跨了 17 天、14 个提交，这处没修。
 
-二、`scripts/minify_dashboard.py` 在中文 Windows 上因编码失败。报错 `UnicodeDecodeError: 'gbk' codec can't decode byte 0xa6`——脚本 `open()` 不带 `encoding=`，本机默认编码是 GBK。`set PYTHONUTF8=1` 可绕过。这类问题 README 里不可能写，只能实跑一次记录一次。
+**二、`scripts/minify_dashboard.py` 在中文 Windows 上因编码失败。** 报错 `UnicodeDecodeError: 'gbk' codec can't decode byte 0xa6`——脚本 `open()` 不带 `encoding=`，本机默认编码是 GBK。`set PYTHONUTF8=1` 可绕过。这类问题 README 里不可能写，只能实跑一次记录一次。
 
 ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓表同源）：`2026.2.11` 全仓 0 处、`X179` 0 处；`HW4` 有 224 处——支持很扎实，只是没落到那个具体 OTA 版本。
 
@@ -1311,9 +1323,9 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 照这条规则推：`2026.2.11` 不早于 `2026.2.9`，也不在 `2026.8.X` 分支上，所以该编 `HW4`。推得出来，但有两处不舒服。
 
-一、`2026.2.11` 不等于 `2026.2.9.X`。 README 写的是补丁位通配（`2026.2.9.11`），实车版本是次版本位（`2026.2.11`）。两者能否对上，README 未作说明，源码中也没有解析器完成该判定。
+**其一，`2026.2.11` 不等于 `2026.2.9.X`。** README 写的是补丁位通配（`2026.2.9.11`），实车版本是次版本位（`2026.2.11`）。两者能否对上，README 未作说明，源码中也没有解析器完成该判定。
 
-二、同族阈值互相打架，而且 flipper 自己的兼容表压根没有这台车的位置。按 `ffbb24e` 读它 `README.md:278-293`，相关的四行：
+**其二，同族阈值互相打架，而且 flipper 自己的兼容表压根没有这台车的位置。** 按 `ffbb24e` 读它 `README.md:278-293`，相关的四行：
 
 | 出处 | 内容 |
 | --- | --- |
@@ -1324,7 +1336,9 @@ changelog.md:243 ... @Tikernel + @ViPiMP (positive compat data: Model Y Juniper 
 
 叠起来看更难受：flipper 唯一一条"Model 3 + HW4"的正面数据版本范围是 `< 2026.2.9`，这台车 `2026.2.11` 正好掉在范围外；唯一一条"HW4 + 2026.2.11"的车型是 Model Y Juniper。两个条件各有一条数据，没有一条同时覆盖两者的车型。
 
-外部项目的阈值还在流：`herrfrei`、`juamiso` 用 2026.2.3 作 FSDV14 分界，`jvanakker` 镜像标注 2026.8.6 对 2026.2.9.x 及更高已失效——同一条分界线上两个版本号在流，同一个 `2026.2.9.x` 一边"正常支持"一边"已失效"。未必矛盾（FSDV14 可能分批推），但对照着选宏的读者要吃下六个版本号的分歧。另注：`jvanakker` 那条标注挂在 CanFeather 原始固件的镜像 README 上，指涉对象不是本文第 2 节的样本代码（见第 0.3 节）。
+外部项目的阈值还在流：`herrfrei`、`juamiso` 用 **2026.2.3** 作 FSDV14 分界，`jvanakker` 镜像标注 **2026.8.6 对 2026.2.9.x 及更高已失效**——同一条分界线上两个版本号在流，同一个 `2026.2.9.x` 一边"正常支持"一边"已失效"。未必矛盾（FSDV14 可能分批推），但对照着选宏的读者要吃下六个版本号的分歧。
+
+另注：`jvanakker` 那条标注挂在 CanFeather 原始固件的镜像 README 上，**指涉对象不是本文第 2 节的样本代码**（见第 0.3 节）。
 
 flipper 那三行我在 `ffbb24e` 上逐行读、可 grep 复现；其余三个按 URL 与页面日期记录、我没 clone 核验，都是一线用户的单点回报，无第三方仲裁。
 
@@ -1493,9 +1507,13 @@ ESP32-S3 是这三家唯一共同支持的平台族，因此值得单独对照�
 
 > The X179 connector is located on the **passenger side footwell**, behind the panel on the right.
 
-一个说驾驶侧后备箱饰板后，一个说副驾脚部空间右侧饰板后——方向完全相反。三仓全量 grep `footwell|trunk panel` 命中 5 处：除上面两条外，`guides/WIRING_GUIDE.md:18` 的 `right-side footwell panel trim` 与第二条同源；`flipper` `HARDWARE.md:75` 作 `console / passenger footwell area`、`ev-open` `docs/onboarding.md:22` 作 `center-console or front-footwell installation area`，两处都是泛化区间、不构成独立口径。没有任何一处能仲裁这两条互相矛盾的指南——连 `tesla-open-can-mod` 自己的 `README.md:301` 也只给 service.tesla.com 的 X179 文档链接，不写文字位置。
+一个说驾驶侧后备箱饰板后，一个说副驾脚部空间右侧饰板后——方向完全相反。三仓全量 grep `footwell|trunk panel` 命中 5 处：除上面两条外，`guides/WIRING_GUIDE.md:18` 的 `right-side footwell panel trim` 与第二条同源；`flipper` `HARDWARE.md:75` 与 `ev-open` `docs/onboarding.md:22` 两处都只给泛化区间、不构成独立口径。
 
-外部有一处独立佐证站在「后排中控台」这一侧。 PAC 的 `CP1-TSL1` 商品页把产品描述为"For 26-Pin Connector at Back Of Center Console"（厂商目录页 `https://catalog.archive.pac-audio.com/catalog/can-integration/cp1-tsl1`，页面标价 $49.99，访问于 2026-10-01，厂商商品页）；Tesla 官方的 X179 页给出料号 `1849225-03-B`、护套 `KSE K30M31014`、色 `GY`、完整 pinout 表与一个 `Connector Location` 图示栏位（`https://service.tesla.com/docs/Model3/ElectricalReference/prog-233/connector/x179/`，一手）。官方页管针脚、不管位置文字——pinout 可以拿来核对下一小节的引脚表，位置仍然只能靠 Service Mode。
+**没有任何一处能仲裁这两条互相矛盾的指南**——连 `tesla-open-can-mod` 自己的 `README.md:301` 也只给 service.tesla.com 的 X179 文档链接，不写文字位置。
+
+外部有一处独立佐证站在「后排中控台」这一侧。PAC 的 `CP1-TSL1` 商品页把产品描述为 "For 26-Pin Connector at Back Of Center Console"（厂商目录页 `https://catalog.archive.pac-audio.com/catalog/can-integration/cp1-tsl1`，页面标价 $49.99，访问于 2026-10-01，**厂商商品页**）。
+
+Tesla 官方的 X179 页给出料号 `1849225-03-B`、护套 `KSE K30M31014`、色 `GY`、完整 pinout 表与一个 `Connector Location` 图示栏位（`https://service.tesla.com/docs/Model3/ElectricalReference/prog-233/connector/x179/`，**一手**）。官方页管针脚、不管位置文字——pinout 可以拿来核对下一小节的引脚表，位置仍然只能靠 Service Mode。
 
 而两份指南自称的车型还是一致的：`guides/INSTALLATION_GUIDE_M4_CAN.md:3` 写"2023 Tesla Model 3 with HW3"，`guides/WIRING_GUIDE.md:5` 写"Photos were taken on a 2023 Model 3 (non-Highland)"。同一台车，两个位置。
 
@@ -1628,9 +1646,11 @@ Flipper 侧的本地构建是 `ufbt`（`README.md:248-249`），产物同样是 
 
 ### 13.3 走 `tesla-open-can-mod` 的话，会撞两处裂缝
 
-裂缝一：M4 指南里的宏在源码里不存在。 `guides/INSTALLATION_GUIDE_M4_CAN.md:29` 写着 `#define HW_TARGET TARGET_HW3  // Change to TARGET_LEGACY, TARGET_HW3, or TARGET_HW4`，全仓库 grep `HW_TARGET|TARGET_HW3|TARGET_LEGACY` 只有这一处命中——没有任何代码读它，真正生效的是 `RP2040CAN.ino:24-26` 的车型宏与 `include/app.h:17-25` 的条件编译。照指南逐字执行，会定义一个没人读的宏，构建照样撞上 `include/app.h:24` 的 `#error`。指南其余部分（装库、选板、接线、验证）都对，只有选型这一行指向了不存在的 API。
+**裂缝一：M4 指南里的宏在源码里不存在。** `guides/INSTALLATION_GUIDE_M4_CAN.md:29` 写着 `#define HW_TARGET TARGET_HW3  // Change to TARGET_LEGACY, TARGET_HW3, or TARGET_HW4`，全仓库 grep `HW_TARGET|TARGET_HW3|TARGET_LEGACY` **只有这一处命中**——没有任何代码读它。
 
-裂缝二：PlatformIO 路径缺一个车型定义——但上游用脚本堵上了。 `include/app.h:24` 的错误信息要求往 `build_flags` 写入 `HW4/HW3/LEGACY`，而 `platformio.ini` 四个板级 env 的 `build_flags` 只有驱动宏（`:8`、`:16`、`:24`、`:30`）；README `:215-217` 又要求修改 `src/main.cpp` 中的"那行 define"——用定冠词暗示它已经存在，实际上不存在。
+真正生效的是 `RP2040CAN.ino:24-26` 的车型宏与 `include/app.h:17-25` 的条件编译。**照指南逐字执行，会定义一个没人读的宏，构建照样撞上 `include/app.h:24` 的 `#error`。** 指南其余部分（装库、选板、接线、验证）都对，只有选型这一行指向了不存在的 API。
+
+**裂缝二：PlatformIO 路径缺一个车型定义——但上游用脚本堵上了。** `include/app.h:24` 的错误信息要求往 `build_flags` 写入 `HW4/HW3/LEGACY`，而 `platformio.ini` 四个板级 env 的 `build_flags` **只有驱动宏**（`:8`、`:16`、`:24`、`:30`）；README `:215-217` 又要求修改 `src/main.cpp` 中的"那行 define"——**用定冠词暗示它已经存在，实际上不存在**。
 
 实跑之后分两种情况。原样 clone 直接 `pio run -e esp32_twai` 失败，但失败点不在 `include/app.h:24`：
 
@@ -1642,7 +1662,9 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 解开两行后同一命令成功，脚本打印 `Synced RP2040CAN.ino defines for esp32_twai: HW4`。准确表述是：填补 `include/app.h:24` 这个空缺的不是源码，而是 `scripts/platformio_sync_ino_defines.py` 把 `.ino` 的车型宏同步进 `build_flags`；把 `extra_scripts` 从 `platformio.ini` 里去掉，该空缺会原样暴露。
 
-**上电之后的第一状态：只听。** `esp32/README.md:20`："The device boots in Listen-Only mode by default and will not transmit any CAN frames until the user explicitly switches to Active mode." `README.md:118` 补一句，这是 MCP2515 的硬件 listen-only 位，物理上不能 TX。上电 ≠ 会发帧，而且这一层不是软件判断——第 6 节维度三那个"运行时治理"，在这里落在了最靠近物理的地方。
+**上电之后的第一状态：只听。** `esp32/README.md:20`："The device boots in Listen-Only mode by default and will not transmit any CAN frames until the user explicitly switches to Active mode." `README.md:118` 补一句，这是 MCP2515 的硬件 listen-only 位，物理上不能 TX。
+
+**上电 ≠ 会发帧**，而且这一层不是软件判断——第 6 节维度三那个"运行时治理"，在这里落在了最靠近物理的地方。
 
 ## 14. 板子与车上的操作流程，以及仓库的指南到此为止
 
@@ -1703,7 +1725,9 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 
 三行的 URL 与 commit 见第 0 节那张表，全部用 `git ls-remote` / 本地 HEAD 复现。
 
-第 9 节引用的同族项目（`herrfrei`、`juamiso`、`jvanakker`）与第 8 节计入测试总数的 `JordanzhaoD/waveshare-single-can-firmware`，我按 URL 与页面日期记录，未 clone 下来做 `file:line` 核验。第 0.3 节额外引用 `jvanakker/tesla-fsd-can-mod` 与 `Karolynaz/waymo-fsd-can-mod` 两个镜像的 README 陈述（访问于 2026-10-02），同样未 clone 核验；`fsdcanmod.com` 的页面内容仅见检索快照。
+第 9 节引用的同族项目（`herrfrei`、`juamiso`、`jvanakker`）与第 8 节计入测试总数的 `JordanzhaoD/waveshare-single-can-firmware`，我按 URL 与页面日期记录，**未 clone 下来做 `file:line` 核验**。
+
+第 0.3 节额外引用 `jvanakker/tesla-fsd-can-mod` 与 `Karolynaz/waymo-fsd-can-mod` 两个镜像的 README 陈述（访问于 2026-10-02），同样未 clone 核验；`fsdcanmod.com` 的页面内容仅见检索快照。
 
 ### 15.2 厂商文档（一手）
 
