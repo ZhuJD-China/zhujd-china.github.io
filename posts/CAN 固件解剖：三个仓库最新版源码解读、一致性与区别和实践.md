@@ -49,7 +49,7 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 **第五部分 · 一台具体配置的实践**（China HW4.0 / 2025 款 Model 3 / 2026.2.11）
 
 - **10. 先把车钉死：这台车意味着什么** —— HW4、DoIP、X179 针号、SOP 时间线四条硬约束
-- **11. 选什么、买什么** —— 主方案与代价、清单、线材与五套备选
+- **11. 选什么、买什么** —— 主方案与代价、清单、线材、五套备选与三家的 ESP32-S3 支持实践
 - **12. 接线：从 X179 到螺丝端子** —— 位置口径、引脚表、终结电阻、供电与十步序列
 - **13. 烧录与上电：两条路** —— Web Flasher 与本地编译，以及两处文档裂缝
 - **14. 板子与车上的操作流程，以及仓库的指南到此为止** —— dashboard 四步、运行约束、抓帧回放与边界
@@ -1241,7 +1241,7 @@ ev-open 那 2 个失败是真编译错误，根因就是 4.6 节的 `strlcpy`：
 | `ev-open-can-tools` | `6d37392`（`dev`） | `waveshare_ESP32_S3_RS485_CAN`、`esp32_ext_mcp2515`、`esp32_twai` | **3/3**（依次 RAM 22.6% / Flash 83.7%、22.7% / 42.4%、24.6% / 84.6%） |
 | **合计** | | **18 次板级构建** | **17/18**，唯一失败是 `feather_rp2040_can` 的失效包名 |
 
-四个 ESP32-S3 目标全部通过，`TX=GPIO15`、`RX=GPIO16` 这组引脚是三个仓库各自独立给出的、交叉印证。这是"能编译通过"的最强证据——不是读 README 说的，是链接器和 esptool 说的。
+四个 ESP32-S3 目标全部通过，`TX=GPIO15`、`RX=GPIO16` 这组引脚由 `flipper`（`esp32/README.md:159`）与 `ev-open`（`platformio.ini:163-164`）两家独立给出、交叉印证；`tesla-open-can-mod` 没有 S3 目标（见 11.6）。这是"能编译通过"的最强证据——不是读 README 说的，是链接器和 esptool 说的。
 
 ### 8.3 环境与六条报错
 
@@ -1409,7 +1409,7 @@ flipper 那三行我在 `ffbb24e` 上逐行读、可 grep 复现；其余三个�
 | 规格一手出处 | Wiki：`https://www.waveshare.com/wiki/ESP32-S3-RS485-CAN` |
 | 第三方同款参考价 | `https://www.spotpear.cn/shop/.../ESP32-S3-RS485-CAN.html` 标 **¥99**（页面日期 2025-08-14） |
 | 第三方比价（2026-10-01 检索，**电商商品页**） | Sunsky **$19.46**（`https://www.sunsky-online.com/p/TBD0607022302/Waveshare-Industrial-ESP32-S3-Control-Board-With-RS485-And-CAN-Communication-Interfaces-Onboard-Ante.htm`，2 件起 $19.30）· Amazon **$26.87**（`https://www.amazon.com/dp/B0FNCWZ3D1`）· eBay **$32.98**（`https://www.ebay.co.uk/itm/267437528758`）；另检索到 MiOT **$22.79**、Newegg **$53.99**、elty **€19.71**（卖的是 `-U` 外置天线版）三处，当时未保留深链。**同一块板在不同站点差近三倍，买前先按下一行的规格核对** |
-| 对应构建目标 | `waveshare-s3-can`（`esp32/README.md:159` 明列，TX=15 / RX=16 / LED=46 / BTN=0） |
+| 对应构建目标 | `waveshare-s3-can`（`esp32/README.md:159` 明列，TX=15 / RX=16 / LED=46 / BTN=0）。**注意 flash 规格两处来源不一致**：上游按 **8MB flash/PSRAM** 配置该 env（`esp32/platformio.ini:185-189`），而厂商 wiki 标 **16MB Flash / 8MB PSRAM**（下一段）。按 8MB 配置在两种板子上都不会出错，按 16MB 配置则必须先确认手上这块的实测容量 |
 
 其余板子、降压模块与 Flipper 那一路的仓库原始链接集中在第 15.2 节「厂商文档（一手）」与第 15.3 节「第三方价格（非一手）」，此处不重复。
 
@@ -1448,6 +1448,30 @@ flipper 那三行我在 `ffbb24e` 上逐行读、可 grep 复现；其余三个�
 | **E 原版** | Flipper Zero + Electronic Cats CAN Add-On | `:541` ~$205–245 | `.fap`，走 `ufbt` |
 
 方案 C 值得单独说：T-2CAN 是双路独立 CAN（原生 TWAI + 外挂 MCP2515）。第 10 节那张 post-April-2024 实测表显示"唯一可用的 CAN 对是 18/19"，而 `HARDWARE.md:278-286` 又指出 `0x3C2` 只在 9/10 或 OBD-II 6/14 上可见、13/14 上根本没有——单路板接错对就没辙，双路板可以一路接 X179 18/19、另一路留着。
+
+### 11.6 三个仓库对 ESP32-S3 的支持实践
+
+ESP32-S3 是这三家唯一共同支持的平台族，因此值得单独对照。下表全部来自三个仓库在第 0 节钉死 commit 上的 `platformio.ini` 与 `esp32/README.md`。
+
+| | `tesla-open-can-mod` | `flipper-tesla-fsd`（`esp32/` 端口） | `ev-open-can-tools` |
+| --- | --- | --- | --- |
+| 框架 | Arduino（`platform = espressif32`，未锁版本） | Arduino-ESP32 **2.0.x**，锁 `espressif32@6.9.0`；`:61` 注释说明 3.x 会在经典 ESP32 上撑爆 dram0，故不升 | **ESP-IDF**（基线 env `espidf_dashboard`，`:19-22`） |
+| S3 目标数 | **0** | **2**：`waveshare-s3-can`、`lilygo-t2can` | **4**：`waveshare_ESP32_S3_RS485_CAN`、`lilygo_t2can`、`esp32_ext_mcp2515`、`m5stack-atoms3-mini-can-base` |
+| 其他代际 | RP2040（`feather_rp2040_can`）、SAME51（`feather_m4_can`） | 经典 ESP32 多个 env；`:162` 明写**没有 C3 env** | 另覆盖 **S2**（`:42`）与 **C6**（`:55`），代际最宽 |
+| S3 的 board 映射 | 不适用 | `esp32-s3-devkitc-1`（通用 S3 开发板定义） | `esp32s3box` / `esp32-s3-devkitc-1` / `m5stack-atoms3`（用板型定义代替厂商定义） |
+| flash 与分区 | **完全不声明** | 逐 env 显式：`waveshare-s3-can` 8MB + `default_8MB.csv`（`:185-189`）、`lilygo-t2can` 16MB + `default_16MB.csv`（`:130-134`） | 逐 env 显式 partitions，分 4MB / 8MB / 16MB 三档（`lilygo_t2can` 另设 `flash_size = 16MB`，NVS 64k） |
+| 引脚策略 | 只有 `m5stack-atomic-can-base` 给了 TWAI 22/19，`esp32_twai` 一个引脚宏都没有，靠源码默认值 | 每 env 一套 build_flags；首启串口自检打印 `[CFG] pins: LED=.. BUTTON=.. CAN_TX=.. CAN_RX=..`（`esp32/README.md:170`） | 每 env 一套；MCP2515 走 SPI 四线并显式声明晶振（8MHz / 16MHz）、CS / INT / RST |
+| 人机界面 | 串口打印 | Web 面板 + HTTP candump 流（端口 82）+ 物理按钮 + 首启引脚自检 + web OTA（15 秒确认、失败回滚） | 网页面板（4561 行）+ 插件引擎 + NVS 持久化引脚 |
+| 实测占用 | `esp32_twai` RAM 14.6% / Flash 61.7%（**非 S3 目标**） | `waveshare-s3-can` RAM 37.4% / Flash 28.0% | `waveshare_ESP32_S3_RS485_CAN` RAM 22.6% / Flash 83.7%；`esp32_ext_mcp2515` RAM 22.7% / Flash 42.4% |
+
+四条对读者最有用的结论：
+
+1. **要 S3 只能在 `flipper` 与 `ev-open` 之间选。** 教学样本 `tesla-open-can-mod` 的 ESP32 目标 `board = esp32dev` 是初代 ESP32，与 S3 不是同一块芯片；要上 S3 得自己加 env，参照它 `m5stack-atomic-can-base`（`:27-30`）的写法改 `board` 与两个 `TWAI_*_PIN` 即可，业务代码不动。
+2. **同一块微雪 ESP32-S3-RS485-CAN，两个项目给的 flash 预算差一个量级。** flipper 按 8MB 分区、实测占用 28.0%；ev-open 按 4MB OTA 分区、实测占用 83.7%。**选 ev-open 就意味着后续加功能前先算分区余量**。
+3. **flash 容量以手上板子为准。** 上游 README 与 `platformio.ini` 按 8MB 配，厂商 wiki 标 16MB（11.2 已记录两处来源）；两套配置里 8MB 那套是保守解。
+4. **跨代际覆盖是 ev-open 的独有优势。** 它同时给出 S3 四个、S2 一个、C6 一个；flipper 明说没有 C3 env（`esp32/README.md:162`）；tesla-open-can-mod 连 S3 都没有。
+
+本节表内行号均指各仓库钉死 commit 的 `platformio.ini`：`tesla-open-can-mod` 为第 0 节第一行 commit，`flipper-tesla-fsd` 为 `esp32/platformio.ini`（`README.md` 行号未加前缀），`ev-open-can-tools` 为 `dev` 分支第 0 节第三行 commit。
 
 ## 12. 接线：从 X179 到螺丝端子
 
