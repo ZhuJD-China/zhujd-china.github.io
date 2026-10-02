@@ -103,15 +103,19 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 
 第三行有个容易踩的坑：仓库接口返回的 `pushed_at` 记录的是 `dev` 的推送时间，而默认 clone 拿到的是 `main`——两者相差 46 天。
 
-**这三个 commit 的检出已被全文逐条复核过。**三个仓都 clone 到本地并 `checkout` 到上表的 commit，然后机械抽出全文 **263 处 `file:line` 引用**逐条比对（先按小节归属定仓，再取该文件在该 commit 下那一行的实际内容）：
+**这三个 commit 的检出已被全文逐条复核过。**三个仓都 clone 到本地并 `checkout` 到上表的 commit，机械抽出全文 **263 处 `file:line`** 引用，按小节归属定仓后逐条取该行的实际内容比对。
 
-| 仓库 | 复核结果 |
-| --- | --- |
-| `flipper-tesla-fsd` `ffbb24e` | **源码行号零错误**——`fsd_can_ops.h:7-10/19-27/55-63`、`fsd_handler.c:7-48/85-324/391-1239-1339`、`fsd_state.h:23-365`、`esp32/.firmware/main.cpp:71-1772`、`prefs.cpp:27-28`、`can_signals.h:44`、`config.h:165`、`README.md`、`HARDWARE.md`、`SECURITY.md` 全部吻合，含 `fsd_handler.c:50` 的署名注释与 `:1329` 的 `OR-ing` 注释逐字一致。**两处文档行号引错**：`ROADMAP.md:107-110` → 应为 `README.md:133`；`SECURITY.md:85-110` / `:67-76` → 应为 `:67`–`:100`。**已订正** |
-| `1-v-1` `815e000` | `app.h:9-87`、`handlers.h:11-301`（30 余处）、`platformio.ini:7-40`、`RP2040CAN.ino:24-32`、`can_driver.h:7-12`、`twai_driver.h:10-130`、`guides/*.md`、7 个测试文件全部吻合；`HW_TARGET` 全仓只命中 `INSTALLATION_GUIDE_M4_CAN.md:29` 一处，**证实 13.3 裂缝一成立**。**一处行号错**：`can_helpers.h:5-46` → 应为 `:6-46`。**已订正** |
-| `ev-open-can-tools` `6d37392` | `app.h:32-458`（含 `:113-127`、`:324`、`appDriver->allowSendFrame = appCanTransmitAllowed;` 逐字一致）、`can_helpers.h:6-231`（`:80` 的 `>> 5` 证实"读第 5 位"）、`handlers.h:346-1218`、`plugin_engine.h:747-749`、`src/main.cpp:84-256`、`platformio.ini:5-164`（`:163-164` 独立印证 `TX=GPIO_NUM_15` / `RX=GPIO_NUM_16`）、`docs/onboarding.md:3-28` 全部吻合；文件行数 `handlers.h` 1218 / `plugin_engine.h` 1641 / `mcp2515_dashboard.h` 4561 / 21 个 env 与 4.1 的表全对。**一处行号互换**：4.4 的 `HW4Handler`（实为 `:1000`）与 `NagHandler`（实为 `:691`）写反。**已订正** |
+| 仓库 | 引用总数 | 通过 | 核出的错 |
+| --- | --- | --- | --- |
+| `flipper-tesla-fsd` `ffbb24e` | 约 150 | **源码行号零错误** | 2 处文档引用错（1.4、14.2） |
+| `1-v-1` `815e000` | 约 70 | 全部通过 | 1 处引文范围错（2.5） |
+| `ev-open-can-tools` `6d37392` | 约 45 | 全部通过 | 1 处行号互换（4.4） |
 
-**另一类错误机器查不出来，是判断错**——13.3 的"裂缝二"原本说"README 要求修改 `src/main.cpp` 中那行并不存在的 define"，复核发现 `src/main.cpp` 全文 47 行只做驱动分派、根本不含车型 define，而 README 让改的 `RP2040CAN.ino:24-26` 那三行一直都在。**行号对、事实错**，这一类只能靠读，已在 13.3 就地重写。
+**263 处全部能解析到存在的文件与行号，无越界、无失效。**逐条的订正说明放在出错的那一节就地给出，不在此重复。四处行号错的清单是：`ROADMAP.md:107-110` → 应为 `README.md:133`；`SECURITY.md:85-110` 与 `:67-76` → 应为 `:67`–`:100`；`can_helpers.h:5-46` → 应为 `:6-46`；4.4 的 `HW4Handler`（实为 `:1000`）与 `NagHandler`（实为 `:691`）写反。
+
+复核顺带证实了两条此前只是断言的结论：**13.3 裂缝一成立**（`HW_TARGET` 全仓只命中 `INSTALLATION_GUIDE_M4_CAN.md:29` 一处，没有任何代码读它）；**8.2 的引脚交叉印证成立**（ev-open `platformio.ini:163-164` 独立给出 `TX=GPIO_NUM_15` / `RX=GPIO_NUM_16`）。也与 2.1 / 4.1 的文件行数表、`can_helpers.h:80` 的 `>> 5`（证实"ev-open 读第 5 位"）全部对上。
+
+**还有一类错误机器查不出来——行号对、事实错。**13.3 的"裂缝二"原本说"README 要求修改 `src/main.cpp` 中那行并不存在的 define"，复核发现 `src/main.cpp` 全文 47 行只做驱动分派、根本不含车型 define，而 README 让改的 `RP2040CAN.ino:24-26` 那三行一直都在。**这一类只能靠读**，已在 13.3 就地重写。
 
 ### 0.2 证据约定：按结论类型分档，不混用
 
@@ -302,15 +306,17 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 
 > This table is informational from field reports/upstream notes. The ESP32 code itself does not hardcode firmware-version checks.
 
-据此，下表三行的证据等级为社区回报，非一手。原文如下（引文按证据需要保留，`:429` 中段一处操作性应对以 `[…]` 略去）：
+据此，下表三行的证据等级为社区回报，非一手。原文如下（引文按证据需要保留：`:429` 中段一处操作性应对以 `[…]` 略去，`:430` 末尾的 issue 链接以 `[…]` 略去）：
 
 | 版本 | Notes（原文） | 行号 |
 | --- | --- | --- |
 | 2026.8.6 | HW4 injection path broken on this build — use Force HW3. Region lock applies too (next row) | `:428` |
 | 2026.8.6+ | Region lock — FSD neural net refuses to run in some regions. […] | `:429` |
-| 2026.14.x and newer | FSD unlock blocked by the activation preflight and an off-CAN region lock; nag killer / TLSSC still work | `:430` |
+| 2026.14.x and newer | FSD unlock blocked by the activation preflight and an off-CAN region lock; nag killer / TLSSC still work — see [#168](…) | `:430` |
 
 `:430` 的 `off-CAN region lock` 是本节的关键约束：在该版本区间，地域锁不由总线帧表达，第 1.2 节的覆写路径对它不生效。`.catalog/README.md:7` 的 `it does not unlock FSD on Tesla firmware 2026.14 and newer` 与之一致，两处独立表述互相印证。
+
+**两处 `[…]` 略掉的恰好都是"怎么办"，本文刻意不补。**`:429` 略掉的是一条拔 SIM 的操作建议、`:430` 略掉的那个链接（指向 discussion `#168`）本身也以操作建议为主。**本文在 14.3 声明过"任何关于规避检测、隐匿接入的做法一概不涉及"，这里就照那个标准执行**——记录它存在，不复述其步骤。
 
 上游为这条分界线准备的不是"解锁"，而是两个绕开手段——它们正好划出了"固件还能做什么"的上界：
 
@@ -329,7 +335,7 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 2. **它在 HW3 上有安全争议**：一次 HW3 / 2026.14.6 的负面测试报告了**紧急刹车**，一度导致该功能在 v2.15 里对 HW3 关闭；ROADMAP `:40` 说这次负面结果"可能"源于 `0x399`/`0x39B` DAS 读回失败（已在 #92 修复），**截至 `ffbb24e` 仍列为待办、要求用当前代码重测后再决定是否在 HW3 上开放**。我没有任何条件判断这个重测的结论，本文也不建议在 HW3 上试它。
 3. **它绕开的是地域锁对"注入"这一环的限制，不是权益**——上车仍需有效资格（1.3）。
 
-另有一项被上游自己列为"边缘收益"的提案：用 DNS 伪装 Tesla 域名以保留地图/多媒体、同时降低封禁风险。`ROADMAP.md:42` 明确写着由于遥测路径的**双向 TLS 证书锁定**，这对防封禁只是边际改善，主要价值在体验——**这也从侧面说明权益校验那条路（1.3 第二道门）是封不掉的。**
+另有一项被上游自己列为"边缘收益"的提案：用 DNS 伪装 Tesla 域名以保留地图/多媒体、同时降低封禁风险。`ROADMAP.md:42` 明确写着由于遥测路径的**双向 TLS 证书锁定**，这对防封禁只是边际改善，主要价值在体验——**而它反过来印证了一件事：连遥测通道本身都被证书锁死了，权益校验那条路（1.3 第二道门）是绕不过去的。**
 
 **第三条边界比上面两条更硬，来自另一份一手文件。** `SECURITY.md:19-32`（钉在 `ffbb24e`）把 VIN 封禁的机制拆到了位一级，并逐条标明证据来源（"community research, April 2026"，即社区研究、引用 issue `#18`）：
 
