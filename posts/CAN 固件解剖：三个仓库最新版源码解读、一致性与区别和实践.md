@@ -115,19 +115,23 @@ excerpt: 三个公开仓库的最新版源码逐行解剖：钉死 commit 与行
 
 ### 0.4 帧 ID 与术语对照
 
-后文引用帧时，本文先给十进制（与三份源码里的 `frame.id == ...` 一致），再括注上游文档惯用的十六进制；两者是纯算术换算（`0x3FD` = 3×256 + 0xFD = 1021）。信号名与方向取自 `flipper` 的 ID 表（`README.md:312-323`，钉在 `ffbb24e`）：
+后文引用帧时，本文先给十进制（与三份源码里的 `frame.id == ...` 一致），再括注上游文档惯用的十六进制；两者是纯算术换算（`0x3FD` = 3×256 + 0xFD = 1021）。下表的信号名与方向逐条取自 `flipper` 的 CAN ID 表（`README.md:310-325`，钉在 `ffbb24e`）：
 
 | 十进制 | 十六进制 | 信号名 | 方向 | 本文出现处 |
 | --- | --- | --- | --- | --- |
 | 1021 | `0x3FD` | `UI_autopilotControl` | TX | 选择位所在帧，HW3/HW4（1.1、2.4） |
 | 1006 | `0x3EE` | `UI_autopilotControl` | TX | 同上，Legacy HW1/HW2（2.4） |
-| 921 | `0x399` | ISA | TX | HW4 速度档与 ISA 校验和（2.7） |
-| 1016 | `0x3F8` | 遥测标志（clip / trip / road-segment） | TX | HW3/HW4 的第二条监听帧（2.4） |
-| 962 | `0x3C2` | 转向柱输入 | RX | 可见总线与 ScrollPress AP（11.5、12.3） |
-| 880 | `0x370` | `EPAS3P` | TX | nag 回声所在的 Chassis CAN 帧（3.5、12.2） |
+| 921 | `0x399` | `ISA_speedLimit` / `DAS_status` | TX/RX | 按硬件代际分派：Legacy/HW3 读 DAS 状态，HW4 走 ISA 速度警告抑制（2.7） |
+| 1016 | `0x3F8` | `UI_driverAssistControl` | TX | HW3/HW4 的第二条监听帧；telemetry-off 涉及的位在其中（2.4） |
+| 962 | `0x3C2` | `VCLEFT_switchStatus` | TX | 工具写入以模拟转向柱按键（ScrollPress AP），并决定可见总线（11.5、12.3） |
+| 880 | `0x370` | `EPAS3P_sysStatus` | TX | nag 回声所在的 Chassis CAN 帧（3.5、12.2） |
+| 923 | `0x39B` | `DAS_status` | RX | HW4/Highland HW3 的 AP 状态，AP-First（14.x）读它判断 AP 是否已接合（1.4） |
 | 792 | `0x318` | `GTW_carState` | RX | OTA 检测；新车上 byte6 是滚动计数器（6.3、14.2） |
 | 817 | `0x331` | `DAS_autopilotConfig` | TX | TLSSC Restore（1.4、14.2） |
 | 2047 | `0x7FF` | `GTW_carConfig` | TX | GTW Config Replay（1.4） |
+| 787 | `0x313` | `UI_trackModeSettings` | TX | Track Mode：平衡/稳定/散热，重算校验和，走 Vehicle 总线 |
+
+**方向列的 TX/RX 是"工具"视角**：TX＝工具发送、RX＝工具接收。同一 ID 在不同硬件代际下角色会互换——`0x399` 在 Legacy/HW3 上工具只读，在 HW4 上还要写 ISA 抑制位，这是 2.7 那段代码存在的理由。
 
 **一处上游自身的命名分歧先记下来**：flipper 的源码注释把选择位所在帧写作 `DAS_autopilotControl`（`fsd_can_ops.h:55`），同一仓库的 README 信号表写作 `UI_autopilotControl`（`README.md:315`）——同一帧（`0x3FD` / `0x3EE`），两种叫法。读源码以注释为准，检索上游文档用后者。
 
