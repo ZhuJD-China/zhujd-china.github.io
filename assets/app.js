@@ -839,10 +839,12 @@
     });
   }
 
-  function renderError(shell, msg) {
+  /* msg 允许 HTML：调用方传 bi() 的双语片段，此处不再转义
+       （若将来接入 URL 参数等动态内容，需在调用方自行 escapeHTML） */
+function renderError(shell, msg) {
     shell.innerHTML =
       '<div class="post-loading"><div class="empty-glyph"><img src="logo.png" alt="logo"></div><p>' +
-      escapeHTML(msg) + '</p></div>';
+      msg + '</p></div>';
   }
 
   /* ---------- 阅读进度条 ---------- */
