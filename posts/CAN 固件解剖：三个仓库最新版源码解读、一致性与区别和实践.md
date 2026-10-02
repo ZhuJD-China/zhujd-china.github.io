@@ -7,7 +7,7 @@ order: 3
 excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际最新版重新钉死行号：tesla-open-can-mod 的 815e000、flipper-tesla-fsd 的 ffbb24e（v2.16-beta.34）、ev-open-can-tools 的 6d37392（v4.0.0-beta.3——它不在默认分支上，main 落后 14 个提交）。三份源码用同一套方法读：地图、启动/运行/业务三层序列、位操作与校验和横切面；再把三者的一致骨架和五条分化维度摊开对照；最后落到一台具体车上——China HW4.0、2025 款 Model 3、2026.2.11 的选型、购买、X179 接线与烧录，附实跑数据汇总与外部引用出处。
 ---
 
-《自动驾驶专栏》第三篇，2026-10-01。围绕同一条 CAN 总线的公开实现不止一个，本文考察其中三个：PlatformIO 固件工程 `tesla-open-can-mod`、Flipper Zero 应用 `flipper-tesla-fsd`、ESP-IDF 固件平台 `ev-open-can-tools`——三者形态差异显著，分别采用编译期选型、运行时菜单与网页开关。三份源码作逐行解剖：并列后可以看到，收发序列集中于同一批文件，抽象骨架高度重合，分化集中在少数几条明确的维度上；最后落到一台具体车辆（China HW4.0、2025 款 Model 3、2026.2.11），完成选型、采购、接线与烧录的全过程记录。
+《自动驾驶专栏》第三篇，2026-10-01。原理一句话先给：车机上的"已勾选"只是一帧 CAN 报文里的一个比特，所有工具做的事情都是让固件不再去看那一帧；而权益与地域围栏都不在这一帧里——这就是第 1 节的"一条链路、三道门"。围绕同一条 CAN 总线的公开实现不止一个，本文考察其中三个：PlatformIO 固件工程 `tesla-open-can-mod`、Flipper Zero 应用 `flipper-tesla-fsd`、ESP-IDF 固件平台 `ev-open-can-tools`——三者形态差异显著，分别采用编译期选型、运行时菜单与网页开关。三份源码作逐行解剖：并列后可以看到，收发序列集中于同一批文件，抽象骨架高度重合，分化集中在少数几条明确的维度上；最后落到一台具体车辆（China HW4.0、2025 款 Model 3、2026.2.11），完成选型、采购、接线与烧录的全过程记录。
 
 **结论前置。**下表六行是全文的结论，先于证据给出，每一行标注可回查的章节：
 
@@ -26,7 +26,7 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 
 **第一部分 · 范围与关键分歧**
 
-- **0. 三个版本，先钉死** —— 三个仓库的 commit / tag、全文的证据分档约定、样本冻结背后的生态下架
+- **0. 三个版本，先钉死** —— 三个仓库的 commit / tag、全文的证据分档约定、样本冻结背后的生态下架、帧 ID 与术语对照
 - **1. 在中国"开启"FSD：一条链路，三道门** —— 勾选位、权益与地域围栏三道门的可动性
 
 **第二部分 · 逐仓库解剖**
@@ -52,7 +52,7 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 - **11. 选什么、买什么** —— 主方案与代价、清单、线材与五套备选
 - **12. 接线：从 X179 到螺丝端子** —— 位置口径、引脚表、终结电阻、供电与十步序列
 - **13. 烧录与上电：两条路** —— Web Flasher 与本地编译，以及两处文档裂缝
-- **14. 板子与车上的操作流程，以及仓库的指南到此为止** —— dashboard 四步、运行约束与边界
+- **14. 板子与车上的操作流程，以及仓库的指南到此为止** —— dashboard 四步、运行约束、抓帧回放与边界
 
 **第六部分 · 出处与总结**
 
@@ -107,6 +107,36 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 2. 第 9 节引用的 `jvanakker` 失效标注（"2026.8.6 与 2026.2.9.x 及以上已不可用"）出自同一个镜像 README 的 `⚠️ UPDATE` 段，**指涉对象是 CanFeather 原始固件**，不是本文第 2 节样本的代码；证据等级维持社区回报。
 3. flipper 把 ev-open 称作 upstream（`:361`），第 5 节那张"几乎能互相覆盖"的骨架表因此有了注脚：**同源，不是巧合**。
 
+### 0.4 帧 ID 与术语对照
+
+后文引用帧时，本文先给十进制（与三份源码里的 `frame.id == ...` 一致），再括注上游文档惯用的十六进制；两者是纯算术换算（`0x3FD` = 3×256 + 0xFD = 1021）。信号名与方向取自 `flipper` 的 ID 表（`README.md:312-323`，钉在 `ffbb24e`）：
+
+| 十进制 | 十六进制 | 信号名 | 方向 | 本文出现处 |
+| --- | --- | --- | --- | --- |
+| 1021 | `0x3FD` | `UI_autopilotControl` | TX | 选择位所在帧，HW3/HW4（1.1、2.4） |
+| 1006 | `0x3EE` | `UI_autopilotControl` | TX | 同上，Legacy HW1/HW2（2.4） |
+| 921 | `0x399` | ISA | TX | HW4 速度档与 ISA 校验和（2.7） |
+| 1016 | `0x3F8` | 遥测标志（clip / trip / road-segment） | TX | HW3/HW4 的第二条监听帧（2.4） |
+| 962 | `0x3C2` | 转向柱输入 | RX | 可见总线与 ScrollPress AP（11.5、12.3） |
+| 880 | `0x370` | `EPAS3P` | TX | nag 回声所在的 Chassis CAN 帧（3.5、12.2） |
+| 792 | `0x318` | `GTW_carState` | RX | OTA 检测；新车上 byte6 是滚动计数器（6.3、14.2） |
+| 817 | `0x331` | `DAS_autopilotConfig` | TX | TLSSC Restore（1.4、14.2） |
+| 2047 | `0x7FF` | `GTW_carConfig` | TX | GTW Config Replay（1.4） |
+
+**一处上游自身的命名分歧先记下来**：flipper 的源码注释把选择位所在帧写作 `DAS_autopilotControl`（`fsd_can_ops.h:55`），同一仓库的 README 信号表写作 `UI_autopilotControl`（`README.md:315`）——同一帧（`0x3FD` / `0x3EE`），两种叫法。读源码以注释为准，检索上游文档用后者。
+
+读本文需要的七个术语：
+
+| 术语 | 在本文与源码里的具体含义 |
+| --- | --- |
+| 仲裁 ID（arbitration ID） | CAN 帧的地址字段，代码里就是 `frame.id` |
+| 数据长度码（DLC） | 帧的数据字节数，代码里 `frame.dlc`；多处用 `dlc < 5` / `< 8` 提前返回 |
+| 多路复用（mux） | 一帧 ID 用 `data[0]` 低 3 位（`data[0] & 0x07`）区分用途，mux 0 / 1 / 2 各是一组语义 |
+| 绝对位号 | 这一层没有 DBC 文件，"起始位 + 长度"已被手工展开成比特序号，如 `setBit(frame, 46, true)`（5.1） |
+| 读-改-重发（read-modify-retransmit，RMR） | 三家工具的核心动作：收到帧 → 改若干比特 → 立即回发；因此发送方多为工具自己 |
+| 滚动计数器（rolling counter） | 帧内逐帧递增的防伪字段；工具回发时必须跟着递增，否则车端判为无效帧 |
+| 显性 / 隐性（dominant / recessive） | CAN 用单线上的两种电平表示逻辑 0 与 1，靠"线与"完成多节点仲裁，优先级由 ID 决定 |
+
 ---
 
 ## 1. 在中国"开启"FSD：一条链路，三道门
@@ -115,7 +145,7 @@ excerpt: 围绕同一条 CAN 总线的三个仓库，我按 2026-10-01 的实际
 
 ### 1.1 一条链路，三道门
 
-**先说链路。** 车机界面上那个 FSD 勾选框本身不改变车辆行为，它只是通过一帧 `DAS_autopilotControl` 报文告诉车上的自动驾驶计算机"用户已经勾选"——状态落在 `data[4]` 的第 6 位（`can_helpers.h:21`、`fsd_can_ops.h:62`；`ev-open-can-tools` 读第 5 位、函数名 `isADSelectedInUI`）。
+**先说链路。** 车机界面上 FSD 那个勾选框本身不改变车辆行为，它只是通过一帧 `UI_autopilotControl`（CAN ID `0x3FD`，即十进制 1021；Legacy 走 `0x3EE` = 1006，帧 ID 与信号名对照见 0.4）告诉车上的自动驾驶计算机"用户已经勾选"——这个状态落在 `data[4]` 的第 6 位（`can_helpers.h:21`、`fsd_can_ops.h:62`；`ev-open-can-tools` 读第 5 位、函数名 `isADSelectedInUI`）。
 
 固件要做的只有一件事：读这个位，决定后续帧要不要按"已选中"处理。三个仓库都把它抽成一个无状态判定函数（逐字对照见 1.2）。**所有"在中国开启 FSD"的固件侧手段，动作都只有一个：让这个函数不看帧、直接返回 `true`**；随后的注入、改比特、解除 nag 都在这条分支的下游。
 
@@ -196,6 +226,11 @@ static inline bool tesla_is_fsd_selected(const uint8_t* data, uint8_t dlc, bool 
 | 2026.14.x and newer | FSD unlock blocked by the activation preflight and an off-CAN region lock; nag killer / TLSSC still work | `:430` |
 
 `:430` 的 `off-CAN region lock` 是本节的关键约束：在该版本区间，地域锁不由总线帧表达，第 1.2 节的覆写路径对它不生效。`.catalog/README.md:7` 的 `it does not unlock FSD on Tesla firmware 2026.14 and newer` 与之一致，两处独立表述互相印证。
+
+上游为这条分界线准备的不是"解锁"，而是两个绕开手段——它们正好划出了"固件还能做什么"的上界：
+
+- **AP-First (14.x)**（`README.md:123`）：把 `0x3FD` 的注入推迟到 AP 已被接合之后，README 标注它 **"Required for Tesla firmware 2026.14.x"**。它改的是注入时机，不改地域锁本身。
+- **GTW Config Replay**（`README.md:124`，v2.15 起由 "Ban Shield" 改名）：监视 `0x7FF` `GTW_carConfig`，在网关发出被改动的帧时实时重放事先学到的健康广播。README 自陈的边界写得很清楚——**只作用在 CAN 广播层，不撤销 NVRAM 或服务端的封禁状态，也不阻止封禁**。
 
 ### 1.5 本节结论
 
@@ -1043,7 +1078,7 @@ include/plugin_engine.h:747:5: error: 'strlcpy' was not declared in this scope; 
 
 `strlcpy` 是 BSD/newlib 函数，ESP-IDF 里有，本机的 MinGW g++ 没有；Linux 上 glibc 2.38 之后也有。所以这大概率是平台相关的——但在我这台 Windows 上，它的 native 套件只能过 7/9。从 `main` 到 `v4.0.0-beta.3` 跨了 17 天、14 个提交，这处没修。
 
-二、`scripts/minify_dashboard.py` 在中文 Windows 上撞 GBK。报错 `UnicodeDecodeError: 'gbk' codec can't decode byte 0xa6`——脚本 `open()` 不带 `encoding=`，本机默认编码是 GBK。`set PYTHONUTF8=1` 可绕过。这类问题 README 里不可能写，只能撞一次记一次。
+二、`scripts/minify_dashboard.py` 在中文 Windows 上因编码失败。报错 `UnicodeDecodeError: 'gbk' codec can't decode byte 0xa6`——脚本 `open()` 不带 `encoding=`，本机默认编码是 GBK。`set PYTHONUTF8=1` 可绕过。这类问题 README 里不可能写，只能实跑一次记录一次。
 
 ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓表同源）：`2026.2.11` 全仓 0 处、`X179` 0 处；`HW4` 有 224 处——支持很扎实，只是没落到那个具体 OTA 版本。
 
@@ -1146,7 +1181,7 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 | 测试 | 99 断言 / 107 次执行 | 827 断言（648 C 版 + 179 C++ 版；另有 10 个板级 env） | 17 个套件目录 / 249 用例（2 个套件编译失败） |
 | 代码规模 | 7 文件 / 301 行业务（`handlers.h`） | 1344 行业务 + 1110 行副本 | 1218 行业务 + 1641 行插件 |
 
-**这个矩阵就是三个仓库的分野：**`tesla-open-can-mod` 是一个能跑通的最小实现，flipper 是一个带运行时治理的完整应用，ev-open 是一个带面板和插件的平台。功能面越宽，需要读的源码越多；但功能面越窄，越容易一眼看全它到底发了什么。
+**这个矩阵就是三个仓库的分野：**`tesla-open-can-mod` 是一个能跑通的最小实现，flipper 是一个带运行时治理的完整应用，ev-open 是一个带面板和插件的平台。功能面越宽，需要读的源码越多；功能面越窄，越容易完整判定它究竟发出了什么。
 
 ### 6.5 维度五：许可证与发布
 
@@ -1158,7 +1193,7 @@ ev-open 对版本与车型的记载也几乎是空的（与第 9 节那张三仓
 
 许可证这一栏是三者唯一完全收敛的地方——三家都是 GPL-3.0。但中间那一格暴露了一个方法陷阱：GitHub 的 REST API 对 flipper 返回的 `license` 是 `NOASSERTION`，因为它的 `LICENSE` 只有 929 B、是那段"如何套用本许可"的说明而非许可全文。任何只靠 API 做许可证清点的调研，都会把星最多的那个（1094★）报告成"许可证未声明"——而它明明白白写着 GPLv3。本表因此按文件本身统计，不采信 API 字段。
 
-发布节奏的分化才是真差异——表右两列逐格都写着："这个仓库还活着吗"和"代码读起来怎么样"是两个独立问题，前一个往往更致命。
+发布节奏的分化才是真差异——表右两列逐格都写着："这个仓库是否还在维护"和"代码质量如何"是两个独立问题，前一个往往更致命。
 
 ## 7. 定位：三个仓库在哪一层
 
@@ -1204,13 +1239,13 @@ ev-open 那 2 个失败是真编译错误，根因就是 4.6 节的 `strlcpy`：
 | `JordanzhaoD` | — | `waveshare_single_can_standalone`（`esp32s3box`，16MB） | **SUCCESS**，RAM 15.3% / Flash 28.8% |
 | `flipper-tesla-fsd` | `ffbb24e`（v2.16-beta.34） | `waveshare-s3-can` + 其余 9 个 | **10/10**（`waveshare-s3-can` RAM 37.4% / Flash 28.0%） |
 | `ev-open-can-tools` | `6d37392`（`dev`） | `waveshare_ESP32_S3_RS485_CAN`、`esp32_ext_mcp2515`、`esp32_twai` | **3/3**（依次 RAM 22.6% / Flash 83.7%、22.7% / 42.4%、24.6% / 84.6%） |
-| **合计** | | **18 次板级构建** | **17/18**，唯一失败是 `feather_rp2040_can` 的死包名 |
+| **合计** | | **18 次板级构建** | **17/18**，唯一失败是 `feather_rp2040_can` 的失效包名 |
 
 四个 ESP32-S3 目标全部通过，`TX=GPIO15`、`RX=GPIO16` 这组引脚是三个仓库各自独立给出的、交叉印证。这是"能编译通过"的最强证据——不是读 README 说的，是链接器和 esptool 说的。
 
 ### 8.3 环境与六条报错
 
-环境：Windows 11，2026-09-30 至 2026-10-01，PlatformIO Core 6.2.0，Python 3.12.10（`PYTHONUTF8=1`，否则 `minify_dashboard.py` 撞 GBK），主机编译器 MinGW-w64 GCC 16.2.0，代理 `http://127.0.0.1:10808`。上表全部于 2026-10-01 在第 0 节钉死的三个 commit 上重跑。
+环境：Windows 11，2026-09-30 至 2026-10-01，PlatformIO Core 6.2.0，Python 3.12.10（须 `PYTHONUTF8=1`，否则 `minify_dashboard.py` 因默认编码失败），主机编译器 MinGW-w64 GCC 16.2.0，代理 `http://127.0.0.1:10808`。上表全部于 2026-10-01 在第 0 节钉死的三个 commit 上重跑。
 
 六条报错按性质分两组。A 组四条是 onboarding / 环境类，照做就能过：
 
@@ -1221,7 +1256,7 @@ ev-open 那 2 个失败是真编译错误，根因就是 4.6 节的 `strlcpy`：
 | `UnicodeDecodeError: 'gbk' codec can't decode byte 0xa6` | `ev-open` `scripts/minify_dashboard.py` | `set PYTHONUTF8=1` |
 | `ModuleNotFoundError: No module named 'csscompressor'` / `'rjsmin'` | `JordanzhaoD` 网页压缩脚本没声明依赖 | `pip install csscompressor jsmin rjsmin` |
 
-B 组两条，是仓库或环境自身有误，与操作无关。第一条是 `tesla-open-can-mod` 的死包名——与第 12 节的 X179 矛盾、第 13 节的两处裂缝同类，都是文档/配置与现实对不上：
+B 组两条，是仓库或环境自身有误，与操作无关。第一条是 `tesla-open-can-mod` 的失效包名——与第 12 节的 X179 矛盾、第 13 节的两处裂缝同类，都是文档/配置与现实对不上：
 
 ```
 *** UnknownPackageError: Could not find the package with 'autowp/MCP2515' requirements
@@ -1440,7 +1475,7 @@ flipper 那三行我在 `ffbb24e` 上逐行读、可 grep 复现；其余三个�
 
 而两份指南自称的车型还是一致的：`guides/INSTALLATION_GUIDE_M4_CAN.md:3` 写"2023 Tesla Model 3 with HW3"，`guides/WIRING_GUIDE.md:5` 写"Photos were taken on a 2023 Model 3 (non-Highland)"。同一台车，两个位置。
 
-这一处的性质与下面两处不同：那两处是"文档指向不存在的 API"，读者会在编译期撞墙、当场发现；这一处是"文档指向错误的物理位置"，后果是拆错饰板、耗时而无从定位。
+这一处的性质与下面两处不同：那两处是"文档指向不存在的 API"，读者会在编译期即报错、当场发现；这一处是"文档指向错误的物理位置"，后果是拆错饰板、耗时而无从定位。
 
 两份指南都附了 Enhance Auto 的实拍视频，实车动手前以视频为准，不要以文字为准。
 
@@ -1494,6 +1529,8 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 
 `HARDWARE.md:633`："Tesla's CAN buses are already terminated. Do not add a second 120 Ω terminator." 多数后装模块出厂带终结，接车之前先关掉——微雪这块出厂是 `NC`，不用动。
 
+120 Ω 不是随手取的数：它是高速 CAN（ISO 11898）的**特性阻抗**，装在总线两端把接口阻抗匹配到线缆上，作用是抑制**信号反射**。反射叠加在有效电平上会变成误码，并直接推高错误帧计数——这正是第 12.6 节把"脱车量电阻"列为必查项的原因。
+
 `:646` 的验证法（脱车量）：CAN-H ↔ CAN-L ~120Ω = 正常（车提供终结）；~60Ω = 外接模块自带的终结器开着，关掉。
 
 ### 12.5 供电三个坑
@@ -1543,16 +1580,17 @@ X179 Pin 20 → GND ────┘   (26-pin: use Pin 26 for GND)
 
 ## 13. 烧录与上电：两条路
 
-### 13.1 路一：Web Flasher（零工具链）
+### 13.1 两条预编译路径（不装任何工具链）
 
-| | |
-| --- | --- |
-| Flasher | `https://hypery11.github.io/flipper-tesla-fsd/install/` |
-| 或 Releases 里下 `tesla-flasher.html` | `https://github.com/hypery11/flipper-tesla-fsd/releases` |
-| 浏览器 | 桌面版 **Chrome / Edge / Opera** |
-| 自己编译 | `esp32/README.md` 给的是 `pio run -e waveshare-s3-can` |
+| | 路线 A：ESP32 | 路线 B：Flipper Zero |
+| --- | --- | --- |
+| 拿什么 | 托管 Web Flasher `https://hypery11.github.io/flipper-tesla-fsd/install/`，或 Releases 里的 `tesla-flasher.html`（`README.md:231`） | Releases 里的 `tesla_mod.fap`（`README.md:225`） |
+| 怎么装 | 桌面版 **Chrome / Edge / Opera** 打开页面，按提示走 | 把 `.fap` 复制到 SD 卡 `apps/GPIO/`（`README.md:227`） |
+| 装完怎么进 | 连板子 AP，浏览器开 `192.168.4.1`（第 14.1 节） | 机上 **Apps → GPIO → Tesla Mod**（`README.md:228`） |
 
-### 13.2 路二：自己编（**这一条我实跑了**）
+两条路都不改固件源码；下面 13.2 是需要自己编的第三条。
+
+### 13.2 路三：自己编（**这一条我实跑了**）
 
 ```bash
 git clone https://github.com/hypery11/flipper-tesla-fsd.git
@@ -1561,6 +1599,8 @@ pio run -e waveshare-s3-can
 ```
 
 第 8 节记录的本机结果（在上游 `6a3404f` 上复跑）：`waveshare-s3-can` SUCCESS，RAM 37.4% / Flash 28.0%；同一棵树的其余 9 个 env 也全部 SUCCESS（10/10）。加 `-t upload` 就是烧录。
+
+Flipper 侧的本地构建是 `ufbt`（`README.md:248-249`），产物同样是 `dist/tesla_mod.fap`，放进 SD 卡 `apps/GPIO/` 即可——与 13.1 路线 B 的安装方式一致。
 
 ### 13.3 走 `tesla-open-can-mod` 的话，会撞两处裂缝
 
@@ -1576,7 +1616,7 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 ========================= [FAILED] Took 113.98 seconds =========================
 ```
 
-解开两行后同一命令成功，脚本打印 `Synced RP2040CAN.ino defines for esp32_twai: HW4`。准确表述是：堵住 `include/app.h:24` 这个洞的不是源码，而是 `scripts/platformio_sync_ino_defines.py` 把 `.ino` 的车型宏同步进 `build_flags`；把 `extra_scripts` 从 `platformio.ini` 里去掉，洞会原样露出来。
+解开两行后同一命令成功，脚本打印 `Synced RP2040CAN.ino defines for esp32_twai: HW4`。准确表述是：填补 `include/app.h:24` 这个空缺的不是源码，而是 `scripts/platformio_sync_ino_defines.py` 把 `.ino` 的车型宏同步进 `build_flags`；把 `extra_scripts` 从 `platformio.ini` 里去掉，该空缺会原样暴露。
 
 **上电之后的第一状态：只听。** `esp32/README.md:20`："The device boots in Listen-Only mode by default and will not transmit any CAN frames until the user explicitly switches to Active mode." `README.md:118` 补一句，这是 MCP2515 的硬件 listen-only 位，物理上不能 TX。上电 ≠ 会发帧，而且这一层不是软件判断——第 6 节维度三那个"运行时治理"，在这里落在了最靠近物理的地方。
 
@@ -1613,6 +1653,17 @@ File "...\scripts\platformio_sync_ino_defines.py", line 29, in _pick_one
 **这里也是仓库的指南到此为止。**再往前——上路之后 nag 是否真的不再出现、FSD 是否真的接合、某个开关在 2026.2.11 上有没有效果——不在本文范围内，仓库文档本身也没给出验证步骤，我不会替它编一份；任何关于规避检测、隐匿接入、移除车上通信模块的做法，本文一概不涉及。
 
 我能担保到 `firmware.bin` 生成、到上面每一条引用的行号为止。烧录之后车会怎么反应，见第 9 节的"未核实"。
+
+### 14.4 上车前后能做的两件事：抓帧与回放
+
+这两项在 dashboard / Flipper 菜单里就能用，不需要任何外部工具（`README.md:97-98`）：
+
+| 功能 | 行为 | 安全边界 |
+| --- | --- | --- |
+| **CAN Capture** | 把收到的每一帧录到 SD 卡 `apps_data/tesla_mod/captures/`，candump 格式 | **只读**，README 标注任何车上都可运行；录到的帧可喂给 `tools/tesla_crc_cracker.py` 做位与校验和分析 |
+| **Send Test** | 从 SD 卡读一份自写的 `.cantest` 文本 profile，回放自己构造的帧 | **默认 dry-run**；真正发送被硬门控在**已停稳（P 挡）**，且每帧发送前重新判定（fail-closed） |
+
+这也是本文方法论的延伸：要判断"某个开关在这台车上到底起没起作用"，比读文档更靠得住的做法是先抓一段帧，再看对应位有没有按预期变化。Capture 是上车前最后一个零风险动作，Send Test 则是唯一能主动验证自己判断的手段——两者都在仓库里，不需要另写代码。
 
 ---
 
