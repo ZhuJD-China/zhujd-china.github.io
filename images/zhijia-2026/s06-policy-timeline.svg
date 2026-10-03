@@ -12,7 +12,7 @@
     .dot-d{fill:#c9a96a}
     .dot-f{fill:#0b0b10;stroke:#e8e4dc;stroke-opacity:.6;stroke-width:1.6}
   </style>
-  <rect class="bg" x="0" y="0" width="1200" height="700" rx="14"/>
+  <rect class="bg" x="0" y="0" width="1200" height="740" rx="14"/>
   <text class="ttl" x="44" y="56">准入试点与强制国标：2023-11 至 2027-07</text>
   <text class="sub" x="44" y="86">实心为已发布节点，空心为已公布但尚未生效的节点；右侧一列为该节点对智驾竞争的直接影响</text>
 

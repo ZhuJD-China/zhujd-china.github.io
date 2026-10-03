@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="100%" role="img" aria-label="ISO 5725 的 trueness 与 precision 二分，以及八家厂商的落点">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 14px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .truth{fill:#1a1712;stroke:#c9a96a;stroke-opacity:.6;stroke-width:1.4}
+    .prec{fill:#14161c;stroke:#7aa2c8;stroke-opacity:.6;stroke-width:1.4}
+    .acc{fill:none;stroke:#8a8578;stroke-width:1.2;stroke-dasharray:4 3}
+    .ok{fill:#1a1712;stroke:#8fbf7a;stroke-opacity:.5;stroke-width:1}
+    .mid{fill:#14161c;stroke:#8a8578;stroke-opacity:.35;stroke-width:1}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="640" rx="14"/>
+<text class="ttl" x="44" y="50">全行业只有两个标准词，但每个厂商都另开了一套
+</text>
+<text class="sub" x="44" y="76">ISO 5725-1:2023 只定义 trueness 与 precision；它不定义 linearity，也不定义任何 3D 专用指标
+</text>
+<!-- 左：二分 -->
+<g transform="translate(44,110)">
+<text class="hd" x="0" y="0">ISO 5725-1:2023 的划分
+</text>
+<g transform="translate(0,18)">
+<rect x="0" y="0" width="270" height="112" rx="9" class="truth"/>
+<text class="hd" x="16" y="26" fill="#c9a96a">Trueness　真值度
+</text>
+<text class="sm" x="16" y="50">系统误差
+</text>
+<text class="xs" x="16" y="72">「大量测试结果的算术平均值与
+</text>
+<text class="xs" x="16" y="88">真实值或可接受参考值之间
+</text>
+<text class="xs" x="16" y="104">的一致程度」
+</text>
+</g>
+<g transform="translate(284,18)">
+<rect x="0" y="0" width="270" height="112" rx="9" class="prec"/>
+<text class="hd" x="16" y="26" fill="#7aa2c8">Precision　精密度
+</text>
+<text class="sm" x="16" y="50">随机误差
+</text>
+<text class="xs" x="16" y="72">「在规定条件下获得的测试结果
+</text>
+<text class="xs" x="16" y="88">之间的一致程度」
+</text>
+<text class="xs" x="16" y="104">「通常以标准差表示」
+</text>
+</g>
+<rect x="0" y="146" width="554" height="44" rx="8" fill="#181a14" stroke="#8a8578" stroke-opacity=".5" stroke-width="1.2"/>
+<text class="mon" x="16" y="174">accuracy = trueness + precision　（它不是一个可测的量，是一个组合）
+</text>
+<g transform="translate(0,206)">
+<rect x="0" y="0" width="554" height="70" rx="8" fill="#1d1414" stroke="#cf5a50" stroke-opacity=".4" stroke-width="1.1"/>
+<text class="hd" x="16" y="24" fill="#cf5a50">ISO 没有定义的三个东西
+</text>
+<text class="xs" x="16" y="46">linearity —— 3D 领域无 ISO 级定义，是从位移传感器行业继承的厂商约定（% of F.S.）
+</text>
+<text class="xs" x="16" y="62">spatial resolution / point-to-point distance —— 全部为厂商自定；重复性 / 平面度另见 VDI/VDE 2634（付费）
+</text>
+</g>
+<g transform="translate(0,292)">
+<rect x="0" y="0" width="554" height="62" rx="8" fill="#14161c" stroke="#8a8578" stroke-opacity=".45" stroke-width="1.1"/>
+<text class="sm" x="16" y="22">交叉验证：Zivid 的 datasheet 尾注直接引了这条——
+</text>
+<text class="xs" x="16" y="42">「术语 accuracy 由一个精度分量和一个真值度分量组成，如 ISO 5725 所述」
+</text>
+<text class="xs" x="16" y="56" fill="#8a8578">另一家独立引用同一句话的厂商：Vicon（同 ISO 3534 体系）
+</text>
+</g>
+</g>
+<!-- 右：八家落点 -->
+<g transform="translate(650,110)">
+<text class="hd" x="0" y="0">八家厂商落在哪里
+</text>
+<g transform="translate(0,20)">
+<text class="xs" x="0" y="0">厂商
+</text>
+<text class="xs" x="200" y="0">系统误差
+</text>
+<text class="xs" x="290" y="0">随机误差
+</text>
+<text class="xs" x="380" y="0">两者混合 / 自定
+</text>
+</g>
+<g transform="translate(0,12)">
+<line x1="0" y1="4" x2="506" y2="4" stroke="#8a8578" stroke-opacity=".3"/>
+</g>
+<g transform="translate(0,28)">
+<text class="sm" x="0" y="16" fill="#8fbf7a">Zivid
+</text>
+<circle cx="215" cy="12" r="6" fill="#8fbf7a"/>
+<circle cx="305" cy="12" r="6" fill="#8fbf7a"/>
+<text class="xs" x="200" y="36" fill="#8fbf7a">trueness 再拆三层，并给三档温度范围
+</text>
+</g>
+<g transform="translate(0,74)">
+<text class="sm" x="0" y="16" fill="#8fbf7a">Mech-Eye
+</text>
+<circle cx="215" cy="12" r="6" fill="#8fbf7a"/>
+<circle cx="305" cy="12" r="6" fill="#8fbf7a"/>
+<text class="xs" x="200" y="36" fill="#8fbf7a">唯一同时给「单点」与「区域」两档重复性
+</text>
+</g>
+<g transform="translate(0,120)">
+<text class="sm" x="0" y="16" fill="#8a8578">Photoneo
+</text>
+<circle cx="420" cy="12" r="6" fill="#8a8578"/>
+<text class="xs" x="0" y="34" fill="#8a8578">calibration accuracy 一个词装两者
+</text>
+</g>
+<g transform="translate(0,172)">
+<text class="sm" x="0" y="16" fill="#8a8578">Basler
+</text>
+<circle cx="420" cy="12" r="6" fill="#8a8578"/>
+<text class="xs" x="0" y="34" fill="#8a8578">定义最接近 ISO，但两个词都叫「精度系」
+</text>
+</g>
+<g transform="translate(0,224)">
+<text class="sm" x="0" y="16" fill="#8a8578">RealSense
+</text>
+<circle cx="420" cy="12" r="6" fill="#8a8578"/>
+<text class="xs" x="0" y="34" fill="#8a8578">Z-accuracy 是系统、RMS 是随机，分开列但未如此命名
+</text>
+</g>
+<g transform="translate(0,276)">
+<text class="sm" x="0" y="16" fill="#8a8578">KEYENCE
+</text>
+<circle cx="420" cy="12" r="6" fill="#8a8578"/>
+<text class="xs" x="0" y="34" fill="#8a8578">用 repeatability + linearity，绕开 accuracy 一词
+</text>
+</g>
+<g transform="translate(0,328)">
+<text class="sm" x="0" y="16" fill="#8a8578">Cognex
+</text>
+<circle cx="420" cy="12" r="6" fill="#8a8578"/>
+<text class="xs" x="0" y="34" fill="#8a8578">repeatability + linearity，同 KEYENCE 一路
+</text>
+</g>
+<g transform="translate(0,380)">
+<text class="sm" x="0" y="16" fill="#cf5a50">Sony
+</text>
+<text class="mor" x="0" y="34">无定义 —— 传感器层不定义系统级精度
+</text>
+</g>
+</g>
+<text class="foot" x="44" y="556">口径：ISO 5725-1:2023（Edition 2, 2023-07）条款 0.1/0.2 原文。该标准付费（CHF 135），iso.org 与 OBP 对自动抓取返回 403；
+</text>
+<text class="foot" x="44" y="576">上述原文经 ANSI 官方 preview PDF、ISO OBP 索引页与第三方镜像三处独立副本互证，三处文字一致。
+</text>
+<text class="foot" x="44" y="596">版本不可混引——1994 版措辞不同。linearity 无 ISO 定义的依据：NIST 激光三角探头论文与 SinceVision 三分法对照。
+</text>
+<text class="foot" x="44" y="616">右栏八家落点依据见正文第 7 节与第 8 节逐条引用；Zivid 的 trueness 三层拆分引自其 Precision &amp; Trueness 博客；Mech-Eye 两档重复性引自 Camera Accuracy 页。
+</text>
+</svg>

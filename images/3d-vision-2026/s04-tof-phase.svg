@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 626" width="100%" role="img" aria-label="ToF 相位模型：调制频率与无模糊距离的耦合，误差的四个因子">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mono{fill:#c9a96a;font:600 15px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .ax{fill:none;stroke:#8a8578;stroke-width:1.2}
+    .grid{fill:none;stroke:#8a8578;stroke-opacity:.18;stroke-width:1}
+    .inv{fill:none;stroke:#c9a96a;stroke-width:2.4}
+    .cellA{fill:#1a1712;stroke:#c9a96a;stroke-opacity:.5;stroke-width:1.2}
+    .cellC{fill:#1d1414;stroke:#cf5a50;stroke-opacity:.5;stroke-width:1.2}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="626" rx="14"/>
+<text class="ttl" x="44" y="50">ToF：频率与无模糊距离是一对反比
+</text>
+<text class="sub" x="44" y="76">它不需要基线，所以误差结构与前两条都不同——但相位缠绕一旦判错，直接错一个 d_MAX
+</text>
+<!-- 左：耦合 -->
+<text class="hd" x="44" y="116">两个公式，一个取舍
+</text>
+<g transform="translate(44,132)">
+<rect class="cellA" x="0" y="0" width="516" height="52" rx="8"/>
+<text class="mono" x="16" y="32">z = c·φ / (2π·f_M)
+</text>
+<text class="xs" x="330" y="32">相位深度公式
+</text>
+</g>
+<g transform="translate(44,194)">
+<rect class="cellA" x="0" y="0" width="516" height="52" rx="8"/>
+<text class="mono" x="16" y="32">d_MAX = c / (2·f_M)
+</text>
+<text class="xs" x="330" y="32">无模糊距离
+</text>
+</g>
+<g transform="translate(96,450)">
+<line class="grid" x1="0" y1="-180" x2="0" y2="0"/>
+<line class="grid" x1="0" y1="-115" x2="440" y2="-115"/>
+<line class="grid" x1="0" y1="-65" x2="440" y2="-65"/>
+<line class="grid" x1="110" y1="0" x2="110" y2="-180"/>
+<line class="grid" x1="220" y1="0" x2="220" y2="-180"/>
+<line class="grid" x1="330" y1="0" x2="330" y2="-180"/>
+<line class="grid" x1="440" y1="0" x2="440" y2="-180"/>
+<line class="ax" x1="-16" y1="0" x2="470" y2="0"/>
+<line class="ax" x1="0" y1="14" x2="0" y2="-196"/>
+<text class="sm" x="0" y="20" text-anchor="middle">20
+</text>
+<text class="sm" x="220" y="20" text-anchor="middle">60
+</text>
+<text class="sm" x="440" y="20" text-anchor="end">120 MHz
+</text>
+<text class="sm" x="225" y="42" text-anchor="middle">调制频率 f_M
+</text>
+<text class="sm" x="-40" y="-90" text-anchor="middle" transform="rotate(-90 -40 -90)">d_MAX
+</text>
+<path class="inv" d="M10 -178 C120 -134 240 -96 430 -64"/>
+<text class="moc" x="180" y="-140">50 MHz → 3 m（TI 官方算例）
+</text>
+<text class="moc" x="180" y="-120">100 MHz → 1.5 m　120 MHz → 1.25 m
+</text>
+<circle cx="330" cy="-88" r="4.5" fill="#7aa2c8"/>
+<text class="moc" x="340" y="-80">IMX556 最高 100 MHz
+</text>
+<circle cx="435" cy="-65" r="4.5" fill="#c9a96a"/>
+<text class="mono" x="300" y="-168">IMX570 最高 120 MHz
+</text>
+</g>
+<!-- 右：四个因子 -->
+<g transform="translate(620,116)">
+<text class="hd" x="0" y="0">误差的四个因子（脉冲式 iToF）
+</text>
+<text class="mono" x="0" y="30" fill="#a09b8d">σ_d = (d_MAX / A·R) · √((A·R·k₁(d) + B·k₂(d)) / N)
+</text>
+<g transform="translate(0,48)">
+<rect x="0" y="0" width="536" height="42" rx="7" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.1"/>
+<text class="mono" x="14" y="26">A　信号项
+</text>
+<text class="sm" x="150" y="26">线性　σ ∝ 1/A
+</text>
+</g>
+<g transform="translate(0,98)">
+<rect x="0" y="0" width="536" height="42" rx="7" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.1"/>
+<text class="mono" x="14" y="26">R　反射率
+</text>
+<text class="sm" x="150" y="26">平方根　σ ∝ 1/√R
+</text>
+<text class="xs" x="330" y="26">实测：不锈钢板误差最大 13.4 mm
+</text>
+</g>
+<g transform="translate(0,148)">
+<rect x="0" y="0" width="536" height="42" rx="7" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.1"/>
+<text class="mono" x="14" y="26">N　重复次数
+</text>
+<text class="sm" x="150" y="26">平方根　σ ∝ 1/√N
+</text>
+<text class="xs" x="330" y="26">TI：SNR 只按 √ 提升
+</text>
+</g>
+<g transform="translate(0,198)">
+<rect x="0" y="0" width="536" height="42" rx="7" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.1"/>
+<text class="mono" x="14" y="26">B　背景项
+</text>
+<text class="sm" x="150" y="26">与信号竞争，环境光即背景
+</text>
+</g>
+<g transform="translate(0,262)">
+<rect class="cellC" x="0" y="0" width="536" height="94" rx="8"/>
+<text class="hd" x="14" y="24" fill="#cf5a50">一个反直觉的实测方向
+</text>
+<text class="sm" x="14" y="48" fill="#cf5a50">不是反射率太低测不准，而是反射率太高（镜面）测不准：
+</text>
+<text class="sm" x="14" y="68" fill="#cf5a50">「反射率增加 → 接收到的光子数减少 → 误差更大」
+</text>
+<text class="xs" x="14" y="86">与第二篇第 9 节「镜面件要用同轴光」是同一物理机理
+</text>
+</g>
+</g>
+<rect x="44" y="530" width="1112" height="34" rx="7" fill="#1d1414" stroke="#cf5a50" stroke-opacity=".4" stroke-width="1.1"/>
+<text class="sm" x="60" y="551" fill="#cf5a50">相位缠绕：d = d_TOF + n(i,j)·d_MAX。级次 n 判错就直接错一个 d_MAX——Basler 把这一类失效单列为影响因素「Non-ambiguity」
+</text>
+<text class="foot" x="44" y="592">口径：两个公式与相位缠绕式引自 Horaud et al. ToF 综述（arXiv:2012.06772）；脉冲式精度式引自 Bronzi et al. SPAD 相机论文式(4)；频率范围引自 Sony iToF 传感器规格表；50 MHz→3 m 算例与「SNR
+</text>
+<text class="foot" x="44" y="610">只按 √ 提升」引自 TI《Introduction to the Time-of-Flight Camera》SLOA190 / SBAU219D；13.4 mm 不锈钢实测引自 Sensors 17(1):92；Non-ambiguity 引自 Basler Influencing Factors。
+</text>
+</svg>

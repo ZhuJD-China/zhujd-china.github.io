@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="镜头、光源、标定三条链与它们的交点">
-  <style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 636" width="100%" role="img" aria-label="镜头、光源、标定三条链与它们的交点">
+<style>
     .bg{fill:#0b0b10}
     .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
     .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -20,91 +20,127 @@
     .mono2{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
     .mono3{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
   </style>
-  <rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
-  <text class="ttl" x="44" y="52">三条链，一个换算</text>
-  <text class="sub" x="44" y="80">物方毫米 → 放大率 → 像方光子 → 相机系数 → 物方毫米。任一环不确定，最后的毫米就不确定</text>
-
-  <!-- 链 1：镜头 -->
-  <text class="hd" x="44" y="122" fill="#c9a96a">链一　镜头</text>
-  <rect class="b1" x="44" y="134" width="1112" height="86" rx="10"/>
-  <g class="mono">
-    <text x="66" y="162">视野 FOV</text>
-    <text x="240" y="162">靶面 H</text>
-    <text x="404" y="162">f = H × WD / FOV</text>
-    <text x="640" y="162">放大率 m = H / FOV</text>
-    <text x="880" y="162">空间分辨率 mm/px</text>
-    <text x="404" y="196">像素数 × 像元 → 靶面</text>
-    <text x="640" y="196">Nyquist = 1000/(2p)</text>
-    <text x="880" y="196">2/3 判据 + MTF 30%</text>
-  </g>
-  <g class="arrow">
-    <path d="M186 156 L232 156 L232 150 L242 156 L232 162 L232 156 Z"/>
-    <path d="M330 156 L376 156 L376 150 L386 156 L376 162 L376 156 Z"/>
-    <path d="M560 156 L612 156 L612 150 L622 156 L612 162 L612 156 Z"/>
-    <path d="M790 156 L852 156 L852 150 L862 156 L852 162 L852 156 Z"/>
-    <path d="M470 190 L612 190 L612 184 L622 190 L612 196 L612 190 Z"/>
-    <path d="M790 190 L852 190 L852 184 L862 190 L852 196 L852 190 Z"/>
-  </g>
-  <text class="xs" x="66" y="182">第 2–4 节</text>
-  <text class="xs" x="880" y="182">30 mm 视野 / 0.05 mm 公差</text>
-
-  <!-- 链 2：光源 -->
-  <text class="hd" x="44" y="252" fill="#7aa2c8">链二　光源</text>
-  <rect class="b2" x="44" y="264" width="1112" height="86" rx="10"/>
-  <g class="mono2">
-    <text x="66" y="292">被测面特征</text>
-    <text x="240" y="292">照明几何</text>
-    <text x="404" y="292">光源类型 / 波长</text>
-    <text x="640" y="292">曝光 t &lt; 3p/(m·v₀)</text>
-    <text x="880" y="292">光子数 μ_p</text>
-    <text x="240" y="326">八种：明/暗/背/同轴/环/掠/散/穹顶</text>
-    <text x="404" y="326">625 / 850 / 525 nm</text>
-    <text x="640" y="326">频闪脉宽与占空比</text>
-    <text x="880" y="326">SNR 与 DSNU</text>
-  </g>
-  <g class="arrow" fill="#7aa2c8">
-    <path d="M186 286 L232 286 L232 280 L242 286 L232 292 L232 286 Z"/>
-    <path d="M356 286 L376 286 L376 280 L386 286 L376 292 L376 286 Z"/>
-    <path d="M562 286 L612 286 L612 280 L622 286 L612 292 L612 286 Z"/>
-    <path d="M790 286 L852 286 L852 280 L862 286 L852 292 L852 286 Z"/>
-    <path d="M356 320 L376 320 L376 314 L386 320 L376 326 L376 320 Z"/>
-    <path d="M562 320 L612 320 L612 314 L622 320 L612 326 L612 320 Z"/>
-    <path d="M790 320 L852 320 L852 314 L862 320 L852 326 L852 320 Z"/>
-  </g>
-  <text class="xs" x="66" y="312">第 9–15 节</text>
-
-  <!-- 链 3：标定 -->
-  <text class="hd" x="44" y="382" fill="#cf5a50">链三　标定</text>
-  <rect class="b3" x="44" y="394" width="1112" height="86" rx="10"/>
-  <g class="mono3">
-    <text x="66" y="422">针孔 + 畸变模型</text>
-    <text x="240" y="422">张正友两阶段</text>
-    <text x="404" y="422">标定板精度 ±(1–15) µm</text>
-    <text x="640" y="422">手眼 AX = XB</text>
-    <text x="880" y="422">残差 vs 真值</text>
-    <text x="240" y="456">闭式解 → LM 优化</text>
-    <text x="404" y="456">平直度 &lt;1–30 µm</text>
-    <text x="640" y="456">10+ 位姿，旋转 ≥30°</text>
-    <text x="880" y="456">hold-out / touch test</text>
-  </g>
-  <g class="arrow" fill="#cf5a50">
-    <path d="M186 416 L232 416 L232 410 L242 416 L232 422 L232 416 Z"/>
-    <path d="M330 416 L376 416 L376 410 L386 416 L376 422 L376 416 Z"/>
-    <path d="M596 416 L612 416 L612 410 L622 416 L612 422 L612 416 Z"/>
-    <path d="M790 416 L852 416 L852 410 L862 416 L852 422 L852 416 Z"/>
-    <path d="M330 450 L376 450 L376 444 L386 450 L376 456 L376 450 Z"/>
-    <path d="M596 450 L612 450 L612 444 L622 450 L612 456 L612 450 Z"/>
-    <path d="M790 450 L852 450 L852 444 L862 450 L852 456 L852 450 Z"/>
-  </g>
-  <text class="xs" x="66" y="442">第 16–20 节</text>
-
-  <!-- 交点 -->
-  <rect x="44" y="496" width="1112" height="70" rx="10" fill="#14161c" stroke="#8a8578" stroke-opacity=".6" stroke-width="1.2"/>
-  <text class="hd" x="60" y="522">交点：一个换算，把三条链缝在一起</text>
-  <text class="mono" x="60" y="548">Z = s · f_x / (u − c_x)      物方毫米 = 格距 × 标定焦距像素 / 像素偏移</text>
-  <text class="sm" x="600" y="522">格距误差 0.1% → 全场 0.1% 尺度系统误差，且与焦距共线、优化器发现不了</text>
-  <text class="sm" x="600" y="546">焦距相对不确定度 0.67% → 45 cm 处 1–2 mm 定位不确定度（NISTIR 7197）</text>
-
-  <text class="foot" x="44" y="592">公式来源：Edmund Optics 视野/放大率应用笔记、Schneider Kreuznach Nyquist 与 DoF 缩放律、EMVA 1288 Release 3.1、OpenCV calib3d 官方文档、Zhang T-PAMI 2000（MSR-TR-98-71）、NISTIR 7197。</text>
-  <text class="foot" x="44" y="610">图为链路示意，各环节的编号节给出对应的可验算公式与厂商可核验规格；不按比例。</text>
+<rect class="bg" x="0" y="0" width="1200" height="636" rx="14"/>
+<text class="ttl" x="44" y="52">三条链，一个换算
+</text>
+<text class="sub" x="44" y="80">物方毫米 → 放大率 → 像方光子 → 相机系数 → 物方毫米。任一环不确定，最后的毫米就不确定
+</text>
+<!-- 链 1：镜头 -->
+<text class="hd" x="44" y="122" fill="#c9a96a">链一　镜头
+</text>
+<rect class="b1" x="44" y="134" width="1112" height="86" rx="10"/>
+<g class="mono">
+<text x="66" y="162">视野 FOV
+</text>
+<text x="240" y="162">靶面 H
+</text>
+<text x="404" y="162">f = H × WD / FOV
+</text>
+<text x="640" y="162">放大率 m = H / FOV
+</text>
+<text x="880" y="162">空间分辨率 mm/px
+</text>
+<text x="404" y="196">像素数 × 像元 → 靶面
+</text>
+<text x="640" y="196">Nyquist = 1000/(2p)
+</text>
+<text x="880" y="196">2/3 判据 + MTF 30%
+</text>
+</g>
+<g class="arrow">
+<path d="M186 156 L232 156 L232 150 L242 156 L232 162 L232 156 Z"/>
+<path d="M330 156 L376 156 L376 150 L386 156 L376 162 L376 156 Z"/>
+<path d="M560 156 L612 156 L612 150 L622 156 L612 162 L612 156 Z"/>
+<path d="M790 156 L852 156 L852 150 L862 156 L852 162 L852 156 Z"/>
+<path d="M470 190 L612 190 L612 184 L622 190 L612 196 L612 190 Z"/>
+<path d="M790 190 L852 190 L852 184 L862 190 L852 196 L852 190 Z"/>
+</g>
+<text class="xs" x="66" y="182">第 2–4 节
+</text>
+<text class="xs" x="880" y="182">30 mm 视野 / 0.05 mm 公差
+</text>
+<!-- 链 2：光源 -->
+<text class="hd" x="44" y="252" fill="#7aa2c8">链二　光源
+</text>
+<rect class="b2" x="44" y="264" width="1112" height="86" rx="10"/>
+<g class="mono2">
+<text x="66" y="292">被测面特征
+</text>
+<text x="240" y="292">照明几何
+</text>
+<text x="404" y="292">光源类型 / 波长
+</text>
+<text x="640" y="292">曝光 t &lt; 3p/(m·v₀)
+</text>
+<text x="880" y="292">光子数 μ_p
+</text>
+<text x="240" y="326">明/暗/背/同轴/环/掠/散/穹
+</text>
+<text x="404" y="326">625 / 850 / 525 nm
+</text>
+<text x="640" y="326">频闪脉宽与占空比
+</text>
+<text x="880" y="326">SNR 与 DSNU
+</text>
+</g>
+<g class="arrow" fill="#7aa2c8">
+<path d="M186 286 L232 286 L232 280 L242 286 L232 292 L232 286 Z"/>
+<path d="M356 286 L376 286 L376 280 L386 286 L376 292 L376 286 Z"/>
+<path d="M562 286 L612 286 L612 280 L622 286 L612 292 L612 286 Z"/>
+<path d="M790 286 L852 286 L852 280 L862 286 L852 292 L852 286 Z"/>
+<path d="M356 320 L376 320 L376 314 L386 320 L376 326 L376 320 Z"/>
+<path d="M562 320 L612 320 L612 314 L622 320 L612 326 L612 320 Z"/>
+<path d="M790 320 L852 320 L852 314 L862 320 L852 326 L852 320 Z"/>
+</g>
+<text class="xs" x="66" y="312">第 9–15 节
+</text>
+<!-- 链 3：标定 -->
+<text class="hd" x="44" y="382" fill="#cf5a50">链三　标定
+</text>
+<rect class="b3" x="44" y="394" width="1112" height="86" rx="10"/>
+<g class="mono3">
+<text x="66" y="422">针孔 + 畸变模型
+</text>
+<text x="240" y="422">张正友两阶段
+</text>
+<text x="404" y="422">标定板精度 ±(1–15) µm
+</text>
+<text x="640" y="422">手眼 AX = XB
+</text>
+<text x="880" y="422">残差 vs 真值
+</text>
+<text x="240" y="456">闭式解 → LM 优化
+</text>
+<text x="404" y="456">平直度 &lt;1–30 µm
+</text>
+<text x="640" y="456">10+ 位姿，旋转 ≥30°
+</text>
+<text x="880" y="456">hold-out / touch test
+</text>
+</g>
+<g class="arrow" fill="#cf5a50">
+<path d="M186 416 L232 416 L232 410 L242 416 L232 422 L232 416 Z"/>
+<path d="M330 416 L376 416 L376 410 L386 416 L376 422 L376 416 Z"/>
+<path d="M596 416 L612 416 L612 410 L622 416 L612 422 L612 416 Z"/>
+<path d="M790 416 L852 416 L852 410 L862 416 L852 422 L852 416 Z"/>
+<path d="M330 450 L376 450 L376 444 L386 450 L376 456 L376 450 Z"/>
+<path d="M596 450 L612 450 L612 444 L622 450 L612 456 L612 450 Z"/>
+<path d="M790 450 L852 450 L852 444 L862 450 L852 456 L852 450 Z"/>
+</g>
+<text class="xs" x="66" y="442">第 16–20 节
+</text>
+<!-- 交点 -->
+<rect x="44" y="496" width="1112" height="70" rx="10" fill="#14161c" stroke="#8a8578" stroke-opacity=".6" stroke-width="1.2"/>
+<text class="hd" x="60" y="522">交点：一个换算，把三条链缝在一起
+</text>
+<text class="mono" x="60" y="548">Z = s · f_x / (u − c_x)      物方毫米 = 格距 × 标定焦距像素 / 像素偏移
+</text>
+<text class="sm" x="600" y="522">格距误差 0.1% → 全场 0.1% 尺度系统误差，且与焦距共线、优化器发现不了
+</text>
+<text class="sm" x="600" y="546">焦距相对不确定度 0.67% → 45 cm 处 1–2 mm 定位不确定度（NISTIR 7197）
+</text>
+<text class="foot" x="44" y="600">公式来源：Edmund Optics 视野/放大率应用笔记、Schneider Kreuznach Nyquist 与 DoF 缩放律、EMVA 1288 Release 3.1、
+</text>
+<text class="foot" x="44" y="618">OpenCV calib3d 官方文档、Zhang T-PAMI 2000（MSR-TR-98-71）、NISTIR 7197。图为链路示意，各环节的编号节给出对应的可验算公式与厂商可核验规格；不按比例。
+</text>
 </svg>

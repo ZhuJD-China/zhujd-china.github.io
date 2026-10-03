@@ -1,0 +1,123 @@
+﻿
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 676" width="100%" role="img" aria-label="三维系统的六类失效模式、机理与对策">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .safe{fill:#14161c;stroke:#7aa2c8;stroke-opacity:.4;stroke-width:1}
+    .danger{fill:#1d1414;stroke:#cf5a50;stroke-opacity:.55;stroke-width:1.2}
+    .ok{fill:#1a1712;stroke:#8fbf7a;stroke-opacity:.5;stroke-width:1}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="676" rx="14"/>
+<text class="ttl" x="44" y="50">六类失效，按「是否产生错误数据」分开
+</text>
+<text class="sub" x="44" y="76">上面四类只表现为点云缺失——看得见。下面两类输出看起来完全正常的错误数值，不产生任何异常信号
+</text>
+<!-- 坐标轴 -->
+<text class="hd" x="44" y="116" fill="#7aa2c8">数据丢失（只表现为孔洞，看得见）
+</text>
+<text class="hd" x="44" y="336" fill="#cf5a50">内容错误（输出正常、数值错，看不见）
+</text>
+<!-- 上排四卡 -->
+<g transform="translate(44,130)">
+<rect class="safe" x="0" y="0" width="264" height="126" rx="9"/>
+<text class="hd" x="14" y="24" fill="#e8e4dc">① 环境光过强
+</text>
+<text class="sm" x="14" y="48">部分点云缺失、深度错
+</text>
+<text class="xs" x="14" y="70">机理：环境光扰乱投影图案
+</text>
+<text class="xs" x="14" y="90" fill="#8fbf7a">对策：物理遮光
+</text>
+<text class="xs" x="14" y="108" fill="#8fbf7a">　　　切掉可投影区
+</text>
+</g>
+<g transform="translate(316,130)">
+<rect class="safe" x="0" y="0" width="264" height="126" rx="9"/>
+<text class="hd" x="14" y="24" fill="#e8e4dc">② 镜面 / 过曝
+</text>
+<text class="sm" x="14" y="48">局部深度丢失
+</text>
+<text class="xs" x="14" y="70">机理：反射光集中入射，
+</text>
+<text class="xs" x="14" y="86">　　　其余区域欠曝
+</text>
+<text class="xs" x="14" y="108" fill="#8fbf7a">对策：降激光幅值、改角度
+</text>
+</g>
+<g transform="translate(588,130)">
+<rect class="safe" x="0" y="0" width="264" height="126" rx="9"/>
+<text class="hd" x="14" y="24" fill="#e8e4dc">③ 透明 / 半透明
+</text>
+<text class="sm" x="14" y="48">重建不可能
+</text>
+<text class="xs" x="14" y="70">机理：光穿过表面，
+</text>
+<text class="xs" x="14" y="86">　　　返回光极少
+</text>
+<text class="xs" x="14" y="108" fill="#8fbf7a">对策：Omni 引擎，或改轮廓测量
+</text>
+</g>
+<g transform="translate(860,130)">
+<rect class="safe" x="0" y="0" width="296" height="126" rx="9"/>
+<text class="hd" x="14" y="24" fill="#e8e4dc">④ 无纹理 / 全黑
+</text>
+<text class="sm" x="14" y="48">视差不可解，视差被置 0
+</text>
+<text class="xs" x="14" y="70">机理：无匹配线索
+</text>
+<text class="xs" x="14" y="90" fill="#8fbf7a">对策：结构光投影器造纹理
+</text>
+<text class="xs" x="14" y="108" fill="#8fbf7a">　　　IR 照明
+</text>
+</g>
+<!-- 下排两卡：危险 -->
+<g transform="translate(44,350)">
+<rect class="danger" x="0" y="0" width="546" height="150" rx="9"/>
+<text class="hd" x="16" y="26" fill="#cf5a50">⑤ Interreflection（光在工件间弹）
+</text>
+<text class="sm" x="16" y="52" fill="#cf5a50">典型场景：光亮的料箱壁、紧密排列的反光轴、球栅阵列（BGA）
+</text>
+<text class="sm" x="16" y="74">Mech-Eye 对 BGA 的结论：
+</text>
+<text class="mon" x="200" y="74" fill="#cf5a50">「互反射导致点云中的虚假数据」
+</text>
+<text class="xs" x="16" y="96">与「数据丢失」的区别：数据还在，只是内容是错的——能存盘、能渲染、能过格式校验
+</text>
+<text class="xs" x="16" y="118" fill="#8fbf7a">对策：黑布遮料箱壁（近零成本）· 换低反射料箱 · 料箱移到相机正下方 · 抬高相机使料箱充满视场
+</text>
+<text class="xs" x="16" y="138" fill="#8fbf7a">　　　前两项常被跳过，因为它们「不算技术方案」
+</text>
+</g>
+<g transform="translate(610,418)">
+<rect class="danger" x="0" y="0" width="546" height="150" rx="9"/>
+<text class="hd" x="16" y="26" fill="#cf5a50">⑥ Hallucination（算法编造深度）
+</text>
+<text class="sm" x="16" y="52" fill="#cf5a50">RealSense 官方原话：「虚假深度，又称幻觉，比没有深度更糟糕」
+</text>
+<text class="xs" x="16" y="76">机理：重复结构（栅栏、线缆、网孔）使最佳与次佳匹配质量接近
+</text>
+<text class="xs" x="16" y="96" fill="#8fbf7a">对策：调 DSSecondPeakThreshold —— 调高后更多深度显示为黑色或零，
+</text>
+<text class="xs" x="16" y="114" fill="#8fbf7a">　　　从而减少由 aliasing 导致的匹配
+</text>
+<text class="xs" x="16" y="138" fill="#8fbf7a">另一条：把相机倾斜 20–30 度
+</text>
+</g>
+<!-- 底部提示 -->
+<rect x="44" y="586" width="1112" height="40" rx="8" fill="#14161c" stroke="#8a8578" stroke-opacity=".45" stroke-width="1.2"/>
+<text class="sm" x="60" y="606">排查顺序：先用真实工件试第 ⑤ ⑥ 类（它们无法用精度指标发现），确认点云里那个特征「真的在那里」，
+</text>
+<text class="sm" x="700" y="606">再谈标称精度。标准样件测不出 interreflection——它需要真实的料箱与真实的摆放。
+</text>
+<text class="foot" x="44.0" y="642">口径：镜面反射两机理与对比度下降引自 Photoneo 官方 wiki；过曝/欠曝机制与 interreflection 场景清单（BGA）引自 Mech-Eye 反射类型页；「数千倍」与背景匹配法则引自 Zivid《Dealing with
+</text>
+<text class="foot" x="44.0" y="658">Highlights and Shiny Objects》；halo/幻觉与 DSSecondPeakThreshold、倾斜 20–30° 引自 RealSense 官方调优指南；全黑件视差置 0 引自 Basler Stereo ace 文档；环境光数值与对策见正文第 6 节。
+</text>
+</svg>

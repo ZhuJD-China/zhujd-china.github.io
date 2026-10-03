@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" role="img" aria-label="EMVA 1288 光子传递曲线与关键指标位置">
-  <style>
+<style>
     .bg{fill:#0b0b10}
     .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
     .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -17,65 +17,91 @@
     .dot3{fill:#7aa2c8}
     .lbl{fill:#e8e4dc;font:600 13px 'Noto Sans SC','PingFang SC',sans-serif}
   </style>
-  <rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
-  <text class="ttl" x="44" y="52">EMVA 1288：一张曲线上的六个指标</text>
-  <text class="sub" x="44" y="80">用光子传递法把"这张图能测多准"变成可跨厂商比较的数字。Release 4.0 于 2021 年 6 月生效，对应 ISO 24942</text>
-
-  <!-- axes -->
-  <line class="grid" x1="140" y1="120" x2="140" y2="420"/>
-  <line class="grid" x1="140" y1="420" x2="800" y2="420"/>
-  <text class="ax" x="140" y="442" text-anchor="middle">低辐照</text>
-  <text class="ax" x="800" y="442" text-anchor="middle">高辐照</text>
-  <text class="ax" x="140" y="112" text-anchor="start">信号（DN）</text>
-  <text class="ax" x="470" y="464" text-anchor="middle">每像元平均光子数 μp</text>
-
-  <!-- variance curve (shot noise) -->
-  <text class="pn" x="140" y="140">方差随信号平方根增长（散粒噪声）</text>
-  <path class="varc" d="M140 420 L180 340 L240 270 L320 210 L420 165 L540 135 L680 118 L800 108"/>
-  <text class="ax" x="700" y="132">σ²</text>
-
-  <!-- signal curve (linear then saturate) -->
-  <text class="pn" x="140" y="176">信号先线性，到饱和容量后压平</text>
-  <path class="curve" d="M140 410 L200 350 L280 280 L360 210 L440 165 L520 138 L600 120 L660 112 L800 108"/>
-
-  <!-- markers -->
-  <line class="thr" x1="196" y1="120" x2="196" y2="420"/>
-  <circle class="dot1" cx="196" cy="352" r="6"/>
-  <text class="lbl" x="196" y="196" fill="#cf5a50" text-anchor="middle">绝对灵敏度阈值</text>
-  <text class="sm" x="196" y="212" text-anchor="middle">μp,min：能测出的最小光子数</text>
-
-  <line class="thr" x1="352" y1="120" x2="352" y2="420"/>
-  <circle class="dot2" cx="352" cy="212" r="6"/>
-  <text class="lbl" x="352" y="240" fill="#c9a96a" text-anchor="middle">饱和容量</text>
-  <text class="sm" x="352" y="256" text-anchor="middle">μp,sat：满阱电子数，决定上限</text>
-
-  <line class="grid" x1="196" y1="352" x2="352" y2="352" stroke="#cf5a50" stroke-opacity=".45" stroke-dasharray="4 3"/>
-  <text class="lbl" x="274" y="386" fill="#cf5a50" text-anchor="middle">动态范围 DR</text>
-  <text class="sm" x="274" y="402" text-anchor="middle">这两点之比，12 bit 理论上限约 72 dB</text>
-
-  <circle class="dot3" cx="300" cy="170" r="6"/>
-  <text class="sm" x="300" y="150" text-anchor="middle">从曲线的斜率与暗噪声可反推量子效率 QE 与系统增益 K</text>
-
-  <!-- right column: what to read -->
-  <text class="hd" x="840" y="140">读这份数据的顺序</text>
-  <text class="sm" x="840" y="166">一　先看 QE（效率）</text>
-  <text class="sm" x="840" y="186">　同照度下 QE 越高信噪比越好</text>
-  <text class="sm" x="840" y="212">二　再看暗噪声 σd</text>
-  <text class="sm" x="840" y="232">　低照度画质的下限，e⁻ 为单位</text>
-  <text class="sm" x="840" y="258">三　最后看动态范围 DR</text>
-  <text class="sm" x="840" y="278">　逆光与高反差场景的余量</text>
-  <text class="sm" x="840" y="304">四　最后才是分辨率</text>
-  <text class="sm" x="840" y="324">　它是选出来的，不是传感器定死的</text>
-
-  <text class="sm" x="840" y="356">一个反直觉的例证：</text>
-  <text class="sm" x="840" y="376">FLIR 两台机器分辨率差 24 倍，</text>
-  <text class="sm" x="840" y="396">但 QE、暗噪声、DR 几乎一样。</text>
-  <text class="sm" x="840" y="416">成像素质由传感器决定，</text>
-  <text class="sm" x="840" y="436">分辨率只是选型时的一个维度。</text>
-
-  <line class="grid" x1="44" y1="486" x2="1156" y2="486"/>
-  <text class="foot" x="44" y="510">标准本身还给了一条容易被忽略的操作约束：系统增益要小到不因满阱饱和、且暗噪声不低于 0.5 DN 才能可靠测量。</text>
-  <text class="foot" x="44" y="532">用高增益把灵敏度"做上去"是常见手法，但 EMVA 的定义会把它算回真实数字——这正是统一测量方法的意义。</text>
-  <text class="foot" x="44" y="556">另需提醒：厂商之间的测试方差可能与参数差异同量级，EMVA 数据不支持用单点数字做跨厂商排名。</text>
-  <text class="foot" x="44" y="580">来源：EMVA 1288 标准页与 Release 3.1/4.0 公告（emva.org），指标定义见标准第 2 章。</text>
+<rect class="bg" x="0" y="0" width="1200" height="600" rx="14"/>
+<text class="ttl" x="44" y="52">EMVA 1288：一张曲线上的六个指标
+</text>
+<text class="sub" x="44" y="80">用光子传递法把"这张图能测多准"变成可跨厂商比较的数字。Release 4.0 于 2021 年 6 月生效，对应 ISO 24942
+</text>
+<!-- axes -->
+<line class="grid" x1="140" y1="120" x2="140" y2="420"/>
+<line class="grid" x1="140" y1="420" x2="800" y2="420"/>
+<text class="ax" x="140" y="442" text-anchor="middle">低辐照
+</text>
+<text class="ax" x="800" y="442" text-anchor="middle">高辐照
+</text>
+<text class="ax" x="140" y="112" text-anchor="start">信号（DN）
+</text>
+<text class="ax" x="470" y="464" text-anchor="middle">每像元平均光子数 μp
+</text>
+<!-- variance curve (shot noise) -->
+<text class="pn" x="470" y="312">方差随信号平方根增长（散粒噪声）
+</text>
+<path class="varc" d="M140 420 L180 340 L240 270 L320 210 L420 165 L540 135 L680 118 L800 108"/>
+<text class="ax" x="700" y="132">σ²
+</text>
+<!-- signal curve (linear then saturate) -->
+<text class="pn" x="470" y="360">信号先线性，到饱和容量后压平
+</text>
+<path class="curve" d="M140 410 L200 350 L280 280 L360 210 L440 165 L520 138 L600 120 L660 112 L800 108"/>
+<!-- markers -->
+<line class="thr" x1="196" y1="120" x2="196" y2="420"/>
+<circle class="dot1" cx="196" cy="352" r="6"/>
+<text class="lbl" x="212" y="190" fill="#cf5a50">绝对灵敏度阈值
+</text>
+<text class="sm" x="212" y="206">μp,min：最小可测光子数
+</text>
+<line class="thr" x1="352" y1="120" x2="352" y2="420"/>
+<circle class="dot2" cx="352" cy="212" r="6"/>
+<text class="lbl" x="352" y="240" fill="#c9a96a" text-anchor="middle">饱和容量
+</text>
+<text class="sm" x="352" y="256" text-anchor="middle">μp,sat：满阱电子数，决定上限
+</text>
+<line class="grid" x1="196" y1="352" x2="352" y2="352" stroke="#cf5a50" stroke-opacity=".45" stroke-dasharray="4 3"/>
+<text class="lbl" x="274" y="386" fill="#cf5a50" text-anchor="middle">动态范围 DR
+</text>
+<text class="sm" x="274" y="402" text-anchor="middle">这两点之比，12 bit 理论上限约 72 dB
+</text>
+<circle class="dot3" cx="300" cy="170" r="6"/>
+<text class="lbl" x="314" y="152">斜率 ∝ QE
+</text>
+<text class="sm" x="470" y="336">从曲线的斜率与暗噪声可反推量子效率 QE 与系统增益 K
+</text>
+<!-- right column: what to read -->
+<text class="hd" x="840" y="140">读这份数据的顺序
+</text>
+<text class="sm" x="840" y="166">一　先看 QE（效率）
+</text>
+<text class="sm" x="840" y="186">　同照度下 QE 越高信噪比越好
+</text>
+<text class="sm" x="840" y="212">二　再看暗噪声 σd
+</text>
+<text class="sm" x="840" y="232">　低照度画质的下限，e⁻ 为单位
+</text>
+<text class="sm" x="840" y="258">三　最后看动态范围 DR
+</text>
+<text class="sm" x="840" y="278">　逆光与高反差场景的余量
+</text>
+<text class="sm" x="840" y="304">四　最后才是分辨率
+</text>
+<text class="sm" x="840" y="324">　它是选出来的，不是传感器定死的
+</text>
+<text class="sm" x="840" y="356">一个反直觉的例证：
+</text>
+<text class="sm" x="840" y="376">FLIR 两台机器分辨率差 24 倍，
+</text>
+<text class="sm" x="840" y="396">但 QE、暗噪声、DR 几乎一样。
+</text>
+<text class="sm" x="840" y="416">成像素质由传感器决定，
+</text>
+<text class="sm" x="840" y="436">分辨率只是选型时的一个维度。
+</text>
+<line class="grid" x1="44" y1="486" x2="1156" y2="486"/>
+<text class="foot" x="44" y="510">标准本身还给了一条容易被忽略的操作约束：系统增益要小到不因满阱饱和、且暗噪声不低于 0.5 DN 才能可靠测量。
+</text>
+<text class="foot" x="44" y="532">用高增益把灵敏度"做上去"是常见手法，但 EMVA 的定义会把它算回真实数字——这正是统一测量方法的意义。
+</text>
+<text class="foot" x="44" y="556">另需提醒：厂商之间的测试方差可能与参数差异同量级，EMVA 数据不支持用单点数字做跨厂商排名。
+</text>
+<text class="foot" x="44" y="580">来源：EMVA 1288 标准页与 Release 3.1/4.0 公告（emva.org），指标定义见标准第 2 章。
+</text>
 </svg>

@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 633" width="100%" role="img" aria-label="双目深度误差的 z 平方标度与四个变量的可调性">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mono{fill:#c9a96a;font:600 14px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .ax{fill:none;stroke:#8a8578;stroke-width:1.2}
+    .grid{fill:none;stroke:#8a8578;stroke-opacity:.18;stroke-width:1}
+    .c1{fill:none;stroke:#c9a96a;stroke-width:2.4}
+    .c2{fill:none;stroke:#cf5a50;stroke-width:2.2}
+    .c3{fill:none;stroke:#7aa2c8;stroke-width:2}
+    .c4{fill:none;stroke:#8fbf7a;stroke-width:1.8;stroke-dasharray:4 3}
+    .cellA{fill:#1a1712;stroke:#c9a96a;stroke-opacity:.5;stroke-width:1.2}
+    .cellB{fill:#14161c;stroke:#7aa2c8;stroke-opacity:.5;stroke-width:1.2}
+    .cellC{fill:#1d1414;stroke:#cf5a50;stroke-opacity:.5;stroke-width:1.2}
+    .cellD{fill:#181a14;stroke:#8fbf7a;stroke-opacity:.5;stroke-width:1.2}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="633" rx="14"/>
+<text class="ttl" x="44" y="50">双目：深度误差随距离按 z² 涨
+</text>
+<text class="sub" x="44" y="76">ε_z = z²·ε_d / (b·f)。四个变量里只有一个最不受控——而它恰好是工程上最难改的那个
+</text>
+<!-- 左：曲线 -->
+<g transform="translate(96,430)">
+<line class="grid" x1="0" y1="-300" x2="0" y2="0"/>
+<line class="grid" x1="0" y1="-225" x2="480" y2="-225"/>
+<line class="grid" x1="0" y1="-150" x2="480" y2="-150"/>
+<line class="grid" x1="0" y1="-75" x2="480" y2="-75"/>
+<line class="grid" x1="0" y1="0" x2="480" y2="0"/>
+<line class="grid" x1="120" y1="0" x2="120" y2="-300"/>
+<line class="grid" x1="240" y1="0" x2="240" y2="-300"/>
+<line class="grid" x1="360" y1="0" x2="360" y2="-300"/>
+<line class="grid" x1="480" y1="0" x2="480" y2="-300"/>
+<line class="ax" x1="-16" y1="0" x2="510" y2="0"/>
+<line class="ax" x1="0" y1="16" x2="0" y2="-316"/>
+<text class="sm" x="-12" y="-296" text-anchor="end">高
+</text>
+<text class="sm" x="-12" y="-151" text-anchor="end">中
+</text>
+<text class="sm" x="-12" y="-6" text-anchor="end">0
+</text>
+<text class="sm" x="0" y="20" text-anchor="middle">0.5
+</text>
+<text class="sm" x="120" y="20" text-anchor="middle">1
+</text>
+<text class="sm" x="240" y="20" text-anchor="middle">1.5
+</text>
+<text class="sm" x="360" y="20" text-anchor="middle">2
+</text>
+<text class="sm" x="480" y="20" text-anchor="end">2.5 m
+</text>
+<text class="sm" x="245" y="44" text-anchor="middle">深度 z
+</text>
+<text class="sm" x="-46" y="-160" text-anchor="middle" transform="rotate(-90 -46 -160)">深度误差 ε_z
+</text>
+<!-- 三个匹配误差 -->
+<path class="c1" d="M12 -2 C60 -12 120 -46 180 -98 C250 -158 330 -232 480 -296"/>
+<path class="c2" d="M12 -3 C60 -25 120 -92 180 -186 C250 -278 330 -290 480 -296"/>
+<path class="c4" d="M12 -4 C60 -40 120 -148 180 -268 C250 -292 330 -295 480 -298"/>
+<text class="mono" x="248" y="-292" fill="#c9a96a">ε_d = 0.05 px（纹理良好）
+</text>
+<text class="moc" x="300" y="-206" fill="#cf5a50">ε_d = 0.11 px（实测典型）
+</text>
+<text class="sm" x="252" y="-140" fill="#8fbf7a">ε_d = 0.20 px（需重标定）
+</text>
+<!-- 二次标度对照 -->
+<path class="c3" d="M12 -2 C150 -8 300 -18 480 -34" stroke-dasharray="2 4"/>
+<text class="moc" x="330" y="-56">若为一次标度（不成立）
+</text>
+</g>
+<!-- 右：变量表 -->
+<g transform="translate(660,116)">
+<text class="hd" x="0" y="0">四个变量，谁最可改
+</text>
+<g transform="translate(0,18)">
+<rect class="cellA" x="0" y="0" width="496" height="46" rx="7"/>
+<text class="mono" x="14" y="20">z 工作距离
+</text>
+<text class="sm" x="150" y="20" fill="#c9a96a">最大的杠杆：按平方衰减
+</text>
+<text class="xs" x="14" y="38">2 m → 1 m，深度误差降到 1/4，不用动任何预算
+</text>
+</g>
+<g transform="translate(0,74)">
+<rect class="cellB" x="0" y="0" width="496" height="46" rx="7"/>
+<text class="mono" x="14" y="20">b 基线
+</text>
+<text class="moc" x="150" y="20">线性改善，但加大体积与最小工作距离
+</text>
+<text class="xs" x="14" y="38">D455 基线 95 mm vs D435 50 mm → 同精度距离加倍
+</text>
+</g>
+<g transform="translate(0,130)">
+<rect class="cellB" x="0" y="0" width="496" height="46" rx="7"/>
+<text class="mono" x="14" y="20">f 焦距（像素）
+</text>
+<text class="moc" x="150" y="20">线性改善，但压缩视野
+</text>
+<text class="xs" x="14" y="38">与第二篇第 4 节的 Nyquist 判据联动
+</text>
+</g>
+<g transform="translate(0,186)">
+<rect class="cellC" x="0" y="0" width="496" height="46" rx="7"/>
+<text class="moc" x="14" y="20" fill="#cf5a50">ε_d 匹配误差
+</text>
+<text class="sm" x="150" y="20" fill="#cf5a50">最不受控：算法与被测物决定
+</text>
+<text class="xs" x="14" y="38">Mask 5→0.18 px，Mask 11→0.11 px（320×240 实测）
+</text>
+</g>
+</g>
+<!-- 底部：实测算例 -->
+<g transform="translate(44,500)">
+<rect x="0" y="0" width="1112" height="76" rx="9" fill="#14161c" stroke="#8a8578" stroke-opacity=".5" stroke-width="1.2"/>
+<text class="hd" x="16" y="26">一个完整的实测算例（Teledyne 官方）
+</text>
+<text class="moc" x="16" y="52">p=0.04　m=0.05　f=250　B=0.10 m　d=20 px　→　(x,y,z)=(1.0, 0.5, 1.25)
+</text>
+<text class="mono" x="600" y="52">Δx=±0.4 mm　Δy=±0.4 mm　Δz=±6 mm
+</text>
+<text class="sm" x="16" y="70" fill="#cf5a50">横向 0.4 mm vs 纵深 6 mm，差 15 倍——「深度比横向难」不是感觉，是公式与实测共同给出的
+</text>
+</g>
+<text class="foot" x="44.0" y="600">口径：公式引自 Gallup et al. CVPR 2008 式(1)（「即使对应关系完美，传统立体的深度误差也随深度二次增长」）与 TTIC depth-from-stereo 讲义；mask 扫描与算例引自 Teledyne《Stereo Accuracy
+</text>
+<text class="foot" x="44.0" y="616">and Error Modeling》；0.1 px 标称与 0.2 px 重标定阈值引自 RealSense 官方调优指南；基线对比引自 RealSense D455 支持页。
+</text>
+</svg>

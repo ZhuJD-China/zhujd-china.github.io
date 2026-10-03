@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="100%" role="img" aria-label="横向分辨率与深度精度的分离">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mono{fill:#c9a96a;font:600 14px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .moc2{fill:#8fbf7a;font:600 12px 'JetBrains Mono',Consolas,monospace}
+    .cell{fill:#14161c;stroke:#8a8578;stroke-opacity:.35;stroke-width:1}
+    .cellA{fill:#1a1712;stroke:#c9a96a;stroke-opacity:.5;stroke-width:1.2}
+    .warn{fill:#cf5a50;fill-opacity:.1;stroke:#cf5a50;stroke-opacity:.45;stroke-width:1.2}
+    .cone{fill:#7aa2c8;fill-opacity:.14;stroke:#7aa2c8;stroke-opacity:.55;stroke-width:1.2}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="630" rx="14"/>
+<text class="ttl" x="44" y="50">横向分辨率：容易被忽略，却会先打败你
+</text>
+<text class="sub" x="44" y="76">最小可检特征 ≈ max(空间分辨率, 点精度)。特征小于一个体素时，它在点云里不存在——不是测不准，是没测到
+</text>
+<!-- 左：光锥扩张 -->
+<text class="hd" x="44" y="118">一个像素覆盖的面积随距离扩张
+</text>
+<g transform="translate(120,168)">
+<circle cx="0" cy="0" r="8" fill="#c9a96a"/>
+<path class="cone" d="M0 0 L-40 44 L40 44 Z"/>
+<text class="xs" x="0" y="-14" text-anchor="middle">相机
+</text>
+<line x1="-60" y1="48" x2="60" y2="48" stroke="#8a8578" stroke-width="1" stroke-opacity=".5"/>
+<text class="moc" x="66" y="46">近处：一个像素覆盖小面积
+</text>
+<path class="cone" d="M0 0 L-118 190 L118 190 Z" fill-opacity=".08"/>
+<line x1="-140" y1="196" x2="140" y2="196" stroke="#8a8578" stroke-width="1" stroke-opacity=".5"/>
+<text class="moc" x="146" y="194">远处：同一像素覆盖大得多的面积
+</text>
+<text class="xs" x="0" y="212" fill="#8a8578">Zivid 官方：「因为每个像素对应一个扩张的光锥，对象离得越远，
+</text>
+<text class="xs" x="0" y="228" fill="#8a8578">每个像素覆盖的表面积越大」
+</text>
+</g>
+<g transform="translate(44,420)">
+<rect class="warn" x="0" y="0" width="516" height="112" rx="9"/>
+<text class="hd" x="16" y="24" fill="#cf5a50">官方给的一个直观例子
+</text>
+<text class="sm" x="16" y="48" fill="#cf5a50">「一个 10 × 10 mm 的特征，在近距离可能被数百个点采样，
+</text>
+<text class="sm" x="16" y="68" fill="#cf5a50">但在远距离只剩少数几个点。」
+</text>
+<text class="xs" x="16" y="92">抽样进一步加剧：2×2 抽样使点距翻倍，
+</text>
+<text class="xs" x="16" y="106">4×4 抽样使其变为四倍
+</text>
+</g>
+<!-- 右：实测对照 -->
+<text class="hd" x="600" y="118">同一台相机的距离代价
+</text>
+<g transform="translate(600,134)">
+<rect class="cellA" x="0" y="0" width="556" height="120" rx="9"/>
+<text class="hd" x="16" y="26" fill="#c9a96a">Zivid 2+ M130　实测（Zivid 官方博客）
+</text>
+<g transform="translate(16,40)">
+<text class="sm" x="0" y="16">700 mm
+</text>
+<text class="mono" x="120" y="16" fill="#c9a96a">点精度 1σ = 0.065 mm
+</text>
+<text class="xs" x="380" y="16">空间分辨率 未给
+</text>
+</g>
+<g transform="translate(16,68)">
+<text class="sm" x="0" y="16">1100 mm
+</text>
+<text class="mono" x="120" y="16" fill="#c9a96a">点精度 1σ = 0.195 mm
+</text>
+<text class="mono" x="380" y="16" fill="#7aa2c8">空间分辨率 0.62 mm
+</text>
+</g>
+<text class="sm" x="16" y="106" fill="#cf5a50">距离 ×1.57，点精度 ×3.0——所以要在自己的工作距离上验收，不是甜点位
+</text>
+</g>
+<!-- 四档指标 -->
+<text class="hd" x="600" y="290">Zivid 的四档量化指标
+</text>
+<g transform="translate(600,306)">
+<rect class="cell" x="0" y="0" width="556" height="180" rx="9"/>
+<text class="sm" x="14" y="24" fill="#8fbf7a">point precision
+</text>
+<text class="xs" x="220" y="24">单点在连续测量间的 1σ 欧氏距离变化
+</text>
+<text class="moc" x="500" y="24" text-anchor="end">µm (1σ)
+</text>
+<line x1="14" y1="32" x2="542" y2="32" stroke="#8a8578" stroke-opacity=".2"/>
+<text class="sm" x="14" y="52" fill="#8fbf7a">local planarity precision
+</text>
+<text class="xs" x="220" y="52">小区域内点到平面的 1σ（如 50×50 px）
+</text>
+<text class="moc" x="500" y="52" text-anchor="end">µm (1σ)
+</text>
+<line x1="14" y1="60" x2="542" y2="60" stroke="#8a8578" stroke-opacity=".2"/>
+<text class="sm" x="14" y="80" fill="#8fbf7a">global planarity trueness
+</text>
+<text class="xs" x="220" y="80">全视场范围内到平面的平均偏差
+</text>
+<text class="moc" x="500" y="80" text-anchor="end">mm
+</text>
+<line x1="14" y1="88" x2="542" y2="88" stroke="#8a8578" stroke-opacity=".2"/>
+<text class="sm" x="14" y="108" fill="#8fbf7a">dimension trueness error
+</text>
+<text class="xs" x="220" y="108">视场内尺寸误差的 70 百分位
+</text>
+<text class="moc" x="500" y="108" text-anchor="end">% of 尺寸
+</text>
+<line x1="14" y1="116" x2="542" y2="116" stroke="#8a8578" stroke-opacity=".2"/>
+<text class="sm" x="14" y="136" fill="#8fbf7a">spatial resolution
+</text>
+<text class="xs" x="220" y="136">给定工作距离下一像素代表的面积
+</text>
+<text class="moc" x="500" y="136" text-anchor="end">mm
+</text>
+<line x1="14" y1="144" x2="542" y2="144" stroke="#8a8578" stroke-opacity=".2"/>
+<text class="sm" x="14" y="168" fill="#cf5a50">Z-resolution
+</text>
+<text class="xs" x="220" y="168" fill="#cf5a50">官方拒绝给出——见下方
+</text>
+</g>
+<rect x="44" y="540" width="1112" height="34" rx="7" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.2"/>
+<text class="sm" x="60" y="561">Zivid 官方声明：「在三维计量中深度分辨率没有普适定义……Zivid 不给出 Z-resolution，因为 3D 点是在 XYZ 上同时测量的，而不是沿单一轴。」
+</text>
+<text class="foot" x="44.0" y="596">口径：光锥扩张、10×10 mm 特征采样数、抽样倍增与四档指标定义全部引自 Zivid 官方《Zivid Specs Terminology》页；0.065/0.195/0.62 mm 引自 Zivid 官方博客《Precision &amp; Trueness》；判据「点
+</text>
+<text class="foot" x="44.0" y="612">精度与空间分辨率共同决定小特征检出能力」引自同术语页。
+</text>
+</svg>

@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="100%" role="img" aria-label="视野、像素数与判定公差的对照">
-  <style>
+﻿
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 612" width="100%" role="img" aria-label="视野、像素数与判定公差的对照">
+<style>
     .bg{fill:#0b0b10}
     .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
     .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -12,86 +13,180 @@
     .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
     .grid{stroke:#e8e4dc;stroke-opacity:.10;stroke-width:1}
   </style>
-  <rect class="bg" x="0" y="0" width="1200" height="520" rx="14"/>
-  <text class="ttl" x="44" y="52">视野 × 像素数 → 能判到多小的公差</text>
-  <text class="sub" x="44" y="80">KEYENCE 官方判定准则：尺寸判定公差约等于正负 5 像素，颜色越深表示公差越细。下表单位为毫米</text>
-
-  <!-- header row -->
-  <text class="hd" x="196" y="118" text-anchor="middle">视野 Y</text>
-  <text class="hd2" x="196" y="136" text-anchor="middle">像素数</text>
-  <g>
-    <text class="hd" x="300" y="118" text-anchor="middle">1</text>
-    <text class="hd" x="400" y="118" text-anchor="middle">5</text>
-    <text class="hd" x="500" y="118" text-anchor="middle">10</text>
-    <text class="hd" x="600" y="118" text-anchor="middle">20</text>
-    <text class="hd" x="700" y="118" text-anchor="middle">30</text>
-    <text class="hd" x="800" y="118" text-anchor="middle">50</text>
-    <text class="hd" x="900" y="118" text-anchor="middle">100</text>
-    <text class="hd" x="1000" y="118" text-anchor="middle">200</text>
-    <text class="hd" x="1100" y="118" text-anchor="middle">500</text>
-  </g>
-  <text class="hd2" x="1070" y="138">视野 Y 毫米</text>
-
-  <!-- row 0.31MP : 0.01 0.05 0.1 0.2 0.3 0.5 1.0 2.1 5.2 -->
-  <text class="fm" x="52" y="178">0.31 MP</text>
-  <text class="fm2" x="52" y="196">480 px</text>
-  <rect x="262" y="160" width="78" height="46" fill="#7a3b2e" rx="3"/><text class="cellT" x="301" y="188" text-anchor="middle">0.01</text>
-  <rect x="342" y="160" width="78" height="46" fill="#a85a3a" rx="3"/><text class="cellT" x="381" y="188" text-anchor="middle">0.05</text>
-  <rect x="422" y="160" width="78" height="46" fill="#c47a45" rx="3"/><text class="cellT" x="461" y="188" text-anchor="middle">0.1</text>
-  <rect x="502" y="160" width="78" height="46" fill="#dc9a52" rx="3"/><text class="cellT" x="541" y="188" text-anchor="middle">0.2</text>
-  <rect x="582" y="160" width="78" height="46" fill="#dc9a52" rx="3"/><text class="cellT" x="621" y="188" text-anchor="middle">0.3</text>
-  <rect x="662" y="160" width="78" height="46" fill="#eab86e" rx="3"/><text class="cellT" x="701" y="188" text-anchor="middle">0.5</text>
-  <rect x="742" y="160" width="78" height="46" fill="#eab86e" rx="3"/><text class="cellT" x="781" y="188" text-anchor="middle">1.0</text>
-  <rect x="822" y="160" width="78" height="46" fill="#f2d291" rx="3"/><text class="cellT" x="861" y="188" text-anchor="middle">2.1</text>
-  <rect x="902" y="160" width="78" height="46" fill="#f7e6bd" rx="3"/><text class="cellT" x="941" y="188" text-anchor="middle">5.2</text>
-
-  <!-- row 2MP : 0.004 0.02 0.04 0.08 0.1 0.2 0.4 0.8 2.1 -->
-  <text class="fm" x="52" y="238">2 MP</text>
-  <text class="fm2" x="52" y="256">1200 px</text>
-  <rect x="262" y="220" width="78" height="46" fill="#4a2a22" rx="3"/><text class="cellT" x="301" y="248" text-anchor="middle">0.004</text>
-  <rect x="342" y="220" width="78" height="46" fill="#7a3b2e" rx="3"/><text class="cellT" x="381" y="248" text-anchor="middle">0.02</text>
-  <rect x="422" y="220" width="78" height="46" fill="#a85a3a" rx="3"/><text class="cellT" x="461" y="248" text-anchor="middle">0.04</text>
-  <rect x="502" y="220" width="78" height="46" fill="#c47a45" rx="3"/><text class="cellT" x="541" y="248" text-anchor="middle">0.08</text>
-  <rect x="582" y="220" width="78" height="46" fill="#c47a45" rx="3"/><text class="cellT" x="621" y="248" text-anchor="middle">0.1</text>
-  <rect x="662" y="220" width="78" height="46" fill="#dc9a52" rx="3"/><text class="cellT" x="701" y="248" text-anchor="middle">0.2</text>
-  <rect x="742" y="220" width="78" height="46" fill="#dc9a52" rx="3"/><text class="cellT" x="781" y="248" text-anchor="middle">0.4</text>
-  <rect x="822" y="220" width="78" height="46" fill="#eab86e" rx="3"/><text class="cellT" x="861" y="248" text-anchor="middle">0.8</text>
-  <rect x="902" y="220" width="78" height="46" fill="#f2d291" rx="3"/><text class="cellT" x="941" y="248" text-anchor="middle">2.1</text>
-
-  <!-- row 5MP : 0.002 0.01 0.02 0.05 0.07 0.1 0.2 0.5 1.2 -->
-  <text class="fm" x="52" y="298">5 MP</text>
-  <text class="fm2" x="52" y="316">2050 px</text>
-  <rect x="262" y="280" width="78" height="46" fill="#3a2019" rx="3"/><text class="cellT" x="301" y="308" text-anchor="middle">0.002</text>
-  <rect x="342" y="280" width="78" height="46" fill="#6b3025" rx="3"/><text class="cellT" x="381" y="308" text-anchor="middle">0.01</text>
-  <rect x="422" y="280" width="78" height="46" fill="#7a3b2e" rx="3"/><text class="cellT" x="461" y="308" text-anchor="middle">0.02</text>
-  <rect x="502" y="280" width="78" height="46" fill="#a85a3a" rx="3"/><text class="cellT" x="541" y="308" text-anchor="middle">0.05</text>
-  <rect x="582" y="280" width="78" height="46" fill="#a85a3a" rx="3"/><text class="cellT" x="621" y="308" text-anchor="middle">0.07</text>
-  <rect x="662" y="280" width="78" height="46" fill="#c47a45" rx="3"/><text class="cellT" x="701" y="308" text-anchor="middle">0.1</text>
-  <rect x="742" y="280" width="78" height="46" fill="#c47a45" rx="3"/><text class="cellT" x="781" y="308" text-anchor="middle">0.2</text>
-  <rect x="822" y="280" width="78" height="46" fill="#dc9a52" rx="3"/><text class="cellT" x="861" y="308" text-anchor="middle">0.5</text>
-  <rect x="902" y="280" width="78" height="46" fill="#eab86e" rx="3"/><text class="cellT" x="941" y="308" text-anchor="middle">1.2</text>
-
-  <!-- row 21MP : 0.001 0.006 0.01 0.02 0.04 0.06 0.1 0.2 0.6 -->
-  <text class="fm" x="52" y="358">21 MP</text>
-  <text class="fm2" x="52" y="376">4092 px</text>
-  <rect x="262" y="340" width="78" height="46" fill="#2b1812" rx="3"/><text class="cellT" x="301" y="368" text-anchor="middle">0.001</text>
-  <rect x="342" y="340" width="78" height="46" fill="#4a2a22" rx="3"/><text class="cellT" x="381" y="368" text-anchor="middle">0.006</text>
-  <rect x="422" y="340" width="78" height="46" fill="#6b3025" rx="3"/><text class="cellT" x="461" y="368" text-anchor="middle">0.01</text>
-  <rect x="502" y="340" width="78" height="46" fill="#7a3b2e" rx="3"/><text class="cellT" x="541" y="368" text-anchor="middle">0.02</text>
-  <rect x="582" y="340" width="78" height="46" fill="#a85a3a" rx="3"/><text class="cellT" x="621" y="368" text-anchor="middle">0.04</text>
-  <rect x="662" y="340" width="78" height="46" fill="#a85a3a" rx="3"/><text class="cellT" x="701" y="368" text-anchor="middle">0.06</text>
-  <rect x="742" y="340" width="78" height="46" fill="#c47a45" rx="3"/><text class="cellT" x="781" y="368" text-anchor="middle">0.1</text>
-  <rect x="822" y="340" width="78" height="46" fill="#c47a45" rx="3"/><text class="cellT" x="861" y="368" text-anchor="middle">0.2</text>
-  <rect x="902" y="340" width="78" height="46" fill="#dc9a52" rx="3"/><text class="cellT" x="941" y="368" text-anchor="middle">0.6</text>
-
-  <!-- conclusion band -->
-  <rect x="44" y="412" width="1112" height="72" rx="10" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.2"/>
-  <text class="fm" x="60" y="438" fill="#c9a96a">三条可直接用的结论</text>
-  <text class="fm2" x="60" y="462">一，横向扩视野代价很大：同一颗 21 MP 传感器，视野从 10 mm 放到 100 mm，判定公差从 0.01 mm 退到 0.1 mm，正好十倍。所以"换高像素"救不了大视野任务。</text>
-  <text class="fm2" x="60" y="478">二，线阵的选型算式不同：像素数 = 视野除以最小缺陷再乘 3。Teledyne 的官方算例是视野 12 英寸、最小缺陷 0.005 英寸，得 7200 像素，选 8K 线阵。</text>
-  <text class="fm2" x="60" y="478">三，看到 0.01 mm 以内就应当停手：这是二维测量的物理边界附近，再往上走应该换测量原理或升到 3D，而不是继续堆像素。</text>
-  <text class="fm2" x="60" y="478">四，上表只保证"能分辨"，不代表"能判定稳定"：官方同时给出理想重复精度 0.1 像素、含余量的实用取值 0.5 像素，实际产线要留抖动与装夹余量。</text>
-
-  <text class="foot" x="44" y="506">数据来源：KEYENCE 官方尺寸检测应用页的判定公差对照表（访问 2026-09-29）。</text>
-  <text class="foot" x="44" y="524">线阵算式与算例来自 Teledyne DALSA 技术论文。单位毫米；判定公差约等于正负 5 像素，颜色深浅仅表示数值相对量级。</text>
+<rect class="bg" x="0" y="0" width="1200" height="612" rx="14"/>
+<text class="ttl" x="44" y="52">视野 × 像素数 → 能判到多小的公差
+</text>
+<text class="sub" x="44" y="80">KEYENCE 官方判定准则：尺寸判定公差约等于正负 5 像素，颜色越深表示公差越细。下表单位为毫米
+</text>
+<!-- header row -->
+<text class="hd" x="196" y="118" text-anchor="middle">视野 Y
+</text>
+<text class="hd2" x="196" y="136" text-anchor="middle">像素数
+</text>
+<g>
+<text class="hd" x="300" y="118" text-anchor="middle">1
+</text>
+<text class="hd" x="400" y="118" text-anchor="middle">5
+</text>
+<text class="hd" x="500" y="118" text-anchor="middle">10
+</text>
+<text class="hd" x="600" y="118" text-anchor="middle">20
+</text>
+<text class="hd" x="700" y="118" text-anchor="middle">30
+</text>
+<text class="hd" x="800" y="118" text-anchor="middle">50
+</text>
+<text class="hd" x="900" y="118" text-anchor="middle">100
+</text>
+<text class="hd" x="1000" y="118" text-anchor="middle">200
+</text>
+<text class="hd" x="1100" y="118" text-anchor="middle">500
+</text>
+</g>
+<text class="hd2" x="1070" y="138">视野 Y 毫米
+</text>
+<!-- row 0.31MP : 0.01 0.05 0.1 0.2 0.3 0.5 1.0 2.1 5.2 -->
+<text class="fm" x="52" y="178">0.31 MP
+</text>
+<text class="fm2" x="52" y="196">480 px
+</text>
+<rect x="262" y="160" width="78" height="46" fill="#7a3b2e" rx="3"/>
+<text class="cellT" x="301" y="188" text-anchor="middle">0.01
+</text>
+<rect x="342" y="160" width="78" height="46" fill="#a85a3a" rx="3"/>
+<text class="cellT" x="381" y="188" text-anchor="middle">0.05
+</text>
+<rect x="422" y="160" width="78" height="46" fill="#c47a45" rx="3"/>
+<text class="cellT" x="461" y="188" text-anchor="middle">0.1
+</text>
+<rect x="502" y="160" width="78" height="46" fill="#dc9a52" rx="3"/>
+<text class="cellT" x="541" y="188" text-anchor="middle">0.2
+</text>
+<rect x="582" y="160" width="78" height="46" fill="#dc9a52" rx="3"/>
+<text class="cellT" x="621" y="188" text-anchor="middle">0.3
+</text>
+<rect x="662" y="160" width="78" height="46" fill="#eab86e" rx="3"/>
+<text class="cellT" x="701" y="188" text-anchor="middle">0.5
+</text>
+<rect x="742" y="160" width="78" height="46" fill="#eab86e" rx="3"/>
+<text class="cellT" x="781" y="188" text-anchor="middle">1.0
+</text>
+<rect x="822" y="160" width="78" height="46" fill="#f2d291" rx="3"/>
+<text class="cellT" x="861" y="188" text-anchor="middle">2.1
+</text>
+<rect x="902" y="160" width="78" height="46" fill="#f7e6bd" rx="3"/>
+<text class="cellT" x="941" y="188" text-anchor="middle">5.2
+</text>
+<!-- row 2MP : 0.004 0.02 0.04 0.08 0.1 0.2 0.4 0.8 2.1 -->
+<text class="fm" x="52" y="238">2 MP
+</text>
+<text class="fm2" x="52" y="256">1200 px
+</text>
+<rect x="262" y="220" width="78" height="46" fill="#4a2a22" rx="3"/>
+<text class="cellT" x="301" y="248" text-anchor="middle">0.004
+</text>
+<rect x="342" y="220" width="78" height="46" fill="#7a3b2e" rx="3"/>
+<text class="cellT" x="381" y="248" text-anchor="middle">0.02
+</text>
+<rect x="422" y="220" width="78" height="46" fill="#a85a3a" rx="3"/>
+<text class="cellT" x="461" y="248" text-anchor="middle">0.04
+</text>
+<rect x="502" y="220" width="78" height="46" fill="#c47a45" rx="3"/>
+<text class="cellT" x="541" y="248" text-anchor="middle">0.08
+</text>
+<rect x="582" y="220" width="78" height="46" fill="#c47a45" rx="3"/>
+<text class="cellT" x="621" y="248" text-anchor="middle">0.1
+</text>
+<rect x="662" y="220" width="78" height="46" fill="#dc9a52" rx="3"/>
+<text class="cellT" x="701" y="248" text-anchor="middle">0.2
+</text>
+<rect x="742" y="220" width="78" height="46" fill="#dc9a52" rx="3"/>
+<text class="cellT" x="781" y="248" text-anchor="middle">0.4
+</text>
+<rect x="822" y="220" width="78" height="46" fill="#eab86e" rx="3"/>
+<text class="cellT" x="861" y="248" text-anchor="middle">0.8
+</text>
+<rect x="902" y="220" width="78" height="46" fill="#f2d291" rx="3"/>
+<text class="cellT" x="941" y="248" text-anchor="middle">2.1
+</text>
+<!-- row 5MP : 0.002 0.01 0.02 0.05 0.07 0.1 0.2 0.5 1.2 -->
+<text class="fm" x="52" y="298">5 MP
+</text>
+<text class="fm2" x="52" y="316">2050 px
+</text>
+<rect x="262" y="280" width="78" height="46" fill="#3a2019" rx="3"/>
+<text class="cellT" x="301" y="308" text-anchor="middle">0.002
+</text>
+<rect x="342" y="280" width="78" height="46" fill="#6b3025" rx="3"/>
+<text class="cellT" x="381" y="308" text-anchor="middle">0.01
+</text>
+<rect x="422" y="280" width="78" height="46" fill="#7a3b2e" rx="3"/>
+<text class="cellT" x="461" y="308" text-anchor="middle">0.02
+</text>
+<rect x="502" y="280" width="78" height="46" fill="#a85a3a" rx="3"/>
+<text class="cellT" x="541" y="308" text-anchor="middle">0.05
+</text>
+<rect x="582" y="280" width="78" height="46" fill="#a85a3a" rx="3"/>
+<text class="cellT" x="621" y="308" text-anchor="middle">0.07
+</text>
+<rect x="662" y="280" width="78" height="46" fill="#c47a45" rx="3"/>
+<text class="cellT" x="701" y="308" text-anchor="middle">0.1
+</text>
+<rect x="742" y="280" width="78" height="46" fill="#c47a45" rx="3"/>
+<text class="cellT" x="781" y="308" text-anchor="middle">0.2
+</text>
+<rect x="822" y="280" width="78" height="46" fill="#dc9a52" rx="3"/>
+<text class="cellT" x="861" y="308" text-anchor="middle">0.5
+</text>
+<rect x="902" y="280" width="78" height="46" fill="#eab86e" rx="3"/>
+<text class="cellT" x="941" y="308" text-anchor="middle">1.2
+</text>
+<!-- row 21MP : 0.001 0.006 0.01 0.02 0.04 0.06 0.1 0.2 0.6 -->
+<text class="fm" x="52" y="358">21 MP
+</text>
+<text class="fm2" x="52" y="376">4092 px
+</text>
+<rect x="262" y="340" width="78" height="46" fill="#2b1812" rx="3"/>
+<text class="cellT" x="301" y="368" text-anchor="middle">0.001
+</text>
+<rect x="342" y="340" width="78" height="46" fill="#4a2a22" rx="3"/>
+<text class="cellT" x="381" y="368" text-anchor="middle">0.006
+</text>
+<rect x="422" y="340" width="78" height="46" fill="#6b3025" rx="3"/>
+<text class="cellT" x="461" y="368" text-anchor="middle">0.01
+</text>
+<rect x="502" y="340" width="78" height="46" fill="#7a3b2e" rx="3"/>
+<text class="cellT" x="541" y="368" text-anchor="middle">0.02
+</text>
+<rect x="582" y="340" width="78" height="46" fill="#a85a3a" rx="3"/>
+<text class="cellT" x="621" y="368" text-anchor="middle">0.04
+</text>
+<rect x="662" y="340" width="78" height="46" fill="#a85a3a" rx="3"/>
+<text class="cellT" x="701" y="368" text-anchor="middle">0.06
+</text>
+<rect x="742" y="340" width="78" height="46" fill="#c47a45" rx="3"/>
+<text class="cellT" x="781" y="368" text-anchor="middle">0.1
+</text>
+<rect x="822" y="340" width="78" height="46" fill="#c47a45" rx="3"/>
+<text class="cellT" x="861" y="368" text-anchor="middle">0.2
+</text>
+<rect x="902" y="340" width="78" height="46" fill="#dc9a52" rx="3"/>
+<text class="cellT" x="941" y="368" text-anchor="middle">0.6
+</text>
+<!-- conclusion band -->
+<rect x="44" y="412" width="1112" height="120" rx="10" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.2"/>
+<text class="fm" x="60" y="440" fill="#c9a96a">四条可直接用的结论
+</text>
+<text class="fm2" x="60" y="468">一，横向扩视野代价很大：同一颗 21 MP 传感器，视野从 10 mm 放到 100 mm，判定公差从 0.01 mm 退到 0.1 mm，正好十倍。所以"换高像素"救不了大视野任务。
+</text>
+<text class="fm2" x="60" y="492">二，线阵的选型算式不同：像素数 = 视野除以最小缺陷再乘 3。Teledyne 的官方算例是视野 12 英寸、最小缺陷 0.005 英寸，得 7200 像素，选 8K 线阵。
+</text>
+<text class="fm2" x="60" y="516">三，看到 0.01 mm 以内就应当停手：这是二维测量的物理边界附近，再往上走应该换测量原理或升到 3D，而不是继续堆像素。
+</text>
+<text class="fm2" x="60" y="540">四，上表只保证"能分辨"，不代表"能判定稳定"：官方同时给出理想重复精度 0.1 像素、含余量的实用取值 0.5 像素，实际产线要留抖动与装夹余量。
+</text>
+<text class="foot" x="44" y="572">数据来源：KEYENCE 官方尺寸检测应用页的判定公差对照表（访问 2026-09-29）。
+</text>
+<text class="foot" x="44" y="590">线阵算式与算例来自 Teledyne DALSA 技术论文。单位毫米；判定公差约等于正负 5 像素，颜色深浅仅表示数值相对量级。
+</text>
 </svg>

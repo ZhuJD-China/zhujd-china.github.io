@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="100%" role="img" aria-label="照明几何与缺陷类型的匹配矩阵、四种背光的边缘陡峭度">
-  <style>
+<style>
     .bg{fill:#0b0b10}
     .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
     .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -18,110 +18,164 @@
     .mk2{fill:none;stroke:#7aa2c8;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:3 3}
     .mk3{fill:none;stroke:#cf5a50;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:2 4}
   </style>
-  <rect class="bg" x="0" y="0" width="1200" height="520" rx="14"/>
-  <text class="ttl" x="44" y="48">把缺陷映射到几何：这张表是照明选型的入口</text>
-  <text class="sub" x="44" y="74">实线＝厂商明确推荐的组合；虚线＝需实验验证。右下角是四种背光的边缘陡峭度排序</text>
-
-  <!-- 表头 -->
-  <g transform="translate(44,104)">
-    <text class="xs" x="0" y="-8">缺陷类型 ↓　／　照明几何 →</text>
-    <g class="sm" fill="#a09b8d">
-      <text x="238" y="-8" text-anchor="middle">明场</text>
-      <text x="308" y="-8" text-anchor="middle">暗场</text>
-      <text x="378" y="-8" text-anchor="middle">背光</text>
-      <text x="448" y="-8" text-anchor="middle">同轴</text>
-      <text x="518" y="-8" text-anchor="middle">环形</text>
-      <text x="588" y="-8" text-anchor="middle">掠射</text>
-      <text x="658" y="-8" text-anchor="middle">散射</text>
-      <text x="728" y="-8" text-anchor="middle">穹顶</text>
-    </g>
-    <line class="g" x1="0" y1="0" x2="768" y2="0"/>
-
-    <!-- 行 -->
-    <g transform="translate(0,0)">
-      <text class="lb" x="12" y="30">高度突变（崩边、凸印、台阶）</text>
-      <rect class="cell" x="198" y="6" width="70" height="40"/><rect class="cell" x="268" y="6" width="70" height="40"/>
-      <rect class="cell" x="338" y="6" width="70" height="40"/><rect class="cell" x="408" y="6" width="70" height="40"/>
-      <rect class="cell" x="478" y="6" width="70" height="40"/><rect class="cell" x="548" y="6" width="70" height="40"/>
-      <rect class="cell" x="618" y="6" width="70" height="40"/><rect class="cell" x="688" y="6" width="70" height="40"/>
-      <path class="mk" d="M294 26 l8 8 l14 -18"/>
-      <path class="mk" d="M584 26 l8 8 l14 -18"/>
-      <text class="xs" x="500" y="40">高角度明场也能出</text>
-    </g>
-    <g transform="translate(0,52)">
-      <text class="lb" x="12" y="30">表面散射（划痕、粗糙度）</text>
-      <rect class="cell" x="198" y="6" width="70" height="40"/><rect class="cell" x="268" y="6" width="70" height="40"/>
-      <rect class="cell" x="338" y="6" width="70" height="40"/><rect class="cell" x="408" y="6" width="70" height="40"/>
-      <rect class="cell" x="478" y="6" width="70" height="40"/><rect class="cell" x="548" y="6" width="70" height="40"/>
-      <rect class="cell" x="618" y="6" width="70" height="40"/><rect class="cell" x="688" y="6" width="70" height="40"/>
-      <path class="mk2" d="M300 26 l8 8 l14 -18"/>
-      <path class="mk2" d="M514 26 l8 8 l14 -18"/>
-      <text class="xs" x="410" y="40">均匀照明反而压低纹理对比（EO 实测）</text>
-    </g>
-    <g transform="translate(0,104)">
-      <text class="lb" x="12" y="30">轮廓 / 尺寸 / 孔位</text>
-      <rect class="cell" x="198" y="6" width="70" height="40"/><rect class="cell" x="268" y="6" width="70" height="40"/>
-      <rect class="cell" x="338" y="6" width="70" height="40"/><rect class="cell" x="408" y="6" width="70" height="40"/>
-      <rect class="cell" x="478" y="6" width="70" height="40"/><rect class="cell" x="548" y="6" width="70" height="40"/>
-      <rect class="cell" x="618" y="6" width="70" height="40"/><rect class="cell" x="688" y="6" width="70" height="40"/>
-      <path class="mk" d="M366 26 l8 8 l14 -18"/>
-    </g>
-    <g transform="translate(0,156)">
-      <text class="lb" x="12" y="30">镜面反射件（金属、玻璃、PCB 焊盘）</text>
-      <rect class="cell" x="198" y="6" width="70" height="40"/><rect class="cell" x="268" y="6" width="70" height="40"/>
-      <rect class="cell" x="338" y="6" width="70" height="40"/><rect class="cell" x="408" y="6" width="70" height="40"/>
-      <rect class="cell" x="478" y="6" width="70" height="40"/><rect class="cell" x="548" y="6" width="70" height="40"/>
-      <rect class="cell" x="618" y="6" width="70" height="40"/><rect class="cell" x="688" y="6" width="70" height="40"/>
-      <path class="mk" d="M440 26 l8 8 l14 -18"/>
-      <path class="mk2" d="M724 26 l8 8 l14 -18"/>
-      <text class="xs" x="500" y="40">环形 CV-DR：扩散低角，专用镜面金属</text>
-    </g>
-    <g transform="translate(0,208)">
-      <text class="lb" x="12" y="30">透明件（玻璃、膜下芯片）</text>
-      <rect class="cell" x="198" y="6" width="70" height="40"/><rect class="cell" x="268" y="6" width="70" height="40"/>
-      <rect class="cell" x="338" y="6" width="70" height="40"/><rect class="cell" x="408" y="6" width="70" height="40"/>
-      <rect class="cell" x="478" y="6" width="70" height="40"/><rect class="cell" x="548" y="6" width="70" height="40"/>
-      <rect class="cell" x="618" y="6" width="70" height="40"/><rect class="cell" x="688" y="6" width="70" height="40"/>
-      <path class="mk2" d="M366 26 l8 8 l14 -18"/>
-      <text class="xs" x="410" y="40">红光透过率更高 → 对比更高（KEYENCE 实验）</text>
-    </g>
-    <g transform="translate(0,260)">
-      <text class="lb" x="12" y="30">内应力 / 双折射</text>
-      <rect class="cell" x="198" y="6" width="70" height="40"/><rect class="cell" x="268" y="6" width="70" height="40"/>
-      <rect class="cell" x="338" y="6" width="70" height="40"/><rect class="cell" x="408" y="6" width="70" height="40"/>
-      <rect class="cell" x="478" y="6" width="70" height="40"/><rect class="cell" x="548" y="6" width="70" height="40"/>
-      <rect class="cell" x="618" y="6" width="70" height="40"/><rect class="cell" x="688" y="6" width="70" height="40"/>
-      <path class="mk3" d="M366 26 l8 8 l14 -18"/>
-      <text class="xs" x="340" y="58">必须偏振背光 + 镜头前分析片；NIR 下须换 400–2000 nm 偏振片</text>
-    </g>
-  </g>
-
-  <!-- 右：四种背光 -->
-  <g transform="translate(856,116)">
-    <text class="hd" x="0" y="0">四种背光的边缘陡峭度</text>
-    <g transform="translate(0,20)">
-      <path class="mk" d="M0 60 L120 60"/>
-      <text class="sm" x="132" y="52">远心照明器</text>
-      <text class="xs" x="132" y="68">截止最快、最一致</text>
-    </g>
-    <g transform="translate(0,84)">
-      <path class="mk2" d="M0 20 L120 46"/>
-      <text class="sm" x="132" y="30">准直背光</text>
-      <text class="xs" x="132" y="46">一致但过渡约 2× 像素</text>
-    </g>
-    <g transform="translate(0,150)">
-      <path class="mk3" d="M0 4 L120 58"/>
-      <text class="sm" x="132" y="30">遮罩背光</text>
-    </g>
-    <g transform="translate(0,196)">
-      <path class="mk3" d="M0 -14 L120 78"/>
-      <text class="sm" x="132" y="30">常规背光</text>
-    </g>
-    <text class="xs" x="0" y="296">边缘越陡，亚像素拟合重复性越好</text>
-    <text class="xs" x="0" y="314">远心背光实拍案例：M10 螺纹曝光</text>
-    <text class="xs" x="0" y="330">2.5 ms → 800 µs，产线 10 ppm 解除</text>
-  </g>
-
-  <text class="foot" x="44" y="478">口径：映射关系综合自 Cognex 照明技术文档、OPT 几何选型判据、KEYENCE 低角度光与灯光选型指南、Edmund Optics 剪影背光应用笔记与环形光实测；四种背光的陡峭度比较为 Edmund Optics 原表述。</text>
-  <text class="foot" x="44" y="498">图为作者按厂商原表述整理的工程映射表，不是厂商官方对照表；边缘陡峭度斜线为示意。</text>
+<rect class="bg" x="0" y="0" width="1200" height="520" rx="14"/>
+<text class="ttl" x="44" y="48">把缺陷映射到几何：这张表是照明选型的入口
+</text>
+<text class="sub" x="44" y="74">实线＝厂商明确推荐的组合；虚线＝需实验验证。右下角是四种背光的边缘陡峭度排序
+</text>
+<!-- 表头 -->
+<g transform="translate(44,104)">
+<text class="xs" x="0" y="-8">缺陷类型 ↓　／　照明几何 →
+</text>
+<g class="sm" fill="#a09b8d">
+<text x="238" y="-8" text-anchor="middle">明场
+</text>
+<text x="308" y="-8" text-anchor="middle">暗场
+</text>
+<text x="378" y="-8" text-anchor="middle">背光
+</text>
+<text x="448" y="-8" text-anchor="middle">同轴
+</text>
+<text x="518" y="-8" text-anchor="middle">环形
+</text>
+<text x="588" y="-8" text-anchor="middle">掠射
+</text>
+<text x="658" y="-8" text-anchor="middle">散射
+</text>
+<text x="728" y="-8" text-anchor="middle">穹顶
+</text>
+</g>
+<line class="g" x1="0" y1="0" x2="768" y2="0"/>
+<!-- 行 -->
+<g transform="translate(0,0)">
+<text class="lb" x="12" y="30">高度突变（崩边、凸印、台阶）
+</text>
+<rect class="cell" x="198" y="6" width="70" height="40"/>
+<rect class="cell" x="268" y="6" width="70" height="40"/>
+<rect class="cell" x="338" y="6" width="70" height="40"/>
+<rect class="cell" x="408" y="6" width="70" height="40"/>
+<rect class="cell" x="478" y="6" width="70" height="40"/>
+<rect class="cell" x="548" y="6" width="70" height="40"/>
+<rect class="cell" x="618" y="6" width="70" height="40"/>
+<rect class="cell" x="688" y="6" width="70" height="40"/>
+<path class="mk" d="M294 26 l8 8 l14 -18"/>
+<path class="mk" d="M584 26 l8 8 l14 -18"/>
+<text class="xs" x="500" y="40">高角度明场也能出
+</text>
+</g>
+<g transform="translate(0,52)">
+<text class="lb" x="12" y="30">表面散射（划痕、粗糙度）
+</text>
+<rect class="cell" x="198" y="6" width="70" height="40"/>
+<rect class="cell" x="268" y="6" width="70" height="40"/>
+<rect class="cell" x="338" y="6" width="70" height="40"/>
+<rect class="cell" x="408" y="6" width="70" height="40"/>
+<rect class="cell" x="478" y="6" width="70" height="40"/>
+<rect class="cell" x="548" y="6" width="70" height="40"/>
+<rect class="cell" x="618" y="6" width="70" height="40"/>
+<rect class="cell" x="688" y="6" width="70" height="40"/>
+<path class="mk2" d="M300 26 l8 8 l14 -18"/>
+<path class="mk2" d="M514 26 l8 8 l14 -18"/>
+<text class="xs" x="410" y="40">均匀照明反而压低纹理对比（EO 实测）
+</text>
+</g>
+<g transform="translate(0,104)">
+<text class="lb" x="12" y="30">轮廓 / 尺寸 / 孔位
+</text>
+<rect class="cell" x="198" y="6" width="70" height="40"/>
+<rect class="cell" x="268" y="6" width="70" height="40"/>
+<rect class="cell" x="338" y="6" width="70" height="40"/>
+<rect class="cell" x="408" y="6" width="70" height="40"/>
+<rect class="cell" x="478" y="6" width="70" height="40"/>
+<rect class="cell" x="548" y="6" width="70" height="40"/>
+<rect class="cell" x="618" y="6" width="70" height="40"/>
+<rect class="cell" x="688" y="6" width="70" height="40"/>
+<path class="mk" d="M366 26 l8 8 l14 -18"/>
+</g>
+<g transform="translate(0,156)">
+<text class="lb" x="12" y="30">镜面反射件（金属、玻璃、PCB 焊盘）
+</text>
+<rect class="cell" x="198" y="6" width="70" height="40"/>
+<rect class="cell" x="268" y="6" width="70" height="40"/>
+<rect class="cell" x="338" y="6" width="70" height="40"/>
+<rect class="cell" x="408" y="6" width="70" height="40"/>
+<rect class="cell" x="478" y="6" width="70" height="40"/>
+<rect class="cell" x="548" y="6" width="70" height="40"/>
+<rect class="cell" x="618" y="6" width="70" height="40"/>
+<rect class="cell" x="688" y="6" width="70" height="40"/>
+<path class="mk" d="M440 26 l8 8 l14 -18"/>
+<path class="mk2" d="M724 26 l8 8 l14 -18"/>
+<text class="xs" x="500" y="40">环形 CV-DR：扩散低角，专用镜面金属
+</text>
+</g>
+<g transform="translate(0,208)">
+<text class="lb" x="12" y="30">透明件（玻璃、膜下芯片）
+</text>
+<rect class="cell" x="198" y="6" width="70" height="40"/>
+<rect class="cell" x="268" y="6" width="70" height="40"/>
+<rect class="cell" x="338" y="6" width="70" height="40"/>
+<rect class="cell" x="408" y="6" width="70" height="40"/>
+<rect class="cell" x="478" y="6" width="70" height="40"/>
+<rect class="cell" x="548" y="6" width="70" height="40"/>
+<rect class="cell" x="618" y="6" width="70" height="40"/>
+<rect class="cell" x="688" y="6" width="70" height="40"/>
+<path class="mk2" d="M366 26 l8 8 l14 -18"/>
+<text class="xs" x="410" y="40">红光透过率更高 → 对比更高（KEYENCE 实验）
+</text>
+</g>
+<g transform="translate(0,260)">
+<text class="lb" x="12" y="30">内应力 / 双折射
+</text>
+<rect class="cell" x="198" y="6" width="70" height="40"/>
+<rect class="cell" x="268" y="6" width="70" height="40"/>
+<rect class="cell" x="338" y="6" width="70" height="40"/>
+<rect class="cell" x="408" y="6" width="70" height="40"/>
+<rect class="cell" x="478" y="6" width="70" height="40"/>
+<rect class="cell" x="548" y="6" width="70" height="40"/>
+<rect class="cell" x="618" y="6" width="70" height="40"/>
+<rect class="cell" x="688" y="6" width="70" height="40"/>
+<path class="mk3" d="M366 26 l8 8 l14 -18"/>
+<text class="xs" x="340" y="58">必须偏振背光 + 镜头前分析片；NIR 下须换 400–2000 nm 偏振片
+</text>
+</g>
+</g>
+<!-- 右：四种背光 -->
+<g transform="translate(856,116)">
+<text class="hd" x="0" y="0">四种背光的边缘陡峭度
+</text>
+<g transform="translate(0,20)">
+<path class="mk" d="M0 60 L120 60"/>
+<text class="sm" x="132" y="52">远心照明器
+</text>
+<text class="xs" x="132" y="68">截止最快、最一致
+</text>
+</g>
+<g transform="translate(0,84)">
+<path class="mk2" d="M0 20 L120 46"/>
+<text class="sm" x="132" y="30">准直背光
+</text>
+<text class="xs" x="132" y="46">一致但过渡约 2× 像素
+</text>
+</g>
+<g transform="translate(0,150)">
+<path class="mk3" d="M0 4 L120 58"/>
+<text class="sm" x="132" y="30">遮罩背光
+</text>
+</g>
+<g transform="translate(0,196)">
+<path class="mk3" d="M0 -14 L120 78"/>
+<text class="sm" x="132" y="30">常规背光
+</text>
+</g>
+<text class="xs" x="0" y="296">边缘越陡，亚像素拟合重复性越好
+</text>
+<text class="xs" x="0" y="314">远心背光实拍案例：M10 螺纹曝光
+</text>
+<text class="xs" x="0" y="330">2.5 ms → 800 µs，产线 10 ppm 解除
+</text>
+</g>
+<text class="foot" x="44" y="478">口径：映射关系综合自 Cognex 照明技术文档、OPT 几何选型判据、KEYENCE 低角度光与灯光选型指南、Edmund Optics 剪影背光应用笔记与环形光实测；四种背光的陡峭度比较为 Edmund Optics 原表述。
+</text>
+<text class="foot" x="44" y="498">图为作者按厂商原表述整理的工程映射表，不是厂商官方对照表；边缘陡峭度斜线为示意。
+</text>
 </svg>

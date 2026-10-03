@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 635" width="100%" role="img" aria-label="八家厂商对精度的八种定义与统计量对照">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 12px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 12px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 12px 'JetBrains Mono',Consolas,monospace}
+    .g{fill:none;stroke:#8a8578;stroke-width:1;stroke-opacity:.35}
+    .cellA{fill:#1a1712}
+    .cellB{fill:#14161c}
+    .cellC{fill:#1d1414}
+    .cellD{fill:#181a14}
+    .none{fill:none;stroke:#cf5a50;stroke-width:1.4;stroke-opacity:.8}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="635" rx="14"/>
+<text class="ttl" x="44" y="50">八家厂商，同一个词，八种定义
+</text>
+<text class="sub" x="44" y="76">拿到一个 3D 精度数字，先查它落在哪一格。这张表的用途就在于此
+</text>
+<!-- 表头 -->
+<g transform="translate(44,100)">
+<rect x="0" y="0" width="1112" height="30" rx="5" fill="#1a1712" stroke="#8a8578" stroke-opacity=".35" stroke-width="1"/>
+<text class="sm" x="12" y="20" fill="#a09b8d">厂商
+</text>
+<text class="sm" x="178" y="20" fill="#a09b8d">它说的「精度」其实是
+</text>
+<text class="sm" x="480" y="20" fill="#a09b8d">统计量
+</text>
+<text class="sm" x="682" y="20" fill="#a09b8d">分母 / 单位
+</text>
+<text class="sm" x="860" y="20" fill="#a09b8d">测量靶与环境
+</text>
+</g>
+<!-- 行 -->
+<g transform="translate(44,134)">
+<rect class="cellA" x="0" y="0" width="1112" height="40"/>
+<text class="mon" x="12" y="25" fill="#c9a96a">Zivid
+</text>
+<text class="sm" x="178" y="25">point precision + dimension trueness
+</text>
+<text class="mon" x="480" y="25" fill="#c9a96a">1σ / 70th pct
+</text>
+<text class="mon" x="682" y="25" fill="#c9a96a">% of 尺寸 / µm
+</text>
+<text class="sm" x="860" y="25">参考物 5–50 cm；含温度、振动、冲击
+</text>
+</g>
+<g transform="translate(44,174)">
+<rect class="cellB" x="0" y="0" width="1112" height="40"/>
+<text class="mon" x="12" y="25" fill="#7aa2c8">Photoneo / Zebra
+</text>
+<text class="sm" x="178" y="25">calibration accuracy（全部 3D 点误差的标准差）
+</text>
+<text class="mon" x="480" y="25" fill="#7aa2c8">1σ
+</text>
+<text class="mon" x="682" y="25" fill="#7aa2c8">mm
+</text>
+<text class="sm" x="860" y="25">temporal noise 绑定 80% albedo 漫射面
+</text>
+</g>
+<g transform="translate(44,214)">
+<rect class="cellC" x="0" y="0" width="1112" height="40"/>
+<text class="mon" x="12" y="25" fill="#cf5a50">Mech-Eye
+</text>
+<text class="sm" x="178" y="25">Z 重复性（单点/区域）+ VDI/VDE 绝对精度
+</text>
+<text class="mon" x="480" y="25" fill="#cf5a50">1σ 中位数 / 极值
+</text>
+<text class="mon" x="682" y="25" fill="#cf5a50">mm / % of 真值
+</text>
+<text class="sm" x="860" y="25">白色陶瓷漫射板；哑铃规 7 位置
+</text>
+</g>
+<g transform="translate(44,254)">
+<rect class="cellB" x="0" y="0" width="1112" height="40"/>
+<text class="mon" x="12" y="25" fill="#7aa2c8">KEYENCE
+</text>
+<text class="sm" x="178" y="25">不用 accuracy 一词，只给 repeatability 与 linearity
+</text>
+<text class="mon" x="480" y="25" fill="#7aa2c8">厂商未标
+</text>
+<text class="mon" x="682" y="25" fill="#7aa2c8">% of F.S. / µm
+</text>
+<text class="sm" x="860" y="25">厂商标准靶
+</text>
+</g>
+<g transform="translate(44,294)">
+<rect class="cellB" x="0" y="0" width="1112" height="40"/>
+<text class="mon" x="12" y="25" fill="#7aa2c8">Cognex
+</text>
+<text class="sm" x="178" y="25">Z 重复性（4×4 mm 均值）/ 线性度（250 点极值）
+</text>
+<text class="mon" x="480" y="25" fill="#7aa2c8">100 次均值 / 极值
+</text>
+<text class="mon" x="682" y="25" fill="#7aa2c8">µm
+</text>
+<text class="sm" x="860" y="25">量程中部；标准 Cognex 靶
+</text>
+</g>
+<g transform="translate(44,334)">
+<rect class="cellA" x="0" y="0" width="1112" height="40"/>
+<text class="mon" x="12" y="25" fill="#c9a96a">Intel RealSense
+</text>
+<text class="sm" x="178" y="25">Z-accuracy + RMS（空间噪声）+ temporal noise
+</text>
+<text class="mon" x="480" y="25" fill="#c9a96a">≤2% / ≤2% / ≤1%
+</text>
+<text class="mon" x="682" y="25" fill="#c9a96a">% of 距离
+</text>
+<text class="sm" x="860" y="25">真值比对；80% ROI，HD 分辨率
+</text>
+</g>
+<g transform="translate(44,374)">
+<rect class="cellB" x="0" y="0" width="1112" height="40"/>
+<text class="mon" x="12" y="25" fill="#7aa2c8">Basler
+</text>
+<text class="sm" x="178" y="25">accuracy（平均差/系统）+ precision（标准差/随机）
+</text>
+<text class="mon" x="480" y="25" fill="#7aa2c8">平均差 / 标准差
+</text>
+<text class="mon" x="682" y="25" fill="#7aa2c8">mm
+</text>
+<text class="sm" x="860" y="25">白色靶 90% 反射率、20 min 暖机、25 帧平均
+</text>
+</g>
+<g transform="translate(44,414)">
+<rect class="cellD" x="0" y="0" width="1112" height="40"/>
+<text class="mon" x="12" y="25" fill="#8fbf7a">Sony（传感器层）
+</text>
+<path class="none" d="M136 12 L560 28"/>
+<text class="sm" x="240" y="25" fill="#cf5a50">规格表只给物理与调制参数，不给「精度」字样 —— 定义未找到
+</text>
+<text class="xs" x="860" y="25">卖传感器，不定义系统级精度
+</text>
+</g>
+<g transform="translate(44,454)">
+<rect x="0" y="0" width="1112" height="30" fill="#1a1712" stroke="#8a8578" stroke-opacity=".35" stroke-width="1"/>
+<text class="sm" x="12" y="20" fill="#8a8578">参考：Micro-Epsilon（激光轮廓仪）口径声明——「所给数据适用于白色漫反射表面」，线性度标为 % of FSO
+</text>
+</g>
+<!-- 表格描边 -->
+<g transform="translate(44,134)">
+<rect x="0" y="0" width="1112" height="350" fill="none" stroke="#8a8578" stroke-opacity=".3" stroke-width="1"/>
+<line class="g" x1="168" y1="0" x2="168" y2="350"/>
+<line class="g" x1="470" y1="0" x2="470" y2="350"/>
+<line class="g" x1="672" y1="0" x2="672" y2="350"/>
+<line class="g" x1="850" y1="0" x2="850" y2="350"/>
+</g>
+<!-- 四问 -->
+<text class="hd" x="44" y="524">验收层的四问
+</text>
+<g transform="translate(44,538)">
+<text class="sm" x="0" y="18">① 随机还是系统？（决定能否测准尺寸的是系统误差）
+</text>
+<text class="sm" x="300" y="18">② 分母是什么？（% of 距离 / % of 尺寸 / F.S. 不可比）
+</text>
+<text class="sm" x="640" y="18">③ 什么靶、多远、什么温度？
+</text>
+<text class="sm" x="900" y="18">④ 哪个分位？
+</text>
+<text class="xs" x="0" y="40" fill="#cf5a50">查无一手来源、本文明确写「未找到」的四项：①「反射率低于 X% 不可用」的数值阈值（七家均无）　② KEYENCE 的 accuracy 定义（它不用这个词）　③ Sony 的 3D 精度定义句
+</text>
+<text class="xs" x="0" y="56" fill="#cf5a50">④ VDA 5 正文对 trueness/precision 的定义（付费标准，5.1 修订版只指向章节不复述定义）
+</text>
+</g>
+<text class="foot" x="44" y="618" >口径：各厂商定义句均为官方文档原文引用，逐条 URL 见正文第 7 节表格；Cognex 脚注文本经经销商镜像读取，已在正文标注；Micro-Epsilon 的白色漫反射表面口径引自其 optoNCDT 产品目录。
+</text>
+</svg>

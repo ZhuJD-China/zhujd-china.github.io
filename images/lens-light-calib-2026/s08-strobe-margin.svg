@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="频闪的过驱安全边界、峰值与连续输出比、曝光窗口时序">
-  <style>
+﻿
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 706" width="100%" role="img" aria-label="频闪的过驱安全边界、峰值与连续输出比、曝光窗口时序">
+<style>
     .bg{fill:#0b0b10}
     .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
     .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -18,100 +19,146 @@
     .pulse{fill:#c9a96a;fill-opacity:.55}
     .win{fill:none;stroke:#7aa2c8;stroke-width:1.6}
   </style>
-  <rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
-  <text class="ttl" x="44" y="48">频闪：峰值不是随便能拉的</text>
-  <text class="sub" x="44" y="74">亮度 ↔ 最大脉宽 ↔ 最大占空比是一组联动的硬边界；越亮，脉宽越短、占空比越低</text>
-
-  <!-- 上左：过驱安全表 -->
-  <text class="hd" x="44" y="120">Basler 过驱安全表</text>
-  <g transform="translate(44,136)">
-    <rect class="cellA" x="0" y="0" width="420" height="30" rx="4"/>
-    <rect class="cellB" x="0" y="36" width="420" height="30" rx="4"/>
-    <rect class="cellB" x="0" y="72" width="420" height="30" rx="4"/>
-    <rect class="cellB" x="0" y="108" width="420" height="30" rx="4"/>
-    <rect class="cellB" x="0" y="144" width="420" height="30" rx="4"/>
-    <text class="xs" x="12" y="12" fill="#a09b8d">亮度设定</text>
-    <text class="xs" x="176" y="12" fill="#a09b8d">最大脉冲宽度</text>
-    <text class="xs" x="336" y="12" fill="#a09b8d">最大占空比</text>
-    <text class="mon" x="12" y="56">0–100%</text>
-    <text class="mon" x="176" y="56" fill="#8fbf7a">无限制</text>
-    <text class="mon" x="336" y="56" fill="#8fbf7a">100%</text>
-    <text class="mor" x="12" y="92">101–200%</text>
-    <text class="mor" x="176" y="92">30 ms</text>
-    <text class="mor" x="336" y="92">30%</text>
-    <text class="mor" x="12" y="128">201–300%</text>
-    <text class="mor" x="176" y="128">10 ms</text>
-    <text class="mor" x="336" y="128">20%</text>
-    <text class="mor" x="12" y="164">301–500%</text>
-    <text class="mor" x="176" y="164">2 ms</text>
-    <text class="mor" x="336" y="164">10%</text>
-    <text class="mor" x="12" y="200">501–1000%</text>
-    <text class="mor" x="176" y="200">1 ms</text>
-    <text class="mor" x="336" y="200">5%</text>
-    <text class="sm" x="0" y="234">超出后相机会自动缩短脉宽，或直接忽略触发。</text>
-  </g>
-
-  <!-- 上中：输出比 -->
-  <g transform="translate(520,120)">
-    <text class="hd" x="0" y="0">典型型号：连续 → 频闪峰值</text>
-    <g transform="translate(0,26)">
-      <rect x="0" y="0" width="80" height="24" rx="3" fill="#7aa2c8" fill-opacity=".5"/>
-      <rect x="0" y="0" width="560" height="6" rx="2" fill="#8a8578" fill-opacity=".3"/>
-      <rect x="0" y="0" width="560" height="6" rx="2" fill="#7aa2c8" fill-opacity=".0"/>
-      <rect x="80" y="-2" width="112" height="28" rx="4" fill="#c9a96a" fill-opacity=".6"/>
-      <text class="sm" x="0" y="42">SVL DDL-250 穹顶</text>
-      <text class="mon" x="210" y="42">5×　41,000 → 205,000 lux @25 mm</text>
-    </g>
-    <g transform="translate(0,80)">
-      <rect x="80" y="-2" width="784" height="28" rx="4" fill="#c9a96a" fill-opacity=".6"/>
-      <text class="sm" x="0" y="20">SVL L300G2 线光</text>
-      <text class="mon" x="210" y="20">7.2×　20 W → 144 W（850 mA → 6 A）</text>
-    </g>
-    <g transform="translate(0,140)">
-      <rect x="80" y="-2" width="392" height="28" rx="4" fill="#c9a96a" fill-opacity=".6"/>
-      <text class="sm" x="0" y="20">SVL NanoDrive 常规过驱</text>
-      <text class="mon" x="210" y="20">3–8×（电流 4–10 倍），极端 10×</text>
-      <text class="xs" x="210" y="42">集成驱动 500 ns 内全功率；1 µs / 10% 占空比 → 100,000 次/秒</text>
-    </g>
-    <g transform="translate(0,206)">
-      <rect x="80" y="-2" width="490" height="28" rx="4" fill="#7aa2c8" fill-opacity=".55"/>
-      <text class="sm" x="0" y="20">iiM AG（Lumimax）</text>
-      <text class="moc" x="210" y="20">&gt;5,000,000 lux　相对连续最高 25×</text>
-    </g>
-    <g transform="translate(0,266)">
-      <text class="sm" x="0" y="20">氙灯：典型脉宽 15–30 µs，必要时可低至 <tspan class="mon">250 ns</tspan></text>
-      <text class="sm" x="0" y="48">平均电流约束：<tspan class="moc">I_avg = I_max × t_on × f</tspan></text>
-      <text class="xs" x="16" y="70">OPT 算例：1.8 A × 1 ms × 15 Hz → 27 mA；频率翻倍则 t_on 必须减半</text>
-    </g>
-  </g>
-
-  <!-- 下：时序 -->
-  <text class="hd" x="44" y="424">时序：脉冲必须落在曝光窗口内</text>
-  <g transform="translate(44,442)">
-    <!-- 正确 -->
-    <text class="sm" x="0" y="14" fill="#8fbf7a">正确：相机控制频闪</text>
-    <g transform="translate(150,0)">
-      <rect class="win" x="0" y="0" width="300" height="34"/>
-      <text class="xs" x="150" y="52" text-anchor="middle" fill="#7aa2c8">曝光窗口 BslFlashWindowDuration</text>
-      <rect class="pulse" x="60" y="6" width="180" height="22" rx="3"/>
-      <text class="mon" x="150" y="21" text-anchor="middle">频闪脉冲</text>
-    </g>
-    <text class="sm" x="490" y="14" fill="#8fbf7a">Basler 自动模式：脉宽由相机的 flash window 时长决定</text>
-
-    <!-- 错误 -->
-    <text class="sm" x="0" y="92" fill="#cf5a50">错误：PLC 触发频闪</text>
-    <g transform="translate(150,78)">
-      <rect class="win" x="0" y="0" width="300" height="34"/>
-      <text class="xs" x="150" y="52" text-anchor="middle" fill="#7aa2c8">曝光窗口</text>
-      <rect x="180" y="6" width="180" height="22" rx="3" fill="#cf5a50" fill-opacity=".45"/>
-      <text class="mon" x="270" y="21" text-anchor="middle" fill="#e8e4dc">脉冲起点偏移</text>
-      <path d="M150 44 L270 44" stroke="#cf5a50" stroke-width="1.4" stroke-dasharray="3 3"/>
-      <text class="xs" x="270" y="62" text-anchor="middle" fill="#cf5a50">时序偏移</text>
-    </g>
-    <text class="sm" x="490" y="92" fill="#cf5a50">Cognex：PLC 控制会引入难以诊断的时序偏移，造成间歇性图像质量失败</text>
-    <text class="xs" x="490" y="112">原话建议——「把它接到相机上。让相机来启动频闪，这样就好了。」</text>
-  </g>
-
-  <text class="foot" x="44" y="586">口径：过驱安全表、flash window 行为引自 Basler light control 文档；电流—占空比与 PWM 频率引自 Basler 各光源页；输出比与脉宽引自 Smart Vision Lights L300G2 / DDL-250 datasheet 与 NanoDrive 白皮书、iiM AG Lumimax 知识库；平均电流公式与算例引自 OPT 光基础知识；PLC 反对意见引自 Cognex《Machine Vision Lighting Techniques》。</text>
-  <text class="foot" x="44" y="606">条形长度为按标注倍数等比绘制；时序图为示意，不按时间轴比例。</text>
+<rect class="bg" x="0" y="0" width="1200" height="706" rx="14"/>
+<text class="ttl" x="44" y="48">频闪：峰值不是随便能拉的
+</text>
+<text class="sub" x="44" y="74">亮度 ↔ 最大脉宽 ↔ 最大占空比是一组联动的硬边界；越亮，脉宽越短、占空比越低
+</text>
+<!-- 上左：过驱安全表 -->
+<text class="hd" x="44" y="120">Basler 过驱安全表
+</text>
+<g transform="translate(44,136)">
+<rect class="cellA" x="0" y="0" width="420" height="30" rx="4"/>
+<rect class="cellB" x="0" y="36" width="420" height="30" rx="4"/>
+<rect class="cellB" x="0" y="72" width="420" height="30" rx="4"/>
+<rect class="cellB" x="0" y="108" width="420" height="30" rx="4"/>
+<rect class="cellB" x="0" y="144" width="420" height="30" rx="4"/>
+<text class="xs" x="12" y="12" fill="#a09b8d">亮度设定
+</text>
+<text class="xs" x="176" y="12" fill="#a09b8d">最大脉冲宽度
+</text>
+<text class="xs" x="336" y="12" fill="#a09b8d">最大占空比
+</text>
+<text class="mon" x="12" y="56">0–100%
+</text>
+<text class="mon" x="176" y="56" fill="#8fbf7a">无限制
+</text>
+<text class="mon" x="336" y="56" fill="#8fbf7a">100%
+</text>
+<text class="mor" x="12" y="92">101–200%
+</text>
+<text class="mor" x="176" y="92">30 ms
+</text>
+<text class="mor" x="336" y="92">30%
+</text>
+<text class="mor" x="12" y="128">201–300%
+</text>
+<text class="mor" x="176" y="128">10 ms
+</text>
+<text class="mor" x="336" y="128">20%
+</text>
+<text class="mor" x="12" y="164">301–500%
+</text>
+<text class="mor" x="176" y="164">2 ms
+</text>
+<text class="mor" x="336" y="164">10%
+</text>
+<text class="mor" x="12" y="200">501–1000%
+</text>
+<text class="mor" x="176" y="200">1 ms
+</text>
+<text class="mor" x="336" y="200">5%
+</text>
+<text class="sm" x="0" y="234">超出后相机会自动缩短脉宽，或直接忽略触发。
+</text>
+</g>
+<!-- 上中：输出比 -->
+<g transform="translate(520,120)">
+<text class="hd" x="0" y="0">典型型号：连续 → 频闪峰值
+</text>
+<g transform="translate(0,26)">
+<rect x="0" y="0" width="80" height="6" rx="2" fill="#8a8578" fill-opacity=".3"/>
+<rect x="0" y="0" width="500" height="6" rx="2" fill="#8a8578" fill-opacity=".12"/>
+<rect x="80" y="-2" width="100" height="28" rx="4" fill="#c9a96a" fill-opacity=".6"/>
+<text class="sm" x="0" y="48">SVL DDL-250 穹顶
+</text>
+<text class="mon" x="210" y="48">5×　41,000 → 205,000 lux @25 mm
+</text>
+</g>
+<g transform="translate(0,84)">
+<rect x="80" y="-2" width="144" height="28" rx="4" fill="#c9a96a" fill-opacity=".6"/>
+<text class="sm" x="0" y="48">SVL L300G2 线光
+</text>
+<text class="mon" x="210" y="48">7.2×　20 W → 144 W（850 mA → 6 A）
+</text>
+</g>
+<g transform="translate(0,142)">
+<rect x="80" y="-2" width="160" height="28" rx="4" fill="#c9a96a" fill-opacity=".6"/>
+<text class="sm" x="0" y="48">SVL NanoDrive 常规过驱
+</text>
+<text class="mon" x="210" y="48">3–8×（电流 4–10 倍），极端 10×
+</text>
+<text class="xs" x="210" y="66">集成驱动 500 ns 内全功率；1 µs / 10% 占空比 → 100,000 次/秒
+</text>
+</g>
+<g transform="translate(0,220)">
+<rect x="80" y="-2" width="500" height="28" rx="4" fill="#7aa2c8" fill-opacity=".55"/>
+<text class="sm" x="0" y="48">iiM AG（Lumimax）
+</text>
+<text class="moc" x="210" y="48">&gt;5,000,000 lux　相对连续最高 25×
+</text>
+</g>
+<g transform="translate(0,286)">
+<text class="sm" x="0" y="0">氙灯：典型脉宽 15–30 µs，必要时可低至<tspan class="mon">250 ns
+</tspan>
+</text>
+<text class="sm" x="0" y="22">平均电流约束：<tspan class="moc">I_avg = I_max × t_on × f
+</tspan>
+</text>
+<text class="xs" x="16" y="44">OPT 算例：1.8 A × 1 ms × 15 Hz → 27 mA；频率翻倍则 t_on 必须减半
+</text>
+</g>
+</g>
+<!-- 下：时序 -->
+<text class="hd" x="44" y="464">时序：脉冲必须落在曝光窗口内
+</text>
+<g transform="translate(44,482)">
+<!-- 正确 -->
+<text class="sm" x="0" y="14" fill="#8fbf7a">正确：相机控制频闪
+</text>
+<g transform="translate(150,0)">
+<rect class="win" x="0" y="0" width="300" height="34"/>
+<text class="xs" x="150" y="52" text-anchor="middle" fill="#7aa2c8">曝光窗口 BslFlashWindowDuration
+</text>
+<rect class="pulse" x="60" y="6" width="180" height="22" rx="3"/>
+<text class="mon" x="150" y="21" text-anchor="middle">频闪脉冲
+</text>
+</g>
+<text class="sm" x="490" y="14" fill="#8fbf7a">Basler 自动模式：脉宽由相机的 flash window 时长决定
+</text>
+<!-- 错误 -->
+<text class="sm" x="0" y="92" fill="#cf5a50">错误：PLC 触发频闪
+</text>
+<g transform="translate(150,78)">
+<rect class="win" x="0" y="0" width="300" height="34"/>
+<text class="xs" x="150" y="52" text-anchor="middle" fill="#7aa2c8">曝光窗口
+</text>
+<rect x="180" y="6" width="180" height="22" rx="3" fill="#cf5a50" fill-opacity=".45"/>
+<text class="mon" x="270" y="21" text-anchor="middle" fill="#e8e4dc">脉冲起点偏移
+</text>
+<path d="M150 44 L270 44" stroke="#cf5a50" stroke-width="1.4" stroke-dasharray="3 3"/>
+<text class="xs" x="270" y="62" text-anchor="middle" fill="#cf5a50">时序偏移
+</text>
+</g>
+<text class="sm" x="490" y="92" fill="#cf5a50">Cognex：PLC 控制会引入难以诊断的时序偏移，造成间歇性图像质量失败
+</text>
+<text class="xs" x="490" y="112">原话建议——「把它接到相机上。让相机来启动频闪，这样就好了。」
+</text>
+</g>
+<text class="foot" x="44" y="640">口径：过驱安全表、flash window 行为引自 Basler light control 文档；电流—占空比与 PWM 频率引自 Basler 各光源页；输出比与脉宽引自 Smart Vision Lights L300G2 / DDL-250 datasheet 与
+</text>
+<text class="foot" x="44" y="658">NanoDrive 白皮书、iiM AG Lumimax 知识库；平均电流公式与算例引自 OPT 光基础知识；PLC 反对意见引自 Cognex《Machine Vision Lighting Techniques》。
+</text>
+<text class="foot" x="44" y="682">条形长度为按标注倍数等比绘制；时序图为示意，不按时间轴比例。
+</text>
 </svg>

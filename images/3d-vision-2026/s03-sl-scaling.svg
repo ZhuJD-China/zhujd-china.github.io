@@ -1,0 +1,115 @@
+﻿
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 594" width="100%" role="img" aria-label="结构光深度误差的二次标度与横向点间距的线性标度之别">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mono{fill:#c9a96a;font:600 14px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .ax{fill:none;stroke:#8a8578;stroke-width:1.2}
+    .grid{fill:none;stroke:#8a8578;stroke-opacity:.18;stroke-width:1}
+    .quad{fill:none;stroke:#c9a96a;stroke-width:2.4}
+    .lin{fill:none;stroke:#7aa2c8;stroke-width:2.4}
+    .bad1{fill:none;stroke:#cf5a50;stroke-width:1.8;stroke-dasharray:4 3}
+    .bad2{fill:none;stroke:#8fbf7a;stroke-width:1.8;stroke-dasharray:4 3}
+    .warn{fill:#cf5a50;fill-opacity:.1;stroke:#cf5a50;stroke-opacity:.45;stroke-width:1.2}
+    .cell{fill:#14161c;stroke:#8a8578;stroke-opacity:.35;stroke-width:1}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="594" rx="14"/>
+<text class="ttl" x="44" y="50">被混为一谈的两个标度
+</text>
+<text class="sub" x="44" y="76">深度绝对误差按二次涨，横向点间距按一次涨。「结构光随距离线性」这句话——描述的不是深度
+</text>
+<!-- 左：深度误差二次 -->
+<text class="hd" x="44" y="118">① 深度绝对误差　二次标度（结构光与双目相同）
+</text>
+<g transform="translate(96,398)">
+<line class="grid" x1="0" y1="-220" x2="0" y2="0"/>
+<line class="grid" x1="0" y1="-110" x2="400" y2="-110"/>
+<line class="grid" x1="100" y1="0" x2="100" y2="-220"/>
+<line class="grid" x1="200" y1="0" x2="200" y2="-220"/>
+<line class="grid" x1="300" y1="0" x2="300" y2="-220"/>
+<line class="grid" x1="400" y1="0" x2="400" y2="-220"/>
+<line class="ax" x1="-16" y1="0" x2="430" y2="0"/>
+<line class="ax" x1="0" y1="14" x2="0" y2="-236"/>
+<text class="sm" x="0" y="20" text-anchor="middle">700
+</text>
+<text class="sm" x="200" y="20" text-anchor="middle">1100
+</text>
+<text class="sm" x="400" y="20" text-anchor="end">2700 mm
+</text>
+<text class="sm" x="205" y="42" text-anchor="middle">工作距离
+</text>
+<text class="sm" x="-40" y="-110" text-anchor="middle" transform="rotate(-90 -40 -110)">深度误差
+</text>
+<path class="bad2" d="M10 -6 C120 -18 240 -40 390 -74"/>
+<text class="sm" x="230" y="-56" fill="#8fbf7a">若为一次标度（不成立）
+</text>
+<path class="quad" d="M10 -6 C70 -16 130 -44 190 -80 C250 -118 320 -168 390 -208"/>
+<text class="mono" x="20" y="-196">二次：d = b·sinα / sin(α+β)
+</text>
+<text class="sm" x="20" y="-178" fill="#8fbf7a">对 d 求导即得二次型
+</text>
+<!-- 实测点 -->
+<circle cx="10" cy="-9" r="4" fill="#cf5a50"/>
+<circle cx="155" cy="-60" r="4" fill="#cf5a50"/>
+<text class="mor" x="18" y="-28">0.065 mm @700 mm
+</text>
+<text class="mor" x="164" y="-96">0.195 mm @1100 mm
+</text>
+<text class="sm" x="204" y="-14" fill="#8a8578">同一台 Zivid 2+ M130，
+</text>
+<text class="sm" x="204" y="-2" fill="#8a8578">距离 ×1.57，精度 ×3.0
+</text>
+</g>
+<!-- 右：点间距一次 -->
+<text class="hd" x="628" y="118">② 横向点间距　一次标度（官方公式）
+</text>
+<g transform="translate(680,398)">
+<line class="grid" x1="0" y1="-220" x2="0" y2="0"/>
+<line class="grid" x1="0" y1="-110" x2="400" y2="-110"/>
+<line class="grid" x1="100" y1="0" x2="100" y2="-220"/>
+<line class="grid" x1="200" y1="0" x2="200" y2="-220"/>
+<line class="grid" x1="300" y1="0" x2="300" y2="-220"/>
+<line class="grid" x1="400" y1="0" x2="400" y2="-220"/>
+<line class="ax" x1="-16" y1="0" x2="430" y2="0"/>
+<line class="ax" x1="0" y1="14" x2="0" y2="-236"/>
+<text class="sm" x="0" y="20" text-anchor="middle">D_o
+</text>
+<text class="sm" x="400" y="20" text-anchor="end">D_d
+</text>
+<text class="sm" x="205" y="42" text-anchor="middle">距离
+</text>
+<text class="sm" x="-40" y="-110" text-anchor="middle" transform="rotate(-90 -40 -110)">点间距 P
+</text>
+<path class="lin" d="M10 -206 L390 -14"/>
+<text class="moc" x="200" y="-200">P = (P_s / D_o) × D_d
+</text>
+<text class="sm" x="200" y="-182">Zebra 3S 官方换算式
+</text>
+<circle cx="10" cy="-206" r="4" fill="#7aa2c8"/>
+<circle cx="390" cy="-14" r="4" fill="#7aa2c8"/>
+<text class="moc" x="20" y="-170">sweet spot 处点尺寸 P_s
+</text>
+<text class="moc" x="250" y="6" text-anchor="end">D_d 处点尺寸 P
+</text>
+</g>
+<!-- 结论条 -->
+<g transform="translate(44,458)">
+<rect class="warn" x="0" y="0" width="1112" height="56" rx="7"/>
+<text class="sm" x="16" y="24" fill="#cf5a50">本文要纠正的第一处口径错误：把「随距离线性」套到深度绝对误差上。学术有形式化证明（单次条纹投影的条纹级次误判深度误差按 Z² 标度），
+</text>
+<text class="sm" x="16" y="44" fill="#cf5a50">厂商以曲线形式给出（Zivid Figure 8–11、Mech-Eye Point Z-Value Repeatability 曲线），但没有厂商把「二次」写进规格书。
+</text>
+</g>
+<text class="foot" x="44" y="552">口径：深度公式 d = b·sin(α)/sin(α+β) 与小三角角放大的警示引自 NIST《Sources of Errors in Structured Light 3D Scanners》；二次标度的学术证明引自 arXiv 长距离单次条纹投影论文（§4.2）；点
+</text>
+<text class="foot" x="44" y="570">间距公式引自 Zebra 3S 官方 glossary；0.065/0.195 mm 两点引自 Zivid 官方博客 Precision &amp; Trueness；「重复性随距离下降但不给幂次」引自 Mech-Eye Camera Accuracy 页。
+</text>
+</svg>

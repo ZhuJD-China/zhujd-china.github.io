@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="常见镜头接口的螺纹规格与法兰距对比">
-  <style>
+﻿
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 628" width="100%" role="img" aria-label="常见镜头接口的螺纹规格与法兰距对比">
+<style>
     .bg{fill:#0b0b10}
     .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
     .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -16,82 +17,118 @@
     .bar3{fill:#cf5a50;fill-opacity:.5}
     .g{fill:none;stroke:#8a8578;stroke-width:1}
   </style>
-  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
-  <text class="ttl" x="44" y="52">接口的硬约束：FFD 差 5 mm 就是两个生态</text>
-  <text class="sub" x="44" y="80">C 与 CS 同螺纹但法兰距差 5 mm，可单向转接；公制接口无统一标准，必须查厂商表</text>
-
-  <!-- FFD 条形图 -->
-  <text class="hd" x="44" y="126">法兰距（FFD，mm）</text>
-  <g transform="translate(180,160)">
-    <!-- scale: 46.5mm -> 420px, 1mm = 9.03px -->
-    <g>
-      <rect class="bar3" x="0" y="0" width="422" height="26" rx="3"/>
-      <text class="lb" x="-12" y="18" text-anchor="end" fill="#e8e4dc">F-mount</text>
-      <text class="mor" x="432" y="18">46.5</text>
-      <text class="xs" x="432" y="18" dx="34" fill="#6b675c">mm</text>
-    </g>
-    <g transform="translate(0,42)">
-      <rect class="bar" x="0" y="0" width="158" height="26" rx="3"/>
-      <text class="lb" x="-12" y="18" text-anchor="end" fill="#e8e4dc">C-mount</text>
-      <text class="mon" x="168" y="18">17.526</text>
-      <text class="xs" x="168" y="18" dx="46" fill="#6b675c">mm　1"-32 UN</text>
-    </g>
-    <g transform="translate(0,84)">
-      <rect class="bar" x="0" y="0" width="158" height="26" rx="3"/>
-      <text class="lb" x="-12" y="18" text-anchor="end" fill="#e8e4dc">TFL-mount</text>
-      <text class="mon" x="168" y="18">17.526</text>
-      <text class="xs" x="168" y="18" dx="46" fill="#6b675c">mm　同 C-mount</text>
-    </g>
-    <g transform="translate(0,126)">
-      <rect class="bar2" x="0" y="0" width="113" height="26" rx="3"/>
-      <text class="lb" x="-12" y="18" text-anchor="end" fill="#e8e4dc">CS-mount</text>
-      <text class="moc" x="123" y="18">12.526</text>
-      <text class="xs" x="123" y="18" dx="46" fill="#6b675c">mm　螺纹同 C，短 5 mm</text>
-    </g>
-  </g>
-
-  <g transform="translate(44,340)">
-    <text class="hd" x="0" y="0">三个必须记住的机械事实</text>
-    <text class="sm" x="0" y="28">1　CS 只能向上接：C-CS 转接环让 CS 相机用 C 镜头，反之不行。</text>
-    <text class="sm" x="0" y="54">2　F-mount 有内径陷阱：28 mm F-mount 镜头要求相机内径 &gt;42 mm。</text>
-    <text class="sm" x="0" y="80">3　M12 / M42 / M58 等公制接口没有统一标准，必须查厂商表；</text>
-    <text class="sm" x="24" y="102">M42×1 尤其要手动输入法兰距。</text>
-  </g>
-
-  <!-- 右侧：C-mount 三层次 -->
-  <g transform="translate(700,140)">
-    <text class="hd" x="0" y="0">C-mount 靶面上限的三个层次</text>
-    <g>
-      <rect x="0" y="16" width="404" height="62" rx="8" fill="#1a1712" stroke="#cf5a50" stroke-opacity=".5" stroke-width="1.1"/>
-      <text class="lb" x="14" y="40" fill="#e8e4dc">接口机械承载上限</text>
-      <text class="mor" x="14" y="62">1.5"（约 ⌀20 mm 对角线）</text>
-      <text class="xs" x="300" y="62">Basler 官网</text>
-    </g>
-    <g>
-      <rect x="0" y="90" width="404" height="62" rx="8" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".5" stroke-width="1.1"/>
-      <text class="lb" x="14" y="114" fill="#e8e4dc">常规镜头系列上限</text>
-      <text class="mon" x="14" y="136">2/3"（⌀11 mm）　像圈 ⌀9.00 mm</text>
-      <text class="xs" x="320" y="136">EO C 系列</text>
-    </g>
-    <g>
-      <rect x="0" y="164" width="404" height="62" rx="8" fill="#14161c" stroke="#7aa2c8" stroke-opacity=".5" stroke-width="1.1"/>
-      <text class="lb" x="14" y="188" fill="#e8e4dc">特殊设计可达值</text>
-      <text class="moc" x="14" y="210">1.4"（像圈 ⌀23.1 mm）　仍在 C-mount 上</text>
-      <text class="xs" x="330" y="210">Computar MPT</text>
-    </g>
-    <text class="sm" x="0" y="256">三者不矛盾，但必须分层引用。写「C-mount 支持 1.5"」时</text>
-    <text class="sm" x="0" y="276">要同时说明你的镜头是常规系列还是特殊设计。</text>
-  </g>
-
-  <!-- 增距环 -->
-  <g transform="translate(700,440)">
-    <text class="hd" x="0" y="0">增距环：能做什么，代价是什么</text>
-    <text class="sm" x="0" y="26">能做：缩短镜头的最小工作距离（当所需 FWD 短于机械 MOD 时）</text>
-    <text class="mor" x="0" y="50">代价：进光量与分辨率下降</text>
-    <text class="sm" x="0" y="74">物到像总距离 OO′ 在 β = 1 时最小，等于 4f + [HH′]</text>
-    <text class="sm" x="0" y="96">精调组件 Schneider UNIFOC 12：0–12 mm 精调范围</text>
-  </g>
-
-  <text class="foot" x="44" y="524">口径：C-mount 1"-32 UN 与 FFD 17.526 mm 引自 Edmund Optics《Lens Mounts》与 Basler C-mount 产品页；CS FFD 12.526 mm 引自 Thorlabs；F-mount 46.5 mm 与 TFL 引自 Schneider Kreuznach 镜头计算器；内径 42 mm 警告引自 EO 规格 PDF。</text>
-  <text class="foot" x="44" y="544">条形长度按标注 FFD 等比绘制（46.5 mm 对应最长条）。</text>
+<rect class="bg" x="0" y="0" width="1200" height="628" rx="14"/>
+<text class="ttl" x="44" y="52">接口的硬约束：FFD 差 5 mm 就是两个生态
+</text>
+<text class="sub" x="44" y="80">C 与 CS 同螺纹但法兰距差 5 mm，可单向转接；公制接口无统一标准，必须查厂商表
+</text>
+<!-- FFD 条形图 -->
+<text class="hd" x="44" y="126">法兰距（FFD，mm）
+</text>
+<g transform="translate(180,160)">
+<!-- scale: 46.5mm -> 420px, 1mm = 9.03px -->
+<g>
+<rect class="bar3" x="0" y="0" width="422" height="26" rx="3"/>
+<text class="lb" x="-12" y="18" text-anchor="end" fill="#e8e4dc">F-mount
+</text>
+<text class="mor" x="432" y="18">46.5
+</text>
+<text class="xs" x="432" y="18" dx="34" fill="#6b675c">mm
+</text>
+</g>
+<g transform="translate(0,42)">
+<rect class="bar" x="0" y="0" width="158" height="26" rx="3"/>
+<text class="lb" x="-12" y="18" text-anchor="end" fill="#e8e4dc">C-mount
+</text>
+<text class="mon" x="168" y="18">17.526
+</text>
+<text class="xs" x="168" y="18" dx="46" fill="#6b675c">mm　1"-32 UN
+</text>
+</g>
+<g transform="translate(0,84)">
+<rect class="bar" x="0" y="0" width="158" height="26" rx="3"/>
+<text class="lb" x="-12" y="18" text-anchor="end" fill="#e8e4dc">TFL-mount
+</text>
+<text class="mon" x="168" y="18">17.526
+</text>
+<text class="xs" x="168" y="18" dx="46" fill="#6b675c">mm　同 C-mount
+</text>
+</g>
+<g transform="translate(0,126)">
+<rect class="bar2" x="0" y="0" width="113" height="26" rx="3"/>
+<text class="lb" x="-12" y="18" text-anchor="end" fill="#e8e4dc">CS-mount
+</text>
+<text class="moc" x="123" y="18">12.526
+</text>
+<text class="xs" x="123" y="18" dx="46" fill="#6b675c">mm　螺纹同 C，短 5 mm
+</text>
+</g>
+</g>
+<g transform="translate(44,340)">
+<text class="hd" x="0" y="0">三个必须记住的机械事实
+</text>
+<text class="sm" x="0" y="28">1　CS 只能向上接：C-CS 转接环让 CS 相机用 C 镜头，反之不行。
+</text>
+<text class="sm" x="0" y="54">2　F-mount 有内径陷阱：28 mm F-mount 镜头要求相机内径 &gt;42 mm。
+</text>
+<text class="sm" x="0" y="80">3　M12 / M42 / M58 等公制接口没有统一标准，必须查厂商表；
+</text>
+<text class="sm" x="24" y="102">M42×1 尤其要手动输入法兰距。
+</text>
+</g>
+<!-- 右侧：C-mount 三层次 -->
+<g transform="translate(700,140)">
+<text class="hd" x="0" y="0">C-mount 靶面上限的三个层次
+</text>
+<g>
+<rect x="0" y="16" width="404" height="62" rx="8" fill="#1a1712" stroke="#cf5a50" stroke-opacity=".5" stroke-width="1.1"/>
+<text class="lb" x="14" y="40" fill="#e8e4dc">接口机械承载上限
+</text>
+<text class="mor" x="14" y="62">1.5"（约 ⌀20 mm 对角线）
+</text>
+<text class="xs" x="300" y="62">Basler 官网
+</text>
+</g>
+<g>
+<rect x="0" y="90" width="404" height="62" rx="8" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".5" stroke-width="1.1"/>
+<text class="lb" x="14" y="114" fill="#e8e4dc">常规镜头系列上限
+</text>
+<text class="mon" x="14" y="136">2/3"（⌀11 mm）　像圈 ⌀9.00 mm
+</text>
+<text class="xs" x="320" y="136">EO C 系列
+</text>
+</g>
+<g>
+<rect x="0" y="164" width="404" height="62" rx="8" fill="#14161c" stroke="#7aa2c8" stroke-opacity=".5" stroke-width="1.1"/>
+<text class="lb" x="14" y="188" fill="#e8e4dc">特殊设计可达值
+</text>
+<text class="moc" x="14" y="210">1.4"（像圈 ⌀23.1 mm）　仍在 C-mount 上
+</text>
+<text class="xs" x="330" y="210">Computar MPT
+</text>
+</g>
+<text class="sm" x="0" y="256">三者不矛盾，但必须分层引用。写「C-mount 支持 1.5"」时
+</text>
+<text class="sm" x="0" y="276">要同时说明你的镜头是常规系列还是特殊设计。
+</text>
+</g>
+<!-- 增距环 -->
+<g transform="translate(700,440)">
+<text class="hd" x="0" y="0">增距环：能做什么，代价是什么
+</text>
+<text class="sm" x="0" y="26">能做：缩短镜头的最小工作距离（当所需 FWD 短于机械 MOD 时）
+</text>
+<text class="mor" x="0" y="50">代价：进光量与分辨率下降
+</text>
+<text class="sm" x="0" y="74">物到像总距离 OO′ 在 β = 1 时最小，等于 4f + [HH′]
+</text>
+<text class="sm" x="0" y="96">精调组件 Schneider UNIFOC 12：0–12 mm 精调范围
+</text>
+</g>
+<text class="foot" x="44" y="562">口径：C-mount 1"-32 UN 与 FFD 17.526 mm 引自 Edmund Optics《Lens Mounts》与 Basler C-mount 产品页；CS FFD 12.526 mm 引自 Thorlabs；F-mount 46.5 mm 与 TFL 引自 Schneider Kreuznach 镜
+</text>
+<text class="foot" x="44" y="580">头计算器；内径 42 mm 警告引自 EO 规格 PDF。
+</text>
+<text class="foot" x="44" y="604">条形长度按标注 FFD 等比绘制（46.5 mm 对应最长条）。
+</text>
 </svg>

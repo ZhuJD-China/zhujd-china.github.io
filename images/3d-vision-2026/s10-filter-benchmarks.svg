@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 591" width="100%" role="img" aria-label="Zivid 内置滤波的每帧实测耗时与 RANSAC 迭代预算的边际收益">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .ax{fill:none;stroke:#8a8578;stroke-width:1.2}
+    .grid{fill:none;stroke:#8a8578;stroke-opacity:.14;stroke-width:1}
+    .b1{fill:#c9a96a;fill-opacity:.85}
+    .b2{fill:#7aa2c8;fill-opacity:.75}
+    .cellA{fill:#1a1712;stroke:#c9a96a;stroke-opacity:.45;stroke-width:1.1}
+    .warn{fill:#1d1414;stroke:#cf5a50;stroke-opacity:.45;stroke-width:1.1}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="591" rx="14"/>
+<text class="ttl" x="44" y="50">滤波的实测代价：单帧可以到数百毫秒
+</text>
+<text class="sub" x="44" y="76">Zivid 官方基准数据文件（median，100 次采样）。同算法跨平台差 59–68 倍，Cluster 比 Outlier 贵 48–120 倍
+</text>
+<!-- 条形图：对数刻度 -->
+<g transform="translate(300,132)">
+<!-- 网格 100 / 1k / 10k / 100k / 1M µs -->
+<line class="grid" x1="0" y1="-16" x2="0" y2="300"/>
+<line class="grid" x1="90" y1="-16" x2="90" y2="300"/>
+<line class="grid" x1="180" y1="-16" x2="180" y2="300"/>
+<line class="grid" x1="270" y1="-16" x2="270" y2="300"/>
+<line class="grid" x1="360" y1="-16" x2="360" y2="300"/>
+<line class="ax" x1="-8" y1="300" x2="370" y2="300"/>
+<text class="xs" x="0" y="-22">100 µs
+</text>
+<text class="xs" x="90" y="-22">1 ms
+</text>
+<text class="xs" x="180" y="-22">10 ms
+</text>
+<text class="xs" x="270" y="-22">100 ms
+</text>
+<text class="xs" x="360" y="-22">1 s
+</text>
+<!-- 五行，每行两根条 -->
+<g transform="translate(0,0)">
+<text class="sm" x="-10" y="14" text-anchor="end">Outlier
+</text>
+<rect class="b1" x="0" y="0" width="1.2" height="12" rx="2"/>
+<rect class="b2" x="0" y="15" width="108" height="12" rx="2"/>
+<text class="mon" x="116" y="11" fill="#c9a96a">105 µs
+</text>
+<text class="moc" x="116" y="26" fill="#7aa2c8">7,182 µs
+</text>
+</g>
+<g transform="translate(0,56)">
+<text class="sm" x="-10" y="14" text-anchor="end">Gaussian
+</text>
+<rect class="b1" x="0" y="0" width="37" height="12" rx="2"/>
+<rect class="b2" x="0" y="15" width="141" height="12" rx="2"/>
+<text class="mon" x="150" y="11" fill="#c9a96a">424 µs
+</text>
+<text class="moc" x="150" y="26" fill="#7aa2c8">24,980 µs
+</text>
+</g>
+<g transform="translate(0,112)">
+<text class="sm" x="-10" y="14" text-anchor="end">Cluster
+</text>
+<rect class="b1" x="0" y="0" width="142" height="12" rx="2"/>
+<rect class="b2" x="0" y="15" width="311" height="12" rx="2"/>
+<text class="mon" x="320" y="11" fill="#c9a96a">12,653 µs
+</text>
+<text class="moc" x="320" y="26" fill="#7aa2c8">343,978 µs
+</text>
+</g>
+<g transform="translate(0,168)">
+<text class="sm" x="-10" y="14" text-anchor="end">Reflection
+</text>
+<rect class="b1" x="0" y="0" width="111" height="12" rx="2"/>
+<rect class="b2" x="0" y="15" width="135" height="12" rx="2"/>
+<text class="mon" x="144" y="11" fill="#c9a96a">7,102 µs
+</text>
+<text class="moc" x="144" y="26" fill="#7aa2c8">14,150 µs
+</text>
+</g>
+<g transform="translate(0,224)">
+<text class="sm" x="-10" y="14" text-anchor="end">Contrast Dist.
+</text>
+<rect class="b1" x="0" y="0" width="93" height="12" rx="2"/>
+<rect class="b2" x="0" y="15" width="195" height="12" rx="2"/>
+<text class="mon" x="204" y="11" fill="#c9a96a">4,294 µs
+</text>
+<text class="moc" x="204" y="26" fill="#7aa2c8">41,593 µs
+</text>
+</g>
+<!-- 图例 -->
+<g transform="translate(0,300)">
+<rect class="b1" x="0" y="0" width="14" height="10" rx="2"/>
+<text class="xs" x="22" y="9" fill="#c9a96a">Zivid 2 / i9-11900K 3.5 GHz + RTX 3070
+</text>
+<rect class="b2" x="0" y="16" width="14" height="10" rx="2"/>
+<text class="xs" x="22" y="25" fill="#7aa2c8">Zivid 3 / i5-1035G1 1.0 GHz + Intel UHD
+</text>
+</g>
+</g>
+<!-- 右：三个结论 + RANSAC -->
+<g transform="translate(760,116)">
+<text class="hd" x="0" y="0">三个可直接引用的量
+</text>
+<text class="sm" x="0" y="24" fill="#c9a96a">① 跨平台 59–68 倍（Gaussian 424 µs → 24,980 µs）
+</text>
+<text class="sm" x="0" y="46" fill="#c9a96a">② Cluster 比 Outlier 贵 48–120 倍
+</text>
+<text class="sm" x="0" y="68" fill="#cf5a50">③ 单帧总成本可达数百毫秒：Zivid 3 低配仅 Cluster 一项 344 ms
+</text>
+</g>
+<g transform="translate(760,208)">
+<text class="hd" x="0" y="0">RANSAC 迭代预算的边际收益
+</text>
+<g transform="translate(0,14)">
+<text class="xs" x="0" y="0" fill="#a09b8d">迭代数
+</text>
+<text class="xs" x="90" y="0" fill="#a09b8d">耗时
+</text>
+<text class="xs" x="180" y="0" fill="#a09b8d">成功率增益
+</text>
+<line x1="0" y1="8" x2="380" y2="8" stroke="#8a8578" stroke-opacity=".3"/>
+<text class="mon" x="0" y="28">10³
+</text>
+<text class="mon" x="90" y="28">402.3 ms
+</text>
+<text class="sm" x="180" y="28">基准
+</text>
+<text class="mon" x="0" y="50">10⁵
+</text>
+<text class="mon" x="90" y="50">416.7 ms
+</text>
+<text class="moc" x="180" y="50">+2.7%（代价 +14 ms）
+</text>
+<text class="mon" x="0" y="72">10⁷
+</text>
+<text class="mon" x="90" y="72">549.3 ms
+</text>
+<text class="moc" x="180" y="72">+6.7%（代价 +147 ms）
+</text>
+<text class="xs" x="0" y="96">×10000 换来 6.7%，代价 36.6% 时间——默认预算已在递减区
+</text>
+<text class="xs" x="0" y="112" fill="#6b675c">口径：点云级全局配准（KITTI-10m），非单次平面拟合
+</text>
+</g>
+</g>
+<!-- 引用陷阱 -->
+<g transform="translate(44,470)">
+<rect class="warn" x="0" y="0" width="1112" height="62" rx="9"/>
+<text class="hd" x="16" y="22" fill="#cf5a50">一个必须避开的引用陷阱
+</text>
+<text class="sm" x="16" y="44" fill="#cf5a50">Zivid 2+ / 高配平台上的 Outlier 数字是一个负值（中位数 −257 µs）。这不是负耗时——那是厂商用「启用减禁用」差值法测量噪声滤波开销时的负中位数（≈ 0）。
+</text>
+<text class="xs" x="16" y="60">引用时应表述为「可忽略不计」。此外这组基准随 SDK 版本变化，官方文档页明确说明「这些基准会随时间变化，多数情况下随更新的 SDK 版本改善」，只能用于说明量级关系。
+</text>
+</g>
+<text class="foot" x="44.0" y="558">口径：五类滤波器耗时取自 Zivid 官方文档内嵌基准数据文件（字段名 Processing/Filters/…，单位 µs，datapoints 100，取 median）；机型归属已逐条核对原始文件——105/424/12,653/7,102/4,294 属
+</text>
+<text class="foot" x="44.0" y="574">Zivid 2 高配，7,182/24,980/343,978/14,150/41,593 属 Zivid 3 低配；RANSAC 数据引自 arXiv 点云配准论文 Table VII。
+</text>
+</svg>

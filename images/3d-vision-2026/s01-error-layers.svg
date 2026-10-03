@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 575" width="100%" role="img" aria-label="3D 测量系统的误差四层分解">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .L1{fill:#1a1712;stroke:#c9a96a;stroke-opacity:.55;stroke-width:1.3}
+    .L2{fill:#14161c;stroke:#7aa2c8;stroke-opacity:.55;stroke-width:1.3}
+    .L3{fill:#1d1414;stroke:#cf5a50;stroke-opacity:.55;stroke-width:1.3}
+    .L4{fill:#181a14;stroke:#8fbf7a;stroke-opacity:.55;stroke-width:1.3}
+    .ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="575" rx="14"/>
+<text class="ttl" x="44" y="50">一个「精度」的四层分解
+</text>
+<text class="sub" x="44" y="76">混淆任何两层，就会拿一个不能兑现的数字去做验收。四层的标定量级完全不同，且不能互相替代
+</text>
+<!-- 层 1-4 阶梯 -->
+<g transform="translate(60,110)">
+<g>
+<rect class="L1" x="0" y="0" width="240" height="150" rx="10"/>
+<text class="hd" x="16" y="28" fill="#c9a96a">① 横向采样
+</text>
+<text class="sm" x="16" y="52">一个像素覆盖多大面积？
+</text>
+<line x1="16" y1="64" x2="224" y2="64" stroke="#8a8578" stroke-opacity=".25"/>
+<text class="sm" x="16" y="86">由传感器与工作距离决定
+</text>
+<text class="xs" x="16" y="108">Zivid：spatial resolution
+</text>
+<text class="xs" x="16" y="126">= 每像素代表的物理表面积
+</text>
+<text class="mono" x="16" y="144" fill="#c9a96a">随距离扩张
+</text>
+</g>
+<g transform="translate(268,0)">
+<rect class="L2" x="0" y="0" width="240" height="150" rx="10"/>
+<text class="hd" x="16" y="28" fill="#7aa2c8">② 随机误差
+</text>
+<text class="sm" x="16" y="52">同一个点重复测，抖多大？
+</text>
+<line x1="16" y1="64" x2="224" y2="64" stroke="#8a8578" stroke-opacity=".25"/>
+<text class="sm" x="16" y="86">决定重复性，不决定偏差
+</text>
+<text class="xs" x="16" y="108">1σ / 标准差 / temporal noise
+</text>
+<text class="xs" x="16" y="126">RealSense：subpixel RMS &lt;0.1 px
+</text>
+<text class="mono" x="16" y="144" fill="#7aa2c8">与距离弱相关
+</text>
+</g>
+<g transform="translate(536,0)">
+<rect class="L3" x="0" y="0" width="240" height="150" rx="10"/>
+<text class="hd" x="16" y="28" fill="#cf5a50">③ 系统误差
+</text>
+<text class="sm" x="16" y="52">100 mm 会不会测成 99.8？
+</text>
+<line x1="16" y1="64" x2="224" y2="64" stroke="#8a8578" stroke-opacity=".25"/>
+<text class="sm" x="16" y="86" fill="#cf5a50">决定能不能测准尺寸
+</text>
+<text class="xs" x="16" y="108">trueness / 线性度 / 绝对误差
+</text>
+<text class="xs" x="16" y="126">Zivid：dimension trueness 70 分位
+</text>
+<text class="mono" x="16" y="144" fill="#cf5a50">与温度、时间强相关
+</text>
+</g>
+<g transform="translate(804,0)">
+<rect class="L4" x="0" y="0" width="300" height="150" rx="10"/>
+<text class="hd" x="16" y="28" fill="#8fbf7a">④ 环境与材质
+</text>
+<text class="sm" x="16" y="52">换批工件、换车间，还成立吗？
+</text>
+<line x1="16" y1="64" x2="284" y2="64" stroke="#8a8578" stroke-opacity=".25"/>
+<text class="sm" x="16" y="86" fill="#8fbf7a">失效是整片数据消失
+</text>
+<text class="xs" x="16" y="108">失效清单见第 6 节
+</text>
+<text class="xs" x="16" y="126">「厂商未公开精度—代价曲线」
+</text>
+<text class="mono" x="16" y="144" fill="#8fbf7a">只有实测能填
+</text>
+</g>
+</g>
+<!-- 两条失效轴 -->
+<text class="hd" x="44" y="312">两类失效，排查方式完全不同
+</text>
+<g transform="translate(44,332)">
+<rect x="0" y="0" width="546" height="140" rx="9" fill="#14161c" stroke="#7aa2c8" stroke-opacity=".5" stroke-width="1.2"/>
+<text class="hd" x="16" y="26" fill="#7aa2c8">数值偏移（第 1–3 层）
+</text>
+<text class="sm" x="16" y="52">数据还在，数值偏了。看得见的失效。
+</text>
+<text class="xs" x="16" y="76">排查手段：标定（第二篇第 16–20 节）· 暖机 · 贴标定板实测
+</text>
+<text class="xs" x="16" y="96">判定方法：与真值比对，看残差随距离/温度的走向
+</text>
+<text class="sm" x="16" y="122" fill="#7aa2c8">特征：误差随工况连续变化，可用模型拟合
+</text>
+</g>
+<g transform="translate(610,332)">
+<rect x="0" y="0" width="546" height="140" rx="9" fill="#1d1414" stroke="#cf5a50" stroke-opacity=".5" stroke-width="1.2"/>
+<text class="hd" x="16" y="26" fill="#cf5a50">内容错误（第 4 层）
+</text>
+<text class="sm" x="16" y="52" fill="#cf5a50">数据还在、能存盘、能渲染，数值是错的。
+</text>
+<text class="xs" x="16" y="76">代表：interreflection（BGA）、hallucination（重复结构）
+</text>
+<text class="xs" x="16" y="96">排查手段：只能用真实工件试，不能用标准样件
+</text>
+<text class="sm" x="16" y="122" fill="#cf5a50">特征：不产生任何异常信号——这是最危险的一类
+</text>
+</g>
+<rect x="44" y="492" width="1112" height="46" rx="9" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".45" stroke-width="1.2"/>
+<text class="sm" x="60" y="512">本文的取材边界：第一篇第 7 节已写过四条路线的型号与精度量级，第 12.3/12.5 节写过「什么时候升到 3D」的判据——
+</text>
+<text class="sm" x="60" y="530">第二篇第 16–20 节写过标定理论。本篇往下挖一层：这些数字分别怎么定义、随距离怎么变、点云处理每一步代价多少。
+</text>
+<text class="foot" x="44" y="558">口径：spatial resolution 与 point precision 的定义引自 Zivid 官方术语页；subpixel RMS 引自 RealSense 官方调优指南；dimension trueness 定义同上；第 6 节的失效清单为各厂商官方文档汇总。
+</text>
+</svg>

@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 589" width="100%" role="img" aria-label="点云流水线的推荐顺序与三处顺序依赖">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+    .stepA{fill:#1a1712;stroke:#c9a96a;stroke-opacity:.5;stroke-width:1.2}
+    .stepB{fill:#14161c;stroke:#7aa2c8;stroke-opacity:.5;stroke-width:1.2}
+    .stepC{fill:#1d1414;stroke:#cf5a50;stroke-opacity:.5;stroke-width:1.2}
+    .ar{fill:#8a8578}
+    .cell{fill:#14161c;stroke:#8a8578;stroke-opacity:.35;stroke-width:1}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="589" rx="14"/>
+<text class="ttl" x="44" y="50">顺序为什么有依赖：每一步都在删点，也都改统计
+</text>
+<text class="sub" x="44" y="76">Open3D 官方明确是「先下采样、再去离群」；粗配与精配的 RANSAC 阈值相差 3.75 倍
+</text>
+<!-- 上：官方推荐顺序 -->
+<text class="hd" x="44" y="116">Open3D 官方的推荐顺序（章节标题即流程）
+</text>
+<g transform="translate(44,132)">
+<rect class="stepA" x="0" y="0" width="180" height="62" rx="8"/>
+<text class="hd" x="14" y="24" fill="#c9a96a">① 下采样
+</text>
+<text class="xs" x="14" y="44">voxel_down_sample(0.02)
+</text>
+<path d="M188 31 L212 31 L206 26 L212 31 L206 36 Z" class="ar"/>
+<rect class="stepB" x="218" y="0" width="190" height="62" rx="8"/>
+<text class="hd" x="232" y="24" fill="#7aa2c8">② 统计离群
+</text>
+<text class="xs" x="232" y="44">remove_statistical_outlier
+</text>
+<path d="M416 31 L440 31 L434 26 L440 31 L434 36 Z" class="ar"/>
+<rect class="stepB" x="446" y="0" width="190" height="62" rx="8"/>
+<text class="hd" x="460" y="24" fill="#7aa2c8">③ 半径离群
+</text>
+<text class="xs" x="460" y="44">remove_radius_outlier
+</text>
+<path d="M644 31 L668 31 L662 26 L668 31 L662 36 Z" class="ar"/>
+<rect class="stepC" x="674" y="0" width="192" height="62" rx="8"/>
+<text class="hd" x="688" y="24" fill="#cf5a50">④ 法向 → 分割 → 距离
+</text>
+<text class="xs" x="688" y="44">在离群之后、下采样之后算
+</text>
+</g>
+<!-- 阈值跟着密度层级走 -->
+<g transform="translate(44,216)">
+<text class="hd" x="0" y="0">阈值必须跟着点云「密度层级」走——Open3D 官方的一手做法
+</text>
+<g transform="translate(0,16)">
+<rect class="stepA" x="0" y="0" width="410" height="66" rx="8"/>
+<text class="sm" x="14" y="22" fill="#c9a96a">粗配阶段：在下采样后的点云上
+</text>
+<text class="mon" x="14" y="44" fill="#c9a96a">distance_threshold = voxel_size × 1.5
+</text>
+<text class="xs" x="14" y="60">点云密度低，阈值需宽松
+</text>
+</g>
+<g transform="translate(430,16)">
+<rect class="stepB" x="0" y="0" width="410" height="66" rx="8"/>
+<text class="sm" x="14" y="22" fill="#7aa2c8">精配阶段：回到原始点云上
+</text>
+<text class="mon" x="14" y="44" fill="#7aa2c8">distance_threshold = voxel_size × 0.4
+</text>
+<text class="xs" x="14" y="60">点云密度高，阈值需严格
+</text>
+</g>
+<text class="sm" x="860" y="34" fill="#cf5a50">同一套参数
+</text>
+<text class="sm" x="860" y="54" fill="#cf5a50">走天下会错
+</text>
+<text class="sm" x="860" y="72" fill="#cf5a50">差 3.75 倍
+</text>
+</g>
+<!-- 下：三个机制 -->
+<text class="hd" x="44" y="336">三处顺序依赖
+</text>
+<g transform="translate(44,352)">
+<rect class="stepC" x="0" y="0" width="366" height="122" rx="8"/>
+<text class="hd" x="14" y="24" fill="#cf5a50">机制一　离群点污染体素质心
+</text>
+<text class="sm" x="14" y="48">不去除离群点，算出的质心本身就是错的。
+</text>
+<text class="xs" x="14" y="70">学术依据：改进体素下采样的论文指出，先用最近邻
+</text>
+<text class="xs" x="14" y="86">距离法搜出最接近计算质心的实际点。
+</text>
+<text class="xs" x="14" y="106" fill="#8fbf7a">推论：先去噪，再下采样
+</text>
+</g>
+<g transform="translate(386,352)">
+<rect class="stepC" x="0" y="0" width="366" height="122" rx="8"/>
+<text class="hd" x="14" y="24" fill="#cf5a50">机制二　下采样改变离群密度
+</text>
+<text class="sm" x="14" y="48">孤立离群点被平均掉或整格消失，密度下降。
+</text>
+<text class="xs" x="14" y="70">同一个 std_ratio / nb_points 在下采样前后
+</text>
+<text class="xs" x="14" y="86">筛掉的不是同一批点。
+</text>
+<text class="xs" x="14" y="106" fill="#8a8578">官方未给数字，此条为从流程推出的机制
+</text>
+</g>
+<g transform="translate(772,352)">
+<rect class="stepC" x="0" y="0" width="384" height="122" rx="8"/>
+<text class="hd" x="14" y="24" fill="#cf5a50">机制三　setIndices 不缩小邻域集
+</text>
+<text class="sm" x="14" y="48">PCL 官方注释：为每个查询点找到的邻居，是从
+</text>
+<text class="xs" x="14" y="70">setInputCloud() 的所有点中找的，而不是只从
+</text>
+<text class="xs" x="14" y="86">setIndices() 索引的点中找。
+</text>
+<text class="xs" x="14" y="106" fill="#8fbf7a">推论：先裁 ROI 再滤波 ≠ 先滤波再裁 ROI
+</text>
+</g>
+<g transform="translate(44,494)">
+<text class="sm" x="0" y="0" fill="#8fbf7a">厂商的一致口径：三家滤波全部是离散档位（Off/Weak/Normal/Strong 或 1–5 / 0.01–0.99），没有一家公开「滤波损失多少 µm 精度」的曲线。
+</text>
+<text class="sm" x="0" y="20" fill="#8fbf7a">官方文档一致地只给定性权衡：噪声 ↔ 细节/覆盖/暗部损失。所以这个问题在 2026 年的公开文档里无法回答，必须自己做实验。
+</text>
+<text class="xs" x="0" y="40">另：Open3D 官方标注 KNN/半径法向与统计离群「不建议在 GPU 上使用」，DBSCAN 是 CPU 包装——「搬到 GPU 加速」对这两步不成立。
+</text>
+</g>
+<text class="foot" x="44.0" y="556">口径：推荐顺序引自 Open3D 官方 outlier-removal 教程的章节顺序与示例代码；粗配/精配阈值引自其 Global Registration 教程；setIndices 作用域引自 PCL StatisticalOutlierRemoval 与
+</text>
+<text class="foot" x="44.0" y="572">RadiusOutlierRemoval 的类页注释原文；质心污染引自 IEEE 2023 改进体素下采样论文；「不建议在 GPU 上使用」引自 Open3D 张量 API 的逐函数标注。
+</text>
+</svg>

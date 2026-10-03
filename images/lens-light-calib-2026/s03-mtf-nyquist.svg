@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="100%" role="img" aria-label="Nyquist 频率与 2/3 判据、典型 MTF 曲线">
-  <style>
+﻿
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 590" width="100%" role="img" aria-label="Nyquist 频率与 2/3 判据、典型 MTF 曲线">
+<style>
     .bg{fill:#0b0b10}
     .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
     .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -20,86 +21,110 @@
     .c2{fill:none;stroke:#8fbf7a;stroke-width:1.8;stroke-opacity:.9}
     .dif{fill:none;stroke:#c9a96a;stroke-width:2.4;stroke-opacity:.16}
   </style>
-  <rect class="bg" x="0" y="0" width="1200" height="540" rx="14"/>
-  <text class="ttl" x="44" y="52">MTF、Nyquist 与「2/3 处 30%」这条判据</text>
-  <text class="sub" x="44" y="80">传感器的采样上限是硬的；镜头要在这个上限的 2/3 处达到 30% 对比度。系统总 MTF 是连乘积</text>
-
-  <!-- 坐标系 -->
-  <g transform="translate(90,440)">
-    <line class="grid" x1="0" y1="-300" x2="0" y2="0"/>
-    <line class="grid" x1="0" y1="-225" x2="560" y2="-225"/>
-    <line class="grid" x1="0" y1="-150" x2="560" y2="-150"/>
-    <line class="grid" x1="0" y1="-75" x2="560" y2="-75"/>
-    <line class="grid" x1="80" y1="0" x2="80" y2="-300"/>
-    <line class="grid" x1="160" y1="0" x2="160" y2="-300"/>
-    <line class="grid" x1="240" y1="0" x2="240" y2="-300"/>
-    <line class="grid" x1="320" y1="0" x2="320" y2="-300"/>
-    <line class="grid" x1="400" y1="0" x2="400" y2="-300"/>
-    <line class="grid" x1="480" y1="0" x2="480" y2="-300"/>
-    <line class="grid" x1="560" y1="0" x2="560" y2="-300"/>
-    <line class="ax" x1="-14" y1="0" x2="580" y2="0"/>
-    <line class="ax" x1="0" y1="14" x2="0" y2="-316"/>
-    <text class="sm" x="-10" y="-6" text-anchor="end">0</text>
-    <text class="sm" x="-10" y="-72" text-anchor="end">25%</text>
-    <text class="sm" x="-10" y="-147" text-anchor="end">50%</text>
-    <text class="sm" x="-10" y="-222" text-anchor="end">75%</text>
-    <text class="sm" x="-10" y="-297" text-anchor="end">100%</text>
-    <text class="sm" x="0" y="20" text-anchor="middle">0</text>
-    <text class="sm" x="160" y="20" text-anchor="middle">40</text>
-    <text class="sm" x="320" y="20" text-anchor="middle">80</text>
-    <text class="sm" x="480" y="20" text-anchor="middle">120</text>
-    <text class="sm" x="560" y="20" text-anchor="end">160</text>
-    <text class="sm" x="285" y="44" text-anchor="middle">空间频率（lp/mm）</text>
-
-    <!-- 阈值 -->
-    <line class="thr" x1="0" y1="-270" x2="560" y2="-270"/>
-    <text class="moc" x="6" y="-278">30% 对比度阈值</text>
-    <!-- Nyquist 3.45µm = 145 lp/mm → 560*145/160 = 507.5 -->
-    <line class="nyq" x1="507.5" y1="0" x2="507.5" y2="-300"/>
-    <text class="mor" x="503" y="-310" text-anchor="end">Nyquist 145 lp/mm（像元 3.45 µm）</text>
-    <!-- 2/3 = 96.7 → 338.4 -->
-    <line class="nyq" x1="338.4" y1="0" x2="338.4" y2="-300" stroke-opacity=".6"/>
-    <text class="mor" x="334" y="-286" text-anchor="end" fill-opacity=".85">2/3 判据线 ≈ 97 lp/mm</text>
-
-    <!-- MTF 曲线（示意） -->
-    <path class="dif" d="M0 -294 C80 -288 160 -272 240 -232 C300 -200 360 -142 420 -84 C460 -46 490 -22 507.5 -8"/>
-    <path class="c1" d="M0 -296 C80 -292 160 -280 240 -250 C300 -226 360 -186 420 -142 C460 -112 490 -86 507.5 -70"/>
-    <path class="c2" d="M0 -292 C80 -286 160 -272 240 -238 C300 -210 360 -168 420 -122 C460 -92 490 -66 507.5 -52"/>
-    <path class="c1" d="M0 -298 C90 -294 180 -280 260 -244 C330 -212 400 -166 460 -118 C500 -86 520 -66 535 -50" stroke-opacity=".55" stroke-width="1.6"/>
-    <path class="c2" d="M0 -294 C90 -290 180 -274 260 -236 C330 -202 400 -154 460 -106 C500 -74 520 -54 535 -40" stroke-opacity=".45" stroke-width="1.4"/>
-
-    <!-- 交点标注 -->
-    <circle cx="338.4" cy="-262" r="4" fill="#cf5a50"/>
-    <text class="mor" x="348" y="-250">此处需 ≥ 30%</text>
-  </g>
-
-  <!-- 图例与右栏 -->
-  <g transform="translate(700,150)">
-    <path class="c1" d="M0 0 L30 0"/>
-    <text class="lb" x="40" y="4">优秀：2/3 判据线上仍高于 30%</text>
-    <path class="c2" d="M0 28 L30 28"/>
-    <text class="lb" x="40" y="32">合格：2/3 线上约 30–40%</text>
-    <path class="c1" d="M0 56 L30 56" stroke-opacity=".45" stroke-width="1.5"/>
-    <path class="c2" d="M0 56 L30 56" stroke-opacity=".35" stroke-width="1.2"/>
-    <text class="lb" x="40" y="60">角落视场曲线（70% / 100% 视场）低于中心</text>
-  </g>
-
-  <g transform="translate(700,280)">
-    <text class="hd" x="0" y="0">三个公式</text>
-    <text class="mon" x="0" y="26">Nyquist = 1000 / (2 × p)　lp/mm</text>
-    <text class="moc" x="0" y="50">Practical MTF = 1 / (2 × p × 0.7)</text>
-    <text class="mor" x="0" y="74">像元 p = 1000 / (2 × lp/mm × 0.7)</text>
-    <text class="sm" x="0" y="104">反推算例：MTF 40 lp/mm @ 68% → 像元 8.75 µm</text>
-    <text class="sm" x="0" y="126">MTF 80 lp/mm @ 44% → 像元 4.375 µm</text>
-  </g>
-
-  <g transform="translate(700,440)">
-    <text class="hd" x="0" y="0">算一遍</text>
-    <text class="sm" x="0" y="24">30 mm 视野、0.05 mm 缺陷 → 600 px 起（按 3 px/特征取更高）</text>
-    <text class="sm" x="0" y="46">3.45 µm 像元 → Nyquist 145 → 2/3 线 97 lp/mm</text>
-    <text class="sm" x="0" y="68">光圈不是越大越好：f/2.4@580 nm 的 Airy 斑已 ≈3.4 µm</text>
-  </g>
-
-  <text class="foot" x="44" y="524">口径：Nyquist 表与「2/3 处 30%」判据引自 Schneider Kreuznach 与 Basler 选型材料（厂商标称）；像元反推式引自 Basler Matching Sensor Size/Pixel Size/MTF 页；Airy 斑与 5 MP 实证引自 Schneider。</text>
-  <text class="foot" x="700" y="524">曲线形态为示意，不代表任何一支具体镜头的实测 MTF。</text>
+<rect class="bg" x="0" y="0" width="1200" height="590" rx="14"/>
+<text class="ttl" x="44" y="52">MTF、Nyquist 与「2/3 处 30%」这条判据
+</text>
+<text class="sub" x="44" y="80">传感器的采样上限是硬的；镜头要在这个上限的 2/3 处达到 30% 对比度。系统总 MTF 是连乘积
+</text>
+<!-- 坐标系 -->
+<g transform="translate(90,440)">
+<line class="grid" x1="0" y1="-300" x2="0" y2="0"/>
+<line class="grid" x1="0" y1="-225" x2="560" y2="-225"/>
+<line class="grid" x1="0" y1="-150" x2="560" y2="-150"/>
+<line class="grid" x1="0" y1="-75" x2="560" y2="-75"/>
+<line class="grid" x1="80" y1="0" x2="80" y2="-300"/>
+<line class="grid" x1="160" y1="0" x2="160" y2="-300"/>
+<line class="grid" x1="240" y1="0" x2="240" y2="-300"/>
+<line class="grid" x1="320" y1="0" x2="320" y2="-300"/>
+<line class="grid" x1="400" y1="0" x2="400" y2="-300"/>
+<line class="grid" x1="480" y1="0" x2="480" y2="-300"/>
+<line class="grid" x1="560" y1="0" x2="560" y2="-300"/>
+<line class="ax" x1="-14" y1="0" x2="580" y2="0"/>
+<line class="ax" x1="0" y1="14" x2="0" y2="-316"/>
+<text class="sm" x="-10" y="-6" text-anchor="end">0
+</text>
+<text class="sm" x="-10" y="-72" text-anchor="end">25%
+</text>
+<text class="sm" x="-10" y="-147" text-anchor="end">50%
+</text>
+<text class="sm" x="-10" y="-222" text-anchor="end">75%
+</text>
+<text class="sm" x="-10" y="-297" text-anchor="end">100%
+</text>
+<text class="sm" x="0" y="20" text-anchor="middle">0
+</text>
+<text class="sm" x="160" y="20" text-anchor="middle">40
+</text>
+<text class="sm" x="320" y="20" text-anchor="middle">80
+</text>
+<text class="sm" x="480" y="20" text-anchor="middle">120
+</text>
+<text class="sm" x="560" y="20" text-anchor="end">160
+</text>
+<text class="sm" x="285" y="44" text-anchor="middle">空间频率（lp/mm）
+</text>
+<!-- 阈值 -->
+<line class="thr" x1="0" y1="-270" x2="560" y2="-270"/>
+<text class="moc" x="6" y="-278">30% 对比度阈值
+</text>
+<!-- Nyquist 3.45µm = 145 lp/mm → 560*145/160 = 507.5 -->
+<line class="nyq" x1="507.5" y1="0" x2="507.5" y2="-300"/>
+<text class="mor" x="503" y="-310" text-anchor="end">Nyquist 145 lp/mm（像元 3.45 µm）
+</text>
+<!-- 2/3 = 96.7 → 338.4 -->
+<line class="nyq" x1="338.4" y1="0" x2="338.4" y2="-300" stroke-opacity=".6"/>
+<text class="mor" x="334" y="-286" text-anchor="end" fill-opacity=".85">2/3 判据线 ≈ 97 lp/mm
+</text>
+<!-- MTF 曲线（示意） -->
+<path class="dif" d="M0 -294 C80 -288 160 -272 240 -232 C300 -200 360 -142 420 -84 C460 -46 490 -22 507.5 -8"/>
+<path class="c1" d="M0 -296 C80 -292 160 -280 240 -250 C300 -226 360 -186 420 -142 C460 -112 490 -86 507.5 -70"/>
+<path class="c2" d="M0 -292 C80 -286 160 -272 240 -238 C300 -210 360 -168 420 -122 C460 -92 490 -66 507.5 -52"/>
+<path class="c1" d="M0 -298 C90 -294 180 -280 260 -244 C330 -212 400 -166 460 -118 C500 -86 520 -66 535 -50" stroke-opacity=".55" stroke-width="1.6"/>
+<path class="c2" d="M0 -294 C90 -290 180 -274 260 -236 C330 -202 400 -154 460 -106 C500 -74 520 -54 535 -40" stroke-opacity=".45" stroke-width="1.4"/>
+<!-- 交点标注 -->
+<circle cx="338.4" cy="-262" r="4" fill="#cf5a50"/>
+<text class="mor" x="348" y="-250">此处需 ≥ 30%
+</text>
+</g>
+<!-- 图例与右栏 -->
+<g transform="translate(700,150)">
+<path class="c1" d="M0 0 L30 0"/>
+<text class="lb" x="40" y="4">优秀：2/3 判据线上仍高于 30%
+</text>
+<path class="c2" d="M0 28 L30 28"/>
+<text class="lb" x="40" y="32">合格：2/3 线上约 30–40%
+</text>
+<path class="c1" d="M0 56 L30 56" stroke-opacity=".45" stroke-width="1.5"/>
+<path class="c2" d="M0 56 L30 56" stroke-opacity=".35" stroke-width="1.2"/>
+<text class="lb" x="40" y="60">角落视场曲线（70% / 100% 视场）低于中心
+</text>
+</g>
+<g transform="translate(700,280)">
+<text class="hd" x="0" y="0">三个公式
+</text>
+<text class="mon" x="0" y="26">Nyquist = 1000 / (2 × p)　lp/mm
+</text>
+<text class="moc" x="0" y="50">Practical MTF = 1 / (2 × p × 0.7)
+</text>
+<text class="mor" x="0" y="74">像元 p = 1000 / (2 × lp/mm × 0.7)
+</text>
+<text class="sm" x="0" y="104">反推算例：MTF 40 lp/mm @ 68% → 像元 8.75 µm
+</text>
+<text class="sm" x="0" y="126">MTF 80 lp/mm @ 44% → 像元 4.375 µm
+</text>
+</g>
+<g transform="translate(700,440)">
+<text class="hd" x="0" y="0">算一遍
+</text>
+<text class="sm" x="0" y="24">30 mm 视野、0.05 mm 缺陷 → 600 px 起（按 3 px/特征取更高）
+</text>
+<text class="sm" x="0" y="46">3.45 µm 像元 → Nyquist 145 → 2/3 线 97 lp/mm
+</text>
+<text class="sm" x="0" y="68">光圈不是越大越好：f/2.4@580 nm 的 Airy 斑已 ≈3.4 µm
+</text>
+</g>
+<text class="foot" x="44" y="546">口径：Nyquist 表与「2/3 处 30%」判据引自 Schneider Kreuznach 与 Basler 选型材料（厂商标称）；像元反推式引自 Basler Matching Sensor Size/Pixel Size/MTF 页；Airy 斑与 5 MP 实证引自
+</text>
+<text class="foot" x="44" y="564">Schneider。曲线形态为示意，不代表任何一支具体镜头的实测 MTF。
+</text>
 </svg>

@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 576" width="100%" role="img" aria-label="PCL 与 Open3D 的默认参数对照，以及单位与坐标系陷阱">
+<style>
+    .bg{fill:#0b0b10}
+    .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC',sans-serif}
+    .lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC',sans-serif}
+    .sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC',sans-serif}
+    .xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC',sans-serif}
+    .foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+    .mon{fill:#c9a96a;font:600 12px 'JetBrains Mono',Consolas,monospace}
+    .moc{fill:#7aa2c8;font:600 12px 'JetBrains Mono',Consolas,monospace}
+    .mor{fill:#cf5a50;font:600 12px 'JetBrains Mono',Consolas,monospace}
+    .g{fill:none;stroke:#8a8578;stroke-width:1;stroke-opacity:.35}
+    .cellA{fill:#1a1712}
+    .cellB{fill:#14161c}
+    .bad{fill:#1d1414;stroke:#cf5a50;stroke-opacity:.45;stroke-width:1}
+    .good{fill:#181a14;stroke:#8fbf7a;stroke-opacity:.45;stroke-width:1}
+    .hdA{fill:#1a1712;stroke:#8a8578;stroke-opacity:.3;stroke-width:1}
+  </style>
+<rect class="bg" x="0" y="0" width="1200" height="576" rx="14"/>
+<text class="ttl" x="44" y="50">默认参数：两个库，两种相反的策略
+</text>
+<text class="sub" x="44" y="76">PCL 的默认值多数是 0 或 1，不设就静默失效或报错；Open3D legacy 主参数干脆没默认值，但新 API 有一组「能跑但未必对」的
+</text>
+<!-- 左：PCL -->
+<g transform="translate(44,106)">
+<text class="hd" x="0" y="0" fill="#c9a96a">PCL　默认 0 或 1，不设即失效
+</text>
+<rect class="hdA" x="0" y="10" width="540" height="26" rx="4"/>
+<text class="xs" x="10" y="27" fill="#a09b8d">类 / 参数
+</text>
+<text class="xs" x="300" y="27" fill="#a09b8d">默认值
+</text>
+<text class="xs" x="420" y="27" fill="#a09b8d">不设的后果
+</text>
+<g transform="translate(0,36)">
+<rect class="cellA" x="0" y="0" width="540" height="34"/>
+<text class="mon" x="10" y="22">SACSegmentation::std_mul_
+</text>
+<text class="mor" x="300" y="22">0.0
+</text>
+<text class="xs" x="420" y="22" fill="#cf5a50">直接报错
+</text>
+</g>
+<g transform="translate(0,70)">
+<rect class="cellA" x="0" y="0" width="540" height="34"/>
+<text class="mon" x="10" y="22">VoxelGrid::leaf_size_
+</text>
+<text class="mor" x="300" y="22">(0,0,0)
+</text>
+<text class="xs" x="420" y="22" fill="#cf5a50">inverse = inf
+</text>
+</g>
+<g transform="translate(0,104)">
+<rect class="cellA" x="0" y="0" width="540" height="34"/>
+<text class="mon" x="10" y="22">NormalEstimation::k_
+</text>
+<text class="mor" x="300" y="22">0
+</text>
+<text class="xs" x="420" y="22" fill="#cf5a50">无邻域 → NaN
+</text>
+</g>
+<g transform="translate(0,138)">
+<rect class="cellB" x="0" y="0" width="540" height="34"/>
+<text class="mon" x="10" y="22" fill="#7aa2c8">StatisticalOutlierRemoval::mean_k_
+</text>
+<text class="moc" x="300" y="22">1
+</text>
+<text class="xs" x="420" y="22">几乎不过滤
+</text>
+</g>
+<g transform="translate(0,172)">
+<rect class="cellB" x="0" y="0" width="540" height="34"/>
+<text class="mon" x="10" y="22" fill="#7aa2c8">SACSegmentation::max_iterations_
+</text>
+<text class="moc" x="300" y="22">50
+</text>
+<text class="xs" x="420" y="22" fill="#cf5a50">底层 SampleConsensus 是 1000
+</text>
+</g>
+<g transform="translate(0,206)">
+<rect class="cellB" x="0" y="0" width="540" height="34"/>
+<text class="mon" x="10" y="22" fill="#7aa2c8">RegionGrowing::theta_threshold_
+</text>
+<text class="moc" x="300" y="22">30°
+</text>
+<text class="xs" x="420" y="22">唯一「可用」的默认值
+</text>
+</g>
+<g transform="translate(0,240)">
+<rect class="cellB" x="0" y="0" width="540" height="34"/>
+<text class="mon" x="10" y="22" fill="#7aa2c8">CropBox::min_pt_ / max_pt_
+</text>
+<text class="moc" x="300" y="22">(±1,±1,±1)
+</text>
+<text class="xs" x="420" y="22">裁一个 2×2×2 盒子
+</text>
+</g>
+<g transform="translate(0,278)">
+<rect class="bad" x="0" y="0" width="540" height="46" rx="6"/>
+<text class="sm" x="10" y="19" fill="#cf5a50">同一个「默认值」有两个数：SACSegmentation 是 50，SampleConsensus 是 1000——
+</text>
+<text class="xs" x="10" y="36" fill="#cf5a50">官方教程输出明确打印「Setting the maximum number of iterations to 50」。调错层级差 20 倍。
+</text>
+</g>
+</g>
+<!-- 右上：Open3D -->
+<g transform="translate(620,106)">
+<text class="hd" x="0" y="0" fill="#7aa2c8">Open3D　两套 API，默认策略相反
+</text>
+<g transform="translate(0,18)">
+<text class="sm" x="0" y="14" fill="#8fbf7a">legacy PointCloud　主参数无默认值，不传即 TypeError
+</text>
+<text class="mon" x="0" y="36">remove_statistical_outlier(nb_neighbors, std_ratio)
+</text>
+<text class="mon" x="0" y="54">voxel_down_sample(voxel_size)
+</text>
+<text class="mon" x="0" y="72">segment_plane(distance_threshold, ransac_n, num_iterations)
+</text>
+</g>
+<g transform="translate(0,124)">
+<text class="sm" x="0" y="14" fill="#cf5a50">t.geometry.PointCloud　有一组能跑但未必对的默认值
+</text>
+<text class="mon" x="0" y="36" fill="#cf5a50">segment_plane(distance_threshold = 0.01, …)
+</text>
+<text class="xs" x="0" y="54" fill="#cf5a50">= 10 mm，对微米级测量比不设还糟
+</text>
+<text class="mon" x="0" y="78">estimate_normals(max_nn = 30, radius = None)
+</text>
+<text class="mon" x="0" y="96">create_from_rgbd_image(depth_scale=1000.0, depth_max=3.0)
+</text>
+<text class="xs" x="0" y="114">默认值把单位写死：depth_scale 是 mm，depth_max 是 m
+</text>
+</g>
+</g>
+<!-- 底部：两个不报错的坑 -->
+<g transform="translate(44,432)">
+<rect class="bad" x="0" y="0" width="546" height="88" rx="9"/>
+<text class="hd" x="16" y="24" fill="#cf5a50">陷阱一　单位：没人检查，也不告诉你
+</text>
+<text class="xs" x="16" y="46">Open3D issue #5278 维护者原话：「你的数据单位是毫米，但示例用的是米。所以你应该把
+</text>
+<text class="xs" x="16" y="62">voxel_size 改成比如 10 或 5（意思是 10mm 或 5mm）。」
+</text>
+<text class="xs" x="16" y="80" fill="#8fbf7a">不报错：体素比场景小 1000 倍，等于完全没下采样，后续所有阈值含义跟着错
+</text>
+</g>
+<g transform="translate(610,432)">
+<rect class="good" x="0" y="0" width="546" height="88" rx="9"/>
+<text class="hd" x="16" y="24" fill="#8fbf7a">陷阱二　坐标系：PLY 文件不是相机系
+</text>
+<text class="xs" x="16" y="46">Open3D 官方示例脚本载入后必须翻转，注释写「Flip it, otherwise the pointcloud
+</text>
+<text class="xs" x="16" y="62">will be upside down.」——只有 create_from_rgbd_image 构造的才是相机系
+</text>
+<text class="xs" x="16" y="80" fill="#8fbf7a">PCL/Open3D 是右手系、Z 向上吗？官方文档无任何声明，须自己变换
+</text>
+</g>
+<text class="foot" x="44.0" y="542">口径：PCL 默认值取自 PCL 1.15.1-dev 官方 API 文档与对应 _8h_source.html 源码（mean_k_{1}、leaf_size_(Eigen::Vector4f::Zero())、k_{0}、threshold_{0.0}、max_iterations_{50}、
+</text>
+<text class="foot" x="44.0" y="558">theta_threshold_ = 30/180*π）；Open3D 默认值取自 0.19.0 官方 Python API（legacy 与 t.geometry 两套）；issue #5278 与示例脚本均为一手来源。
+</text>
+</svg>

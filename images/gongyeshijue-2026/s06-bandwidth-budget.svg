@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="151 MP 相机在各接口下的帧率上限">
-  <style>
+<style>
     .bg{fill:#0b0b10}
     .ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
     .sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -17,54 +17,74 @@
     .b4{fill:#9a7d45}
     .need{fill:#cf5a50;fill-opacity:.22;stroke:#cf5a50;stroke-width:1.2;stroke-dasharray:5 4}
   </style>
-  <rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
-  <text class="ttl" x="44" y="52">带宽决定帧率：151 MP 相机在各接口下的天花板</text>
-  <text class="sub" x="44" y="80">每帧 151 MB（Mono8）。横条为该接口有效带宽能支撑的帧率，注意不是接口标称速率</text>
-
-  <rect x="44" y="100" width="1112" height="46" rx="8" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".4" stroke-width="1.2"/>
-  <text class="eq" x="60" y="129">带宽 = 宽 × 高 × 位深/8 × 帧率 × 相机数</text>
-  <text class="sm" x="660" y="129">相机数是最容易被忘掉的乘数：四台同规格相机就意味着四倍带宽</text>
-
-  <!-- axis 0..40 fps, x 380..1100 => 18px per fps -->
-  <line class="grid" x1="380" y1="170" x2="380" y2="400"/>
-  <line class="grid" x1="650" y1="170" x2="650" y2="400"/>
-  <line class="grid" x1="920" y1="170" x2="920" y2="400"/>
-  <line class="grid" x1="1100" y1="170" x2="1100" y2="400"/>
-  <text class="ax" x="380" y="420" text-anchor="middle">0</text>
-  <text class="ax" x="650" y="420" text-anchor="middle">15</text>
-  <text class="ax" x="920" y="420" text-anchor="middle">30</text>
-  <text class="ax" x="1100" y="420" text-anchor="middle">40 fps</text>
-
-  <text class="lb" x="44" y="200">1 GigE</text>
-  <text class="sm" x="44" y="218">实测约 110 MB/s</text>
-  <rect class="b1" x="380" y="184" width="14" height="24" rx="5"/>
-  <text class="val" x="404" y="202">不足 1 fps</text>
-
-  <text class="lb" x="44" y="252">USB3 Vision</text>
-  <text class="sm" x="44" y="270">实测约 350 至 400 MB/s</text>
-  <rect class="b2" x="380" y="236" width="47" height="24" rx="5"/>
-  <text class="val" x="437" y="254">约 2.6 fps</text>
-
-  <text class="lb" x="44" y="304">10 GigE</text>
-  <text class="sm" x="44" y="322">实测约 1.1 GB/s</text>
-  <rect class="b3" x="380" y="288" width="126" height="24" rx="5"/>
-  <text class="val" x="516" y="306">约 7 fps</text>
-
-  <text class="lb" x="44" y="356">4×CXP-12</text>
-  <text class="sm" x="44" y="374">50 Gbit/s 标准上限</text>
-  <rect class="b4" x="380" y="340" width="594" height="24" rx="5"/>
-  <text class="val" x="984" y="358">约 33 fps</text>
-
-  <!-- practical target -->
-  <rect class="need" x="690" y="170" width="18" height="222" rx="4"/>
-  <text class="sm" x="716" y="200">多数在线检测的</text>
-  <text class="sm" x="716" y="218">实用下限</text>
-  <text class="sm" x="716" y="240">1 GigE 与 USB3</text>
-  <text class="sm" x="716" y="258">在这一量级上不可用</text>
-
-  <line class="grid" x1="44" y1="440" x2="1156" y2="440"/>
-  <text class="hd" x="44" y="468">厂商实机数据印证了同一结论</text>
-  <text class="sm" x="44" y="492">Basler boost boA13440-17cm：127 MP，17 fps，CXP-12　　LUCID ATX650G：65 MP，14.1 fps，10GigE</text>
-  <text class="sm" x="44" y="514">Teledyne Kinetix：10.2 MP，498 fps（8 bit，约 5 GB/s，走 PCIe/USB3.2）　—— 分辨率降一个量级，帧率才上一个量级</text>
-  <text class="foot" x="44" y="542">有效带宽为实测口径（1 GigE 约 110 MB/s、USB3 Vision 约 350 至 400 MB/s，XIMEA 称实测可达约 450 MB/s），CXP 为标准上限；帧率上限为按公式换算，非厂商标称。</text>
+<rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+<text class="ttl" x="44" y="52">带宽决定帧率：151 MP 相机在各接口下的天花板
+</text>
+<text class="sub" x="44" y="80">每帧 151 MB（Mono8）。横条为该接口有效带宽能支撑的帧率，注意不是接口标称速率
+</text>
+<rect x="44" y="100" width="1112" height="46" rx="8" fill="#1a1712" stroke="#c9a96a" stroke-opacity=".4" stroke-width="1.2"/>
+<text class="eq" x="60" y="129">带宽 = 宽 × 高 × 位深/8 × 帧率 × 相机数
+</text>
+<text class="sm" x="660" y="129">相机数是最容易被忘掉的乘数：四台同规格相机就意味着四倍带宽
+</text>
+<!-- axis 0..40 fps, x 380..1100 => 18px per fps -->
+<line class="grid" x1="380" y1="170" x2="380" y2="400"/>
+<line class="grid" x1="650" y1="170" x2="650" y2="400"/>
+<line class="grid" x1="920" y1="170" x2="920" y2="400"/>
+<line class="grid" x1="1100" y1="170" x2="1100" y2="400"/>
+<text class="ax" x="380" y="420" text-anchor="middle">0
+</text>
+<text class="ax" x="650" y="420" text-anchor="middle">15
+</text>
+<text class="ax" x="920" y="420" text-anchor="middle">30
+</text>
+<text class="ax" x="1100" y="420" text-anchor="middle">40 fps
+</text>
+<text class="lb" x="44" y="200">1 GigE
+</text>
+<text class="sm" x="44" y="218">实测约 110 MB/s
+</text>
+<rect class="b1" x="380" y="184" width="14" height="24" rx="5"/>
+<text class="val" x="404" y="202">不足 1 fps
+</text>
+<text class="lb" x="44" y="252">USB3 Vision
+</text>
+<text class="sm" x="44" y="270">实测约 350 至 400 MB/s
+</text>
+<rect class="b2" x="380" y="236" width="47" height="24" rx="5"/>
+<text class="val" x="437" y="254">约 2.6 fps
+</text>
+<text class="lb" x="44" y="304">10 GigE
+</text>
+<text class="sm" x="44" y="322">实测约 1.1 GB/s
+</text>
+<rect class="b3" x="380" y="288" width="126" height="24" rx="5"/>
+<text class="val" x="516" y="306">约 7 fps
+</text>
+<text class="lb" x="44" y="356">4×CXP-12
+</text>
+<text class="sm" x="44" y="374">50 Gbit/s 标准上限
+</text>
+<rect class="b4" x="380" y="340" width="594" height="24" rx="5"/>
+<text class="val" x="984" y="358">约 33 fps
+</text>
+<!-- practical target -->
+<rect class="need" x="690" y="170" width="18" height="222" rx="4"/>
+<text class="sm" x="716" y="200">多数在线检测的
+</text>
+<text class="sm" x="716" y="218">实用下限
+</text>
+<text class="sm" x="716" y="240">1 GigE 与 USB3
+</text>
+<text class="sm" x="716" y="258">在这一量级上不可用
+</text>
+<line class="grid" x1="44" y1="440" x2="1156" y2="440"/>
+<text class="hd" x="44" y="468">厂商实机数据印证了同一结论
+</text>
+<text class="sm" x="44" y="492">Basler boost boA13440-17cm：127 MP，17 fps，CXP-12　　LUCID ATX650G：65 MP，14.1 fps，10GigE
+</text>
+<text class="sm" x="44" y="514">Teledyne Kinetix：10.2 MP，498 fps（8 bit，约 5 GB/s，走 PCIe/USB3.2）　—— 分辨率降一个量级，帧率才上一个量级
+</text>
+<text class="foot" x="44" y="542">有效带宽为实测口径（1 GigE 约 110 MB/s、USB3 Vision 约 350 至 400 MB/s，XIMEA 称实测可达约 450 MB/s），CXP 为标准上限；帧率上限为按公式换算，非厂商标称。
+</text>
 </svg>
