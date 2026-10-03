@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="100%" role="img" aria-label="双目：把 z² 画成几何，而不是公式">
+  <style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mon{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mog{fill:#8fbf7a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.note{fill:#a09b8d;font:400 11.5px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+
+  <rect class="bg" x="0" y="0" width="1200" height="700" rx="14"/>
+  <text class="ttl" x="44" y="48">双目：把 z² 画成几何，而不是公式</text>
+  <text class="sub" x="44" y="76">纵向放大率 f/b 是常数；同样的视差误差，在远处被 z 拉得更长</text>
+  <line x1="312.84" y1="286.04" x2="751.23" y2="391.13" stroke="#6d6a63" stroke-width="0.7"/>
+  <line x1="28.08" y1="416.87" x2="301.76" y2="291.13" stroke="#6d6a63" stroke-width="0.7"/>
+  <line x1="220.2" y1="298.8" x2="218.49" y2="272.16" stroke="#64809e" stroke-width="1.3"/>
+  <line x1="284.97" y1="298.85" x2="733.17" y2="411.44" stroke="#6d6a63" stroke-width="0.7"/>
+  <line x1="220.2" y1="298.8" x2="246.5" y2="305.66" stroke="#64809e" stroke-width="1.3"/>
+  <line x1="197.2" y1="308.67" x2="220.2" y2="298.8" stroke="#64809e" stroke-width="1.3"/>
+  <polygon points="220.2,298.8 246.5,305.66 245.04,278.67 218.49,272.16" fill="#5a728c" fill-opacity="0.34" stroke="#5a728c" stroke-width="1.3" stroke-opacity=".9"/>
+  <polygon points="197.2,308.67 195.22,281.52 218.49,272.16 220.2,298.8" fill="#5a728c" fill-opacity="0.34" stroke="#5a728c" stroke-width="1.3" stroke-opacity=".9"/>
+  <line x1="218.49" y1="272.16" x2="245.04" y2="278.67" stroke="#64809e" stroke-width="1.3"/>
+  <polygon points="197.2,308.67 223.74,315.86 246.5,305.66 220.2,298.8" fill="#5a728c" fill-opacity="0.34" stroke="#5a728c" stroke-width="1.3" stroke-opacity=".9"/>
+  <line x1="246.5" y1="305.66" x2="245.04" y2="278.67" stroke="#64809e" stroke-width="1.3"/>
+  <line x1="195.22" y1="281.52" x2="218.49" y2="272.16" stroke="#64809e" stroke-width="1.3"/>
+  <line x1="67.55" y1="431.79" x2="337.65" y2="299.9" stroke="#6d6a63" stroke-width="0.7"/>
+  <line x1="238.61" y1="302.15" x2="237.7" y2="286.13" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="223.74" y1="315.86" x2="246.5" y2="305.66" stroke="#64809e" stroke-width="1.3"/>
+  <line x1="197.2" y1="308.67" x2="195.22" y2="281.52" stroke="#64809e" stroke-width="1.3"/>
+  <line x1="238.61" y1="302.15" x2="257.68" y2="307.11" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="227.2" y1="307.18" x2="238.61" y2="302.15" stroke="#64809e" stroke-width="1.2"/>
+  <polygon points="195.22,281.52 222.01,288.33 245.04,278.67 218.49,272.16" fill="#5a728c" fill-opacity="0.34" stroke="#5a728c" stroke-width="1.3" stroke-opacity=".9"/>
+  <line x1="197.2" y1="308.67" x2="223.74" y2="315.86" stroke="#64809e" stroke-width="1.3"/>
+  <polygon points="238.61,302.15 257.68,307.11 256.87,290.94 237.7,286.13" fill="#5a728c" fill-opacity="0.46" stroke="#5a728c" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="227.2,307.18 226.2,291.01 237.7,286.13 238.61,302.15" fill="#5a728c" fill-opacity="0.46" stroke="#5a728c" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="193.56" y1="310.23" x2="191.54" y2="282.99" stroke="#64809e" stroke-width="1.3"/>
+  <polygon points="223.74,315.86 222.01,288.33 245.04,278.67 246.5,305.66" fill="#5a728c" fill-opacity="0.34" stroke="#5a728c" stroke-width="1.3" stroke-opacity=".9"/>
+  <circle cx="235.96" cy="297.53" r="3" fill="#c2bfba"/>
+  <polygon points="227.2,307.18 246.35,312.26 257.68,307.11 238.61,302.15" fill="#5a728c" fill-opacity="0.46" stroke="#5a728c" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="237.7" y1="286.13" x2="256.87" y2="290.94" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="226.2" y1="291.01" x2="237.7" y2="286.13" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="193.56" y1="310.23" x2="220.15" y2="317.48" stroke="#64809e" stroke-width="1.3"/>
+  <polygon points="197.2,308.67 223.74,315.86 222.01,288.33 195.22,281.52" fill="#5a728c" fill-opacity="0.34" stroke="#5a728c" stroke-width="1.3" stroke-opacity=".9"/>
+  <line x1="257.68" y1="307.11" x2="256.87" y2="290.94" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="227.2" y1="307.18" x2="226.2" y2="291.01" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="222.01" y1="288.33" x2="245.04" y2="278.67" stroke="#64809e" stroke-width="1.3"/>
+  <line x1="169.3" y1="320.65" x2="193.56" y2="310.23" stroke="#64809e" stroke-width="1.3"/>
+  <polygon points="193.56,310.23 220.15,317.48 218.37,289.86 191.54,282.99" fill="#5a728c" fill-opacity="0.34" stroke="#5a728c" stroke-width="1.3" stroke-opacity=".9"/>
+  <line x1="246.35" y1="312.26" x2="257.68" y2="307.11" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="227.2" y1="307.18" x2="246.35" y2="312.26" stroke="#64809e" stroke-width="1.2"/>
+  <polygon points="226.2,291.01 245.46,295.93 256.87,290.94 237.7,286.13" fill="#5a728c" fill-opacity="0.46" stroke="#5a728c" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="255.31" y1="312.47" x2="713.63" y2="433.4" stroke="#6d6a63" stroke-width="0.7"/>
+  <line x1="195.22" y1="281.52" x2="222.01" y2="288.33" stroke="#64809e" stroke-width="1.3"/>
+  <polygon points="246.35,312.26 245.46,295.93 256.87,290.94 257.68,307.11" fill="#5a728c" fill-opacity="0.46" stroke="#5a728c" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="227.2,307.18 246.35,312.26 245.46,295.93 226.2,291.01" fill="#5a728c" fill-opacity="0.46" stroke="#5a728c" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="169.3,320.65 166.98,292.87 191.54,282.99 193.56,310.23" fill="#5a728c" fill-opacity="0.34" stroke="#5a728c" stroke-width="1.3" stroke-opacity=".9"/>
+  <line x1="223.74" y1="315.86" x2="222.01" y2="288.33" stroke="#64809e" stroke-width="1.3"/>
+  <line x1="191.54" y1="282.99" x2="218.37" y2="289.86" stroke="#64809e" stroke-width="1.3"/>
+  <line x1="245.46" y1="295.93" x2="256.87" y2="290.94" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="226.2" y1="291.01" x2="245.46" y2="295.93" stroke="#64809e" stroke-width="1.2"/>
+  <polygon points="169.3,320.65 196.11,328.25 220.15,317.48 193.56,310.23" fill="#5a728c" fill-opacity="0.34" stroke="#5a728c" stroke-width="1.3" stroke-opacity=".9"/>
+  <line x1="109.24" y1="447.55" x2="375.07" y2="309.04" stroke="#6d6a63" stroke-width="0.7"/>
+  <line x1="220.15" y1="317.48" x2="218.37" y2="289.86" stroke="#64819e" stroke-width="1.3"/>
+  <line x1="166.98" y1="292.87" x2="191.54" y2="282.99" stroke="#64819f" stroke-width="1.3"/>
+  <line x1="246.35" y1="312.26" x2="245.46" y2="295.93" stroke="#64819f" stroke-width="1.2"/>
+  <line x1="211.86" y1="313.94" x2="210.76" y2="297.56" stroke="#6481a0" stroke-width="1.2"/>
+  <line x1="196.11" y1="328.25" x2="220.15" y2="317.48" stroke="#6582a0" stroke-width="1.3"/>
+  <line x1="169.3" y1="320.65" x2="166.98" y2="292.87" stroke="#6582a0" stroke-width="1.3"/>
+  <line x1="211.86" y1="313.94" x2="231.14" y2="319.18" stroke="#6582a0" stroke-width="1.2"/>
+  <line x1="199.81" y1="319.26" x2="211.86" y2="313.94" stroke="#6582a0" stroke-width="1.2"/>
+  <polygon points="166.98,292.87 194.04,300.07 218.37,289.86 191.54,282.99" fill="#5c7590" fill-opacity="0.34" stroke="#5c7590" stroke-width="1.3" stroke-opacity=".9"/>
+  <line x1="169.3" y1="320.65" x2="196.11" y2="328.25" stroke="#6583a1" stroke-width="1.3"/>
+  <polygon points="211.86,313.94 231.14,319.18 230.14,302.64 210.76,297.56" fill="#5c7590" fill-opacity="0.46" stroke="#5c7590" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="199.81,319.26 198.61,302.71 210.76,297.56 211.86,313.94" fill="#5c7590" fill-opacity="0.46" stroke="#5c7590" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="196.11,328.25 194.04,300.07 218.37,289.86 220.15,317.48" fill="#5c7691" fill-opacity="0.34" stroke="#5c7691" stroke-width="1.3" stroke-opacity=".9"/>
+  <circle cx="208.83" cy="309.33" r="3" fill="#c5c2bd"/>
+  <polygon points="199.81,319.26 219.17,324.63 231.14,319.18 211.86,313.94" fill="#5d7691" fill-opacity="0.46" stroke="#5d7691" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="210.76" y1="297.56" x2="230.14" y2="302.64" stroke="#6583a2" stroke-width="1.2"/>
+  <line x1="198.61" y1="302.71" x2="210.76" y2="297.56" stroke="#6583a2" stroke-width="1.2"/>
+  <line x1="235.96" y1="297.53" x2="301.73" y2="324.21" stroke="#8b7650" stroke-width="1.3"/>
+  <polygon points="169.3,320.65 196.11,328.25 194.04,300.07 166.98,292.87" fill="#5d7792" fill-opacity="0.34" stroke="#5d7792" stroke-width="1.3" stroke-opacity=".9"/>
+  <line x1="205.56" y1="261.54" x2="233.25" y2="250.85" stroke="#c9a96a" stroke-width="2.2"/>
+  <line x1="231.14" y1="319.18" x2="230.14" y2="302.64" stroke="#6684a2" stroke-width="1.2"/>
+  <line x1="199.81" y1="319.26" x2="198.61" y2="302.71" stroke="#6684a3" stroke-width="1.2"/>
+  <line x1="194.04" y1="300.07" x2="218.37" y2="289.86" stroke="#6684a3" stroke-width="1.3"/>
+  <line x1="219.17" y1="324.63" x2="231.14" y2="319.18" stroke="#6684a3" stroke-width="1.2"/>
+  <line x1="199.81" y1="319.26" x2="219.17" y2="324.63" stroke="#6684a3" stroke-width="1.2"/>
+  <polygon points="198.61,302.71 218.09,307.91 230.14,302.64 210.76,297.56" fill="#5e7893" fill-opacity="0.46" stroke="#5e7893" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="166.98" y1="292.87" x2="194.04" y2="300.07" stroke="#6685a3" stroke-width="1.3"/>
+  <polygon points="219.17,324.63 218.09,307.91 230.14,302.64 231.14,319.18" fill="#5e7894" fill-opacity="0.46" stroke="#5e7894" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="199.81,319.26 219.17,324.63 218.09,307.91 198.61,302.71" fill="#5e7894" fill-opacity="0.46" stroke="#5e7894" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="153.36" y1="464.23" x2="414.14" y2="318.58" stroke="#716e66" stroke-width="0.7"/>
+  <line x1="196.11" y1="328.25" x2="194.04" y2="300.07" stroke="#6785a4" stroke-width="1.3"/>
+  <line x1="218.09" y1="307.91" x2="230.14" y2="302.64" stroke="#6786a5" stroke-width="1.2"/>
+  <line x1="198.61" y1="302.71" x2="218.09" y2="307.91" stroke="#6786a5" stroke-width="1.2"/>
+  <line x1="219.17" y1="324.63" x2="218.09" y2="307.91" stroke="#6786a5" stroke-width="1.2"/>
+  <line x1="223.69" y1="327" x2="692.43" y2="457.23" stroke="#726e67" stroke-width="0.7"/>
+  <line x1="208.83" y1="309.33" x2="301.73" y2="324.21" stroke="#8c7750" stroke-width="1.3"/>
+  <line x1="235.96" y1="297.53" x2="407.46" y2="352.07" stroke="#8d7850" stroke-width="1.3"/>
+  <circle cx="301.73" cy="324.21" r="4" fill="#b89b64"/>
+  <line x1="301.73" y1="324.21" x2="303.29" y2="324.62" stroke="#cf5a50" stroke-width="3"/>
+  <circle cx="303.29" cy="324.62" r="3.2" fill="none" stroke="#cf5a50" stroke-width="1.8"/>
+  <line x1="200.11" y1="481.9" x2="454.95" y2="328.55" stroke="#757169" stroke-width="0.7"/>
+  <line x1="208.83" y1="309.33" x2="407.46" y2="352.07" stroke="#8f7951" stroke-width="1.3"/>
+  <line x1="189.92" y1="342.52" x2="669.34" y2="483.18" stroke="#78746b" stroke-width="0.7"/>
+  <line x1="249.74" y1="500.67" x2="497.63" y2="338.97" stroke="#79756c" stroke-width="0.7"/>
+  <line x1="235.96" y1="297.53" x2="563.17" y2="393.11" stroke="#917b51" stroke-width="1.3"/>
+  <line x1="208.83" y1="309.33" x2="563.17" y2="393.11" stroke="#927c52" stroke-width="1.3"/>
+  <line x1="302.52" y1="520.62" x2="542.31" y2="349.89" stroke="#7d796f" stroke-width="0.7"/>
+  <circle cx="407.46" cy="352.07" r="4" fill="#bfa167"/>
+  <line x1="153.75" y1="359.13" x2="644.12" y2="511.53" stroke="#7e7a70" stroke-width="0.7"/>
+  <line x1="235.96" y1="297.53" x2="730.61" y2="425.09" stroke="#506881" stroke-width="1" stroke-dasharray="5 4"/>
+  <line x1="407.46" y1="352.07" x2="415.99" y2="354.32" stroke="#cf5a50" stroke-width="3"/>
+  <circle cx="415.99" cy="354.32" r="3.2" fill="none" stroke="#cf5a50" stroke-width="1.8"/>
+  <line x1="358.77" y1="541.88" x2="589.12" y2="361.32" stroke="#817d72" stroke-width="0.7"/>
+  <line x1="208.83" y1="309.33" x2="713.06" y2="445.21" stroke="#516a84" stroke-width="1" stroke-dasharray="5 4"/>
+  <line x1="114.93" y1="376.97" x2="616.43" y2="542.65" stroke="#848074" stroke-width="0.7"/>
+  <line x1="418.84" y1="564.59" x2="638.24" y2="373.32" stroke="#868175" stroke-width="0.7"/>
+  <line x1="483.13" y1="588.9" x2="689.83" y2="385.92" stroke="#8a8578" stroke-width="0.7"/>
+  <circle cx="563.17" cy="393.11" r="4" fill="#c9a96a"/>
+  <line x1="73.16" y1="396.16" x2="585.91" y2="576.96" stroke="#8a8578" stroke-width="0.7"/>
+  <line x1="563.17" y1="393.11" x2="592.41" y2="400.82" stroke="#cf5a50" stroke-width="3"/>
+  <circle cx="592.41" cy="400.82" r="3.2" fill="none" stroke="#cf5a50" stroke-width="1.8"/>
+  <line x1="552.09" y1="614.97" x2="744.08" y2="399.17" stroke="#8a8578" stroke-width="0.7"/>
+  <line x1="28.08" y1="416.87" x2="552.09" y2="614.97" stroke="#8a8578" stroke-width="0.7"/>
+  <line x1="626.28" y1="643.01" x2="801.21" y2="413.12" stroke="#8a8578" stroke-width="0.7"/>
+  <text class="lb" x="182.09" y="326.51" text-anchor="end" fill="#7aa2c8">左相机</text>
+  <text class="lb" x="229.35" y="314.87" text-anchor="start" fill="#7aa2c8">右相机</text>
+  <text class="lb" x="219.19" y="241.61" text-anchor="middle" fill="#c9a96a" font-family="'JetBrains Mono',Consolas,monospace">基线 b = 60 mm</text>
+  <text class="sm" x="44" y="112" text-anchor="start">同一视差误差 ε_d = 0.5 px，在三个距离上给出的深度误差</text>
+  <text class="lb" x="286.97" y="287.84" text-anchor="middle" fill="#e8e4dc" font-family="'JetBrains Mono',Consolas,monospace">z = 150 mm</text>
+  <text class="lb" x="399.6" y="294.56" text-anchor="middle" fill="#e8e4dc" font-family="'JetBrains Mono',Consolas,monospace">z = 330 mm</text>
+  <text class="lb" x="562.83" y="313.96" text-anchor="middle" fill="#e8e4dc" font-family="'JetBrains Mono',Consolas,monospace">z = 560 mm</text>
+  <line x1="303.29" y1="324.62" x2="333.29" y2="224.62" stroke="#94423d" stroke-width="1"/>
+  <text class="xs" x="341.29" y="228.62" text-anchor="start" fill="#cf5a50" font-family="'JetBrains Mono',Consolas,monospace">ε_z 0.47</text>
+  <line x1="415.99" y1="354.32" x2="451.99" y2="248.62" stroke="#94423d" stroke-width="1"/>
+  <text class="xs" x="459.99" y="252.62" text-anchor="start" fill="#cf5a50" font-family="'JetBrains Mono',Consolas,monospace">ε_z 2.27</text>
+  <line x1="592.41" y1="400.82" x2="634.41" y2="272.62" stroke="#94423d" stroke-width="1"/>
+  <text class="xs" x="642.41" y="276.62" text-anchor="start" fill="#cf5a50" font-family="'JetBrains Mono',Consolas,monospace">ε_z 6.53</text>
+  <rect x="778" y="96" width="356" height="214" rx="10" fill="#14161c" stroke="#8a8578" stroke-width="1.2"/>
+  <text class="xs" x="800" y="122" text-anchor="start" fill="#6b675c">误差棒长度已放大 6 倍</text>
+  <text class="xs" x="800" y="148" text-anchor="start">距离 z</text>
+  <text class="xs" x="930" y="148" text-anchor="start">视差 d</text>
+  <text class="xs" x="1050" y="148" text-anchor="start">ε_z</text>
+  <line x1="800" y1="158" x2="1120" y2="158" stroke="#8a8578" stroke-width="1" stroke-opacity="0.35"/>
+  <text class="sm" x="800" y="180" text-anchor="start">150 mm</text>
+  <text class="mon" x="930" y="180" text-anchor="end">160 px</text>
+  <text class="mon" x="1050" y="180" text-anchor="end" fill="#cf5a50">0.47 mm</text>
+  <text class="sm" x="800" y="206" text-anchor="start">330 mm</text>
+  <text class="mon" x="930" y="206" text-anchor="end">73 px</text>
+  <text class="mon" x="1050" y="206" text-anchor="end" fill="#cf5a50">2.27 mm</text>
+  <text class="sm" x="800" y="232" text-anchor="start">560 mm</text>
+  <text class="mon" x="930" y="232" text-anchor="end">43 px</text>
+  <text class="mon" x="1050" y="232" text-anchor="end" fill="#cf5a50">6.53 mm</text>
+  <text class="sm" x="800" y="264" text-anchor="start" fill="#c9a96a">距离翻 2 倍，ε_z 变 4 倍</text>
+  <rect x="778" y="330" width="356" height="186" rx="10" fill="#1a1712" fill-opacity="0.5" stroke="#c9a96a" stroke-width="1.2"/>
+  <text class="hd" x="800" y="358" text-anchor="start" fill="#c9a96a">为什么是二次的</text>
+  <text class="mon" x="800" y="386" text-anchor="start">纵向放大率 m_v = f / b = 400 / 60 ≈ 6.7</text>
+  <text class="sm" x="800" y="410" text-anchor="start">这是一个与距离无关的常数。</text>
+  <text class="sm" x="800" y="436" text-anchor="start">视差误差 ε_d 在像面上是固定的</text>
+  <text class="sm" x="800" y="456" text-anchor="start" fill="#c9a96a">→ 折算到纵向就是 ε_z = ε_d · z² /(b·f)</text>
+  <text class="xs" x="800" y="482" text-anchor="start" fill="#a09b8d">z 出现在平方里，因为它既缩短视差，</text>
+  <text class="xs" x="800" y="498" text-anchor="start" fill="#a09b8d">又把这段纵向长度放大。</text>
+  <rect x="22" y="556" width="1134" height="92" rx="10" fill="#14161c" stroke="#8a8578" stroke-width="1.2"/>
+  <text class="hd" x="44" y="582" text-anchor="start">误差公式里四个变量，只有两个真能拧</text>
+  <text class="lb" x="44" y="606" text-anchor="start" fill="#e8e4dc">z 工作距离</text>
+  <text class="xs" x="44" y="624" text-anchor="start" fill="#cf5a50">最大杠杆</text>
+  <text class="xs" x="136" y="624" text-anchor="start" fill="#6b675c">移远一倍 → 精度差 4 倍</text>
+  <text class="lb" x="326" y="606" text-anchor="start" fill="#e8e4dc">b 基线</text>
+  <text class="xs" x="326" y="624" text-anchor="start" fill="#c9a96a">线性改善</text>
+  <text class="xs" x="418" y="624" text-anchor="start" fill="#6b675c">加宽基线是最直接的手段</text>
+  <text class="lb" x="608" y="606" text-anchor="start" fill="#e8e4dc">f 焦距</text>
+  <text class="xs" x="608" y="624" text-anchor="start" fill="#c9a96a">线性改善</text>
+  <text class="xs" x="700" y="624" text-anchor="start" fill="#6b675c">但同时压窄视场</text>
+  <text class="lb" x="890" y="606" text-anchor="start" fill="#e8e4dc">ε_d 亚像素</text>
+  <text class="xs" x="890" y="624" text-anchor="start" fill="#a09b8d">依赖亚像素算法</text>
+  <text class="xs" x="982" y="624" text-anchor="start" fill="#6b675c">现实里最难达标的一项</text>
+  <text class="foot" x="44" y="674" text-anchor="start">几何按真实比例绘制：b = 60 mm，f = 400 px，工件沿光轴摆放；误差棒为便于观察放大 6 倍。</text>
+</svg>

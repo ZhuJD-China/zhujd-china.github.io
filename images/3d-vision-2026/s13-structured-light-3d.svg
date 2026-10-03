@@ -1,0 +1,199 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 724" width="100%" role="img" aria-label="结构光：α 与 β 各偏一点，深度就跑到别处">
+  <style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mon{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mog{fill:#8fbf7a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.note{fill:#a09b8d;font:400 11.5px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+  </style>
+<defs><marker id="ar0" markerWidth="7" markerHeight="7" refX="6.2" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#a98e5b"/></marker><marker id="ar1" markerWidth="7" markerHeight="7" refX="6.2" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#6585a4"/></marker></defs>
+  <rect class="bg" x="0" y="0" width="1200" height="724" rx="14"/>
+  <text class="ttl" x="44" y="48">结构光：α 与 β 各偏一点，深度就跑到别处</text>
+  <text class="sub" x="44" y="76">同一个三角，深度对两个角的敏感度差得很远——β 越大越糟</text>
+  <line x1="353.35" y1="225.22" x2="828.65" y2="337.63" stroke="#6d6a63" stroke-width="0.7"/>
+  <line x1="324.92" y1="252.52" x2="818.64" y2="375.45" stroke="#6d6a63" stroke-width="0.7"/>
+  <line x1="312.42" y1="218.49" x2="375.25" y2="233.41" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="312.42" y1="218.49" x2="310.75" y2="168.87" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="280.84" y1="246.78" x2="312.42" y2="218.49" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="294" y1="282.22" x2="807.57" y2="417.23" stroke="#6d6a63" stroke-width="0.7"/>
+  <polygon points="312.42,218.49 375.25,233.41 375.34,183.04 310.75,168.87" fill="#5a728c" fill-opacity="0.3" stroke="#5a728c" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="280.84,246.78 345.74,263.07 375.25,233.41 312.42,218.49" fill="#5a728c" fill-opacity="0.3" stroke="#5a728c" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="280.84,246.78 278.18,195.75 310.75,168.87 312.42,218.49" fill="#5a728c" fill-opacity="0.3" stroke="#5a728c" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="375.25" y1="233.41" x2="375.34" y2="183.04" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="310.75" y1="168.87" x2="375.34" y2="183.04" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="345.74" y1="263.07" x2="375.25" y2="233.41" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="319.9" y1="189.65" x2="350.26" y2="196.52" stroke="#64809e" stroke-width="1.1"/>
+  <line x1="319.9" y1="189.65" x2="319.24" y2="166.91" stroke="#64809e" stroke-width="1.1"/>
+  <circle cx="327.8" cy="210.98" r="2.8" fill="#c2bfba"/>
+  <line x1="278.18" y1="195.75" x2="310.75" y2="168.87" stroke="#64809e" stroke-width="1.2"/>
+  <line x1="304.54" y1="202.93" x2="319.9" y2="189.65" stroke="#64809e" stroke-width="1.1"/>
+  <polygon points="319.9,189.65 350.26,196.52 349.98,173.62 319.24,166.91" fill="#5a728d" fill-opacity="0.42" stroke="#5a728d" stroke-width="1.1" stroke-opacity=".9"/>
+  <line x1="280.84" y1="246.78" x2="345.74" y2="263.07" stroke="#64819f" stroke-width="1.2"/>
+  <polygon points="304.54,202.93 335.39,210.1 350.26,196.52 319.9,189.65" fill="#5b738e" fill-opacity="0.42" stroke="#5b738e" stroke-width="1.1" stroke-opacity=".9"/>
+  <polygon points="304.54,202.93 303.67,179.87 319.24,166.91 319.9,189.65" fill="#5b738e" fill-opacity="0.42" stroke="#5b738e" stroke-width="1.1" stroke-opacity=".9"/>
+  <line x1="350.26" y1="196.52" x2="349.98" y2="173.62" stroke="#64819f" stroke-width="1.1"/>
+  <line x1="280.84" y1="246.78" x2="278.18" y2="195.75" stroke="#64819f" stroke-width="1.2"/>
+  <line x1="319.24" y1="166.91" x2="349.98" y2="173.62" stroke="#64819f" stroke-width="1.1"/>
+  <polygon points="345.74,263.07 344.95,211.25 375.34,183.04 375.25,233.41" fill="#5b748e" fill-opacity="0.3" stroke="#5b748e" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="335.39" y1="210.1" x2="350.26" y2="196.52" stroke="#6582a0" stroke-width="1.1"/>
+  <polygon points="278.18,195.75 344.95,211.25 375.34,183.04 310.75,168.87" fill="#5b748f" fill-opacity="0.3" stroke="#5b748f" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="303.67" y1="179.87" x2="319.24" y2="166.91" stroke="#6582a0" stroke-width="1.1"/>
+  <line x1="304.54" y1="202.93" x2="335.39" y2="210.1" stroke="#6582a1" stroke-width="1.1"/>
+  <line x1="304.54" y1="202.93" x2="303.67" y2="179.87" stroke="#6582a1" stroke-width="1.1"/>
+  <polygon points="335.39,210.1 334.91,186.87 349.98,173.62 350.26,196.52" fill="#5c7590" fill-opacity="0.42" stroke="#5c7590" stroke-width="1.1" stroke-opacity=".9"/>
+  <polygon points="303.67,179.87 334.91,186.87 349.98,173.62 319.24,166.91" fill="#5c7590" fill-opacity="0.42" stroke="#5c7590" stroke-width="1.1" stroke-opacity=".9"/>
+  <polygon points="280.84,246.78 345.74,263.07 344.95,211.25 278.18,195.75" fill="#5c7591" fill-opacity="0.3" stroke="#5c7591" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="304.54,202.93 335.39,210.1 334.91,186.87 303.67,179.87" fill="#5d7691" fill-opacity="0.42" stroke="#5d7691" stroke-width="1.1" stroke-opacity=".9"/>
+  <line x1="260.24" y1="314.63" x2="795.29" y2="463.6" stroke="#706c65" stroke-width="0.7"/>
+  <line x1="344.95" y1="211.25" x2="375.34" y2="183.04" stroke="#6583a2" stroke-width="1.2"/>
+  <line x1="334.91" y1="186.87" x2="349.98" y2="173.62" stroke="#6683a2" stroke-width="1.1"/>
+  <line x1="335.39" y1="210.1" x2="334.91" y2="186.87" stroke="#6684a3" stroke-width="1.1"/>
+  <line x1="-31.88" y1="595.14" x2="328.6" y2="248.99" stroke="#706c65" stroke-width="0.7"/>
+  <line x1="303.67" y1="179.87" x2="334.91" y2="186.87" stroke="#6684a3" stroke-width="1.1"/>
+  <line x1="345.74" y1="263.07" x2="344.95" y2="211.25" stroke="#6684a3" stroke-width="1.2"/>
+  <line x1="278.18" y1="195.75" x2="344.95" y2="211.25" stroke="#6684a3" stroke-width="1.2"/>
+  <line x1="326.76" y1="169.29" x2="325.57" y2="121.12" stroke="#757169" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="428.72" y1="234.54" x2="426.23" y2="237.09" stroke="#7092b5" stroke-width="1.4"/>
+  <line x1="426.23" y1="237.09" x2="423.45" y2="239.58" stroke="#7093b5" stroke-width="1.4"/>
+  <line x1="423.45" y1="239.58" x2="420.39" y2="242.02" stroke="#7093b5" stroke-width="1.4"/>
+  <line x1="420.39" y1="242.02" x2="417.04" y2="244.38" stroke="#7093b5" stroke-width="1.4"/>
+  <line x1="417.04" y1="244.38" x2="413.43" y2="246.67" stroke="#7093b6" stroke-width="1.4"/>
+  <line x1="43.33" y1="627.59" x2="385.26" y2="263" stroke="#736f67" stroke-width="0.7"/>
+  <line x1="413.43" y1="246.67" x2="409.55" y2="248.88" stroke="#7093b6" stroke-width="1.4"/>
+  <line x1="409.55" y1="248.88" x2="405.42" y2="250.99" stroke="#7094b6" stroke-width="1.4"/>
+  <line x1="405.42" y1="250.99" x2="401.05" y2="253" stroke="#7194b6" stroke-width="1.4"/>
+  <line x1="401.05" y1="253" x2="396.44" y2="254.91" stroke="#7194b7" stroke-width="1.4"/>
+  <line x1="396.44" y1="254.91" x2="391.62" y2="256.7" stroke="#7194b7" stroke-width="1.4"/>
+  <line x1="391.62" y1="256.7" x2="386.59" y2="258.38" stroke="#7194b7" stroke-width="1.4"/>
+  <line x1="386.59" y1="258.38" x2="381.37" y2="259.93" stroke="#7194b7" stroke-width="1.4"/>
+  <line x1="223.24" y1="350.16" x2="781.58" y2="515.38" stroke="#757169" stroke-width="0.7"/>
+  <line x1="123.49" y1="662.17" x2="444.33" y2="277.61" stroke="#757169" stroke-width="0.7"/>
+  <line x1="327.8" y1="210.98" x2="494.68" y2="363.46" stroke="#6585a4" stroke-width="1.8" marker-end="url(#ar1)"/>
+  <line x1="209.08" y1="699.1" x2="505.95" y2="292.86" stroke="#77736b" stroke-width="0.7"/>
+  <line x1="182.51" y1="389.27" x2="766.17" y2="573.56" stroke="#79756c" stroke-width="0.7"/>
+  <line x1="300.7" y1="738.62" x2="570.32" y2="308.78" stroke="#7a766c" stroke-width="0.7"/>
+  <line x1="541.03" y1="308.79" x2="538.42" y2="225.76" stroke="#7a6947" stroke-width="1.5"/>
+  <line x1="398.99" y1="781.03" x2="637.59" y2="325.42" stroke="#7c786e" stroke-width="0.7"/>
+  <line x1="527.23" y1="338.53" x2="523.33" y2="256.38" stroke="#7c6a47" stroke-width="1.5"/>
+  <line x1="137.46" y1="432.53" x2="748.73" y2="639.41" stroke="#7e7a70" stroke-width="0.7"/>
+  <line x1="504.72" y1="826.64" x2="708" y2="342.83" stroke="#7f7a70" stroke-width="0.7"/>
+  <line x1="512.88" y1="369.46" x2="507.58" y2="288.33" stroke="#7d6b48" stroke-width="1.5"/>
+  <line x1="94.95" y1="247.1" x2="324.6" y2="82.11" stroke="#8a8578" stroke-width="1.6"/>
+  <line x1="112.41" y1="397.73" x2="187.28" y2="422.28" stroke="#ba9d65" stroke-width="1.2"/>
+  <line x1="112.41" y1="397.73" x2="103.04" y2="340.27" stroke="#bb9d65" stroke-width="1.2"/>
+  <polygon points="440.45,525.52 547.74,294.35 545.73,210.94 427.26,451.3" fill="#b79b64" fill-opacity="0.2" stroke="#b79b64" stroke-width="1.4" stroke-opacity=".9"/>
+  <line x1="497.94" y1="401.66" x2="491.13" y2="321.71" stroke="#7f6c48" stroke-width="1.5"/>
+  <circle cx="494.68" cy="363.46" r="4.4" fill="#e2ded7"/>
+  <line x1="618.76" y1="875.84" x2="781.74" y2="361.07" stroke="#817c72" stroke-width="0.7"/>
+  <line x1="60.16" y1="444.55" x2="112.41" y2="397.73" stroke="#bc9e65" stroke-width="1.2"/>
+  <polygon points="112.41,397.73 187.28,422.28 180.41,363.96 103.04,340.27" fill="#b79b64" fill-opacity="0.3" stroke="#b79b64" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="482.37" y1="435.2" x2="473.93" y2="356.62" stroke="#806d49" stroke-width="1.5"/>
+  <line x1="119.22" y1="399.76" x2="494.68" y2="363.46" stroke="#a98e5b" stroke-width="1.8" marker-end="url(#ar0)"/>
+  <polygon points="60.16,444.55 137.78,472.03 187.28,422.28 112.41,397.73" fill="#b99c64" fill-opacity="0.3" stroke="#b99c64" stroke-width="1.2" stroke-opacity=".9"/>
+  <polygon points="60.16,444.55 48.24,385.49 103.04,340.27 112.41,397.73" fill="#b99c65" fill-opacity="0.3" stroke="#b99c65" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="187.28" y1="422.28" x2="180.41" y2="363.96" stroke="#bea066" stroke-width="1.2"/>
+  <line x1="262.31" y1="390.27" x2="261.91" y2="385.97" stroke="#c3a568" stroke-width="1.4"/>
+  <line x1="103.04" y1="340.27" x2="180.41" y2="363.96" stroke="#bfa166" stroke-width="1.2"/>
+  <line x1="87.35" y1="480.65" x2="728.83" y2="714.56" stroke="#837f73" stroke-width="0.7"/>
+  <line x1="742.13" y1="929.06" x2="859.07" y2="380.2" stroke="#837f73" stroke-width="0.7"/>
+  <line x1="262.34" y1="394.65" x2="262.31" y2="390.27" stroke="#c4a568" stroke-width="1.4"/>
+  <line x1="137.78" y1="472.03" x2="187.28" y2="422.28" stroke="#c0a167" stroke-width="1.2"/>
+  <line x1="111.66" y1="369.77" x2="148.03" y2="381.3" stroke="#c0a167" stroke-width="1.1"/>
+  <line x1="494.68" y1="363.46" x2="505.07" y2="225.75" stroke="#8bb977" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <line x1="111.66" y1="369.77" x2="107.4" y2="343.22" stroke="#c0a267" stroke-width="1.1"/>
+  <line x1="261.99" y1="399.08" x2="262.34" y2="394.65" stroke="#c4a568" stroke-width="1.4"/>
+  <line x1="466.14" y1="470.17" x2="455.92" y2="393.16" stroke="#816e49" stroke-width="1.5"/>
+  <circle cx="119.22" cy="399.76" r="2.8" fill="#e1ddd5"/>
+  <line x1="48.24" y1="385.49" x2="103.04" y2="340.27" stroke="#c0a267" stroke-width="1.2"/>
+  <line x1="85.83" y1="392.12" x2="111.66" y2="369.77" stroke="#c0a267" stroke-width="1.1"/>
+  <line x1="261.26" y1="403.57" x2="261.99" y2="399.08" stroke="#c4a568" stroke-width="1.4"/>
+  <polygon points="111.66,369.77 148.03,381.3 144.3,354.55 107.4,343.22" fill="#bd9f66" fill-opacity="0.42" stroke="#bd9f66" stroke-width="1.1" stroke-opacity=".9"/>
+  <line x1="60.16" y1="444.55" x2="137.78" y2="472.03" stroke="#c1a367" stroke-width="1.2"/>
+  <line x1="260.14" y1="408.09" x2="261.26" y2="403.57" stroke="#c5a669" stroke-width="1.4"/>
+  <polygon points="85.83,392.12 122.85,404.31 148.03,381.3 111.66,369.77" fill="#bea066" fill-opacity="0.42" stroke="#bea066" stroke-width="1.1" stroke-opacity=".9"/>
+  <polygon points="85.83,392.12 81.01,365.19 107.4,343.22 111.66,369.77" fill="#bea066" fill-opacity="0.42" stroke="#bea066" stroke-width="1.1" stroke-opacity=".9"/>
+  <line x1="148.03" y1="381.3" x2="144.3" y2="354.55" stroke="#c1a367" stroke-width="1.1"/>
+  <line x1="60.16" y1="444.55" x2="48.24" y2="385.49" stroke="#c1a367" stroke-width="1.2"/>
+  <line x1="107.4" y1="343.22" x2="144.3" y2="354.55" stroke="#c2a367" stroke-width="1.1"/>
+  <polygon points="137.78,472.03 128.53,412.11 180.41,363.96 187.28,422.28" fill="#bfa166" fill-opacity="0.3" stroke="#bfa166" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="258.64" y1="412.65" x2="260.14" y2="408.09" stroke="#c5a669" stroke-width="1.4"/>
+  <line x1="122.85" y1="404.31" x2="148.03" y2="381.3" stroke="#c2a368" stroke-width="1.1"/>
+  <polygon points="48.24,385.49 128.53,412.11 180.41,363.96 103.04,340.27" fill="#bfa167" fill-opacity="0.3" stroke="#bfa167" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="81.01" y1="365.19" x2="107.4" y2="343.22" stroke="#c2a468" stroke-width="1.1"/>
+  <line x1="256.75" y1="417.21" x2="258.64" y2="412.65" stroke="#c5a669" stroke-width="1.4"/>
+  <line x1="449.2" y1="506.67" x2="437.04" y2="431.46" stroke="#836f49" stroke-width="1.5"/>
+  <line x1="85.83" y1="392.12" x2="122.85" y2="404.31" stroke="#c3a468" stroke-width="1.1"/>
+  <line x1="85.83" y1="392.12" x2="81.01" y2="365.19" stroke="#c3a468" stroke-width="1.1"/>
+  <line x1="254.46" y1="421.78" x2="256.75" y2="417.21" stroke="#c6a669" stroke-width="1.4"/>
+  <polygon points="122.85,404.31 118.58,377.18 144.3,354.55 148.03,381.3" fill="#c1a267" fill-opacity="0.42" stroke="#c1a267" stroke-width="1.1" stroke-opacity=".9"/>
+  <polygon points="81.01,365.19 118.58,377.18 144.3,354.55 107.4,343.22" fill="#c1a267" fill-opacity="0.42" stroke="#c1a267" stroke-width="1.1" stroke-opacity=".9"/>
+  <polygon points="60.16,444.55 137.78,472.03 128.53,412.11 48.24,385.49" fill="#c1a367" fill-opacity="0.3" stroke="#c1a367" stroke-width="1.2" stroke-opacity=".9"/>
+  <line x1="251.78" y1="426.34" x2="254.46" y2="421.78" stroke="#c6a769" stroke-width="1.4"/>
+  <polygon points="85.83,392.12 122.85,404.31 118.58,377.18 81.01,365.19" fill="#c2a367" fill-opacity="0.42" stroke="#c2a367" stroke-width="1.1" stroke-opacity=".9"/>
+  <line x1="128.53" y1="412.11" x2="180.41" y2="363.96" stroke="#c4a568" stroke-width="1.2"/>
+  <line x1="118.58" y1="377.18" x2="144.3" y2="354.55" stroke="#c4a568" stroke-width="1.1"/>
+  <line x1="248.71" y1="430.88" x2="251.78" y2="426.34" stroke="#c6a769" stroke-width="1.4"/>
+  <line x1="122.85" y1="404.31" x2="118.58" y2="377.18" stroke="#c5a669" stroke-width="1.1"/>
+  <line x1="81.01" y1="365.19" x2="118.58" y2="377.18" stroke="#c5a669" stroke-width="1.1"/>
+  <line x1="245.25" y1="435.38" x2="248.71" y2="430.88" stroke="#c7a769" stroke-width="1.4"/>
+  <line x1="137.78" y1="472.03" x2="128.53" y2="412.11" stroke="#c5a669" stroke-width="1.2"/>
+  <line x1="241.41" y1="439.83" x2="245.25" y2="435.38" stroke="#c7a869" stroke-width="1.4"/>
+  <line x1="48.24" y1="385.49" x2="128.53" y2="412.11" stroke="#c6a669" stroke-width="1.2"/>
+  <line x1="111.48" y1="351.1" x2="102.41" y2="294.02" stroke="#888377" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="31.28" y1="534.49" x2="705.9" y2="801.12" stroke="#888377" stroke-width="0.7"/>
+  <line x1="-31.88" y1="595.14" x2="679.21" y2="901.92" stroke="#8a8578" stroke-width="0.7"/>
+  <text class="lb" x="123.28" y="441.32" text-anchor="middle" fill="#c9a96a">结构光投射器</text>
+  <text class="lb" x="328.35" y="249.1" text-anchor="middle" fill="#7aa2c8">相机</text>
+  <text class="lb" x="250.64" y="416.65" text-anchor="end" fill="#c9a96a">α</text>
+  <text class="lb" x="417.55" y="252.88" text-anchor="start" fill="#7aa2c8">β</text>
+  <text class="lb" x="225.83" y="145.07" text-anchor="middle" fill="#8a8578" font-family="'JetBrains Mono',Consolas,monospace">基线 b = 300 mm</text>
+  <text class="lb" x="505.9" y="204.81" text-anchor="middle" fill="#c9a96a" font-family="'JetBrains Mono',Consolas,monospace">d = b·sinα / sin(α+β)</text>
+  <rect x="738" y="96" width="416" height="250" rx="10" fill="#14161c" stroke="#8a8578" stroke-width="1.2"/>
+  <text class="hd" x="760" y="122" text-anchor="start" fill="#e8e4dc">角误差放大成深度误差</text>
+  <text class="xs" x="760" y="144" text-anchor="start" fill="#6b675c">基准：α = 30°，β = 15°，b = 300 mm，d = 212.1 mm</text>
+  <text class="xs" x="760" y="176" text-anchor="start">角偏差</text>
+  <text class="xs" x="878" y="176" text-anchor="start">Δd</text>
+  <text class="xs" x="970" y="176" text-anchor="start">相对深度误差</text>
+  <line x1="760" y1="186" x2="1144" y2="186" stroke="#8a8578" stroke-width="1" stroke-opacity="0.35"/>
+  <text class="sm" x="760" y="208" text-anchor="start">α -1°</text>
+  <text class="mon" x="878" y="208" text-anchor="end">-2.8 mm</text>
+  <text class="mon" x="970" y="208" text-anchor="end" fill="#cf5a50">-1.3 %</text>
+  <text class="sm" x="760" y="234" text-anchor="start">α +1°</text>
+  <text class="mon" x="878" y="234" text-anchor="end">+2.7 mm</text>
+  <text class="mon" x="970" y="234" text-anchor="end" fill="#cf5a50">+1.3 %</text>
+  <text class="sm" x="760" y="260" text-anchor="start">β -1°</text>
+  <text class="mon" x="878" y="260" text-anchor="end">+3.8 mm</text>
+  <text class="mon" x="970" y="260" text-anchor="end" fill="#cf5a50">+1.8 %</text>
+  <text class="sm" x="760" y="286" text-anchor="start">β +1°</text>
+  <text class="mon" x="878" y="286" text-anchor="end">-3.6 mm</text>
+  <text class="mon" x="970" y="286" text-anchor="end" fill="#cf5a50">-1.7 %</text>
+  <line x1="760" y1="300" x2="1144" y2="300" stroke="#8a8578" stroke-width="1" stroke-opacity="0.25"/>
+  <text class="sm" x="760" y="324" text-anchor="start" fill="#c9a96a">同样 1° 角偏差：α 敏感度 2.76 mm，β 敏感度 3.80 mm</text>
+  <text class="sm" x="760" y="346" text-anchor="start" fill="#cf5a50">在这组几何里，β 的影响是 α 的 1.4 倍</text>
+  <rect x="738" y="372" width="416" height="208" rx="10" fill="#1a1712" fill-opacity="0.5" stroke="#c9a96a" stroke-width="1.2"/>
+  <text class="hd" x="760" y="400" text-anchor="start" fill="#c9a96a">相对灵敏度：α 与 β 不对称</text>
+  <text class="sm" x="760" y="428" text-anchor="start">把上表的 Δd/d 除以 1°（0.01745 rad），</text>
+  <text class="sm" x="760" y="450" text-anchor="start">得到每弧度的相对深度误差：</text>
+  <text class="mon" x="760" y="476" text-anchor="start" fill="#7aa2c8">α：sinβ /(sinα·sin(α+β))</text>
+  <text class="mon" x="760" y="498" text-anchor="start" fill="#c9a96a">β：|cot(α+β)|</text>
+  <text class="xs" x="760" y="524" text-anchor="start" fill="#a09b8d">β 的表达式里没有 α，只看总夹角：</text>
+  <text class="xs" x="760" y="542" text-anchor="start" fill="#a09b8d">α+β = 90° 时最稳，偏离越大越糟。</text>
+  <text class="sm" x="760" y="562" text-anchor="start" fill="#cf5a50">所以真正难测的是「斜着看过去」的表面。</text>
+  <rect x="22" y="596" width="1134" height="84" rx="10" fill="#14161c" stroke="#8a8578" stroke-width="1.2"/>
+  <text class="hd" x="44" y="622" text-anchor="start">结构光和双目共享同一个结论</text>
+  <text class="lb" x="44" y="650" text-anchor="start" fill="#c9a96a">三角测量</text>
+  <text class="sm" x="140" y="650" text-anchor="start" fill="#6b675c">深度误差 ∝ 角误差</text>
+  <text class="lb" x="416" y="650" text-anchor="start" fill="#7aa2c8">角精度</text>
+  <text class="sm" x="512" y="650" text-anchor="start" fill="#6b675c">取决于相位/条纹解算，不是几何</text>
+  <text class="lb" x="788" y="650" text-anchor="start" fill="#cf5a50">斜面工件</text>
+  <text class="sm" x="884" y="650" text-anchor="start" fill="#6b675c">α+β 偏离 90° 时 β 灵敏度飙升</text>
+  <text class="foot" x="44" y="700" text-anchor="start">三角按真实比例绘制：b = 300 mm，α = 30°，β = 15°，得 d ≈ 212 mm；Δd 为角偏差 ±1° 时的解析结果。</text>
+</svg>

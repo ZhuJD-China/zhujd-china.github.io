@@ -6,3 +6,7 @@
 # 系统文件
 .DS_Store
 Thumbs.db
+
+# Python 缓存（配图生成脚本）
+__pycache__/
+*.pyc
