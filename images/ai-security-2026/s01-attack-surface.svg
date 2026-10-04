@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460">
+  <rect width="900" height="460" fill="#0b0b10"/>
+  <text x="450" y="36" text-anchor="middle" fill="#e8e4dc" font-size="18">大模型安全的五层攻击面</text>
+  <g font-size="14" fill="#e8e4dc">
+    <rect x="120" y="60" width="660" height="50" rx="8" fill="#17171f" stroke="#c9a96a"/>
+    <text x="450" y="82" text-anchor="middle">数据层：投毒 / 后门 / 供应链污染</text>
+    <rect x="120" y="125" width="660" height="50" rx="8" fill="#17171f" stroke="#c9a96a"/>
+    <text x="450" y="147" text-anchor="middle">训练层：框架与依赖漏洞 / 集群隔离</text>
+    <rect x="120" y="190" width="660" height="50" rx="8" fill="#17171f" stroke="#c9a96a"/>
+    <text x="450" y="212" text-anchor="middle">模型层：权重窃取 / 定向后门编辑</text>
+    <rect x="120" y="255" width="660" height="50" rx="8" fill="#17171f" stroke="#cf5a50"/>
+    <text x="450" y="277" text-anchor="middle">推理层：提示注入 / 越狱 / 信息泄露 / 提示词窃取</text>
+    <rect x="120" y="320" width="660" height="50" rx="8" fill="#17171f" stroke="#cf5a50"/>
+    <text x="450" y="342" text-anchor="middle">应用层：Agent 劫持 / RAG 污染 / 间接注入 RCE</text>
+  </g>
+  <text x="450" y="420" text-anchor="middle" fill="#a09b8d" font-size="12">红色描边为当前暴露最多的风险层</text>
+</svg>
