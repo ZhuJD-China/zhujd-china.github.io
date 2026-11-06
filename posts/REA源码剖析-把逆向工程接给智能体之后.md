@@ -3,7 +3,7 @@ title: REA 源码剖析：把逆向工程接给智能体之后
 date: 2026-10-15
 tags: [逆向工程, MCP, 智能体, 源码剖析, 开源]
 album: 逆向专栏
-order: 4
+order: 3
 excerpt: 一个今年 4 月才创建的仓库，10 月初从 4 千星冲上 25.6 万星，npm 单日下载一度超过 10 万——REA（Reverse Engineer Anything）把 Ghidra、Hopper、JADX 这些重型工具包进一个 MCP 服务，让编码智能体像调库一样调它们。本文基于对 65.9 万行 TypeScript 源码的逐目录解剖和一周的社区调研，回答三个问题：它到底能干什么、限制在哪、社区成果推进到了哪一步。
 ---
 
