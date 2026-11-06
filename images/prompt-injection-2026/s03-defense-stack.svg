@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="100%" role="img" aria-label="三层防御与各自残余风险">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 34px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 19px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 21px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 17px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 14px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.8}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1000" height="620" rx="14"/>
+<text class="ttl" x="36" y="48">三层防御，各管一段</text>
+<text class="sub" x="36" y="76">模型层降概率，系统层给边界，权限层限后果。</text>
+<rect x="30" y="126" width="940" height="128" rx="10" fill="#121318" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<rect x="30" y="126" width="8" height="128" rx="4" fill="#c9a96a" fill-opacity=".8"/>
+<text class="hd" x="56" y="162" style="fill:#c9a96a">模型层</text>
+<text class="sm" x="56" y="188" style="font-size:14px">降低「数据被当成指令」的概率</text>
+<rect x="56" y="208" width="96" height="30" rx="8" fill="#191b22" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="104.0" y="229" text-anchor="middle" style="fill:#e8e4dc;font-size:14px">指令层级</text>
+<rect x="164" y="208" width="208" height="30" rx="8" fill="#191b22" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="268.0" y="229" text-anchor="middle" style="fill:#e8e4dc;font-size:14px">Spotlighting</text>
+<rect x="384" y="208" width="152" height="30" rx="8" fill="#191b22" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="460.0" y="229" text-anchor="middle" style="fill:#e8e4dc;font-size:14px">SecAlign</text>
+<text class="sm" x="944" y="182" text-anchor="end" style="fill:#c9a96a;font-size:14px">剩下：被说服的概率</text>
+<rect x="30" y="286" width="940" height="128" rx="10" fill="#121318" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<rect x="30" y="286" width="8" height="128" rx="4" fill="#7aa2c8" fill-opacity=".8"/>
+<text class="hd" x="56" y="322" style="fill:#7aa2c8">系统层</text>
+<text class="sm" x="56" y="348" style="font-size:14px">让不可信数据流不到敏感汇</text>
+<rect x="56" y="368" width="110" height="30" rx="8" fill="#191b22" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="111.0" y="389" text-anchor="middle" style="fill:#e8e4dc;font-size:14px">双 LLM</text>
+<rect x="178" y="368" width="110" height="30" rx="8" fill="#191b22" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="233.0" y="389" text-anchor="middle" style="fill:#e8e4dc;font-size:14px">CaMeL</text>
+<rect x="300" y="368" width="96" height="30" rx="8" fill="#191b22" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="348.0" y="389" text-anchor="middle" style="fill:#e8e4dc;font-size:14px">污点追踪</text>
+<text class="sm" x="944" y="342" text-anchor="end" style="fill:#7aa2c8;font-size:14px">剩下：策略覆盖不全</text>
+<rect x="30" y="446" width="940" height="128" rx="10" fill="#121318" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<rect x="30" y="446" width="8" height="128" rx="4" fill="#8fbf7a" fill-opacity=".8"/>
+<text class="hd" x="56" y="482" style="fill:#8fbf7a">权限层</text>
+<text class="sm" x="56" y="508" style="font-size:14px">让被骗之后的损失有上限</text>
+<rect x="56" y="528" width="96" height="30" rx="8" fill="#191b22" fill-opacity="1.0" stroke="#8fbf7a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="104.0" y="549" text-anchor="middle" style="fill:#e8e4dc;font-size:14px">最小权限</text>
+<rect x="164" y="528" width="96" height="30" rx="8" fill="#191b22" fill-opacity="1.0" stroke="#8fbf7a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="212.0" y="549" text-anchor="middle" style="fill:#e8e4dc;font-size:14px">人工确认</text>
+<rect x="272" y="528" width="110" height="30" rx="8" fill="#191b22" fill-opacity="1.0" stroke="#8fbf7a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="327.0" y="549" text-anchor="middle" style="fill:#e8e4dc;font-size:14px">出网白名单</text>
+<text class="sm" x="944" y="502" text-anchor="end" style="fill:#8fbf7a;font-size:14px">剩下：合法调用的组合</text>
+<line class="ar" x1="500" y1="254" x2="500" y2="282" marker-end="url(#ah)"/>
+<line class="ar" x1="500" y1="414" x2="500" y2="442" marker-end="url(#ah)"/>
+<rect x="30" y="576" width="940" height="32" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="500" y="598" text-anchor="middle" style="fill:#c9a96a;font-size:14px">57.7% → 7.95% 是模型层的成绩；7.95% 不再变成 9.3，是后两层的工作。</text>
+</svg>

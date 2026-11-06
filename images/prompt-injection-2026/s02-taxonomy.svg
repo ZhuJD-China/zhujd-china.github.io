@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="100%" role="img" aria-label="六条投递通道">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 34px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 19px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 21px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 17px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 14px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.8}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1000" height="600" rx="14"/>
+<text class="ttl" x="36" y="48">六条投递通道</text>
+<text class="sub" x="36" y="76">只防聊天框，等于只关了六扇门里的一扇。</text>
+<rect x="30" y="126" width="300" height="152" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="46" y="154" style="fill:#c9a96a">01</text>
+<text class="hd" x="78" y="155" style="font-size:19px">直接输入</text>
+<text class="xs" x="46" y="186">写入者</text>
+<text class="sm" x="106" y="186" style="font-size:14px">当前用户</text>
+<text class="xs" x="46" y="214">触发点</text>
+<text class="sm" x="106" y="214" style="font-size:14px">提交时</text>
+<text class="xs" x="46" y="242">典型</text>
+<text class="sm" x="106" y="242" style="font-size:14px">聊天框、表单、API 参数</text>
+<rect x="350" y="126" width="300" height="152" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="366" y="154" style="fill:#c9a96a">02</text>
+<text class="hd" x="398" y="155" style="font-size:19px">间接内容</text>
+<text class="xs" x="366" y="186">写入者</text>
+<text class="sm" x="426" y="186" style="font-size:14px">网页 / 邮件 / 文档作者</text>
+<text class="xs" x="366" y="214">触发点</text>
+<text class="sm" x="426" y="214" style="font-size:14px">检索、读取时</text>
+<text class="xs" x="366" y="242">典型</text>
+<text class="sm" x="426" y="242" style="font-size:14px">EchoLeak、Slack AI</text>
+<rect x="670" y="126" width="300" height="152" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="686" y="154" style="fill:#c9a96a">03</text>
+<text class="hd" x="718" y="155" style="font-size:19px">持久化存储</text>
+<text class="xs" x="686" y="186">写入者</text>
+<text class="sm" x="746" y="186" style="font-size:14px">知识库 / 记忆写入者</text>
+<text class="xs" x="686" y="214">触发点</text>
+<text class="sm" x="746" y="214" style="font-size:14px">后续每次会话</text>
+<text class="xs" x="686" y="242">典型</text>
+<text class="sm" x="746" y="242" style="font-size:14px">被污染的 RAG、恶意记忆</text>
+<rect x="30" y="300" width="300" height="152" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="46" y="328" style="fill:#c9a96a">04</text>
+<text class="hd" x="78" y="329" style="font-size:19px">工具输出</text>
+<text class="xs" x="46" y="360">写入者</text>
+<text class="sm" x="106" y="360" style="font-size:14px">API / MCP / 代码输出</text>
+<text class="xs" x="46" y="388">触发点</text>
+<text class="sm" x="106" y="388" style="font-size:14px">工具返回时</text>
+<text class="xs" x="46" y="416">典型</text>
+<text class="sm" x="106" y="416" style="font-size:14px">GitHub MCP、插件响应</text>
+<rect x="350" y="300" width="300" height="152" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="366" y="328" style="fill:#c9a96a">05</text>
+<text class="hd" x="398" y="329" style="font-size:19px">多模态载体</text>
+<text class="xs" x="366" y="360">写入者</text>
+<text class="sm" x="426" y="360" style="font-size:14px">图片 / 音频上传者</text>
+<text class="xs" x="366" y="388">触发点</text>
+<text class="sm" x="426" y="388" style="font-size:14px">OCR、视觉编码时</text>
+<text class="xs" x="366" y="416">典型</text>
+<text class="sm" x="426" y="416" style="font-size:14px">截图、发票、语音消息</text>
+<rect x="670" y="300" width="300" height="152" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="686" y="328" style="fill:#c9a96a">06</text>
+<text class="hd" x="718" y="329" style="font-size:19px">供应链</text>
+<text class="xs" x="686" y="360">写入者</text>
+<text class="sm" x="746" y="360" style="font-size:14px">插件 / 权重 / 依赖作者</text>
+<text class="xs" x="686" y="388">触发点</text>
+<text class="sm" x="746" y="388" style="font-size:14px">安装、加载时</text>
+<text class="xs" x="686" y="416">典型</text>
+<text class="sm" x="746" y="416" style="font-size:14px">恶意 MCP server、后门权重</text>
+<line class="ar" x1="130" y1="500" x2="870" y2="500" marker-end="url(#ah)"/>
+<text class="sm" x="130" y="530" text-anchor="middle">离模型越近</text>
+<text class="xs" x="500" y="530" text-anchor="middle">检测难度 →</text>
+<text class="sm" x="870" y="530" text-anchor="middle">离权限越近</text>
+<text class="foot" x="36" y="574">越靠右，payload 越容易藏在正常业务里；越靠下，一次写入的影响越持久。</text>
+</svg>

@@ -25,6 +25,9 @@
       "file": "模型量化全解-从LLMint8到2026年的原生低精度时代.md"
     },
     {
+      "file": "提示注入全解-从EchoLeak的零点击到Agent的权限边界.md"
+    },
+    {
       "file": "推理引擎双雄记-vLLM与SGLang的三年战争.md"
     },
     {

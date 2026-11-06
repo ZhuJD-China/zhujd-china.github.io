@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 690" width="100%" role="img" aria-label="从任务结构到防御形态">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 34px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 19px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 21px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 17px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 14px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.8}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1000" height="690" rx="14"/>
+<text class="ttl" x="36" y="48">从任务结构到防御形态</text>
+<text class="sub" x="36" y="76">先问四个问题；答案决定你要做到哪一层。</text>
+<rect x="180" y="120" width="340" height="92" rx="10" fill="#121318" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="196" y="146" style="fill:#c9a96a">Q1</text>
+<text class="hd" x="228" y="147" style="font-size:19px">模型会读外部内容？</text>
+<text class="sm" x="196" y="178" style="font-size:13px">邮件、网页、文档、工具输出</text>
+<line class="ar" x1="350.0" y1="212" x2="350.0" y2="242" marker-end="url(#ah)"/>
+<text class="xs" x="358.0" y="232">是</text>
+<line class="ar" x1="522" y1="166" x2="604" y2="166" marker-end="url(#ah)"/>
+<text class="xs" x="532" y="158">否</text>
+<rect x="610" y="120" width="360" height="92" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#8fbf7a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="hd" x="626" y="148" style="fill:#8fbf7a;font-size:19px">低风险</text>
+<text class="sm" x="626" y="176" style="font-size:14px">输入隔离 + 输出审核</text>
+<rect x="180" y="248" width="340" height="92" rx="10" fill="#121318" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="196" y="274" style="fill:#c9a96a">Q2</text>
+<text class="hd" x="228" y="275" style="font-size:19px">有会写数据的工具？</text>
+<text class="sm" x="196" y="306" style="font-size:13px">发邮件、发公开内容、改文件</text>
+<line class="ar" x1="350.0" y1="340" x2="350.0" y2="370" marker-end="url(#ah)"/>
+<text class="xs" x="358.0" y="360">是</text>
+<line class="ar" x1="522" y1="294" x2="604" y2="294" marker-end="url(#ah)"/>
+<text class="xs" x="532" y="286">否</text>
+<rect x="610" y="248" width="360" height="92" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="hd" x="626" y="276" style="fill:#7aa2c8;font-size:19px">只读场景</text>
+<text class="sm" x="626" y="304" style="font-size:14px">Spotlighting + 检测器 + 输出审核</text>
+<rect x="180" y="376" width="340" height="92" rx="10" fill="#121318" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="196" y="402" style="fill:#c9a96a">Q3</text>
+<text class="hd" x="228" y="403" style="font-size:19px">能触达敏感数据或外网？</text>
+<text class="sm" x="196" y="434" style="font-size:13px">私有仓库、客户数据、任意 URL</text>
+<line class="ar" x1="350.0" y1="468" x2="350.0" y2="498" marker-end="url(#ah)"/>
+<text class="xs" x="358.0" y="488">是</text>
+<line class="ar" x1="522" y1="422" x2="604" y2="422" marker-end="url(#ah)"/>
+<text class="xs" x="532" y="414">否</text>
+<rect x="610" y="376" width="360" height="92" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="hd" x="626" y="404" style="fill:#c9a96a;font-size:19px">中风险</text>
+<text class="sm" x="626" y="432" style="font-size:14px">能力分离 + 全链路审计</text>
+<rect x="180" y="504" width="340" height="92" rx="10" fill="#121318" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="mono" x="196" y="530" style="fill:#c9a96a">Q4</text>
+<text class="hd" x="228" y="531" style="font-size:19px">动作不可逆或跨边界？</text>
+<text class="sm" x="196" y="562" style="font-size:13px">转账、删除、授权、跨租户</text>
+<line class="ar" x1="522" y1="550" x2="604" y2="550" marker-end="url(#ah)"/>
+<text class="xs" x="532" y="542">否</text>
+<rect x="610" y="504" width="360" height="92" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#cf5a50" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="hd" x="626" y="532" style="fill:#cf5a50;font-size:19px">高风险</text>
+<text class="sm" x="626" y="560" style="font-size:14px">最小权限 + 人工确认 + 出网白名单</text>
+<text class="xs" x="626" y="582" style="font-size:12px">前三条已成立，按高风险处理</text>
+<line class="ar" x1="350.0" y1="632" x2="350.0" y2="654" marker-end="url(#ah)"/>
+<text class="xs" x="358.0" y="648">是</text>
+<rect x="180" y="656" width="770" height="24" rx="10" fill="#1a1416" fill-opacity="1.0" stroke="#cf5a50" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="194" y="674" style="fill:#e8e4dc;font-size:13px">四个都是「是」：最高风险，上双 LLM / CaMeL，先证明权限边界。</text>
+</svg>

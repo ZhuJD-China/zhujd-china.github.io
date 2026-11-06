@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="100%" role="img" aria-label="ASR 与任务完成率的报告口径">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 34px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 19px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 21px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 17px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 14px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 16px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.8}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1000" height="580" rx="14"/>
+<text class="ttl" x="36" y="48">报告中的 ASR 与它没说的部分</text>
+<text class="sub" x="36" y="76">同一张图里的数字来自不同设置，只能看量级，不能排名。</text>
+<rect x="30" y="110" width="600" height="420" rx="10" fill="#121318" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="hd" x="52" y="144" style="font-size:20px">攻击成功率（ASR，%）</text>
+<text class="sm" x="52" y="192" style="font-size:14px">GPT-4o 无防御</text>
+<rect x="196" y="176" width="378.89666666666665" height="24" rx="4" fill="#cf5a50" fill-opacity="1.0" stroke="#cf5a50" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="582.8966666666666" y="193" style="fill:#cf5a50;font-size:14px">57.7</text>
+<text class="sm" x="52" y="244" style="font-size:14px">+ 提示注入检测器</text>
+<rect x="196" y="228" width="52.205000000000005" height="24" rx="4" fill="#c9a96a" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="256.20500000000004" y="245" style="fill:#c9a96a;font-size:14px">7.95</text>
+<text class="sm" x="52" y="296" style="font-size:14px">+ 工具过滤器</text>
+<rect x="196" y="280" width="44.916000000000004" height="24" rx="4" fill="#c9a96a" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="248.916" y="297" style="fill:#c9a96a;font-size:14px">6.84</text>
+<text class="sm" x="52" y="348" style="font-size:14px">LLMail GPT-4o</text>
+<rect x="196" y="332" width="380.8666666666667" height="24" rx="4" fill="#cf5a50" fill-opacity="1.0" stroke="#cf5a50" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="584.8666666666667" y="349" style="fill:#cf5a50;font-size:14px">58.0</text>
+<text class="sm" x="52" y="400" style="font-size:14px">Spotlighting</text>
+<rect x="196" y="384" width="13.133333333333333" height="24" rx="4" fill="#7aa2c8" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="217.13333333333333" y="401" style="fill:#7aa2c8;font-size:14px">&lt;2</text>
+<text class="sm" x="52" y="452" style="font-size:14px">SecAlign</text>
+<rect x="196" y="436" width="65.66666666666666" height="24" rx="4" fill="#7aa2c8" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="269.66666666666663" y="453" style="fill:#7aa2c8;font-size:14px">&lt;10</text>
+<text class="sm" x="52" y="490" style="fill:#c9a96a;font-size:13px">相对降幅 86.2%，绝对残余 7.95%。1,000 次攻击，仍有约 80 次成功。</text>
+<rect x="650" y="110" width="320" height="420" rx="10" fill="#121318" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="hd" x="672" y="144" style="font-size:20px">任务完成率（%）</text>
+<text class="sm" x="672" y="170" style="font-size:14px">CaMeL 的代价</text>
+<text class="sm" x="672" y="234" style="font-size:14px">未防御</text>
+<rect x="748" y="216" width="169.68" height="30" rx="4" fill="#8a8578" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="925.6800000000001" y="237" style="fill:#8a8578;font-size:14px">84</text>
+<text class="sm" x="672" y="310" style="font-size:14px">CaMeL</text>
+<rect x="748" y="292" width="155.54" height="30" rx="4" fill="#7aa2c8" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.2"/>
+<text class="sm" x="911.54" y="313" style="fill:#7aa2c8;font-size:14px">77</text>
+<text class="sm" x="672" y="400" style="fill:#7aa2c8;font-size:14px">可证明安全</text>
+<text class="xs" x="672" y="426" style="font-size:13px">不是零成本：策略要写全，</text>
+<text class="xs" x="672" y="448" style="font-size:13px">开放式任务会掉点。</text>
+<text class="xs" x="672" y="492" style="font-size:12px">AgentDojo，97 任务 / 629 用例</text>
+<text class="foot" x="36" y="562" style="font-size:13px">注：Spotlighting、SecAlign 的数字来自各自论文设置；CaMeL 是任务完成率，不是 ASR。</text>
+</svg>
