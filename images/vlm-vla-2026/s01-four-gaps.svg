@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="100%" role="img" aria-label="四组评测分数与部署场景之间的落差">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1200" height="640" rx="14"/>
+<text class="ttl" x="44" y="50">四组数字，四道落差</text>
+<text class="sub" x="44" y="78">榜单上的高分与部署中的现实之间，差的往往不是模型，而是分布与任务结构。</text>
+<circle cx="846" cy="112" r="6" fill="#c9a96a"/>
+<text class="sm" x="860" y="117">模型 / 结构化任务</text>
+<circle cx="1000" cy="112" r="6" fill="#cf5a50"/>
+<text class="sm" x="1014" y="117">参照 / 扰动场景</text>
+<line class="grid" x1="190.0" y1="140" x2="190.0" y2="545"/>
+<text class="xs" x="190.0" y="566" text-anchor="middle">0</text>
+<line class="grid" x1="368.0" y1="140" x2="368.0" y2="545"/>
+<text class="xs" x="368.0" y="566" text-anchor="middle">20</text>
+<line class="grid" x1="546.0" y1="140" x2="546.0" y2="545"/>
+<text class="xs" x="546.0" y="566" text-anchor="middle">40</text>
+<line class="grid" x1="724.0" y1="140" x2="724.0" y2="545"/>
+<text class="xs" x="724.0" y="566" text-anchor="middle">60</text>
+<line class="grid" x1="902.0" y1="140" x2="902.0" y2="545"/>
+<text class="xs" x="902.0" y="566" text-anchor="middle">80</text>
+<line class="grid" x1="1080.0" y1="140" x2="1080.0" y2="545"/>
+<text class="xs" x="1080.0" y="566" text-anchor="middle">100</text>
+<text class="sm" x="44" y="160">MMMU 2026 前沿 vs 人类专家</text>
+<line x1="935.82" y1="190" x2="978.54" y2="190" stroke="#8a8578" stroke-width="2" stroke-opacity=".55"/>
+<circle cx="935.82" cy="190" r="7" fill="#c9a96a" stroke="#0b0b10" stroke-width="2"/>
+<circle cx="978.54" cy="190" r="7" fill="#cf5a50" stroke="#0b0b10" stroke-width="2"/>
+<text class="sm" x="925.82" y="176" text-anchor="end">模型 83.8</text>
+<text class="sm" x="988.54" y="176">人类 88.6</text>
+<text class="xs" x="957.1800000000001" y="216" text-anchor="middle" style="fill:#cf5a50">差 4.8 个百分点</text>
+<text class="sm" x="44" y="270">BLINK 视觉感知（2023）</text>
+<line x1="646.2139999999999" y1="300" x2="1041.73" y2="300" stroke="#8a8578" stroke-width="2" stroke-opacity=".55"/>
+<circle cx="646.2139999999999" cy="300" r="7" fill="#c9a96a" stroke="#0b0b10" stroke-width="2"/>
+<circle cx="1041.73" cy="300" r="7" fill="#cf5a50" stroke="#0b0b10" stroke-width="2"/>
+<text class="sm" x="636.2139999999999" y="286" text-anchor="end">GPT-4V 51.3</text>
+<text class="sm" x="1051.73" y="286">人类 95.7</text>
+<text class="xs" x="843.972" y="326" text-anchor="middle" style="fill:#cf5a50">差 44.4 个百分点</text>
+<text class="sm" x="44" y="380">LIBERO → LIBERO-PRO</text>
+<line x1="528.2" y1="410" x2="1051.9650000000001" y2="410" stroke="#8a8578" stroke-width="2" stroke-opacity=".55"/>
+<circle cx="1051.9650000000001" cy="410" r="7" fill="#c9a96a" stroke="#0b0b10" stroke-width="2"/>
+<circle cx="528.2" cy="410" r="7" fill="#cf5a50" stroke="#0b0b10" stroke-width="2"/>
+<text class="sm" x="1061.9650000000001" y="396">π0.5 96.9</text>
+<text class="sm" x="518.2" y="396" text-anchor="end">扰动后 38.0</text>
+<text class="xs" x="790.0825000000001" y="436" text-anchor="middle" style="fill:#cf5a50">差 58.9 个百分点</text>
+<text class="sm" x="44" y="490">Gemini Robotics 2 任务</text>
+<line x1="596.73" y1="520" x2="987.4399999999999" y2="520" stroke="#8a8578" stroke-width="2" stroke-opacity=".55"/>
+<circle cx="987.4399999999999" cy="520" r="7" fill="#c9a96a" stroke="#0b0b10" stroke-width="2"/>
+<circle cx="596.73" cy="520" r="7" fill="#cf5a50" stroke="#0b0b10" stroke-width="2"/>
+<text class="sm" x="997.4399999999999" y="506">精密插装 89.6</text>
+<text class="sm" x="586.73" y="506" text-anchor="end">地面拾取 45.7</text>
+<text class="xs" x="792.085" y="546" text-anchor="middle" style="fill:#cf5a50">差 43.9 个百分点</text>
+<text class="foot" x="44" y="600">四个差距不是同一种差距：MMMU 差在感知，BLINK 差在细粒度，LIBERO 差在分布，Gemini 差在任务结构。</text>
+<text class="xs" x="44" y="620">横轴统一按 0–100 绘制，仅用于并排比较；不同评测的分数不可直接换算。</text>
+</svg>

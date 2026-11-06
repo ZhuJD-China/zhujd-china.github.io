@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="100%" role="img" aria-label="控制层级与延迟预算：1 kHz 安全环到 50 Hz 策略层">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1200" height="640" rx="14"/>
+<text class="ttl" x="44" y="50">控制层级与延迟预算</text>
+<text class="sub" x="44" y="78">按对数轴排列：1 ms 的安全环，到 1 秒的动作分块。</text>
+<line class="grid" x1="250.0" y1="130" x2="250.0" y2="540"/>
+<text class="xs" x="250.0" y="568" text-anchor="middle">1 ms</text>
+<line class="grid" x1="536.6666666666666" y1="130" x2="536.6666666666666" y2="540"/>
+<text class="xs" x="536.6666666666666" y="568" text-anchor="middle">10 ms</text>
+<line class="grid" x1="823.3333333333333" y1="130" x2="823.3333333333333" y2="540"/>
+<text class="xs" x="823.3333333333333" y="568" text-anchor="middle">100 ms</text>
+<line class="grid" x1="1110.0" y1="130" x2="1110.0" y2="540"/>
+<text class="xs" x="1110.0" y="568" text-anchor="middle">1 s</text>
+<line x1="622.9619320903413" y1="120" x2="622.9619320903413" y2="540" stroke="#cf5a50" stroke-width="1.4" stroke-dasharray="5 5" stroke-opacity=".8"/>
+<text class="xs" x="630.9619320903413" y="142" style="fill:#cf5a50">20 ms：50 Hz 控制周期</text>
+<text class="sm" x="230" y="195" text-anchor="end">安全环 1 kHz</text>
+<rect x="250" y="177" width="5.0" height="26" rx="4" fill="#8fbf7a" fill-opacity=".55"/>
+<circle cx="250.0" cy="190" r="5" fill="#8fbf7a"/>
+<text class="xs" x="262.0" y="195" style="fill:#8fbf7a">急停、力矩限制</text>
+<text class="sm" x="230" y="253" text-anchor="end">底层 S1 200 Hz</text>
+<rect x="250" y="235" width="200.4" height="26" rx="4" fill="#7aa2c8" fill-opacity=".55"/>
+<circle cx="450.3714012429921" cy="248" r="5" fill="#7aa2c8"/>
+<text class="xs" x="462.3714012429921" y="253" style="fill:#7aa2c8">关节伺服</text>
+<text class="sm" x="230" y="311" text-anchor="end">相机 60 Hz</text>
+<rect x="250" y="293" width="350.5" height="26" rx="4" fill="#a09b8d" fill-opacity=".55"/>
+<circle cx="600.5120550623071" cy="306" r="5" fill="#a09b8d"/>
+<text class="xs" x="612.5120550623071" y="311" style="fill:#a09b8d">曝光 + 传输</text>
+<text class="sm" x="230" y="369" text-anchor="end">π0.5 推理</text>
+<rect x="250" y="351" width="539.2" height="26" rx="4" fill="#c9a96a" fill-opacity=".55"/>
+<circle cx="789.1665631204935" cy="364" r="5" fill="#c9a96a"/>
+<text class="xs" x="801.1665631204935" y="369" style="fill:#c9a96a">RTX 4090，第三方</text>
+<text class="sm" x="230" y="427" text-anchor="end">策略 S2 10 Hz</text>
+<rect x="250" y="409" width="573.3" height="26" rx="4" fill="#cf5a50" fill-opacity=".55"/>
+<circle cx="823.3333333333333" cy="422" r="5" fill="#cf5a50"/>
+<text class="xs" x="835.3333333333333" y="427" style="fill:#cf5a50">视觉语言理解</text>
+<text class="sm" x="230" y="485" text-anchor="end">50 步分块</text>
+<rect x="250" y="467" width="860.0" height="26" rx="4" fill="#6b675c" fill-opacity=".55"/>
+<circle cx="1110.0" cy="480" r="5" fill="#6b675c"/>
+<text class="xs" x="1104.0" y="460" text-anchor="end" style="fill:#6b675c">50 Hz 下开环 1 秒</text>
+<text class="foot" x="44" y="604">76 ms 的推理塞不进 20 ms 的环路，所以策略层要么降频到 10–13 Hz，要么用动作分块把延迟藏进开环。</text>
+<text class="sm" x="44" y="628">安全与底层控制不能用学习模型：1 kHz 和 200 Hz 的环必须是确定性的。</text>
+</svg>

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="动作头的四代做法：离散 token、回归、扩散与流匹配">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
+<text class="ttl" x="44" y="50">动作头的四代做法</text>
+<text class="sub" x="44" y="78">同一个「看懂」，落到动作上要解决精度、多峰与延迟三个问题。</text>
+<rect x="44" y="112" width="264" height="400" rx="10" fill="#101014" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.2"/>
+<rect x="44" y="112" width="264" height="4" rx="2" fill="#c9a96a"/>
+<text class="hd" x="62" y="148" style="fill:#c9a96a">离散 token</text>
+<text class="xs" x="62" y="172">RT-2 · 55B</text>
+<rect x="328" y="112" width="264" height="400" rx="10" fill="#101014" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.2"/>
+<rect x="328" y="112" width="264" height="4" rx="2" fill="#7aa2c8"/>
+<text class="hd" x="346" y="148" style="fill:#7aa2c8">回归</text>
+<text class="xs" x="346" y="172">RT-1 / OpenVLA · 7B</text>
+<rect x="612" y="112" width="264" height="400" rx="10" fill="#101014" fill-opacity="1.0" stroke="#8fbf7a" stroke-opacity=".55" stroke-width="1.2"/>
+<rect x="612" y="112" width="264" height="4" rx="2" fill="#8fbf7a"/>
+<text class="hd" x="630" y="148" style="fill:#8fbf7a">扩散</text>
+<text class="xs" x="630" y="172">Diffusion Policy</text>
+<rect x="896" y="112" width="264" height="400" rx="10" fill="#101014" fill-opacity="1.0" stroke="#cf5a50" stroke-opacity=".55" stroke-width="1.2"/>
+<rect x="896" y="112" width="264" height="4" rx="2" fill="#cf5a50"/>
+<text class="hd" x="914" y="148" style="fill:#cf5a50">流匹配</text>
+<text class="xs" x="914" y="172">π0 · 3.3B</text>
+<rect x="66" y="200" width="46" height="30" rx="5" fill="#1a1712" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="89" y="220" text-anchor="middle" style="fill:#c9a96a">bin</text>
+<rect x="122" y="200" width="46" height="30" rx="5" fill="#1a1712" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="145" y="220" text-anchor="middle" style="fill:#c9a96a">bin</text>
+<rect x="178" y="200" width="46" height="30" rx="5" fill="#1a1712" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="201" y="220" text-anchor="middle" style="fill:#c9a96a">bin</text>
+<rect x="234" y="200" width="46" height="30" rx="5" fill="#1a1712" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="257" y="220" text-anchor="middle" style="fill:#c9a96a">bin</text>
+<rect x="66" y="244" width="46" height="30" rx="5" fill="#1a1712" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="89" y="264" text-anchor="middle" style="fill:#c9a96a">bin</text>
+<rect x="122" y="244" width="46" height="30" rx="5" fill="#1a1712" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="145" y="264" text-anchor="middle" style="fill:#c9a96a">bin</text>
+<rect x="178" y="244" width="46" height="30" rx="5" fill="#1a1712" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="201" y="264" text-anchor="middle" style="fill:#c9a96a">bin</text>
+<rect x="234" y="244" width="46" height="30" rx="5" fill="#1a1712" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="257" y="264" text-anchor="middle" style="fill:#c9a96a">bin</text>
+<text class="xs" x="62" y="306">256 bins × 8 维 → 8 个 token</text>
+<line class="ar" x1="62" y1="330" x2="62" y2="370" marker-end="url(#ah)"/>
+<text class="xs" x="62" y="396">复用语言模型下一 token 预测</text>
+<text class="xs" x="62" y="426" style="fill:#cf5a50">精度被 bin 宽度锁死</text>
+<text class="xs" x="62" y="452" style="fill:#cf5a50">自回归 8 步，慢</text>
+<rect x="346" y="205" width="72" height="34" rx="6" fill="#14161c" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="382" y="227" text-anchor="middle" style="fill:#7aa2c8">obs</text>
+<line class="ar" x1="422" y1="222" x2="458" y2="222" marker-end="url(#ah)"/>
+<rect x="460" y="205" width="62" height="34" rx="6" fill="#14161c" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="491" y="227" text-anchor="middle" style="fill:#7aa2c8">MLP</text>
+<line class="ar" x1="524" y1="222" x2="556" y2="222" marker-end="url(#ah)"/>
+<rect x="558" y="205" width="18" height="34" rx="6" fill="#1a2430" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="0.9"/>
+<text class="xs" x="346" y="276">连续动作向量（6–30 维）</text>
+<line class="ar" x1="346" y1="300" x2="346" y2="344" marker-end="url(#ah)"/>
+<text class="xs" x="346" y="370" style="fill:#8fbf7a">一步推理、实现简单</text>
+<text class="xs" x="346" y="400" style="fill:#cf5a50">多峰被平均，容易撞中间</text>
+<text class="xs" x="346" y="430">代表：RT-1、OpenVLA</text>
+<circle cx="646" cy="222" r="15" fill="#8fbf7a" fill-opacity="0.18" stroke="#8fbf7a" stroke-opacity=".7"/>
+<circle cx="700" cy="222" r="12" fill="#8fbf7a" fill-opacity="0.36" stroke="#8fbf7a" stroke-opacity=".7"/>
+<circle cx="754" cy="222" r="9" fill="#8fbf7a" fill-opacity="0.54" stroke="#8fbf7a" stroke-opacity=".7"/>
+<circle cx="808" cy="222" r="6" fill="#8fbf7a" fill-opacity="0.72" stroke="#8fbf7a" stroke-opacity=".7"/>
+<text class="xs" x="630" y="262">噪声 → 逐步去噪</text>
+<polyline points="634,330 682,300 732,324 782,288 840,310" fill="none" stroke="#8fbf7a" stroke-width="2.4"/>
+<text class="xs" x="630" y="360">生成一条动作序列</text>
+<text class="xs" x="630" y="392" style="fill:#8fbf7a">能表达多峰、训练稳定</text>
+<text class="xs" x="630" y="422" style="fill:#cf5a50">T 步去噪，推理慢</text>
+<text class="xs" x="630" y="452" style="fill:#cf5a50">难塞进高节拍产线</text>
+<path d="M 920 330 C 966 270, 1016 350, 1106 280" fill="none" stroke="#cf5a50" stroke-width="1.6" stroke-opacity=".5"/>
+<line x1="936" y1="352.0" x2="944" y2="326.0" stroke="#cf5a50" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="984" y1="341.60769515458674" x2="992" y2="315.60769515458674" stroke="#cf5a50" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="1032" y1="341.60769515458674" x2="1040" y2="315.60769515458674" stroke="#cf5a50" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="1080" y1="352.0" x2="1088" y2="326.0" stroke="#cf5a50" stroke-width="2" marker-end="url(#ah)"/>
+<text class="xs" x="914" y="372">学习从噪声到动作的速度场</text>
+<text class="xs" x="914" y="402" style="fill:#8fbf7a">少步积分，50 Hz 可跑</text>
+<text class="xs" x="914" y="432" style="fill:#cf5a50">训练目标更敏感</text>
+<text class="xs" x="914" y="462">代表：π0、π0.5</text>
+<text class="foot" x="44" y="548">四条路没有绝对优劣：离散 token 复用语言栈，回归简单，扩散表达多峰，流匹配省步数。</text>
+<text class="sm" x="44" y="572">2026 年的主流是流匹配 + 动作分块：一次预测 50 步，把推理延迟藏进开环执行。</text>
+<text class="sm" x="44" y="602" style="fill:#c9a96a">分块的代价是反应变慢：50 步 @ 50 Hz 意味着 1 秒开环，这 1 秒里发生的事模型看不见。</text>
+</svg>

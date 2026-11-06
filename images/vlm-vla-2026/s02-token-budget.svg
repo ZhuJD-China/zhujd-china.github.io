@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="100%" role="img" aria-label="视觉 token 预算：分辨率与帧率如何把上下文吃满">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1200" height="640" rx="14"/>
+<text class="ttl" x="44" y="50">一张图要花多少 token</text>
+<text class="sub" x="44" y="78">以 14×14 patch、2×2 合并为例：每个视觉 token 覆盖 28×28 像素。</text>
+<text class="mono" x="44" y="112">N = ceil(H / 28) × ceil(W / 28)</text>
+<rect x="40" y="140" width="535" height="330" rx="10" fill="#101014" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.0"/>
+<text class="hd" x="64" y="174">单帧图像</text>
+<text class="lb" x="64" y="225">1280×720</text>
+<rect x="190" y="205" width="35.9" height="30" rx="5" fill="#c9a96a" fill-opacity=".82"/>
+<text class="sm" x="235.88" y="225" style="fill:#e8e4dc">1,196</text>
+<text class="lb" x="64" y="303">1920×1080</text>
+<rect x="190" y="283" width="80.7" height="30" rx="5" fill="#7aa2c8" fill-opacity=".82"/>
+<text class="sm" x="280.73" y="303" style="fill:#e8e4dc">2,691</text>
+<text class="lb" x="64" y="381">3840×2160</text>
+<rect x="190" y="361" width="322.9" height="30" rx="5" fill="#cf5a50" fill-opacity=".82"/>
+<text class="sm" x="522.9200000000001" y="381" style="fill:#e8e4dc">10,764</text>
+<text class="xs" x="64" y="440">720p 是 1.0×；4K 是 9.0×，不是 4×。</text>
+<rect x="600" y="140" width="560" height="330" rx="10" fill="#101014" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.0"/>
+<text class="hd" x="624" y="174">60 秒 720p 视频</text>
+<text class="lb" x="624" y="240">1 fps · 60 帧</text>
+<rect x="760" y="218" width="169.8" height="34" rx="5" fill="#c9a96a" fill-opacity=".82"/>
+<text class="sm" x="939.832" y="240" style="fill:#e8e4dc">71,760</text>
+<text class="lb" x="624" y="332">2 fps · 120 帧</text>
+<rect x="760" y="310" width="339.7" height="34" rx="5" fill="#cf5a50" fill-opacity=".82"/>
+<text class="sm" x="1109.664" y="332" style="fill:#e8e4dc">143,520</text>
+<text class="xs" x="624" y="440">1 fps 就是 7.2 万 token；2 fps 翻倍。</text>
+<text class="foot" x="44" y="510">KV cache 也要跟着算：7B、32 层、32 头、head_dim 128、FP16，MHA 每 token 约 512 KiB，1,196 个 token 约 0.6 GB。</text>
+<text class="foot" x="44" y="534">换成 8 个 KV 头的 GQA，约 0.16 GB；但视频上到 7 万 token，仍是 GB 级，并随并发线性增长。</text>
+<text class="sm" x="44" y="574">注意力的两两交互随 token 数平方增长：10,764 与 1,196 相比，配对数差 81 倍。</text>
+<text class="sm" x="44" y="604" style="fill:#c9a96a">所以「支持任意分辨率」和「任意分辨率都便宜」是两回事。</text>
+</svg>

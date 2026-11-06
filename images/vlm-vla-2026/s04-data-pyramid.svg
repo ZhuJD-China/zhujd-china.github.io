@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" width="100%" role="img" aria-label="机器人数据的四个来源：网页、视频、仿真与真机轨迹">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1200" height="660" rx="14"/>
+<text class="ttl" x="44" y="50">机器人数据的金字塔</text>
+<text class="sub" x="44" y="78">越往上，动作标签越密、成本越高；越往下，规模越大、动作越少。</text>
+<polygon points="90,570 1030,570 960,470 160,470" fill="#6b675c" fill-opacity=".16" stroke="#6b675c" stroke-opacity=".7" stroke-width="1.4"/>
+<text class="hd" x="560" y="516.0" text-anchor="middle" style="fill:#6b675c">网页图文</text>
+<text class="xs" x="560" y="538.0" text-anchor="middle">5.85B 对 · 无动作</text>
+<polygon points="170,460 950,460 890,370 230,370" fill="#8fbf7a" fill-opacity=".16" stroke="#8fbf7a" stroke-opacity=".7" stroke-width="1.4"/>
+<text class="hd" x="560" y="411.0" text-anchor="middle" style="fill:#8fbf7a">人类视频</text>
+<text class="xs" x="560" y="433.0" text-anchor="middle">1,000h+ · 无关节角</text>
+<polygon points="240,360 880,360 820,278 300,278" fill="#7aa2c8" fill-opacity=".16" stroke="#7aa2c8" stroke-opacity=".7" stroke-width="1.4"/>
+<text class="hd" x="560" y="315.0" text-anchor="middle" style="fill:#7aa2c8">仿真</text>
+<text class="xs" x="560" y="337.0" text-anchor="middle">230k 场景 · 有标签但有 gap</text>
+<polygon points="310,268 810,268 750,194 370,194" fill="#c9a96a" fill-opacity=".16" stroke="#c9a96a" stroke-opacity=".7" stroke-width="1.4"/>
+<text class="hd" x="560" y="227.0" text-anchor="middle" style="fill:#c9a96a">真机轨迹</text>
+<text class="xs" x="560" y="249.0" text-anchor="middle">1M+ 条 / 10,000h · 最贵</text>
+<line class="ar" x1="100" y1="530" x2="100" y2="210" marker-end="url(#ah)"/>
+<text class="sm" x="112" y="360" style="fill:#c9a96a">动作标签密度升高</text>
+<line class="ar" x1="1040" y1="210" x2="1040" y2="530" marker-end="url(#ah)"/>
+<text class="sm" x="1028" y="360" text-anchor="end" style="fill:#7aa2c8">规模与覆盖增大</text>
+<text class="foot" x="44" y="604">一百万条轨迹买得到覆盖，买不到失败原因、接触力、语义边界和产线节拍。</text>
+<text class="sm" x="44" y="628">最贵的不是数据量，是带动作、带失败、带时间戳的样本；公开数据集通常把失败片段裁掉了。</text>
+</svg>

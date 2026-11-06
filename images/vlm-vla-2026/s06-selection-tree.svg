@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" role="img" aria-label="VLA 选型决策树：从任务结构到部署形态">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+.grid{stroke:#8a8578;stroke-width:1;stroke-opacity:.16}
+</style>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a96a"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1200" height="800" rx="14"/>
+<text class="ttl" x="44" y="50">VLA 选型决策树</text>
+<text class="sub" x="44" y="78">先看任务结构和控制周期，再看模型大小。</text>
+<rect x="300" y="100" width="380" height="68" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.4"/>
+<text class="hd" x="490" y="130" text-anchor="middle">任务是否固定、物体是否已知？</text>
+<text class="xs" x="490" y="154" text-anchor="middle">固定工位、固定来料、固定光照</text>
+<rect x="300" y="232" width="380" height="68" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.4"/>
+<text class="hd" x="490" y="262" text-anchor="middle">是否需要多步、长程？</text>
+<text class="xs" x="490" y="286" text-anchor="middle">装配、整理、跨工位搬运</text>
+<rect x="300" y="364" width="380" height="68" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#8fbf7a" stroke-opacity=".55" stroke-width="1.4"/>
+<text class="hd" x="490" y="394" text-anchor="middle">环境是否开放？</text>
+<text class="xs" x="490" y="418" text-anchor="middle">新物体、新布局、有人协作</text>
+<rect x="740" y="92" width="410" height="84" rx="10" fill="#101014" fill-opacity="1.0" stroke="#8fbf7a" stroke-opacity=".55" stroke-width="1.3"/>
+<rect x="740" y="92" width="4" height="84" rx="2" fill="#8fbf7a"/>
+<text class="lb" x="758" y="124" style="fill:#8fbf7a">经典视觉 + 规则</text>
+<text class="xs" x="758" y="148">VLM 只做复核与异常兜底</text>
+<rect x="740" y="224" width="410" height="84" rx="10" fill="#101014" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.3"/>
+<rect x="740" y="224" width="4" height="84" rx="2" fill="#7aa2c8"/>
+<text class="lb" x="758" y="256" style="fill:#7aa2c8">单任务 VLA 微调</text>
+<text class="xs" x="758" y="280">100–500 条演示 + 力控/护栏</text>
+<rect x="740" y="356" width="410" height="84" rx="10" fill="#101014" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.3"/>
+<rect x="740" y="356" width="4" height="84" rx="2" fill="#c9a96a"/>
+<text class="lb" x="758" y="388" style="fill:#c9a96a">双系统 VLA</text>
+<text class="xs" x="758" y="412">慢思考 + 快控制 + 任务编排</text>
+<rect x="740" y="474" width="410" height="84" rx="10" fill="#101014" fill-opacity="1.0" stroke="#cf5a50" stroke-opacity=".55" stroke-width="1.3"/>
+<rect x="740" y="474" width="4" height="84" rx="2" fill="#cf5a50"/>
+<text class="lb" x="758" y="506" style="fill:#cf5a50">通用 VLA + 遥操作兜底</text>
+<text class="xs" x="758" y="530">开放世界、影子运行、人工接管</text>
+<line class="ar" x1="680" y1="134" x2="736" y2="134" marker-end="url(#ah)"/>
+<text class="sm" x="706" y="124" text-anchor="middle" style="fill:#8fbf7a">是</text>
+<line class="ar" x1="490" y1="168" x2="490" y2="228" marker-end="url(#ah)"/>
+<text class="sm" x="502" y="202" style="fill:#cf5a50">否</text>
+<line class="ar" x1="680" y1="266" x2="736" y2="266" marker-end="url(#ah)"/>
+<text class="sm" x="706" y="256" text-anchor="middle" style="fill:#7aa2c8">否</text>
+<line class="ar" x1="490" y1="300" x2="490" y2="360" marker-end="url(#ah)"/>
+<text class="sm" x="502" y="334" style="fill:#c9a96a">是</text>
+<line class="ar" x1="680" y1="398" x2="736" y2="398" marker-end="url(#ah)"/>
+<text class="sm" x="706" y="388" text-anchor="middle" style="fill:#c9a96a">否</text>
+<path d="M 490 432 L 490 516 L 736 516" fill="none" stroke="#8a8578" stroke-width="1.6" marker-end="url(#ah)"/>
+<text class="sm" x="502" y="466" style="fill:#cf5a50">是</text>
+<rect x="44" y="590" width="1112" height="104" rx="10" fill="#101014" fill-opacity="1.0" stroke="#8a8578" stroke-opacity=".55" stroke-width="1.0"/>
+<text class="hd" x="68" y="620">无论走哪条路，先过五关</text>
+<circle cx="72" cy="656" r="3.5" fill="#c9a96a"/>
+<text class="sm" x="86" y="660">成功定义可测量</text>
+<circle cx="294" cy="656" r="3.5" fill="#c9a96a"/>
+<text class="sm" x="308" y="660">p95 延迟满足节拍</text>
+<circle cx="516" cy="656" r="3.5" fill="#c9a96a"/>
+<text class="sm" x="530" y="660">安全环独立于模型</text>
+<circle cx="738" cy="656" r="3.5" fill="#c9a96a"/>
+<text class="sm" x="752" y="660">影子运行 ≥ 2 周</text>
+<circle cx="960" cy="656" r="3.5" fill="#c9a96a"/>
+<text class="sm" x="974" y="660">报告置信区间，不报均值</text>
+<text class="xs" x="68" y="682" style="fill:#cf5a50">0 失败 ≠ 0 风险：10 次全成功的 95% 上界仍有 25.9%。</text>
+<text class="sm" x="44" y="738">控制周期 &lt; 20 ms：模型只能放慢环，快环交给控制器或 IK；想端到端，先把分块与异步推理算清楚。</text>
+<text class="foot" x="44" y="764">这张树不替代试跑：它只帮你排除明显不合适的方案，剩下的答案在产线数据里。</text>
+</svg>
