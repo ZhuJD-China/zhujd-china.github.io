@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="100%" role="img" aria-label="榜单分数与真实场景的落差">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+</style>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker></defs>
+<rect class="bg" x="0" y="0" width="1200" height="640" rx="14"/>
+<text class="ttl" x="44" y="50">榜单上的 99%，换一个数据集就不到 60%</text>
+<text class="sub" x="44" y="78">指标口径不同，不能逐项比较；但方向一致：受控 lab → 真实产线，掉 10 到 40 个点。</text>
+<rect x="900" y="96" width="12" height="12" rx="3" fill="#c9a96a" fill-opacity="1.0"/>
+<text class="xs" x="920" y="107">图像级 AUROC</text>
+<rect x="1030" y="96" width="12" height="12" rx="3" fill="#cf5a50" fill-opacity="1.0"/>
+<text class="xs" x="1050" y="107">平均 AU-PRO</text>
+<line x1="90" y1="480" x2="1140" y2="480" stroke="#8a8578" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3 5"/>
+<text class="xs" x="78" y="484" text-anchor="end">0</text>
+<line x1="90" y1="420" x2="1140" y2="420" stroke="#8a8578" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3 5"/>
+<text class="xs" x="78" y="424" text-anchor="end">20</text>
+<line x1="90" y1="360" x2="1140" y2="360" stroke="#8a8578" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3 5"/>
+<text class="xs" x="78" y="364" text-anchor="end">40</text>
+<line x1="90" y1="300" x2="1140" y2="300" stroke="#8a8578" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3 5"/>
+<text class="xs" x="78" y="304" text-anchor="end">60</text>
+<line x1="90" y1="240" x2="1140" y2="240" stroke="#8a8578" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3 5"/>
+<text class="xs" x="78" y="244" text-anchor="end">80</text>
+<line x1="90" y1="180" x2="1140" y2="180" stroke="#8a8578" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3 5"/>
+<text class="xs" x="78" y="184" text-anchor="end">100</text>
+<rect x="160" y="182.70000000000005" width="130" height="297.29999999999995" rx="4" fill="#c9a96a" fill-opacity="0.22"/>
+<rect x="160" y="182.70000000000005" width="130" height="4" fill="#c9a96a"/>
+<text class="hd" x="225" y="172.70000000000005" text-anchor="middle" fill="#c9a96a" font-size="18pxpx">99.1</text>
+<text class="lb" x="225" y="506" text-anchor="middle">MVTec AD</text>
+<text class="xs" x="225" y="526" text-anchor="middle">PatchCore · 图像 AUROC</text>
+<rect x="390" y="183.89999999999998" width="130" height="296.1" rx="4" fill="#c9a96a" fill-opacity="0.22"/>
+<rect x="390" y="183.89999999999998" width="130" height="4" fill="#c9a96a"/>
+<text class="hd" x="455" y="173.89999999999998" text-anchor="middle" fill="#c9a96a" font-size="18pxpx">98.7</text>
+<text class="lb" x="455" y="506" text-anchor="middle">VisA</text>
+<text class="xs" x="455" y="526" text-anchor="middle">Dinomaly · 多类图像 AUROC</text>
+<rect x="620" y="212.10000000000002" width="130" height="267.9" rx="4" fill="#c9a96a" fill-opacity="0.22"/>
+<rect x="620" y="212.10000000000002" width="130" height="4" fill="#c9a96a"/>
+<text class="hd" x="685" y="202.10000000000002" text-anchor="middle" fill="#c9a96a" font-size="18pxpx">89.3</text>
+<text class="lb" x="685" y="506" text-anchor="middle">Real-IAD</text>
+<text class="xs" x="685" y="526" text-anchor="middle">Dinomaly · 多类图像 AUROC</text>
+<rect x="850" y="303.0" width="130" height="177.0" rx="4" fill="#cf5a50" fill-opacity="0.22"/>
+<rect x="850" y="303.0" width="130" height="4" fill="#cf5a50"/>
+<text class="hd" x="915" y="293.0" text-anchor="middle" fill="#cf5a50" font-size="18pxpx">&lt;60</text>
+<text class="lb" x="915" y="506" text-anchor="middle">MVTec AD 2</text>
+<text class="xs" x="915" y="526" text-anchor="middle">SOTA · 平均 AU-PRO &lt;60</text>
+<line x1="90" y1="300" x2="1140" y2="300" stroke="#cf5a50" stroke-opacity="0.7" stroke-width="1.2" stroke-dasharray="6 5"/>
+<text class="xs" x="1128" y="292" text-anchor="end" fill="#cf5a50">60%</text>
+<text class="sm" x="160" y="140" fill="#cf5a50">约 40 个点</text>
+<line x1="300" y1="150" x2="850" y2="150" stroke="#cf5a50" stroke-width="1.4" marker-end="url(#ah)"/>
+<text class="lb" x="44" y="570" fill="#c9a96a">同一根轴只表示数值，不代表同一指标；MVTec AD 2 的低分是「换到真实场景」后的结果。</text>
+<text class="foot" x="44" y="622">数据：PatchCore 论文均值 99.1；Dinomaly 多类 98.7 / 89.3；MVTec AD 2 论文 SOTA &lt;60% 平均 AU-PRO</text>
+</svg>

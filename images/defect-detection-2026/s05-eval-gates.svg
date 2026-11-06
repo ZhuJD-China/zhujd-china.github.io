@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="100%" role="img" aria-label="上线前要过的三道门">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+</style>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker></defs>
+<rect class="bg" x="0" y="0" width="1200" height="560" rx="14"/>
+<text class="ttl" x="44" y="50">上线前要过的三道门</text>
+<text class="sub" x="44" y="78">跳过任何一道，模型都会在产线上用误报和漏检教你做事。</text>
+<rect x="45" y="130" width="350" height="300" rx="10" fill="#121216" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.3"/>
+<text class="hd" x="65" y="168" fill="#c9a96a">① 离线留出集</text>
+<text class="sm" x="65" y="205">· 测试集来自产线分布</text>
+<text class="sm" x="65" y="237">· 不是公开数据集</text>
+<text class="sm" x="65" y="269">· 分类型召回</text>
+<text class="sm" x="65" y="301">· 固定阈值误报 / 千件</text>
+<text class="sm" x="65" y="333">· 置信区间与样本量</text>
+<text class="sm" x="65" y="365">· 阈值按成本定</text>
+<rect x="435" y="130" width="350" height="300" rx="10" fill="#121216" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.3"/>
+<text class="hd" x="455" y="168" fill="#7aa2c8">② 影子运行</text>
+<text class="sm" x="455" y="205">· 模型推理，不接 PLC</text>
+<text class="sm" x="455" y="237">· 与复检台对比</text>
+<text class="sm" x="455" y="269">· 2–4 周，覆盖班次</text>
+<text class="sm" x="455" y="301">· 收集边界样本</text>
+<text class="sm" x="455" y="333">· 校准阈值</text>
+<text class="sm" x="455" y="365">· 暴露集成问题</text>
+<rect x="825" y="130" width="350" height="300" rx="10" fill="#121216" fill-opacity="1.0" stroke="#8fbf7a" stroke-opacity=".55" stroke-width="1.3"/>
+<text class="hd" x="845" y="168" fill="#8fbf7a">③ 冠军-挑战者</text>
+<text class="sm" x="845" y="205">· 同线、同光、同相机</text>
+<text class="sm" x="845" y="237">· 交替批次</text>
+<text class="sm" x="845" y="269">· 成本 / 千件</text>
+<text class="sm" x="845" y="301">· 漏检与逃逸</text>
+<text class="sm" x="845" y="333">· 版本与回滚</text>
+<text class="sm" x="845" y="365">· 上线后持续监控</text>
+<line x1="400" y1="280" x2="425" y2="280" stroke="#8a8578" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="780" y1="280" x2="805" y2="280" stroke="#8a8578" stroke-width="1.6" marker-end="url(#ah)"/>
+<text class="lb" x="44" y="500" fill="#cf5a50">最常见的错误：第 1 道门用公开集刷到 99%，第 2 道门直接跳过，然后把模型接到 PLC。</text>
+<text class="foot" x="44" y="542">三道门顺序不可交换｜任何一道失败都不该进入下一道</text>
+</svg>

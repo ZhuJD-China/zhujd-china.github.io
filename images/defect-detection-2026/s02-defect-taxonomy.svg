@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="100%" role="img" aria-label="缺陷的四个家族与对应算法">
+<style>
+.bg{fill:#0b0b10}
+.ttl{fill:#e8e4dc;font:600 26px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sub{fill:#a09b8d;font:400 15px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.hd{fill:#e8e4dc;font:600 16px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.lb{fill:#e8e4dc;font:400 13px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.sm{fill:#a09b8d;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.xs{fill:#6b675c;font:400 11px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.foot{fill:#6b675c;font:400 12px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.mono{fill:#c9a96a;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.moc{fill:#7aa2c8;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.mor{fill:#cf5a50;font:600 13px 'JetBrains Mono',Consolas,monospace}
+.ar{fill:none;stroke:#8a8578;stroke-width:1.6}
+</style>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8578"/></marker></defs>
+<rect class="bg" x="0" y="0" width="1200" height="620" rx="14"/>
+<text class="ttl" x="44" y="50">缺陷的四个家族，对应四类算法</text>
+<text class="sub" x="44" y="78">先用物理信号定义缺陷，再选算法；反过来做，就会拿划痕检测器去抓漏装。</text>
+<rect x="40" y="120" width="250" height="400" rx="10" fill="#1a1712" fill-opacity="1.0" stroke="#c9a96a" stroke-opacity=".55" stroke-width="1.3"/>
+<rect x="40" y="120" width="250" height="44" rx="10" fill="#c9a96a" fill-opacity="0.18"/>
+<text class="hd" x="56" y="148" fill="#c9a96a">外观类</text>
+<text class="xs" x="56" y="195" fill="#6b675c">典型缺陷</text>
+<text class="lb" x="56" y="219">划痕 / 脏污 / 凹坑</text>
+<text class="lb" x="56" y="240">气泡 / 裂纹 / 异物</text>
+<text class="xs" x="56" y="279" fill="#6b675c">物理信号</text>
+<text class="sm" x="56" y="303">局部反射率</text>
+<text class="sm" x="56" y="323">纹理</text>
+<text class="xs" x="56" y="361" fill="#6b675c">首选算法</text>
+<text class="lb" x="56" y="385" fill="#c9a96a">经典阈值 / 纹理</text>
+<text class="lb" x="56" y="406" fill="#c9a96a">+ 无监督 AD</text>
+<text class="xs" x="56" y="445" fill="#6b675c">判定单位</text>
+<text class="sm" x="56" y="469">像素 / 区域</text>
+<rect x="330" y="120" width="250" height="400" rx="10" fill="#14161c" fill-opacity="1.0" stroke="#7aa2c8" stroke-opacity=".55" stroke-width="1.3"/>
+<rect x="330" y="120" width="250" height="44" rx="10" fill="#7aa2c8" fill-opacity="0.18"/>
+<text class="hd" x="346" y="148" fill="#7aa2c8">尺寸类</text>
+<text class="xs" x="346" y="195" fill="#6b675c">典型缺陷</text>
+<text class="lb" x="346" y="219">缺料 / 多料</text>
+<text class="lb" x="346" y="240">毛刺 / 变形</text>
+<text class="xs" x="346" y="279" fill="#6b675c">物理信号</text>
+<text class="sm" x="346" y="303">几何</text>
+<text class="sm" x="346" y="323">轮廓</text>
+<text class="xs" x="346" y="361" fill="#6b675c">首选算法</text>
+<text class="lb" x="346" y="385" fill="#7aa2c8">3D 测量</text>
+<text class="lb" x="346" y="406" fill="#7aa2c8">边缘 / 模板</text>
+<text class="xs" x="346" y="445" fill="#6b675c">判定单位</text>
+<text class="sm" x="346" y="469">µm / mm</text>
+<rect x="620" y="120" width="250" height="400" rx="10" fill="#181a14" fill-opacity="1.0" stroke="#8fbf7a" stroke-opacity=".55" stroke-width="1.3"/>
+<rect x="620" y="120" width="250" height="44" rx="10" fill="#8fbf7a" fill-opacity="0.18"/>
+<text class="hd" x="636" y="148" fill="#8fbf7a">装配类</text>
+<text class="xs" x="636" y="195" fill="#6b675c">典型缺陷</text>
+<text class="lb" x="636" y="219">错装 / 漏装</text>
+<text class="lb" x="636" y="240">反装 / 偏移</text>
+<text class="xs" x="636" y="279" fill="#6b675c">物理信号</text>
+<text class="sm" x="636" y="303">目标存在</text>
+<text class="sm" x="636" y="323">位姿</text>
+<text class="xs" x="636" y="361" fill="#6b675c">首选算法</text>
+<text class="lb" x="636" y="385" fill="#8fbf7a">监督检测 / 分割</text>
+<text class="lb" x="636" y="406" fill="#8fbf7a">YOLO / U-Net</text>
+<text class="xs" x="636" y="445" fill="#6b675c">判定单位</text>
+<text class="sm" x="636" y="469">目标 / 图像</text>
+<rect x="910" y="120" width="250" height="400" rx="10" fill="#1d1414" fill-opacity="1.0" stroke="#cf5a50" stroke-opacity=".55" stroke-width="1.3"/>
+<rect x="910" y="120" width="250" height="44" rx="10" fill="#cf5a50" fill-opacity="0.18"/>
+<text class="hd" x="926" y="148" fill="#cf5a50">逻辑类</text>
+<text class="xs" x="926" y="195" fill="#6b675c">典型缺陷</text>
+<text class="lb" x="926" y="219">数量不对 / 顺序不对</text>
+<text class="lb" x="926" y="240">搭配不对</text>
+<text class="xs" x="926" y="279" fill="#6b675c">物理信号</text>
+<text class="sm" x="926" y="303">目标间关系</text>
+<text class="xs" x="926" y="341" fill="#6b675c">首选算法</text>
+<text class="lb" x="926" y="365" fill="#cf5a50">规则 + 检测</text>
+<text class="lb" x="926" y="386" fill="#cf5a50">+ 视觉语言模型</text>
+<text class="xs" x="926" y="425" fill="#6b675c">判定单位</text>
+<text class="sm" x="926" y="449">图像 / 批次</text>
+<text class="lb" x="44" y="570" fill="#c9a96a">前两类靠「看」，后两类靠「数」和「关系」。逻辑类缺陷的像素可以全部正常，重建误差为零。</text>
+<text class="foot" x="44" y="602">分类依据：物理信号与判定单位｜MVTec LOCO 把结构异常与逻辑异常分开评测</text>
+</svg>
